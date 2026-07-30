@@ -238,6 +238,10 @@ export async function speak(text, opts = {}) {
   const clean = stripMarkup(text);
   if (!clean) return;
 
+  // Sem isso, um clique antes da lista de vozes chegar fala com a voz
+  // padrão do sistema, no idioma padrão do SO — não em it-IT.
+  if (!state.ready) await voicesReady();
+
   if (!state.supported || state.degraded) {
     // Nada a tocar. Não é erro: neste modo a UI já revela a transcrição.
     opts.onEnd?.();
@@ -259,6 +263,8 @@ export async function speak(text, opts = {}) {
 
 /** Fala uma sequência de turnos, cada um com sua voz. Usado pelo diálogo. */
 export async function speakSequence(turns, opts = {}) {
+  if (!state.ready) await voicesReady();
+
   if (!state.supported || state.degraded) {
     opts.onDone?.();
     return;
