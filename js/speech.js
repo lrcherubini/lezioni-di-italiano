@@ -58,6 +58,27 @@ export function status() {
    Chrome ele retorna [] até o evento voiceschanged disparar. Resolvemos
    uma única promise e cacheamos.                                         */
 
+/* As vozes neurais "Multilingual" do Windows 11 (e as online do Edge)
+   identificam o idioma pelo TEXTO e trocam de sotaque sozinhas — o `lang`
+   e o `voice` do utterance não as demovem. O efeito prático: «Dire
+   l'alfabeto» sai em francês (o detector vê "Dire l'…") e «I digrammi GN,
+   GL, SC, CH, GH» sai em inglês (nenhuma palavra italiana para detectar).
+   Uma voz italiana monolíngue não tem detector e sempre lê em italiano,
+   então ela vem primeiro. A multilíngue fica como último recurso: é melhor
+   que silêncio, e num texto italiano corrido ela acerta. */
+const isMultilingual = (v) => /multiling/i.test(v.name || '');
+
+const isItalian = (v) => (v.lang || '').replace('_', '-').toLowerCase().startsWith('it');
+
+/** Vozes italianas, monolíngues primeiro. A ordem importa: `voiceFor()`
+ *  entrega [0] para narração e [1] para o segundo falante do diálogo. */
+function pickItalian(voices) {
+  const italian = voices.filter(isItalian);
+  const mono = italian.filter((v) => !isMultilingual(v));
+  const multi = italian.filter(isMultilingual);
+  return [...mono, ...multi];
+}
+
 let readyPromise = null;
 
 export function voicesReady() {
@@ -79,7 +100,7 @@ export function voicesReady() {
       if (!voices.length && !settled) return false;
 
       state.voices = voices;
-      state.italian = voices.filter((v) => (v.lang || '').replace('_', '-').toLowerCase().startsWith('it'));
+      state.italian = pickItalian(voices);
       state.degraded = state.italian.length === 0;
       state.ready = true;
       settled = true;
@@ -99,7 +120,7 @@ export function voicesReady() {
       settled = true;
       const voices = window.speechSynthesis.getVoices() || [];
       state.voices = voices;
-      state.italian = voices.filter((v) => (v.lang || '').replace('_', '-').toLowerCase().startsWith('it'));
+      state.italian = pickItalian(voices);
       state.degraded = state.italian.length === 0;
       state.ready = true;
       emit();
@@ -188,6 +209,12 @@ function stripMarkup(text) {
    _utter() não cancela nada por conta própria. */
 let generation = 0;
 
+/* O Chrome pode coletar o SpeechSynthesisUtterance como lixo antes de ele
+   terminar de tocar — e aí onend/onerror nunca disparam e a corrente de
+   sentenças trava no meio. Manter uma referência viva até o fim resolve.
+   Ver talkrapp.com/speechSynthesis.html. */
+const speaking = new Set();
+
 /** Fala um trecho já limpo, sem cancelar a fila. Interno. */
 function _utter(text, { rate, speaker, gen, onStart }) {
   const voice = voiceFor(speaker);
@@ -214,13 +241,18 @@ function _utter(text, { rate, speaker, gen, onStart }) {
           onStart?.();
         }
       };
-      u.onend = next;
+      u.onend = () => {
+        speaking.delete(u);
+        next();
+      };
       u.onerror = () => {
+        speaking.delete(u);
         // "interrupted"/"canceled" são esperados quando o usuário troca de áudio.
         if (gen === generation) next();
         else resolve();
       };
 
+      speaking.add(u);
       window.speechSynthesis.speak(u);
     };
 
@@ -291,6 +323,7 @@ function pause(ms) {
 
 export function cancel() {
   generation++;
+  speaking.clear();
   if (!state.supported) return;
   try {
     window.speechSynthesis.cancel();
