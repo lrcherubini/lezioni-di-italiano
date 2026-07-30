@@ -3,8 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Lezioni di italiano · material de estudo</title>
-  <meta name="description" content="Material de estudo de italiano A1: conteúdo explicado e exercícios de audição.">
+  <title>Ripasso · Lezioni di italiano</title>
   <meta name="color-scheme" content="light dark">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🇮🇹</text></svg>">
   <link rel="stylesheet" href="css/tokens.css">
@@ -21,8 +20,7 @@
         <small>material de estudo · A1</small>
       </a>
       <div class="toolbar">
-        <button class="btn btn--sm" type="button" data-action="export" title="Baixar seu progresso como JSON">⬇ Progresso</button>
-        <button class="btn btn--sm" type="button" data-action="import" title="Restaurar progresso de um arquivo">⬆ Importar</button>
+        <a class="btn btn--sm" href="index.html">← Todas as aulas</a>
         <button class="btn btn--sm btn--ghost" type="button" data-action="theme" aria-label="Alternar tema">🌙</button>
       </div>
     </div>
@@ -30,33 +28,17 @@
 
   <main class="page" id="main">
     <div id="audio-status"></div>
-
-    <section class="hero">
-      <h1>Lezioni di italiano</h1>
-      <p>
-        Material de apoio para estudo de italiano, com a explicação escrita por inteiro. 
-        Cada linha em italiano tem áudio, e os exercícios treinam <strong>audição</strong> antes de leitura.
-      </p>
-      <p style="margin-top:var(--sp-3)">
-        Seu progresso fica só neste navegador. Nada é enviado para nenhum servidor.
-      </p>
-    </section>
-
-    <div id="home-topo"></div>
-
-    <h2 class="stage__kicker" style="margin-bottom:var(--sp-3)">Aulas</h2>
-    <div id="lesson-grid">
-      <p class="loading">Carregando as aulas…</p>
+    <div id="ripasso">
+      <p class="loading">Montando a revisão…</p>
     </div>
   </main>
 
   <footer class="site-footer">
     <div class="site-footer__inner">
       <p>Material de estudo pessoal, gerado a partir das anotações de aula. Sem fins comerciais.</p>
-      <p>Sem rastreamento, sem cookies, sem servidor. Progresso salvo no <code>localStorage</code> do navegador.</p>
     </div>
   </footer>
 
-  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/ripasso.js"></script>
 </body>
 </html>

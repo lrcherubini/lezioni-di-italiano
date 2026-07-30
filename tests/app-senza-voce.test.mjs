@@ -17,7 +17,7 @@ installStorage();
 installFetch();
 
 const store = await import('../js/store.js');
-await import('../js/app.js');
+await import('../js/main.js');
 
 const aula = readContent('lezione-01.json');
 

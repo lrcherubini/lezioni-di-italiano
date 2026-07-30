@@ -188,6 +188,108 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
   max-width: var(--measure); font-size: var(--fs-base);
 }
 
+/* --- Card «Continuar» ---------------------------------------------------
+   Com 40 aulas, abrir a home e ter que lembrar onde parou é atrito puro.
+   Este card é o caminho de 90% das visitas, então vem antes da lista.    */
+
+.resume {
+  display: block;
+  background: var(--navy); color: var(--text-on-dark);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-4) var(--sp-5);
+  margin-bottom: var(--sp-6);
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.resume:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.resume__kicker {
+  font-size: var(--fs-xs); font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  opacity: 0.75;
+}
+.resume__title {
+  font-family: var(--font-serif); font-size: var(--fs-xl);
+  font-weight: 700; margin-top: var(--sp-1);
+}
+.resume__gloss { font-size: var(--fs-sm); font-style: italic; opacity: 0.8; margin-top: var(--sp-1); }
+.resume__foot {
+  display: flex; align-items: center; gap: var(--sp-3);
+  margin-top: var(--sp-3);
+}
+.resume .progress { background: rgb(255 255 255 / 0.2); }
+.resume .progress__label { color: var(--text-on-dark); opacity: 0.8; }
+
+/* --- Chamada do Ripasso -------------------------------------------------
+   Só renderizada quando há item vencido: um card permanente marcando zero
+   viraria ruído semanal.                                                 */
+
+.ripasso-call {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  margin-bottom: var(--sp-6);
+  border: 1px solid var(--warn);
+  background: var(--warn-bg);
+  border-radius: var(--radius-lg);
+  color: var(--text); text-decoration: none;
+  font-size: var(--fs-sm);
+}
+.ripasso-call:hover { box-shadow: var(--shadow-sm); }
+.ripasso-call__n {
+  font-family: var(--font-serif); font-size: var(--fs-2xl); font-weight: 700;
+  color: var(--warn); line-height: 1; flex: 0 0 auto;
+}
+.ripasso-call__gloss { color: var(--text-muted); }
+
+/* --- Página do Ripasso --------------------------------------------------- */
+
+.ripasso-fonte {
+  padding: 0 var(--sp-4) var(--sp-3);
+  font-size: var(--fs-xs);
+}
+.ripasso-fonte a { color: var(--text-muted); }
+.ripasso-vuoto {
+  padding: var(--sp-5);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  color: var(--text-muted);
+  max-width: var(--measure);
+}
+.ripasso-vuoto p + p { margin-top: var(--sp-2); }
+
+/* --- Blocos de aulas ----------------------------------------------------
+   <details> nativo: dobrar/desdobrar sem uma linha de JS de estado, e já
+   acessível por teclado. Só o bloco da aula em retomada nasce aberto.    */
+
+.bloco {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--sp-4);
+  background: var(--surface);
+}
+.bloco__head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  cursor: pointer;
+  list-style: none;
+  border-radius: var(--radius-lg);
+}
+.bloco__head::-webkit-details-marker { display: none; }
+.bloco__head::before {
+  content: "▸";
+  color: var(--text-faint);
+  transition: transform 120ms ease;
+  display: inline-block;
+}
+.bloco[open] > .bloco__head::before { transform: rotate(90deg); }
+.bloco__head:hover { background: var(--surface-alt); }
+.bloco__head:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.bloco__titolo { font-weight: 700; flex: 1; }
+.bloco__conta { font-size: var(--fs-xs); color: var(--text-muted); white-space: nowrap; }
+.bloco[open] > .bloco__head { border-bottom: 1px solid var(--border); }
+.bloco > .lesson-grid { padding: var(--sp-4); }
+
 .lesson-grid {
   display: grid; gap: var(--sp-4);
   grid-template-columns: 1fr;
@@ -195,6 +297,11 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
 }
 @media (min-width: 640px) {
   .lesson-grid { grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr)); }
+}
+
+/* Aula 100% concluída: marca discreta, para varrer a lista com o olho. */
+.lesson-card[data-completa="true"] .progress__label::after {
+  content: " ✓"; color: var(--verde); font-weight: 700;
 }
 
 .lesson-card {

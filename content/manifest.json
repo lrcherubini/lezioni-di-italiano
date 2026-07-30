@@ -13,8 +13,18 @@
       "file": "lezione-00.json",
       "titolo": "L'alfabeto e i suoni",
       "gloss": "O alfabeto e os sons",
-      "categorie": ["PRONUNCIA"],
-      "temi": ["Alfabeto", "Vocali", "C e G", "Digrammi", "Doppie", "Accento"]
+      "categorie": [
+        "PRONUNCIA"
+      ],
+      "temi": [
+        "Alfabeto",
+        "Vocali",
+        "C e G",
+        "Digrammi",
+        "Doppie",
+        "Accento"
+      ],
+      "conteggio": 8
     },
     {
       "id": "01",
@@ -22,8 +32,23 @@
       "file": "lezione-01.json",
       "titolo": "Io sono, tu sei",
       "gloss": "Apresentar-se, dizer nacionalidade e idade",
-      "categorie": ["VERBO", "VOCABOLARIO", "ESPRESSIONE", "GRAMMATICA"],
-      "temi": ["Essere e Avere", "Paesi", "Nazionalità", "Numeri 0–20", "Saluti", "Articoli", "Plurale", "L'età"]
+      "categorie": [
+        "VERBO",
+        "VOCABOLARIO",
+        "ESPRESSIONE",
+        "GRAMMATICA"
+      ],
+      "temi": [
+        "Essere e Avere",
+        "Paesi",
+        "Nazionalità",
+        "Numeri 0–20",
+        "Saluti",
+        "Articoli",
+        "Plurale",
+        "L'età"
+      ],
+      "conteggio": 35
     }
   ]
 }

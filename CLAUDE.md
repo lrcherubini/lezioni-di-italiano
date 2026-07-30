@@ -12,7 +12,7 @@ O objetivo principal deste projeto é um **loop de autoria repetível**: a cada 
 2. **Nenhum arquivo versionado cita nome de pessoa ou da plataforma de aula.** Vale para os docs também — este repositório é público. Diálogos usam nomes italianos genéricos (Marco, Giulia, Luca). Não use dados pessoais reais (idade, cidade) em exemplos.
 3. **Nunca linke PDF nem sirva arquivo de `presentations/`.** O site é autocontido: todo conteúdo explicativo é transcrito para `content/*.json`.
 4. **Zero dependências e zero passo de build.** Sem `package.json`, sem bundler, sem CI de build, sem CDN. O site é HTML + CSS + JS vanilla servido direto. Vale para as ferramentas também: o validador é stdlib do Python e a suíte é o `node --test` embutido com um DOM próprio — se a resposta para um problema for `npm install`, ela está errada.
-5. **Ao adicionar uma aula, edite apenas `content/`.** Não toque em `js/`, `css/` nem nos JSONs de aulas anteriores.
+5. **Ao adicionar uma aula, edite apenas `content/`.** Não toque em `js/`, `css/` nem nos JSONs de aulas anteriores. As duas exceções são geradas por ferramenta, nunca à mão: o `conteggio` do manifest e o `content/lessico.json`, que saem de `python tools/validate.py --fix`.
 6. **`id` de item é imutável.** Ele é a chave do progresso no `localStorage`. Renomear um `id` apaga o histórico daquele item; reaproveitar um `id` mistura históricos de coisas diferentes.
 7. **Toda seção precisa de `spiegazione`.** É o que torna o site independente dos slides. O validador reprova se faltar.
 7.1. **Todo texto italiano exibido tem botão de áudio — sem exceção.** Isso vale para `titolo` de aula/seção, itens de `header` (comunicazione/lessico/grammatica), toda célula de `tabella` que não esteja marcada `pt: true`, cabeçalhos de coluna de `paradigma` e `paradigm-fill`, e o título+gloss do `dialogo`. Ao criar uma tabela nova, pergunte célula por célula: "isto é italiano ou é rótulo/descrição em português?" — no segundo caso, marque `{ "html": "…", "pt": true }`. Ver a seção *Tipos de bloco*.
@@ -30,8 +30,13 @@ pdftotext -layout -enc UTF-8 "presentations/Lezione_2-Slides.pdf" -
 # Validar content/ contra todos os invariantes — SEMPRE rode antes de terminar
 python tools/validate.py
 
-# Suíte de testes + cobertura (piso 80%). Rode se mexer em js/ ou css/.
+# Reescreve os dados derivados (conteggio do manifest + lessico.json).
+# Rode DEPOIS de acrescentar uma aula, antes de validar.
+python tools/validate.py --fix
+
+# Suítes. A de JS se mexer em js/ ou css/; a de Python se mexer no validador.
 node tools/test.mjs
+python tools/validate_test.py
 
 # Servir localmente. Necessário: fetch() de JSON falha em file:// por CORS.
 python -m http.server 8000
@@ -301,8 +306,9 @@ Tipos registrados em `js/exercises/index.js`. Usar tipo não registrado é erro 
 5. **Valide formas duvidosas** contra Treccani/Crusca e aplique a classificação de 3 saídas.
 6. **Escreva o diálogo** (6–10 turnos), só com vocabulário em escopo.
 7. **Gere exercícios:** ≥2 `gap-audio`, ≥1 `qa-transcribe`, ≥1 `paradigm-fill` por paradigma, ≥1 `dialogo`.
-8. **Acrescente a entrada em `content/manifest.json`** (`id`, `numero`, `file`, `titolo`, `gloss`, `categorie`, `temi`).
-9. **Rode `python tools/validate.py`** e zere os erros. Rode também **`node tools/test.mjs`**: os testes de página carregam os JSONs reais, então uma aula que não renderiza falha ali.
+8. **Acrescente a entrada em `content/manifest.json`** (`id`, `numero`, `file`, `titolo`, `gloss`, `categorie`, `temi`). **Não escreva `conteggio` à mão** — é derivado, sai do `--fix`.
+9. **Rode `python tools/validate.py --fix`** (grava os derivados) e depois **`python tools/validate.py`** até zerar os erros. Rode também **`node tools/test.mjs`**: os testes de página carregam os JSONs reais, então uma aula que não renderiza falha ali.
+9.1. **Leia os avisos de escopo.** O validador compara o italiano do seu diálogo com `content/lessico.json`, o léxico acumulado até aquela aula, e avisa sobre forma nunca ensinada. É **aviso, não erro**, porque a checagem é heurística e existe caso legítimo — o diálogo da Aula 0 soletra *Castelli* de propósito, e a palavra não é vocabulário a ensinar. Para cada aviso, decida: ou a palavra entra no conteúdo da aula (num `chunk`, `lista` ou `tabella`), ou ela sai do diálogo, ou é caso legítimo e fica. O que não vale é ignorar sem olhar.
 10. **Checagem de anonimato:** nenhum nome próprio das fontes aparece em arquivo versionado; os diálogos usam nomes italianos genéricos.
 11. **Não toque** em `js/`, `css/`, nem nos JSONs de aulas anteriores.
 
@@ -311,21 +317,50 @@ Tipos registrados em `js/exercises/index.js`. Usar tipo não registrado é erro 
 ## Arquitetura, para quando você *precisar* mexer no código
 
 ```
-index.html          índice de aulas
-lezione.html        renderiza ?l=NN
-css/tokens.css      tokens; paleta derivada do deck; dark mode
-css/style.css       folha única, mobile-first
-js/app.js           bootstrap, rota, monta cards, liga submit→check→feedback→store
-js/speech.js        ÚNICO lugar que toca speechSynthesis
-js/store.js         ÚNICO lugar que toca localStorage
-js/check.js         normalização de resposta e diff por token
-js/render.js        seções, chips, blocos, botão de áudio, barra de player
-js/exercises/       um módulo por tipo + index.js (registry)
-content/            manifest.json + lezione-NN.json
-tests/              suíte node:test; support/ tem DOM mínimo e dublês
-tools/validate.py   valida os invariantes deste documento
-tools/test.mjs      roda a suíte com cobertura, piso de 80%
+index.html            índice de aulas
+lezione.html          renderiza ?l=NN
+ripasso.html          revisão espaçada, atravessando aulas
+css/tokens.css        tokens; paleta derivada do deck; dark mode
+css/style.css         folha única, mobile-first
+js/main.js            ponto de entrada da home e da aula (só o DOMContentLoaded)
+js/app.js             rota, monta cards, liga submit→check→feedback→store
+js/ripasso.js         ponto de entrada da revisão; reusa mountExercise
+js/speech.js          ÚNICO lugar que toca speechSynthesis
+js/store.js           ÚNICO lugar que toca localStorage
+js/check.js           normalização de resposta e diff por token
+js/render.js          seções, chips, blocos, botão de áudio, barra de player
+js/exercises/         um módulo por tipo + index.js (registry)
+content/              manifest.json + lezione-NN.json + lessico.json (derivado)
+tests/                suíte node:test; support/ tem DOM mínimo e dublês
+tools/validate.py     valida os invariantes deste documento; --fix grava derivados
+tools/validate_test.py testes do validador (unittest da stdlib)
+tools/test.mjs        roda a suíte JS com cobertura, piso de 80%
 ```
+
+**`app.js` não se autoinicializa.** Quem dispara é `main.js`, com uma linha.
+A razão é concreta: `ripasso.js` importa `mountExercise` e `initChrome` de
+`app.js`, e quando o import trazia junto um `DOMContentLoaded`, a página de
+revisão subia dois bootstraps e duplicava os listeners da toolbar.
+
+### Dados derivados em `content/`
+
+Duas coisas ali são **calculadas, não escritas à mão**:
+
+| Onde | O quê | Por quê |
+|---|---|---|
+| `manifest.lezioni[].conteggio` | ids rastreáveis da aula | A home desenha a barra de progresso sem baixar a aula. Com 40 aulas, buscar todas seriam ~1,6 MB por visita. |
+| `content/lessico.json` | forma italiana → aula que a ensinou | Sustenta a checagem da regra do i+1 nos diálogos. |
+
+São **versionados** (o site é servido direto, sem build) e o `validate.py`
+reprova quando ficam velhos. `--fix` reescreve. Não é um passo de build: o
+derivado é conferido no repositório, não gerado no deploy.
+
+A colheita do léxico é exatamente o italiano que a aula **exibe** — o mesmo
+conjunto que ganha 🔊 pelo invariante 7.1: `chunks` (com `slot`), `header`,
+e os blocos `lista`, `tabella` (menos células `pt: true`), `contrasto` e
+`paradigma`. `dialogo` e `esercizi` ficam **fora de propósito**: são o que a
+checagem confere, e se entrassem, um diálogo fora de escopo se
+autoautorizaria.
 
 ### Testes
 

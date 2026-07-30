@@ -144,6 +144,21 @@ export function getItem(lessonId, itemId) {
   return lessonBucket(lessonId).items[itemId] ?? null;
 }
 
+/** Id da última aula visitada, ou null. Alimenta o card «Continuar» da
+ *  home — com 40 aulas, lembrar onde parou deixa de ser trivial. */
+export function lastVisited() {
+  const s = load();
+  let melhor = null;
+  let quando = '';
+  for (const [id, b] of Object.entries(s.lessons)) {
+    if (b.visitedAt && b.visitedAt > quando) {
+      quando = b.visitedAt;
+      melhor = id;
+    }
+  }
+  return melhor;
+}
+
 export function lessonProgress(lessonId, totalItems) {
   const b = lessonBucket(lessonId);
   const ids = Object.keys(b.items);
@@ -157,8 +172,22 @@ export function lessonProgress(lessonId, totalItems) {
   };
 }
 
+/** Quantos itens estão vencidos. Separado de dueItems() porque a home só
+ *  precisa do número, e ela não pode pagar por ordenação nem por fetch. */
+export function dueCount() {
+  const s = load();
+  const now = Date.now();
+  let n = 0;
+  for (const bucket of Object.values(s.lessons)) {
+    for (const it of Object.values(bucket.items ?? {})) {
+      if (it.dueAt && new Date(it.dueAt).getTime() <= now) n += 1;
+    }
+  }
+  return n;
+}
+
 /** Itens com revisão vencida, ordenados pelos mais errados primeiro.
- *  Alimenta o roteamento adaptativo (fase 2). */
+ *  Alimenta o Ripasso. */
 export function dueItems(limit = 20) {
   const s = load();
   const now = Date.now();

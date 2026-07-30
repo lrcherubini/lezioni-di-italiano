@@ -19,7 +19,7 @@ const CONTENT = 'content/';
 
 /* --- Fetch --------------------------------------------------------------- */
 
-async function loadJSON(path) {
+export async function loadJSON(path) {
   const res = await fetch(path, { cache: 'no-cache' });
   if (!res.ok) throw new Error(`${res.status} ao carregar ${path}`);
   return res.json();
@@ -94,6 +94,13 @@ function initAudioBanner() {
 
 let exCounter = 0;
 
+/** Zera a numeração. Chamado por quem monta uma página inteira de cards;
+ *  sem isso o contador acumula entre renderizações e a segunda página
+ *  começaria em "Ex. 16". */
+export function resetExerciseCounter() {
+  exCounter = 0;
+}
+
 /**
  * Monta o card em volta de um exercício e liga o ciclo
  * submit → check → feedback → store.record.
@@ -102,7 +109,7 @@ let exCounter = 0;
  * diálogo: ele tem título e gloss em italiano próprios (não um `consegna`
  * comum) e não deve entrar na numeração "Ex. NN" dos exercícios.
  */
-function mountExercise(item, lessonId, opts = {}) {
+export function mountExercise(item, lessonId, opts = {}) {
   const mod = getExercise(item.type);
   if (opts.countInIndex !== false) exCounter += 1;
 
@@ -175,56 +182,142 @@ function mountExercise(item, lessonId, opts = {}) {
   return card;
 }
 
-/* --- Home ---------------------------------------------------------------- */
+/* --- Home ----------------------------------------------------------------
 
-async function renderHome() {
+   A home carrega SÓ o manifest. A contagem de itens de cada aula vem do
+   campo `conteggio`, gravado lá por `tools/validate.py --fix` e conferido
+   pelo validador a cada rodada.
+
+   Antes ela baixava todo `lezione-NN.json` só para contar itens: com 40
+   aulas isso seria ~1,6 MB e 40 requisições a cada visita. O dado derivado
+   no manifest troca isso por uma requisição só.                        */
+
+/** Quantas aulas por bloco dobrável. 10 dá blocos que cabem numa tela. */
+const BLOCO = 10;
+
+function lessonCard(entry) {
+  const prog = store.lessonProgress(entry.id, entry.conteggio ?? 0);
+
+  return el('li', {},
+    el('article', { class: 'lesson-card', 'data-completa': prog.pct === 100 ? 'true' : null },
+      el('div', { class: 'lesson-card__body' },
+        el('div', { class: 'lesson-card__num' }, `Lezione ${entry.numero}`),
+        el('h2', { class: 'lesson-card__title' },
+          speakButton(entry.titolo),
+          ' ',
+          el('a', { href: `lezione.html?l=${entry.id}` }, entry.titolo)
+        ),
+        el('p', { class: 'lesson-card__gloss' }, entry.gloss),
+        el('div', { class: 'lesson-card__chips' }, ...(entry.categorie ?? []).map(chip)),
+        el('ul', { class: 'lesson-card__temi' }, ...(entry.temi ?? []).map((t) => el('li', {}, t)))
+      ),
+      el('div', { class: 'lesson-card__foot' },
+        el('div', { class: 'progress' },
+          el('div', { class: 'progress__bar', style: `width:${prog.pct}%` })
+        ),
+        el('span', { class: 'progress__label' }, `${prog.done}/${prog.total}`)
+      )
+    )
+  );
+}
+
+/** Card de retomada. Sem ele, com 40 aulas o aluno abre a home e tem que
+ *  lembrar onde parou. */
+function resumeCard(entry) {
+  const prog = store.lessonProgress(entry.id, entry.conteggio ?? 0);
+
+  return el('a', { class: 'resume', href: `lezione.html?l=${entry.id}` },
+    el('div', { class: 'resume__kicker' }, '▶ Continuar'),
+    el('div', { class: 'resume__title' }, `Lezione ${entry.numero} · ${entry.titolo}`),
+    el('div', { class: 'resume__gloss' }, entry.gloss),
+    el('div', { class: 'resume__foot' },
+      el('div', { class: 'progress' },
+        el('div', { class: 'progress__bar', style: `width:${prog.pct}%` })
+      ),
+      el('span', { class: 'progress__label' }, `${prog.done}/${prog.total}`)
+    )
+  );
+}
+
+/** Agrupa em blocos de BLOCO aulas, pelo `numero`. */
+function blocos(lezioni) {
+  const mapa = new Map();
+  for (const l of lezioni) {
+    const inicio = Math.floor(l.numero / BLOCO) * BLOCO;
+    if (!mapa.has(inicio)) mapa.set(inicio, []);
+    mapa.get(inicio).push(l);
+  }
+  return [...mapa.entries()].sort((a, b) => a[0] - b[0]);
+}
+
+export async function renderHome() {
   const manifest = await loadJSON(`${CONTENT}manifest.json`);
+  const lezioni = manifest.lezioni ?? [];
+
   const grid = document.getElementById('lesson-grid');
   grid.innerHTML = '';
 
-  // Contamos itens de cada aula para a barra de progresso ser real.
-  const counts = await Promise.all(
-    manifest.lezioni.map(async (l) => {
-      try {
-        const data = await loadJSON(`${CONTENT}${l.file}`);
-        return countItems(data);
-      } catch {
-        return 0;
-      }
-    })
-  );
+  /* Retomada: a última aula visitada, ou a primeira se nunca visitou. */
+  const ultimaId = store.lastVisited();
+  const retomar = lezioni.find((l) => l.id === ultimaId) ?? lezioni[0];
 
-  manifest.lezioni.forEach((l, i) => {
-    const prog = store.lessonProgress(l.id, counts[i]);
+  const topo = document.getElementById('home-topo');
+  if (topo) {
+    topo.innerHTML = '';
+    if (retomar) topo.append(resumeCard(retomar));
 
-    grid.append(
-      el('li', {},
-        el('article', { class: 'lesson-card' },
-          el('div', { class: 'lesson-card__body' },
-            el('div', { class: 'lesson-card__num' }, `Lezione ${l.numero}`),
-            el('h2', { class: 'lesson-card__title' },
-              speakButton(l.titolo),
-              ' ',
-              el('a', { href: `lezione.html?l=${l.id}` }, l.titolo)
-            ),
-            el('p', { class: 'lesson-card__gloss' }, l.gloss),
-            el('div', { class: 'lesson-card__chips' }, ...(l.categorie ?? []).map(chip)),
-            el('ul', { class: 'lesson-card__temi' }, ...(l.temi ?? []).map((t) => el('li', {}, t)))
-          ),
-          el('div', { class: 'lesson-card__foot' },
-            el('div', { class: 'progress' },
-              el('div', { class: 'progress__bar', style: `width:${prog.pct}%` })
-            ),
-            el('span', { class: 'progress__label' }, `${prog.done}/${prog.total}`)
+    // Ripasso: só aparece quando há o que revisar. Um card permanente
+    // dizendo "0 itens" seria ruído toda semana.
+    const vencidos = store.dueCount();
+    if (vencidos > 0) {
+      topo.append(
+        el('a', { class: 'ripasso-call', href: 'ripasso.html' },
+          el('span', { class: 'ripasso-call__n' }, String(vencidos)),
+          el('span', {},
+            el('strong', {}, vencidos === 1 ? 'item para revisar' : 'itens para revisar'),
+            el('span', { class: 'ripasso-call__gloss' },
+              ' — de todas as aulas, os que você mais erra primeiro')
           )
         )
+      );
+    }
+  }
+
+  const grupos = blocos(lezioni);
+
+  for (const [inicio, aulas] of grupos) {
+    const completas = aulas.filter(
+      (l) => store.lessonProgress(l.id, l.conteggio ?? 0).pct === 100
+    ).length;
+
+    // Só o bloco da aula em retomada abre. Com um bloco só (início do
+    // curso) ele abre de qualquer jeito, para a home não nascer vazia.
+    const contemRetomada = retomar && aulas.some((l) => l.id === retomar.id);
+    const aberto = grupos.length === 1 || contemRetomada;
+
+    const fim = inicio + BLOCO - 1;
+    const ul = el('ul', { class: 'lesson-grid' }, ...aulas.map(lessonCard));
+
+    grid.append(
+      el('details', { class: 'bloco', open: aberto || null, 'data-inicio': String(inicio) },
+        el('summary', { class: 'bloco__head' },
+          el('span', { class: 'bloco__titolo' }, `Aulas ${inicio}–${fim}`),
+          el('span', { class: 'bloco__conta' }, `${completas}/${aulas.length} completas`)
+        ),
+        ul
       )
     );
-  });
+  }
 }
 
-/** Conta itens rastreáveis: sub-itens quando existem, senão o exercício. */
-function countItems(lesson) {
+/**
+ * Conta itens rastreáveis: sub-itens quando existem, senão o exercício.
+ *
+ * Esta é a conta que vai para `conteggio` no manifest — `tools/validate.py`
+ * reproduz a mesma lógica e reprova se os dois divergirem. Mudou aqui,
+ * mude lá.
+ */
+export function countItems(lesson) {
   let n = 0;
   for (const ex of lesson.esercizi ?? []) {
     if (ex.type === 'paradigm-fill') {
@@ -241,6 +334,8 @@ function countItems(lesson) {
 /* --- Página de aula ----------------------------------------------------- */
 
 async function renderLesson() {
+  resetExerciseCounter();
+
   const params = new URLSearchParams(location.search);
   const id = params.get('l') ?? '00';
 
@@ -443,7 +538,7 @@ function initDataButtons() {
 
 /* --- Bootstrap ---------------------------------------------------------- */
 
-function fail(err) {
+export function fail(err) {
   console.error(err);
   const slot = document.getElementById('audio-status') ?? document.body;
   slot.prepend(
@@ -461,15 +556,27 @@ function fail(err) {
   );
 }
 
-async function main() {
+/** Cabeçalho comum a todas as páginas: tema, banner de áudio e os botões
+ *  de progresso. `ripasso.js` chama isto para não duplicar nada. */
+export function initChrome() {
   initTheme();
   initAudioBanner();
   initDataButtons();
+}
+
+/**
+ * Sobe a página. Quem dispara é `js/main.js` — este módulo NÃO se
+ * autoinicializa de propósito: `ripasso.js` importa daqui para reusar
+ * `mountExercise` e `initChrome`, e se o import trouxesse junto um
+ * bootstrap, as duas páginas rodariam ao mesmo tempo e os listeners da
+ * toolbar sairiam duplicados.
+ */
+export async function boot() {
+  initChrome();
 
   try {
     if (document.getElementById('lesson-grid')) {
       await renderHome();
-      window.addEventListener('ldi:progress', () => renderHome().catch(fail));
     } else if (document.getElementById('lesson')) {
       await renderLesson();
     }
@@ -477,5 +584,3 @@ async function main() {
     fail(err);
   }
 }
-
-document.addEventListener('DOMContentLoaded', main);

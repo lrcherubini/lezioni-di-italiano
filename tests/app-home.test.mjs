@@ -1,5 +1,9 @@
-/* Bootstrap da home: cards de aula, barra de progresso e os botões de
-   exportar/importar. */
+/* Home: card «Continuar», blocos dobráveis, barra de progresso e os botões
+   de exportar/importar.
+
+   A asserção mais importante deste arquivo é a contagem de requisições: a
+   home tem que ler SÓ o manifest. Antes ela baixava cada lezione-NN.json
+   para contar itens, o que com 40 aulas seria ~1,6 MB por visita. */
 
 import { test, describe, before } from 'node:test';
 import assert from 'node:assert/strict';
@@ -11,10 +15,11 @@ const synth = makeSpeechSynthesis({ voices: IT_VOICES });
 installUtterance();
 const dom = installDOM({ speechSynthesis: synth });
 installStorage();
-installFetch();
+const requisicoes = installFetch();
 
 const store = await import('../js/store.js');
-await import('../js/app.js');
+const { renderHome, countItems } = await import('../js/app.js');
+await import('../js/main.js');   // registra o DOMContentLoaded
 
 const manifest = readContent('manifest.json');
 let grid;
@@ -26,17 +31,102 @@ before(async () => {
   grid = dom.document.getElementById('lesson-grid');
 });
 
+describe('custo de carregamento', () => {
+  test('a home faz UMA requisição — só o manifest', () => {
+    // O invariante de escala do projeto. Se alguém voltar a buscar as
+    // aulas aqui, com 40 delas a home fica inutilizável no celular.
+    assert.deepEqual(requisicoes, ['content/manifest.json']);
+  });
+
+  test('o total de itens vem do conteggio do manifest', () => {
+    for (const l of manifest.lezioni) {
+      assert.equal(typeof l.conteggio, 'number',
+        `manifest sem conteggio em ${l.id} — rode python tools/validate.py --fix`);
+    }
+  });
+});
+
 describe('esqueleto x HTML real', () => {
   test('os ids e data-actions do teste existem em index.html', () => {
     const html = readText('index.html');
-    for (const marca of ['id="lesson-grid"', 'id="audio-status"',
+    for (const marca of ['id="lesson-grid"', 'id="home-topo"', 'id="audio-status"',
       'data-action="theme"', 'data-action="export"', 'data-action="import"']) {
       assert.ok(html.includes(marca), `index.html perdeu ${marca}`);
     }
   });
 });
 
-describe('cards de aula', () => {
+describe('card «Continuar»', () => {
+  test('sem histórico, aponta para a primeira aula', () => {
+    const r = dom.document.getElementById('home-topo').querySelector('.resume');
+    assert.ok(r, 'o card de retomada não renderizou');
+    assert.equal(r.getAttribute('href'), `lezione.html?l=${manifest.lezioni[0].id}`);
+    assert.match(r.textContent, /Continuar/);
+  });
+
+  test('depois de visitar uma aula, aponta para ela', async () => {
+    store.markVisited('01');
+    await renderHome();
+
+    const r = dom.document.getElementById('home-topo').querySelector('.resume');
+    assert.equal(r.getAttribute('href'), 'lezione.html?l=01');
+    assert.match(r.textContent, /Lezione 1/);
+  });
+});
+
+describe('chamada do Ripasso', () => {
+  test('não aparece quando não há nada vencido', () => {
+    assert.equal(dom.document.getElementById('home-topo').querySelectorAll('.ripasso-call').length, 0,
+      'um card marcando zero seria ruído toda semana');
+  });
+
+  test('aparece com a contagem quando há item vencido', async () => {
+    store.record('01', 'l01-e01', { correct: false, score: 0 });
+    const raw = JSON.parse(store.exportJSON());
+    raw.lessons['01'].items['l01-e01'].dueAt = new Date(Date.now() - 1000).toISOString();
+    store.importJSON(JSON.stringify(raw));
+
+    await renderHome();
+
+    const call = dom.document.getElementById('home-topo').querySelector('.ripasso-call');
+    assert.ok(call, 'a chamada do Ripasso não renderizou');
+    assert.equal(call.getAttribute('href'), 'ripasso.html');
+    assert.equal(call.querySelector('.ripasso-call__n').textContent, '1');
+    assert.match(call.textContent, /item para revisar/);
+  });
+
+  test('pluraliza a partir de dois', async () => {
+    store.record('01', 'l01-e02', { correct: false, score: 0 });
+    const raw = JSON.parse(store.exportJSON());
+    for (const it of Object.values(raw.lessons['01'].items)) {
+      it.dueAt = new Date(Date.now() - 1000).toISOString();
+    }
+    store.importJSON(JSON.stringify(raw));
+
+    await renderHome();
+
+    const call = dom.document.getElementById('home-topo').querySelector('.ripasso-call');
+    assert.equal(call.querySelector('.ripasso-call__n').textContent, '2');
+    assert.match(call.textContent, /itens para revisar/);
+
+    store.reset();
+    await renderHome();
+  });
+});
+
+describe('blocos de aulas', () => {
+  test('com 2 aulas há um bloco só, e ele nasce aberto', () => {
+    const blocos = grid.querySelectorAll('.bloco');
+    assert.equal(blocos.length, 1);
+    assert.equal(blocos[0].getAttribute('data-inicio'), '0');
+    assert.equal(blocos[0].hasAttribute('open'), true, 'a home não pode nascer vazia');
+    assert.match(blocos[0].querySelector('.bloco__titolo').textContent, /Aulas 0–9/);
+  });
+
+  test('o resumo do bloco conta as aulas completas', () => {
+    assert.match(grid.querySelector('.bloco__conta').textContent, /0\/2 completas/);
+  });
+
   test('um card por aula do manifest, na ordem', () => {
     const cards = grid.querySelectorAll('.lesson-card');
     assert.equal(cards.length, manifest.lezioni.length);
@@ -60,33 +150,27 @@ describe('cards de aula', () => {
 });
 
 describe('barra de progresso', () => {
-  test('começa em 0% com o total real de itens da aula', () => {
+  test('começa em 0% com o total vindo do manifest', () => {
     const label = grid.querySelectorAll('.progress__label')[1].textContent;
     const [feito, total] = label.split('/').map(Number);
     assert.equal(feito, 0);
-    assert.ok(total > 0, 'o total tem que contar os itens rastreáveis da aula');
+    assert.equal(total, manifest.lezioni[1].conteggio);
     assert.equal(grid.querySelectorAll('.progress__bar')[1].getAttribute('style'), 'width:0%');
   });
 
-  test('o total conta células de paradigma e perguntas do diálogo, não os exercícios', () => {
-    // countItems: um paradigm-fill vale N células ocultas, não 1.
-    const aula = readContent('lezione-01.json');
-    const esperado =
-      aula.esercizi.reduce((n, ex) => n + (ex.type === 'paradigm-fill'
-        ? ex.righe.reduce((m, r) => m + r.nascondi.length, 0)
-        : 1), 0)
-      + aula.dialogo.passate.find((p) => p.focus === 'detail').domande.length;
-
-    const total = Number(grid.querySelectorAll('.progress__label')[1].textContent.split('/')[1]);
-    assert.equal(total, esperado);
+  test('o conteggio do manifest bate com a conta real da aula', () => {
+    // countItems() em app.js e count_items() em validate.py são a mesma
+    // conta escrita duas vezes. Este teste é o que impede as duas de
+    // divergirem em silêncio.
+    for (const l of manifest.lezioni) {
+      assert.equal(countItems(readContent(l.file)), l.conteggio, `aula ${l.id}`);
+    }
   });
 
-  test('acertar um item redesenha a home pelo evento ldi:progress', async () => {
+  test('acertar itens move a barra', async () => {
     const aula = readContent('lezione-01.json');
     store.record('01', aula.esercizi[0].id, { correct: true, score: 1 });
-
-    dom.window.dispatchEvent({ type: 'ldi:progress' });
-    await flush(20);
+    await renderHome();
 
     const label = dom.document.getElementById('lesson-grid')
       .querySelectorAll('.progress__label')[1].textContent;

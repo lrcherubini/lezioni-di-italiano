@@ -23,7 +23,7 @@ globalThis.fetch = async () => { throw new TypeError('Failed to fetch'); };
 const erros = [];
 console.error = (e) => erros.push(e);
 
-await import('../js/app.js');
+await import('../js/main.js');
 
 before(async () => {
   lessonSkeleton(dom.document);

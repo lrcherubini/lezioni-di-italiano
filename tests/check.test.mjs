@@ -62,8 +62,24 @@ describe('expandElision', () => {
 describe('checkAnswer', () => {
   test('resposta vazia é erro sem score', () => {
     const r = checkAnswer('', 'sono');
-    assert.deepEqual(r, { correct: false, score: 0, level: 'none' });
+    assert.deepEqual(r, { correct: false, score: 0, similarity: 0, level: 'none' });
     assert.deepEqual(checkAnswer('   ', 'sono').level, 'none');
+  });
+
+  test('similarity vem em TODOS os ramos, não só no erro', () => {
+    // gap-audio gradua a mensagem por result.similarity; quem consome não
+    // deveria precisar saber em qual ramo a resposta caiu.
+    for (const r of [
+      checkAnswer('sono', 'sono'),                              // exact
+      checkAnswer('perche', 'perché'),                          // accent
+      checkAnswer('lo amico', "l'amico", { tolleranzaElisione: true }), // elision
+      checkAnswer('zzz', 'sono'),                               // none
+      checkAnswer('', 'sono'),                                  // vazio
+    ]) {
+      assert.equal(typeof r.similarity, 'number', JSON.stringify(r));
+      assert.ok(r.similarity >= 0 && r.similarity <= 1);
+    }
+    assert.equal(checkAnswer('sono', 'sono').similarity, 1);
   });
 
   test('igualdade estrita, ignorando caixa e pontuação', () => {

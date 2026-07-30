@@ -56,7 +56,8 @@ export function homeSkeleton(document) {
     mk('button', { 'data-action': 'theme' }),
     mk('button', { 'data-action': 'export' }),
     mk('button', { 'data-action': 'import' }),
-    mk('ul', { id: 'lesson-grid' })
+    mk('div', { id: 'home-topo' }),
+    mk('div', { id: 'lesson-grid' })
   );
 }
 

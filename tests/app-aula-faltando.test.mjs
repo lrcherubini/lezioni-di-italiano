@@ -25,7 +25,7 @@ globalThis.fetch = async (path) => (path.endsWith('manifest.json')
   ? { ok: true, status: 200, json: async () => MANIFEST }
   : { ok: false, status: 404, json: async () => ({}) });
 
-await import('../js/app.js');
+await import('../js/main.js');
 
 before(async () => {
   homeSkeleton(dom.document);

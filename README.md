@@ -32,26 +32,31 @@ Qualquer servidor estático serve: `npx serve`, `php -S localhost:8000`, extens�
 ```
 index.html            índice de aulas
 lezione.html          página de aula (?l=01)
+ripasso.html          revisão espaçada, atravessando todas as aulas
 css/
   tokens.css          tokens: paleta derivada dos slides, dark mode
   style.css           folha única, mobile-first
 js/
-  app.js              bootstrap, rota, monta os exercícios
+  main.js             ponto de entrada da home e da aula
+  app.js              rota, monta os exercícios, liga o ciclo de resposta
+  ripasso.js          monta a revisão; reusa o mesmo card de exercício
   speech.js           síntese de voz (único lugar que toca speechSynthesis)
   store.js            progresso (único lugar que toca localStorage)
   check.js            correção de resposta + diff palavra a palavra
   render.js           seções, chips, tabelas, botão de áudio
   exercises/          um módulo por tipo + index.js (registry)
 content/
-  manifest.json       índice das aulas
+  manifest.json       índice das aulas (com o conteggio derivado)
   lezione-00.json     Aula 0 — alfabeto e sons
   lezione-01.json     Aula 1 — essere/avere, nacionalidade, idade
+  lessico.json        derivado: forma italiana → aula que a ensinou
 tests/
   *.test.mjs          suíte (node:test), um arquivo por cenário
   support/            DOM mínimo, dublê da Web Speech API, fixtures
 tools/
-  validate.py         valida o conteúdo contra os invariantes do projeto
-  test.mjs            roda a suíte com cobertura e piso de 80%
+  validate.py         valida o conteúdo; --fix grava os dados derivados
+  validate_test.py    testes do validador (unittest da stdlib)
+  test.mjs            roda a suíte JS com cobertura e piso de 80%
 ```
 
 Não versionados (ver `.gitignore`):
@@ -70,20 +75,27 @@ Não versionados (ver `.gitignore`):
 
 O fluxo completo está em **[CLAUDE.md](CLAUDE.md)** — é o documento operacional, escrito para um agente executar.
 
-Resumo: colocar os arquivos novos em `presentations/`, criar `content/lezione-NN.json` seguindo o schema, acrescentar a entrada em `content/manifest.json`, rodar `python tools/validate.py`. **Nenhum código é tocado** — adicionar aula mexe só em `content/`.
+Resumo: colocar os arquivos novos em `presentations/`, criar `content/lezione-NN.json` seguindo o schema, acrescentar a entrada em `content/manifest.json`, rodar o validador. **Nenhum código é tocado** — adicionar aula mexe só em `content/`.
 
 ```bash
-python tools/validate.py
+python tools/validate.py --fix    # grava os dados derivados
+python tools/validate.py          # confere tudo
+node tools/test.mjs               # a aula nova entra no smoke sozinha
 ```
 
 O validador cobre os invariantes que importam: toda seção tem explicação, `id` únicos (são a chave do progresso), largura de tabela consistente, categorias válidas, tipo de exercício registrado, e a frase reconstruída de cada lacuna idêntica ao áudio.
 
+**Dados derivados.** Duas coisas em `content/` são calculadas, não escritas à mão: o `conteggio` de cada entrada do manifest (quantos itens rastreáveis a aula tem) e o `content/lessico.json` (forma italiana → aula que a ensinou). São versionadas — o site é servido direto, sem build — e o validador reprova quando ficam velhas. Isso é o que deixa a home carregar **um** arquivo em vez de todas as aulas.
+
+**Regra do i+1.** O validador compara o italiano de cada diálogo com o léxico acumulado até aquela aula e **avisa** sobre forma nunca ensinada. Aviso e não erro: a checagem é heurística e existe caso legítimo (o diálogo da Aula 0 soletra *Castelli* de propósito). Mas cada aviso merece uma decisão.
+
 ## Testes
 
 ```bash
-node tools/test.mjs            # suíte + cobertura, reprova abaixo de 80%
+node tools/test.mjs            # suíte JS + cobertura, reprova abaixo de 80%
 node tools/test.mjs --sem-cobertura
 node tools/test.mjs tests/check.test.mjs
+python tools/validate_test.py  # testes do validador
 ```
 
 Runner é o `node --test` embutido (Node 22+) e a cobertura é a do V8 — **nenhuma dependência**, nenhum `package.json`, coerente com o resto do projeto. Onde o código precisa de DOM, os testes usam um DOM mínimo próprio em [tests/support/dom.mjs](tests/support/dom.mjs), de umas 300 linhas, em vez de trazer o jsdom.
@@ -91,6 +103,8 @@ Runner é o `node --test` embutido (Node 22+) e a cobertura é a do V8 — **nen
 Os testes de página carregam os **JSONs reais** de `content/`, não mocks. Isso dá ao loop de autoria uma rede que o `validate.py` não dá: ele checa que o schema está certo, a suíte checa que o schema **vira página**.
 
 O que está coberto, além do caminho feliz: `localStorage` bloqueado ou corrompido, migração de progresso antigo, navegador sem nenhuma voz italiana, navegador sem Web Speech API, `fetch` falhando em `file://`, aula com tipo de exercício não registrado, e manifest apontando para arquivo inexistente.
+
+`tests/aule.test.mjs` percorre o manifest e não cita nenhuma aula pelo nome: **a aula da semana entra no smoke sozinha**, sem editar teste nenhum.
 
 ## Documentação
 

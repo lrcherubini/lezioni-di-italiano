@@ -5,6 +5,10 @@ presentations/
 # Caderno de dúvidas e divergências — local, para levar à aula.
 ERRATA.md
 
+# Cache do Python (o validador e seus testes)
+__pycache__/
+*.pyc
+
 # Sistema operacional / editor
 Thumbs.db
 desktop.ini

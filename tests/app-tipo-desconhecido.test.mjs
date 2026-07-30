@@ -44,7 +44,7 @@ globalThis.fetch = async (path) => ({
   json: async () => (path.endsWith('manifest.json') ? MANIFEST : AULA),
 });
 
-await import('../js/app.js');
+await import('../js/main.js');
 
 before(async () => {
   lessonSkeleton(dom.document);

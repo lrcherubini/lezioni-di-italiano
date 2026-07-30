@@ -53,18 +53,22 @@ export function expandElision(text) {
  *   tolleranzaAccenti?: boolean,
  *   tolleranzaElisione?: boolean
  * }} opts
- * @returns {{correct: boolean, score: number, level: 'exact'|'accent'|'elision'|'alt'|'none', nota?: string}}
+ * `similarity` vem SEMPRE, em todos os ramos — quem consome (gap-audio
+ * gradua a mensagem por ela) não deveria ter que saber em qual ramo caiu.
+ *
+ * @returns {{correct: boolean, score: number, similarity: number,
+ *            level: 'exact'|'accent'|'elision'|'alt'|'none', nota?: string}}
  */
 export function checkAnswer(given, expected, opts = {}) {
   const g = normalize(given);
-  if (!g) return { correct: false, score: 0, level: 'none' };
+  if (!g) return { correct: false, score: 0, similarity: 0, level: 'none' };
 
   const candidates = [expected, ...(opts.accettaAnche ?? [])];
 
   // 1. Igualdade estrita (após normalizar espaço/pontuação/caixa).
   for (const cand of candidates) {
     if (g === normalize(cand)) {
-      return { correct: true, score: 1, level: 'exact' };
+      return { correct: true, score: 1, similarity: 1, level: 'exact' };
     }
   }
 
@@ -78,6 +82,7 @@ export function checkAnswer(given, expected, opts = {}) {
         return {
           correct: true,
           score: 0.85,
+          similarity: similarity(g, normalize(cand)),
           level: 'accent',
           nota: `Certo! Só atenção ao acento: <b>${escapeHtml(cand)}</b>.`,
         };
@@ -92,6 +97,7 @@ export function checkAnswer(given, expected, opts = {}) {
         return {
           correct: true,
           score: 0.85,
+          similarity: similarity(g, normalize(cand)),
           level: 'elision',
           nota: `Aceito, mas o italiano elide aqui: <b>${escapeHtml(cand)}</b>.`,
         };
@@ -99,9 +105,13 @@ export function checkAnswer(given, expected, opts = {}) {
     }
   }
 
-  // 4. Errado — mas devolvemos similaridade para modular o feedback.
-  const score = similarity(g, normalize(expected));
-  return { correct: false, score: 0, level: 'none', similarity: score };
+  // 4. Errado — mas a similaridade modula o feedback ("quase!" x "revise").
+  return {
+    correct: false,
+    score: 0,
+    similarity: similarity(g, normalize(expected)),
+    level: 'none',
+  };
 }
 
 /* --- Diff por token -----------------------------------------------------
