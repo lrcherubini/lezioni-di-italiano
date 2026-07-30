@@ -90,7 +90,14 @@ export function markVisited(lessonId) {
  */
 export function record(lessonId, itemId, result) {
   const b = lessonBucket(lessonId);
-  const prev = b.items[itemId] ?? { attempts: 0, correct: 0, ease: 2.5, interval: 0, dueAt: null, lastAt: null };
+  // Os defaults entram por spread, não por `??` no objeto inteiro: um item
+  // vindo de export antigo (ou de arquivo editado à mão) pode existir sem
+  // `ease`/`interval`, e aí o agendamento produzia NaN → data inválida →
+  // toISOString() lançava e o submit do exercício morria junto.
+  const prev = {
+    attempts: 0, correct: 0, ease: 2.5, interval: 0, dueAt: null, lastAt: null,
+    ...(b.items[itemId] ?? {}),
+  };
 
   prev.attempts += 1;
   if (result.correct) prev.correct += 1;
@@ -106,6 +113,14 @@ export function record(lessonId, itemId, result) {
 /* SRS leve, no espírito do SM-2 mas sem a nota de 0–5: usamos só
    acertou/errou e o score parcial que o diff devolve. Suficiente para
    decidir "revisar amanhã" contra "revisar em duas semanas". */
+
+/* Teto do intervalo, em dias. Sem ele o intervalo cresce por fator ~3 a
+   cada acerto e, por volta do 23º acerto seguido, ultrapassa o range de
+   Date — `setDate()` gera data inválida e `toISOString()` LANÇA, derrubando
+   o submit inteiro do exercício. Um ano também é o limite pedagógico útil:
+   revisão mais espaçada que isso, num curso de A1, é o mesmo que nunca. */
+const MAX_INTERVAL_DAYS = 365;
+
 function schedule(item, result) {
   const score = result.score ?? (result.correct ? 1 : 0);
 
@@ -114,7 +129,10 @@ function schedule(item, result) {
     item.interval = 1;
   } else {
     item.ease = Math.min(3.0, item.ease + (score >= 0.95 ? 0.1 : 0));
-    item.interval = item.interval === 0 ? 1 : Math.round(item.interval * item.ease);
+    item.interval = Math.min(
+      MAX_INTERVAL_DAYS,
+      item.interval === 0 ? 1 : Math.round(item.interval * item.ease)
+    );
   }
 
   const due = new Date();

@@ -46,8 +46,12 @@ content/
   manifest.json       índice das aulas
   lezione-00.json     Aula 0 — alfabeto e sons
   lezione-01.json     Aula 1 — essere/avere, nacionalidade, idade
+tests/
+  *.test.mjs          suíte (node:test), um arquivo por cenário
+  support/            DOM mínimo, dublê da Web Speech API, fixtures
 tools/
   validate.py         valida o conteúdo contra os invariantes do projeto
+  test.mjs            roda a suíte com cobertura e piso de 80%
 ```
 
 Não versionados (ver `.gitignore`):
@@ -74,6 +78,20 @@ python tools/validate.py
 
 O validador cobre os invariantes que importam: toda seção tem explicação, `id` únicos (são a chave do progresso), largura de tabela consistente, categorias válidas, tipo de exercício registrado, e a frase reconstruída de cada lacuna idêntica ao áudio.
 
+## Testes
+
+```bash
+node tools/test.mjs            # suíte + cobertura, reprova abaixo de 80%
+node tools/test.mjs --sem-cobertura
+node tools/test.mjs tests/check.test.mjs
+```
+
+Runner é o `node --test` embutido (Node 22+) e a cobertura é a do V8 — **nenhuma dependência**, nenhum `package.json`, coerente com o resto do projeto. Onde o código precisa de DOM, os testes usam um DOM mínimo próprio em [tests/support/dom.mjs](tests/support/dom.mjs), de umas 300 linhas, em vez de trazer o jsdom.
+
+Os testes de página carregam os **JSONs reais** de `content/`, não mocks. Isso dá ao loop de autoria uma rede que o `validate.py` não dá: ele checa que o schema está certo, a suíte checa que o schema **vira página**.
+
+O que está coberto, além do caminho feliz: `localStorage` bloqueado ou corrompido, migração de progresso antigo, navegador sem nenhuma voz italiana, navegador sem Web Speech API, `fetch` falhando em `file://`, aula com tipo de exercício não registrado, e manifest apontando para arquivo inexistente.
+
 ## Documentação
 
 | Arquivo | Para quê |
@@ -98,6 +116,6 @@ Nada sai do navegador. Sem conta, sem servidor, sem cookies, sem analytics, sem 
 
 ## Licença e conteúdo
 
-Código sob licença MIT. As explicações didáticas foram escritas para este repositório.
+Código e conteúdo sob licença **MIT** — ver [LICENSE](LICENSE). As explicações didáticas foram escritas para este repositório.
 
 O material original das aulas (slides e anotações do professor) **não está aqui e não é redistribuído** — fica fora do controle de versão. Este é material de estudo pessoal, sem fins comerciais.

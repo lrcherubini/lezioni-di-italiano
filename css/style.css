@@ -109,7 +109,14 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
 .btn--primary:hover:not(:disabled) { background: var(--navy-600); }
 .btn--ghost { border-color: transparent; background: transparent; }
 .btn--ghost:hover:not(:disabled) { background: var(--surface-alt); }
-.btn--sm { font-size: var(--fs-xs); padding: var(--sp-1) var(--sp-2); }
+/* "Pequeno" é relativo: continua menor que .btn, mas com alvo de toque
+   utilizável no celular — as passadas do diálogo e Lento/Normal são
+   botões que se aperta muito, e 24px de altura era pouco. */
+.btn--sm {
+  font-size: var(--fs-sm);
+  padding: var(--sp-1) var(--sp-3);
+  min-height: 2.25rem;
+}
 .btn[aria-pressed="true"] {
   background: var(--navy); color: var(--text-on-dark); border-color: var(--navy);
 }

@@ -11,7 +11,7 @@ O objetivo principal deste projeto é um **loop de autoria repetível**: a cada 
 1. **Nunca commite `presentations/` nem `ERRATA.md`.** Ambos estão no `.gitignore`. O primeiro é material de terceiros e contém dados pessoais; o segundo é caderno de trabalho local.
 2. **Nenhum arquivo versionado cita nome de pessoa ou da plataforma de aula.** Vale para os docs também — este repositório é público. Diálogos usam nomes italianos genéricos (Marco, Giulia, Luca). Não use dados pessoais reais (idade, cidade) em exemplos.
 3. **Nunca linke PDF nem sirva arquivo de `presentations/`.** O site é autocontido: todo conteúdo explicativo é transcrito para `content/*.json`.
-4. **Zero dependências e zero passo de build.** Sem `package.json`, sem bundler, sem CI de build, sem CDN. O site é HTML + CSS + JS vanilla servido direto.
+4. **Zero dependências e zero passo de build.** Sem `package.json`, sem bundler, sem CI de build, sem CDN. O site é HTML + CSS + JS vanilla servido direto. Vale para as ferramentas também: o validador é stdlib do Python e a suíte é o `node --test` embutido com um DOM próprio — se a resposta para um problema for `npm install`, ela está errada.
 5. **Ao adicionar uma aula, edite apenas `content/`.** Não toque em `js/`, `css/` nem nos JSONs de aulas anteriores.
 6. **`id` de item é imutável.** Ele é a chave do progresso no `localStorage`. Renomear um `id` apaga o histórico daquele item; reaproveitar um `id` mistura históricos de coisas diferentes.
 7. **Toda seção precisa de `spiegazione`.** É o que torna o site independente dos slides. O validador reprova se faltar.
@@ -29,6 +29,9 @@ pdftotext -layout -enc UTF-8 "presentations/Lezione_2-Slides.pdf" -
 
 # Validar content/ contra todos os invariantes — SEMPRE rode antes de terminar
 python tools/validate.py
+
+# Suíte de testes + cobertura (piso 80%). Rode se mexer em js/ ou css/.
+node tools/test.mjs
 
 # Servir localmente. Necessário: fetch() de JSON falha em file:// por CORS.
 python -m http.server 8000
@@ -299,7 +302,7 @@ Tipos registrados em `js/exercises/index.js`. Usar tipo não registrado é erro 
 6. **Escreva o diálogo** (6–10 turnos), só com vocabulário em escopo.
 7. **Gere exercícios:** ≥2 `gap-audio`, ≥1 `qa-transcribe`, ≥1 `paradigm-fill` por paradigma, ≥1 `dialogo`.
 8. **Acrescente a entrada em `content/manifest.json`** (`id`, `numero`, `file`, `titolo`, `gloss`, `categorie`, `temi`).
-9. **Rode `python tools/validate.py`** e zere os erros.
+9. **Rode `python tools/validate.py`** e zere os erros. Rode também **`node tools/test.mjs`**: os testes de página carregam os JSONs reais, então uma aula que não renderiza falha ali.
 10. **Checagem de anonimato:** nenhum nome próprio das fontes aparece em arquivo versionado; os diálogos usam nomes italianos genéricos.
 11. **Não toque** em `js/`, `css/`, nem nos JSONs de aulas anteriores.
 
@@ -319,8 +322,27 @@ js/check.js         normalização de resposta e diff por token
 js/render.js        seções, chips, blocos, botão de áudio, barra de player
 js/exercises/       um módulo por tipo + index.js (registry)
 content/            manifest.json + lezione-NN.json
+tests/              suíte node:test; support/ tem DOM mínimo e dublês
 tools/validate.py   valida os invariantes deste documento
+tools/test.mjs      roda a suíte com cobertura, piso de 80%
 ```
+
+### Testes
+
+`node tools/test.mjs`. Runner é o `node --test` embutido e a cobertura é a do V8 —
+zero dependências, coerente com o invariante 4. Onde precisa de DOM, `tests/support/dom.mjs`
+implementa a fatia usada pelo site (~300 linhas) em vez de trazer jsdom.
+
+Duas regras ao mexer aqui:
+
+- **Um cenário de estado global = um arquivo.** `speech.js` e `store.js` guardam estado de
+  módulo de propósito (promise de vozes cacheada, cache do progresso). `node --test` dá um
+  processo por arquivo, que é a forma limpa de ter estado virgem. Reimportar com
+  `?query=` funciona mas cria um script distinto para a contagem de cobertura, e o número
+  sai errado sem avisar.
+- **Os testes de página usam os JSONs reais de `content/`.** É de propósito: `validate.py`
+  checa que o schema está certo, a suíte checa que o schema **vira página**. Uma aula nova
+  que quebre a renderização falha aqui.
 
 ### Contrato de um tipo de exercício
 
