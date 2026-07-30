@@ -61,11 +61,32 @@ def load_all() -> dict[str, dict]:
     return out
 
 
+def check_cell(name: str, ctx: str, cell) -> None:
+    """Célula de tabella: string simples (italiano, ganha 🔊) ou
+    { "html": str, "pt": true } (não-italiano, sem áudio). Ver CLAUDE.md."""
+    if isinstance(cell, str) or cell is None:
+        return
+    if isinstance(cell, dict):
+        extra = set(cell.keys()) - {'html', 'pt'}
+        if extra:
+            err(f'{name} {ctx}: célula com chave desconhecida {extra}')
+        if 'html' not in cell or not isinstance(cell.get('html'), str):
+            err(f'{name} {ctx}: célula-objeto sem "html" string')
+        if 'pt' in cell and not isinstance(cell['pt'], bool):
+            err(f'{name} {ctx}: célula "pt" deve ser booleano')
+        return
+    err(f'{name} {ctx}: célula precisa ser string ou objeto {{html, pt}}, veio {type(cell).__name__}')
+
+
 def check_table(name: str, ctx: str, block: dict) -> None:
     width = len(block.get('intestazioni', []))
+    for h in block.get('intestazioni', []):
+        check_cell(name, ctx, h)
     for i, row in enumerate(block.get('righe', [])):
         if len(row) != width:
             err(f'{name} {ctx}: tabela linha {i} tem {len(row)} células, cabeçalho tem {width}')
+        for cell in row:
+            check_cell(name, ctx, cell)
 
 
 def check_paradigma(name: str, ctx: str, block: dict, ids: Counter) -> None:

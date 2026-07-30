@@ -234,14 +234,18 @@
         {
           "type": "tabella",
           "titolo": "Arrivare o andare via?",
-          "intestazioni": ["Espressione", "Português", "Quando"],
+          "intestazioni": [
+            "Espressione",
+            { "html": "Português", "pt": true },
+            { "html": "Quando", "pt": true }
+          ],
           "righe": [
-            ["Ciao", "oi / tchau", "informal — chegando <b>e</b> saindo"],
-            ["Salve", "olá", "neutro, meio-termo"],
-            ["Buongiorno", "bom dia", "manhã, formal — chegando"],
-            ["Buon pomeriggio", "boa tarde", "tarde — menos usado que <em>Buongiorno</em>"],
-            ["Buonasera", "boa noite", "noite — <b>só chegando</b>"],
-            ["Buonanotte", "boa noite", "noite — <b>só saindo</b>, ou antes de dormir"]
+            ["Ciao", { "html": "oi / tchau", "pt": true }, { "html": "informal — chegando <b>e</b> saindo", "pt": true }],
+            ["Salve", { "html": "olá", "pt": true }, { "html": "neutro, meio-termo", "pt": true }],
+            ["Buongiorno", { "html": "bom dia", "pt": true }, { "html": "manhã, formal — chegando", "pt": true }],
+            ["Buon pomeriggio", { "html": "boa tarde", "pt": true }, { "html": "tarde — menos usado que <em>Buongiorno</em>", "pt": true }],
+            ["Buonasera", { "html": "boa noite", "pt": true }, { "html": "noite — <b>só chegando</b>", "pt": true }],
+            ["Buonanotte", { "html": "boa noite", "pt": true }, { "html": "noite — <b>só saindo</b>, ou antes de dormir", "pt": true }]
           ]
         },
         {
@@ -290,13 +294,18 @@
         {
           "type": "tabella",
           "titolo": "Quando usare quale",
-          "intestazioni": ["Artigo", "Usa-se antes de", "Esempi", "Plurale"],
+          "intestazioni": [
+            { "html": "Artigo", "pt": true },
+            { "html": "Usa-se antes de", "pt": true },
+            "Esempi",
+            "Plurale"
+          ],
           "righe": [
-            ["<b>il</b>", "consoante comum (masc.)", "<em>il cane, il francese, il tedesco</em>", "<b>i</b> — <em>i cani</em>"],
-            ["<b>lo</b>", "s+cons., z, gn, ps, x, y (masc.)", "<em>lo spagnolo, lo zaino, lo svizzero</em>", "<b>gli</b> — <em>gli spagnoli</em>"],
-            ["<b>l'</b>", "vogal (masc.)", "<em>l'amico, l'italiano, l'austriaco</em>", "<b>gli</b> — <em>gli amici</em>"],
-            ["<b>la</b>", "consoante (fem.)", "<em>la penna, la spagnola</em>", "<b>le</b> — <em>le penne</em>"],
-            ["<b>l'</b>", "vogal (fem.)", "<em>l'amica, l'italiana</em>", "<b>le</b> — <em>le amiche</em>"]
+            ["<b>il</b>", { "html": "consoante comum (masc.)", "pt": true }, "<em>il cane, il francese, il tedesco</em>", "<b>i</b> — <em>i cani</em>"],
+            ["<b>lo</b>", { "html": "s+cons., z, gn, ps, x, y (masc.)", "pt": true }, "<em>lo spagnolo, lo zaino, lo svizzero</em>", "<b>gli</b> — <em>gli spagnoli</em>"],
+            ["<b>l'</b>", { "html": "vogal (masc.)", "pt": true }, "<em>l'amico, l'italiano, l'austriaco</em>", "<b>gli</b> — <em>gli amici</em>"],
+            ["<b>la</b>", { "html": "consoante (fem.)", "pt": true }, "<em>la penna, la spagnola</em>", "<b>le</b> — <em>le penne</em>"],
+            ["<b>l'</b>", { "html": "vogal (fem.)", "pt": true }, "<em>l'amica, l'italiana</em>", "<b>le</b> — <em>le amiche</em>"]
           ]
         },
         {
@@ -342,12 +351,16 @@
         {
           "type": "tabella",
           "titolo": "Quando usare quale",
-          "intestazioni": ["Artigo", "Usa-se antes de", "Esempi"],
+          "intestazioni": [
+            { "html": "Artigo", "pt": true },
+            { "html": "Usa-se antes de", "pt": true },
+            "Esempi"
+          ],
           "righe": [
-            ["<b>un</b>", "consoante comum <b>e vogal</b> (masc.)", "<em>un cane, un amico, un anno</em>"],
-            ["<b>uno</b>", "s+cons., z, gn, ps (masc.)", "<em>uno spagnolo, uno zaino, uno studente</em>"],
-            ["<b>una</b>", "consoante (fem.)", "<em>una penna, una spagnola</em>"],
-            ["<b>un'</b>", "vogal (fem.)", "<em>un'amica, un'italiana</em>"]
+            ["<b>un</b>", { "html": "consoante comum <b>e vogal</b> (masc.)", "pt": true }, "<em>un cane, un amico, un anno</em>"],
+            ["<b>uno</b>", { "html": "s+cons., z, gn, ps (masc.)", "pt": true }, "<em>uno spagnolo, uno zaino, uno studente</em>"],
+            ["<b>una</b>", { "html": "consoante (fem.)", "pt": true }, "<em>una penna, una spagnola</em>"],
+            ["<b>un'</b>", { "html": "vogal (fem.)", "pt": true }, "<em>un'amica, un'italiana</em>"]
           ]
         },
         {

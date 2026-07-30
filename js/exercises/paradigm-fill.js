@@ -19,7 +19,9 @@ export default {
 
     const thead = el('tr', {},
       el('th', {}, 'Português'),
-      ...(item.colonne ?? []).map((c) => el('th', {}, c))
+      ...(item.colonne ?? []).map((c) =>
+        el('th', {}, el('span', { class: 'cell' }, speakButton(c), el('span', {}, c)))
+      )
     );
     const tbody = el('tbody');
 

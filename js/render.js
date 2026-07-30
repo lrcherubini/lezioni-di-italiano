@@ -51,6 +51,34 @@ function stripTags(s) {
   return String(s).replace(/<[^>]*>/g, '');
 }
 
+/** Remove asides entre parênteses do texto a ser falado. Neste conteúdo,
+ *  parênteses guardam sempre glosa em português ou abreviação (masc./fem.),
+ *  nunca conteúdo italiano que precise ser ouvido — por isso é seguro
+ *  aplicar isso a qualquer célula antes de gerar o áudio. */
+function stripParens(text) {
+  return text.replace(/\s*\([^)]*\)/g, '').replace(/\s+/g, ' ').trim();
+}
+
+/** Normaliza uma célula de tabella: string simples = italiano (ganha 🔊);
+ *  { html, pt: true } = não-italiano (cabeçalho/descrição em português),
+ *  sem botão. Ver CLAUDE.md. */
+function normalizeCell(cell) {
+  if (cell && typeof cell === 'object') return { html: cell.html ?? '', pt: Boolean(cell.pt) };
+  return { html: cell ?? '', pt: false };
+}
+
+function cellPlainText(cell) {
+  return stripTags(normalizeCell(cell).html).trim();
+}
+
+function renderCell(tag, cell) {
+  const c = normalizeCell(cell);
+  const plain = stripTags(c.html).trim();
+  if (c.pt || !plain) return el(tag, { html: c.html });
+  const spoken = stripParens(plain) || plain;
+  return el(tag, {}, el('span', { class: 'cell' }, speakButton(spoken), el('span', { html: c.html })));
+}
+
 export function chip(category) {
   return el('span', { class: `chip chip--${category}` }, category);
 }
@@ -80,15 +108,15 @@ function renderLista(block) {
 
 function renderTabella(block) {
   const heads = block.intestazioni ?? [];
-  const hasHeads = heads.some((h) => h && h.trim());
+  const hasHeads = heads.some((h) => cellPlainText(h));
 
   const thead = hasHeads
-    ? el('thead', {}, el('tr', {}, ...heads.map((h) => el('th', { html: h || '' }))))
+    ? el('thead', {}, el('tr', {}, ...heads.map((h) => renderCell('th', h))))
     : null;
 
   const tbody = el('tbody');
   for (const row of block.righe ?? []) {
-    tbody.append(el('tr', {}, ...row.map((cell) => el('td', { html: cell || '' }))));
+    tbody.append(el('tr', {}, ...row.map((cell) => renderCell('td', cell))));
   }
 
   return el('div', { class: 'table-wrap' }, el('table', {}, thead, tbody));
@@ -111,7 +139,12 @@ function renderContrasto(block) {
 }
 
 function renderParadigma(block) {
-  const thead = el('tr', {}, el('th', {}, 'Português'), ...(block.colonne ?? []).map((c) => el('th', {}, c)));
+  const thead = el('tr', {},
+    el('th', {}, 'Português'),
+    ...(block.colonne ?? []).map((c) =>
+      el('th', {}, el('span', { class: 'cell' }, speakButton(c), el('span', {}, c)))
+    )
+  );
 
   const tbody = el('tbody');
   for (const row of block.righe ?? []) {
@@ -201,10 +234,14 @@ export function renderSection(section) {
 
 export function renderObiettivi(header) {
   if (!header) return null;
+  // header.comunicazione/lessico/grammatica são frases em italiano — cada
+  // uma ganha 🔊, como qualquer outro texto italiano do site.
   const col = (title, items) =>
     el('div', {},
       el('h2', {}, title),
-      el('ul', {}, ...(items ?? []).map((i) => el('li', { html: i })))
+      el('ul', {}, ...(items ?? []).map((i) =>
+        el('li', {}, speakButton(i), el('span', { html: i }))
+      ))
     );
 
   return el('div', { class: 'obiettivi' },

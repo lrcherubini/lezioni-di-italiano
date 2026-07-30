@@ -222,7 +222,8 @@ export default {
             ),
             r.correct
               ? (r.nota ? el('span', { class: 'item__nota', html: r.nota }) : null)
-              : el('span', { class: 'item__nota', html: `<b>${escapeHtml(r.domanda.risposta)}</b>` })
+              : el('span', { class: 'item__nota' },
+                  speakButton(r.domanda.risposta), ' ', el('b', { html: escapeHtml(r.domanda.risposta) }))
           )
         )
       );

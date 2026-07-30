@@ -175,12 +175,16 @@
         {
           "type": "tabella",
           "titolo": "A regra em uma tabela",
-          "intestazioni": ["Quero o som…", "Antes de A, O, U", "Antes de E, I"],
+          "intestazioni": [
+            { "html": "Quero o som…", "pt": true },
+            { "html": "Antes de A, O, U", "pt": true },
+            { "html": "Antes de E, I", "pt": true }
+          ],
           "righe": [
-            ["duro /k/", "ca, co, cu — <em>casa</em>", "<b>ch</b>e, <b>ch</b>i — <em>che, chi</em>"],
-            ["brando /tʃ/", "<b>ci</b>a, <b>ci</b>o, <b>ci</b>u — <em>ciao</em>", "ce, ci — <em>cena</em>"],
-            ["duro /g/", "ga, go, gu — <em>gatto</em>", "<b>gh</b>e, <b>gh</b>i — <em>spaghetti</em>"],
-            ["brando /dʒ/", "<b>gi</b>a, <b>gi</b>o, <b>gi</b>u — <em>giorno</em>", "ge, gi — <em>gentile</em>"]
+            [{ "html": "duro /k/", "pt": true }, "ca, co, cu — <em>casa</em>", "<b>ch</b>e, <b>ch</b>i — <em>che, chi</em>"],
+            [{ "html": "brando /tʃ/", "pt": true }, "<b>ci</b>a, <b>ci</b>o, <b>ci</b>u — <em>ciao</em>", "ce, ci — <em>cena</em>"],
+            [{ "html": "duro /g/", "pt": true }, "ga, go, gu — <em>gatto</em>", "<b>gh</b>e, <b>gh</b>i — <em>spaghetti</em>"],
+            [{ "html": "brando /dʒ/", "pt": true }, "<b>gi</b>a, <b>gi</b>o, <b>gi</b>u — <em>giorno</em>", "ge, gi — <em>gentile</em>"]
           ]
         },
         {
@@ -426,11 +430,15 @@
         {
           "type": "tabella",
           "titolo": "Dove cade l'accento",
-          "intestazioni": ["Posição", "Escreve acento?", "Esempi"],
+          "intestazioni": [
+            { "html": "Posição", "pt": true },
+            { "html": "Escreve acento?", "pt": true },
+            "Esempi"
+          ],
           "righe": [
-            ["Penúltima sílaba — o caso normal", "não", "<em>casa, amore, italiano, ragazzo</em>"],
-            ["Última sílaba", "<b>sim, sempre</b>", "<em>caffè, tè, perché, così, però, città</em>"],
-            ["Antepenúltima", "não", "<em>telefono, sabato, austriaco</em>"]
+            [{ "html": "Penúltima sílaba — o caso normal", "pt": true }, { "html": "não", "pt": true }, "<em>casa, amore, italiano, ragazzo</em>"],
+            [{ "html": "Última sílaba", "pt": true }, { "html": "<b>sim, sempre</b>", "pt": true }, "<em>caffè, tè, perché, così, però, città</em>"],
+            [{ "html": "Antepenúltima", "pt": true }, { "html": "não", "pt": true }, "<em>telefono, sabato, austriaco</em>"]
           ]
         },
         {

@@ -261,10 +261,7 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
   margin-bottom: var(--sp-2);
 }
 .obiettivi ul { list-style: none; font-size: var(--fs-sm); display: grid; gap: var(--sp-1); }
-.obiettivi li { padding-left: var(--sp-3); position: relative; }
-.obiettivi li::before {
-  content: "›"; position: absolute; left: 0; color: var(--navy-300); font-weight: 700;
-}
+.obiettivi li { display: flex; align-items: baseline; gap: var(--sp-2); }
 
 /* Trilha de etapas, sticky. */
 .rail {
@@ -416,7 +413,9 @@ table em { font-style: italic; }
 .paradigma tr[data-eccezione="true"] td:first-child::after {
   content: " ⚠"; color: var(--warn);
 }
-.paradigma .cell { display: flex; align-items: center; gap: var(--sp-2); }
+
+/* Célula com botão de áudio — usada em toda tabella e paradigma. */
+.cell { display: flex; align-items: center; gap: var(--sp-2); }
 
 /* Nota / callout */
 .nota {

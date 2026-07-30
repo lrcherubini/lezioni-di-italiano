@@ -97,10 +97,14 @@ let exCounter = 0;
 /**
  * Monta o card em volta de um exercício e liga o ciclo
  * submit → check → feedback → store.record.
+ *
+ * opts.headTitle/headGloss/headLabel/countInIndex existem só para o
+ * diálogo: ele tem título e gloss em italiano próprios (não um `consegna`
+ * comum) e não deve entrar na numeração "Ex. NN" dos exercícios.
  */
-function mountExercise(item, lessonId) {
+function mountExercise(item, lessonId, opts = {}) {
   const mod = getExercise(item.type);
-  exCounter += 1;
+  if (opts.countInIndex !== false) exCounter += 1;
 
   if (!mod) {
     return el('div', { class: 'ex' },
@@ -111,8 +115,11 @@ function mountExercise(item, lessonId) {
   const card = el('div', { class: 'ex', id: item.id, 'data-type': item.type });
 
   const head = el('div', { class: 'ex__head' },
-    el('span', { class: 'ex__num' }, `Ex. ${String(exCounter).padStart(2, '0')}`),
-    el('span', { class: 'ex__consegna', html: item.consegna ?? '' }),
+    el('span', { class: 'ex__num' }, opts.headLabel ?? `Ex. ${String(exCounter).padStart(2, '0')}`),
+    opts.headTitle
+      ? el('span', { class: 'ex__consegna' }, speakButton(opts.headTitle), ' ', el('span', { html: opts.headTitle }))
+      : el('span', { class: 'ex__consegna', html: item.consegna ?? '' }),
+    opts.headGloss ? el('span', { class: 'section__gloss', html: opts.headGloss }) : null,
     item.category ? chip(item.category) : null
   );
   card.append(head);
@@ -196,6 +203,8 @@ async function renderHome() {
           el('div', { class: 'lesson-card__body' },
             el('div', { class: 'lesson-card__num' }, `Lezione ${l.numero}`),
             el('h2', { class: 'lesson-card__title' },
+              speakButton(l.titolo),
+              ' ',
               el('a', { href: `lezione.html?l=${l.id}` }, l.titolo)
             ),
             el('p', { class: 'lesson-card__gloss' }, l.gloss),
@@ -308,26 +317,19 @@ async function renderLesson() {
   /* Ascolto */
   if (lesson.dialogo) {
     const d = lesson.dialogo;
-    main.append(renderStage(
-      {
-        id: 'ascolto',
-        kicker: 'Etapa 3',
-        title: 'Ascolto',
-        intro: d.consegna ?? '',
-      },
-      el('div', { class: 'ex', id: d.id, 'data-type': 'dialogue' },
-        el('div', { class: 'ex__head' },
-          el('span', { class: 'ex__num' }, 'Dialogo'),
-          el('span', { class: 'ex__consegna' }, d.titolo),
-          d.gloss ? el('span', { class: 'section__gloss', html: d.gloss }) : null
-        )
-      )
-    ));
 
-    // O diálogo usa o mesmo caminho de montagem dos exercícios.
-    const shell = main.querySelector(`#${cssEscape(d.id)}`);
-    const mounted = mountExercise({ ...d, type: 'dialogue', consegna: d.titolo }, id);
-    shell.replaceWith(mounted);
+    // O diálogo usa o mesmo caminho de montagem dos exercícios, mas com
+    // cabeçalho próprio (título+gloss em italiano, com áudio) em vez do
+    // "Ex. NN" genérico — e sem entrar na numeração dos exercícios.
+    main.append(renderStage(
+      { id: 'ascolto', kicker: 'Etapa 3', title: 'Ascolto', intro: d.consegna ?? '' },
+      mountExercise({ ...d, type: 'dialogue' }, id, {
+        headLabel: 'Dialogo',
+        headTitle: d.titolo,
+        headGloss: d.gloss,
+        countInIndex: false,
+      })
+    ));
   }
 
   /* Esercizi */
@@ -413,12 +415,6 @@ function initRail() {
     const node = document.getElementById(id);
     if (node) obs.observe(node);
   }
-}
-
-/** IDs de conteúdo são controlados por nós, mas querySelector com id que
- *  comece por dígito quebra — daí o escape. */
-function cssEscape(id) {
-  return typeof CSS !== 'undefined' && CSS.escape ? CSS.escape(id) : id;
 }
 
 /* --- Exportar / importar progresso -------------------------------------- */

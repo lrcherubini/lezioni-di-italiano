@@ -15,6 +15,7 @@ O objetivo principal deste projeto é um **loop de autoria repetível**: a cada 
 5. **Ao adicionar uma aula, edite apenas `content/`.** Não toque em `js/`, `css/` nem nos JSONs de aulas anteriores.
 6. **`id` de item é imutável.** Ele é a chave do progresso no `localStorage`. Renomear um `id` apaga o histórico daquele item; reaproveitar um `id` mistura históricos de coisas diferentes.
 7. **Toda seção precisa de `spiegazione`.** É o que torna o site independente dos slides. O validador reprova se faltar.
+7.1. **Todo texto italiano exibido tem botão de áudio — sem exceção.** Isso vale para `titolo` de aula/seção, itens de `header` (comunicazione/lessico/grammatica), toda célula de `tabella` que não esteja marcada `pt: true`, cabeçalhos de coluna de `paradigma` e `paradigm-fill`, e o título+gloss do `dialogo`. Ao criar uma tabela nova, pergunte célula por célula: "isto é italiano ou é rótulo/descrição em português?" — no segundo caso, marque `{ "html": "…", "pt": true }`. Ver a seção *Tipos de bloco*.
 8. **Nada de atividade em par ou grupo.** A aula é particular 1-a-1. Materiais A1 de referência estão cheios de *"in coppia"* e *"girate per la classe"* — tudo isso é inaplicável aqui.
 9. **`category` só entre os cinco valores permitidos** (abaixo). Acrescentar um valor exige editar `tools/validate.py`, `css/tokens.css` **e** este documento.
 
@@ -160,10 +161,30 @@ Fonte da verdade. `tools/validate.py` verifica tudo abaixo.
 { "type": "lista", "titolo": "…",
   "items": [{ "it": "…", "pt": "…", "nota": "…" }] }
 
-// tabella — TODA linha precisa ter o mesmo número de células do cabeçalho
+// tabella — TODA linha precisa ter o mesmo número de células do cabeçalho.
+// Cada célula (cabeçalho ou corpo) é string OU objeto:
+//   string simples          → assumida em ITALIANO, ganha 🔊 automaticamente
+//   { "html": "…", "pt": true } → NÃO italiano (cabeçalho/descrição em
+//                                  português), sem botão de áudio
+// O texto falado tem qualquer aside entre parênteses removido antes do TTS
+// (parênteses neste conteúdo só guardam glosa em PT ou abreviação, nunca
+// italiano que precise ser ouvido) — não precisa fazer nada para isso,
+// render.js cuida sozinho.
 { "type": "tabella", "titolo": "…",
   "intestazioni": ["Persona", "Essere", "Avere"],
   "righe": [["io", "sono", "ho"]] }
+
+// Exemplo de tabela mista (a maioria não precisa disto — só quando um
+// cabeçalho ou coluna inteira é descrição em português, não italiano):
+{ "type": "tabella", "titolo": "Quando usare quale",
+  "intestazioni": [
+    { "html": "Artigo", "pt": true },      // rótulo em PT, sem botão
+    { "html": "Usa-se antes de", "pt": true },
+    "Esempi"                                // Italiano, ganha botão
+  ],
+  "righe": [
+    ["<b>il</b>", { "html": "consoante comum (masc.)", "pt": true }, "<em>il cane</em>"]
+  ] }
 
 // contrasto — 2+ grupos, para contraste de som ou de forma
 { "type": "contrasto", "titolo": "…",
