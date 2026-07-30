@@ -1,0 +1,13 @@
+# Material de origem das aulas — NUNCA versionar.
+# Contém material de terceiros e dados pessoais (nomes, registro de chat).
+presentations/
+
+# Caderno de dúvidas e divergências — local, para levar à aula.
+ERRATA.md
+
+# Sistema operacional / editor
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/

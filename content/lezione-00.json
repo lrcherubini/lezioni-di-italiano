@@ -1,0 +1,597 @@
+{
+  "id": "00",
+  "numero": 0,
+  "titolo": "L'alfabeto e i suoni",
+  "gloss": "O alfabeto e os sons",
+  "header": {
+    "comunicazione": [
+      "Dire l'alfabeto",
+      "Fare lo spelling di un nome",
+      "Chiedere «Come si scrive?»"
+    ],
+    "lessico": [
+      "I nomi delle lettere",
+      "Le lettere straniere"
+    ],
+    "grammatica": [
+      "Vocali aperte e chiuse",
+      "C e G: suono duro e suono dolce",
+      "I digrammi GN, GL, SC, CH, GH",
+      "Le consonanti doppie",
+      "L'accento tonico"
+    ]
+  },
+  "riscaldamento": {
+    "prompt": "Antes de começar: leia estas quatro palavras em voz alta como você acha que se pronunciam — <em>Ciao</em>, <em>Chi</em>, <em>Gennaio</em>, <em>Spaghetti</em>. Guarde suas apostas. No fim da aula, volte aqui e confira.",
+    "spiegazione": [
+      "O italiano é uma língua quase perfeitamente fonética: uma vez que você sabe as regras, você lê qualquer palavra corretamente sem nunca a ter ouvido. Isso é uma notícia excelente — e é diferente do inglês, onde a escrita e o som brigam.",
+      "Como falante de português, você já vem com uma vantagem grande: quase todos os sons do italiano existem no português. O problema não são os sons novos, são três hábitos do português que o italiano não aceita. Esta aula é sobre desmontar esses três hábitos."
+    ]
+  },
+  "sections": [
+    {
+      "id": "l00-s01",
+      "category": "PRONUNCIA",
+      "sottotitolo": "Vocali",
+      "titolo": "Le cinque vocali, i sette suoni",
+      "gloss": "As cinco vogais, os sete sons",
+      "spiegazione": [
+        "O italiano escreve cinco vogais (<b>a e i o u</b>) mas pronuncia sete sons, porque <b>e</b> e <b>o</b> têm cada uma versão <em>aberta</em> e <em>fechada</em> — exatamente como em português (compare <em>pêlo</em> e <em>pélo</em>). Você já faz essa distinção sem pensar, então aqui é só transferir o hábito.",
+        "Agora o mais importante desta aula inteira, e a fonte número um de sotaque para brasileiros: <b>o italiano não tem vogal nasal e não reduz vogal nenhuma</b>. Não existe <em>ão</em>, <em>em</em>, <em>im</em> nasal. E toda vogal é pronunciada inteira e clara, inclusive no fim da palavra. Em <em>Americano</em> aquele <b>o</b> final é um <b>o</b> cheio, não um <em>u</em> abafado. Em <em>Italiano</em>, nada de nasalizar o <em>-ano</em>.",
+        "Regra prática: <b>a</b>, <b>i</b> e <b>u</b> têm sempre um único som, sempre aberto e limpo. Não existe <em>u</em> muda e não existe vogal engolida. Se você pronunciar cada vogal com a clareza de uma sílaba tônica, já soa italiano."
+      ],
+      "blocks": [
+        {
+          "type": "contrasto",
+          "titolo": "E chiusa e E aperta",
+          "gruppi": [
+            {
+              "etichetta": "E chiusa /e/",
+              "gloss": "E fechado, como em «pêlo»",
+              "esempi": [
+                { "it": "Chiudere", "pt": "fechar" },
+                { "it": "Perché", "pt": "porque / por quê" }
+              ]
+            },
+            {
+              "etichetta": "E aperta /ɛ/",
+              "gloss": "E aberto, como em «pélo»",
+              "esempi": [
+                { "it": "Tè", "pt": "chá" },
+                { "it": "Caffè", "pt": "café" },
+                { "it": "Festa", "pt": "festa" }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "contrasto",
+          "titolo": "O aperta e O chiusa",
+          "gruppi": [
+            {
+              "etichetta": "O aperta /ɔ/",
+              "gloss": "O aberto, como em «pó»",
+              "esempi": [
+                { "it": "Porta", "pt": "porta" },
+                { "it": "Rosa", "pt": "rosa" },
+                { "it": "Oro", "pt": "ouro" },
+                { "it": "Però", "pt": "porém, mas" }
+              ]
+            },
+            {
+              "etichetta": "O chiusa /o/",
+              "gloss": "O fechado, como em «avô»",
+              "esempi": [
+                { "it": "Sapore", "pt": "sabor" },
+                { "it": "Amore", "pt": "amor" }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "lista",
+          "titolo": "Le altre vocali: un solo suono",
+          "items": [
+            { "it": "Americano", "pt": "americano", "nota": "Todo <b>a</b> é aberto e todo <b>o</b> final é pronunciado inteiro." },
+            { "it": "Italiano", "pt": "italiano", "nota": "Sem nasalizar: <em>i-ta-li-A-no</em>, não «italiãnu»." },
+            { "it": "Mamma", "pt": "mãe, mamãe", "nota": "Sem nasal nenhuma, e com <b>mm</b> longo." },
+            { "it": "Italia", "pt": "Itália" },
+            { "it": "Incubo", "pt": "pesadelo", "nota": "O <b>in-</b> não é nasal: <em>IN-ku-bo</em>." },
+            { "it": "Una", "pt": "uma", "nota": "<b>u</b> como em «uva»; jamais nasal." },
+            { "it": "Uomo", "pt": "homem" }
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "attenzione",
+          "titolo": "O erro mais comum de brasileiro",
+          "testo": "Nasalizar. <em>Mamma</em> não é «mãma», <em>Incubo</em> não é «ĩcubo», <em>Italiano</em> não é «italiãnu». Se você exagerar propositalmente a clareza de cada vogal, vai chegar perto do certo."
+        }
+      ]
+    },
+    {
+      "id": "l00-s02",
+      "category": "PRONUNCIA",
+      "sottotitolo": "Consonanti",
+      "titolo": "C e G: dura o dolce?",
+      "gloss": "C e G: som duro ou brando?",
+      "spiegazione": [
+        "Esta é a regra mais valiosa do italiano, porque uma só regra resolve <b>c</b>, <b>g</b>, <b>sc</b>, os digramas <b>ch/gh</b>, e — mais adiante — até plurais como <em>amico → amici</em> e <em>amica → amiche</em>. Vale a pena entender de verdade em vez de decorar.",
+        "A regra: <b>c</b> e <b>g</b> têm som <em>duro</em> antes de <b>a</b>, <b>o</b>, <b>u</b>, e som <em>brando</em> antes de <b>e</b> e <b>i</b>. Duro é o som de «casa» e «gato». Brando é o som de «tchau» e de «dia» carioca — os dois sons que o português escreve como <em>tch</em> e <em>dj</em>.",
+        "E se eu quiser o som duro antes de <b>e</b> ou <b>i</b>? Aí o italiano <b>enfia um H no meio</b>: <em>che</em>, <em>chi</em>, <em>ghe</em>, <em>ghi</em>. O H não tem som nenhum — ele é só um sinal de trânsito dizendo «este C continua duro». Daí <em>Chi</em> se lê «qui» e <em>spaghetti</em> tem <b>g</b> de «gato».",
+        "E o contrário: se eu quiser o som brando antes de <b>a</b>, <b>o</b>, <b>u</b>? Aí o italiano <b>enfia um I</b>: <em>cia</em>, <em>cio</em>, <em>ciu</em>, <em>gia</em>, <em>gio</em>, <em>giu</em>. E esse <b>i</b> também não se pronuncia como vogal separada — é só sinalização. Por isso <em>Ciao</em> é «tchau» com duas sílabas, não «tchi-a-o», e <em>Giorno</em> é «djorno», não «dji-orno»."
+      ],
+      "blocks": [
+        {
+          "type": "contrasto",
+          "titolo": "La lettera C",
+          "gruppi": [
+            {
+              "etichetta": "C dura /k/ — davanti a A, O, U",
+              "gloss": "som de «casa» — o professor anotou como 'K'",
+              "esempi": [
+                { "it": "Come", "pt": "como" },
+                { "it": "Casa", "pt": "casa" },
+                { "it": "Cuffia", "pt": "fone de ouvido" }
+              ]
+            },
+            {
+              "etichetta": "C dolce /tʃ/ — davanti a E, I",
+              "gloss": "som de «tchau» — o professor anotou como 'Tch'",
+              "esempi": [
+                { "it": "Ciao", "pt": "oi / tchau" },
+                { "it": "Cioccolato", "pt": "chocolate" },
+                { "it": "Cesare", "pt": "César" },
+                { "it": "Cena", "pt": "jantar" }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "contrasto",
+          "titolo": "La lettera G",
+          "gruppi": [
+            {
+              "etichetta": "G dura /g/ — davanti a A, O, U",
+              "gloss": "som de «gato»",
+              "esempi": [
+                { "it": "Gatto", "pt": "gato" },
+                { "it": "Gusto", "pt": "gosto, sabor" },
+                { "it": "Gonna", "pt": "saia" }
+              ]
+            },
+            {
+              "etichetta": "G dolce /dʒ/ — davanti a E, I",
+              "gloss": "som de «dia» carioca — o professor anotou como 'Dj'",
+              "esempi": [
+                { "it": "Giorno", "pt": "dia" },
+                { "it": "Giraffa", "pt": "girafa" },
+                { "it": "Genio", "pt": "gênio" },
+                { "it": "Gentile", "pt": "gentil" }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "tabella",
+          "titolo": "A regra em uma tabela",
+          "intestazioni": ["Quero o som…", "Antes de A, O, U", "Antes de E, I"],
+          "righe": [
+            ["duro /k/", "ca, co, cu — <em>casa</em>", "<b>ch</b>e, <b>ch</b>i — <em>che, chi</em>"],
+            ["brando /tʃ/", "<b>ci</b>a, <b>ci</b>o, <b>ci</b>u — <em>ciao</em>", "ce, ci — <em>cena</em>"],
+            ["duro /g/", "ga, go, gu — <em>gatto</em>", "<b>gh</b>e, <b>gh</b>i — <em>spaghetti</em>"],
+            ["brando /dʒ/", "<b>gi</b>a, <b>gi</b>o, <b>gi</b>u — <em>giorno</em>", "ge, gi — <em>gentile</em>"]
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "info",
+          "titolo": "Por que isso vai te salvar na Aula 1",
+          "testo": "Quando você vir <em>amico → amici</em> mas <em>amica → amiche</em>, não é capricho: o italiano escolhe entre <b>-ci</b> e <b>-chi</b> justamente para decidir se o som fica brando ou duro. A grafia muda para o som ficar igual, ou para mudar de propósito. Guarde isso."
+        }
+      ]
+    },
+    {
+      "id": "l00-s03",
+      "category": "PRONUNCIA",
+      "sottotitolo": "Consonanti",
+      "titolo": "La lettera Z e le doppie",
+      "gloss": "A letra Z e as consoantes dobradas",
+      "spiegazione": [
+        "O <b>z</b> italiano nunca tem o som do <em>z</em> português de «zero». Ele tem dois valores, os dois com um <em>t</em> ou <em>d</em> escondido na frente: surdo /ts/, como em «tsé-tsé», e sonoro /dz/, parecido com o «ds» de «adsorver» dito rápido. Não existe regra confiável para saber qual é qual — vai por exposição.",
+        "Agora o segundo grande hábito do português a desmontar: <b>as consoantes dobradas são reais e alteram o significado</b>. Em português, <em>carro</em> e <em>caro</em> diferem no som do R, mas ninguém segura o R. Em italiano você <b>segura a consoante</b> — ela dura o dobro do tempo.",
+        "E isso não é detalhe estético, é diferença de palavra: <em>caro</em> (caro, querido) contra <em>carro</em> (carroça); <em>nono</em> (nono) contra <em>nonno</em> (avô); <em>pena</em> (pena) contra <em>penna</em> (caneta). Se você não segurar a dobrada, você disse outra palavra. Repare que <em>penna</em> vai aparecer na Aula 1."
+      ],
+      "blocks": [
+        {
+          "type": "contrasto",
+          "titolo": "I due suoni della Z",
+          "gruppi": [
+            {
+              "etichetta": "Z sonora /dz/",
+              "gloss": "o professor anotou como 'Dz'",
+              "esempi": [
+                { "it": "Zaino", "pt": "mochila" },
+                { "it": "Zero", "pt": "zero" },
+                { "it": "Zanzara", "pt": "mosquito, pernilongo" }
+              ]
+            },
+            {
+              "etichetta": "Z sorda /ts/",
+              "gloss": "o professor anotou como 'ts'",
+              "esempi": [
+                { "it": "Pizza", "pt": "pizza" },
+                { "it": "Alzare", "pt": "levantar" }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "lista",
+          "titolo": "Le consonanti doppie",
+          "items": [
+            { "it": "Fabbrica", "pt": "fábrica", "nota": "Segure o <b>bb</b>." },
+            { "it": "Mamma", "pt": "mãe", "nota": "Segure o <b>mm</b>." },
+            { "it": "Carro", "pt": "carroça", "nota": "Contraste com <em>caro</em> = querido, caro." },
+            { "it": "Gonna", "pt": "saia", "nota": "Contraste com <em>gona</em>, que não existe." },
+            { "it": "Fattoria", "pt": "fazenda, sítio" },
+            { "it": "Tappo", "pt": "tampa, rolha" },
+            { "it": "Minaccia", "pt": "ameaça", "nota": "<b>cc</b> + <b>i</b>: dobrada <em>e</em> brando." },
+            { "it": "Stesso", "pt": "mesmo" }
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "attenzione",
+          "titolo": "Teste de si mesmo",
+          "testo": "Diga <em>caro</em> e <em>carro</em> em sequência. Se soarem iguais, você ainda não está segurando a dobrada. A duração é a única pista que o italiano dá."
+        }
+      ]
+    },
+    {
+      "id": "l00-s04",
+      "category": "PRONUNCIA",
+      "sottotitolo": "Digrammi",
+      "titolo": "I digrammi: GN, GL, SC, CH, GH",
+      "gloss": "Os dígrafos",
+      "spiegazione": [
+        "Aqui você ganha de graça. Dois dígrafos italianos são exatamente sons que o português já tem e escreve de outro jeito: <b>gn</b> é o nosso <em>nh</em>, e <b>gl</b> (seguido de <b>i</b>) é o nosso <em>lh</em>. <em>Bagno</em> é «banho», <em>famiglia</em> é «família» com lh. Nada novo para aprender, só uma grafia nova para reconhecer.",
+        "O <b>sc</b> segue a mesma lógica de C e G que você já viu: antes de <b>e</b> e <b>i</b> ele fica brando e vira o som de «chá» /ʃ/ — <em>scendere</em>, <em>scienza</em>. Antes de <b>a</b>, <b>o</b>, <b>u</b> ele é duro /sk/ — <em>scocca</em>. E, coerentemente, <b>sch</b> devolve o som duro antes de e/i.",
+        "Já <b>ch</b> e <b>gh</b> você conhece da seção anterior: são o H mudo mantendo o som duro. E <b>gu</b> antes de e/i também soa duro, como em <em>guerra</em> — mesmo efeito, letra diferente."
+      ],
+      "blocks": [
+        {
+          "type": "lista",
+          "titolo": "GN = nh · GL(i) = lh",
+          "items": [
+            { "it": "Bagno", "pt": "banheiro", "nota": "<b>gn</b> = nh de «banho»." },
+            { "it": "Lasagna", "pt": "lasanha" },
+            { "it": "Famiglia", "pt": "família", "nota": "<b>gli</b> = lh de «filho»." },
+            { "it": "Figlio", "pt": "filho" }
+          ]
+        },
+        {
+          "type": "contrasto",
+          "titolo": "SC: dolce o duro",
+          "gruppi": [
+            {
+              "etichetta": "SC dolce /ʃ/ — davanti a E, I",
+              "gloss": "som de «chá»",
+              "esempi": [
+                { "it": "Scegliere", "pt": "escolher" },
+                { "it": "Scendere", "pt": "descer" },
+                { "it": "Scienza", "pt": "ciência" }
+              ]
+            },
+            {
+              "etichetta": "SC duro /sk/ — davanti a A, O, U",
+              "gloss": "som de «escola»",
+              "esempi": [
+                { "it": "Scocca", "pt": "carcaça, chassi" },
+                { "it": "Scuola", "pt": "escola" }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "lista",
+          "titolo": "CH, GH, GU: il suono duro davanti a E, I",
+          "items": [
+            { "it": "Chi", "pt": "quem", "nota": "Lê-se «qui». O H é mudo." },
+            { "it": "Che", "pt": "que", "nota": "Lê-se «que»." },
+            { "it": "Spaghetti", "pt": "espaguete", "nota": "<b>gh</b> = g de «gato»." },
+            { "it": "Ghiaccio", "pt": "gelo" },
+            { "it": "Guerra", "pt": "guerra", "nota": "<b>gu</b> + e também é duro." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l00-s05",
+      "category": "PRONUNCIA",
+      "sottotitolo": "Lettere",
+      "titolo": "H muta, Q e R",
+      "gloss": "H muda, Q e R",
+      "spiegazione": [
+        "O <b>h</b> italiano <b>nunca</b> tem som. Nunca. Ele aparece em apenas dois lugares: dentro dos dígrafos <em>ch</em> e <em>gh</em>, onde é sinal de som duro, e no verbo <em>avere</em> — <em>ho, hai, ha, hanno</em>, que você vê já na Aula 1. Nessas formas o H só serve para distinguir na escrita de outras palavras: <em>ho</em> (eu tenho) contra <em>o</em> (ou); <em>hanno</em> (eles têm) contra <em>anno</em> (ano). No som, <em>ho</em> é simplesmente «ó».",
+        "O <b>q</b> vem sempre acompanhado de <b>u</b> e soa /kw/, igual ao português de «quatro»: <em>qui</em>, <em>questo</em>, <em>aquilone</em>. Sem surpresas.",
+        "O <b>r</b> é o terceiro hábito a desmontar. Em italiano o R é sempre <b>vibrante de ponta de língua</b> — o R de «caro» paulista, batidinho. Nunca o R gutural do carioca, nunca o R aspirado de «rato» do português. Em <em>Roma</em>, <em>Regno</em>, <em>Ragazzo</em>, o R inicial é batido, não aspirado. E em <em>Carro</em> ele é batido e <b>longo</b>."
+      ],
+      "blocks": [
+        {
+          "type": "lista",
+          "titolo": "Q sempre con U",
+          "items": [
+            { "it": "Qui", "pt": "aqui" },
+            { "it": "Questo", "pt": "este" },
+            { "it": "Aquilone", "pt": "pipa" }
+          ]
+        },
+        {
+          "type": "lista",
+          "titolo": "La R vibrante",
+          "items": [
+            { "it": "Roma", "pt": "Roma", "nota": "R batido, nunca gutural." },
+            { "it": "Regno", "pt": "reino" },
+            { "it": "Ragazzo", "pt": "rapaz, garoto" },
+            { "it": "Carro", "pt": "carroça", "nota": "R batido e longo." }
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "info",
+          "titolo": "H muda, na prática",
+          "testo": "<em>Ho</em> se pronuncia exatamente como <em>o</em>. <em>Hanno</em> se pronuncia exatamente como <em>anno</em>. A diferença existe só no papel — e é justamente por isso que ela existe."
+        }
+      ]
+    },
+    {
+      "id": "l00-s06",
+      "category": "PRONUNCIA",
+      "sottotitolo": "Alfabeto",
+      "titolo": "L'alfabeto italiano",
+      "gloss": "O alfabeto italiano",
+      "spiegazione": [
+        "O alfabeto italiano tem <b>21 letras</b>. Cinco letras do nosso alfabeto — <b>j, k, w, x, y</b> — são consideradas <em>lettere straniere</em> e aparecem só em palavras importadas e em nomes próprios. Mas você precisa saber o nome delas, porque vai ter que soletrar seu próprio nome.",
+        "Saber o <b>nome</b> das letras é uma habilidade prática, não decorativa: é o que permite responder quando alguém pergunta <em>«Come si scrive?»</em> — «Como se escreve?». Note que os nomes são quase todos femininos: si dice <em>la</em> A, <em>la</em> B.",
+        "Repare que os nomes das letras seguem a própria regra de C e G que você aprendeu: a letra C se chama <em>ci</em> («tchi», brando) e a letra G se chama <em>gi</em> («dji», brando), porque em ambos vem um <b>i</b> depois."
+      ],
+      "blocks": [
+        {
+          "type": "tabella",
+          "titolo": "Le 21 lettere",
+          "intestazioni": ["Lettera", "Nome", "Esempio"],
+          "righe": [
+            ["A", "a", "Americano"],
+            ["B", "bi", "Bari"],
+            ["C", "ci", "Casa"],
+            ["D", "di", "Dio"],
+            ["E", "e", "Festa"],
+            ["F", "effe", "Favoloso"],
+            ["G", "gi", "Gatto"],
+            ["H", "acca", "Ho"],
+            ["I", "i", "Italia"],
+            ["L", "elle", "Lingua"],
+            ["M", "emme", "Mangiare"],
+            ["N", "enne", "Nave"],
+            ["O", "o", "Oro"],
+            ["P", "pi", "Paese"],
+            ["Q", "cu", "Questo"],
+            ["R", "erre", "Roma"],
+            ["S", "esse", "Solo"],
+            ["T", "ti", "Torta"],
+            ["U", "u", "Uomo"],
+            ["V", "vu", "Veloce"],
+            ["Z", "zeta", "Zero"]
+          ]
+        },
+        {
+          "type": "tabella",
+          "titolo": "Le lettere straniere",
+          "intestazioni": ["Lettera", "Nome", "Esempio"],
+          "righe": [
+            ["J", "i lunga", "Jeans"],
+            ["K", "cappa", "Karate"],
+            ["W", "doppia vu", "Web"],
+            ["X", "ics", "Taxi"],
+            ["Y", "ipsilon / i greca", "Yogurt"]
+          ]
+        },
+        {
+          "type": "lista",
+          "titolo": "Chiedere lo spelling",
+          "items": [
+            { "it": "Come si scrive?", "pt": "Como se escreve?" },
+            { "it": "Come si dice?", "pt": "Como se diz?" },
+            { "it": "Puoi ripetere, per favore?", "pt": "Pode repetir, por favor?" },
+            { "it": "Più lentamente, per favore.", "pt": "Mais devagar, por favor." },
+            { "it": "doppia elle", "pt": "dois L (LL)", "nota": "Para soletrar consoante dobrada: <em>doppia</em> + nome da letra." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l00-s07",
+      "category": "PRONUNCIA",
+      "sottotitolo": "Accento",
+      "titolo": "L'accento tonico",
+      "gloss": "O acento tônico",
+      "spiegazione": [
+        "Na maioria esmagadora das palavras italianas a sílaba forte é a <b>penúltima</b>: <em>ca-SA</em>, <em>a-MO-re</em>, <em>ita-LIA-no</em>, <em>ra-GAZ-zo</em>. Comece assumindo penúltima e você acerta a maior parte das vezes.",
+        "Diferente do português, o italiano <b>quase não escreve acento</b>. Ele só marca graficamente quando a tônica cai na <b>última</b> sílaba: <em>caffè</em>, <em>tè</em>, <em>perché</em>, <em>così</em>, <em>però</em>, <em>città</em>. Ou seja: <b>se você vê um acento escrito, a força está ali, no fim da palavra</b> — é uma pista, não um enfeite.",
+        "Cuidado com um grupo importante: existem palavras com a tônica na <b>antepenúltima</b> e o italiano não avisa por escrito. <em>TE-le-fo-no</em>, <em>SA-ba-to</em>, <em>au-STRI-a-co</em>. Essas você aprende ouvindo — mais uma razão para usar o botão de áudio em toda linha deste site.",
+        "Sobre a direção do acento: <b>è</b> e <b>é</b> não são a mesma coisa. O grave (<b>è</b>) marca vogal aberta e o agudo (<b>é</b>) marca vogal fechada. Daí <em>caff<b>è</b></em> com E aberto e <em>perch<b>é</b></em> com E fechado. E há um par que separa duas palavras diferentes: <em><b>è</b></em> com acento é o verbo «é», enquanto <em>e</em> sem acento é a conjunção «e». Você vai usar as duas na mesma frase já na Aula 1."
+      ],
+      "blocks": [
+        {
+          "type": "tabella",
+          "titolo": "Dove cade l'accento",
+          "intestazioni": ["Posição", "Escreve acento?", "Esempi"],
+          "righe": [
+            ["Penúltima sílaba — o caso normal", "não", "<em>casa, amore, italiano, ragazzo</em>"],
+            ["Última sílaba", "<b>sim, sempre</b>", "<em>caffè, tè, perché, così, però, città</em>"],
+            ["Antepenúltima", "não", "<em>telefono, sabato, austriaco</em>"]
+          ]
+        },
+        {
+          "type": "contrasto",
+          "titolo": "Grave e acuto: aperta e chiusa",
+          "gruppi": [
+            {
+              "etichetta": "Accento grave ` → vocale aperta",
+              "gloss": "boca mais aberta",
+              "esempi": [
+                { "it": "Caffè", "pt": "café" },
+                { "it": "Tè", "pt": "chá" },
+                { "it": "Però", "pt": "porém" }
+              ]
+            },
+            {
+              "etichetta": "Accento acuto ´ → vocale chiusa",
+              "gloss": "boca mais fechada",
+              "esempi": [
+                { "it": "Perché", "pt": "porque" },
+                { "it": "Così", "pt": "assim" }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "attenzione",
+          "titolo": "è contra e",
+          "testo": "<em><b>è</b></em> (com acento) = o verbo «é». <em>e</em> (sem acento) = a conjunção «e». <em>Lui <b>è</b> italiano <b>e</b> lei <b>è</b> spagnola.</em> Trocar um pelo outro é o erro de escrita mais comum de quem começa."
+        }
+      ]
+    }
+  ],
+  "chunks": [
+    { "id": "l00-c01", "it": "Come si scrive?", "pt": "Como se escreve?", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l00-c02", "it": "Come si dice?", "pt": "Como se diz?", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l00-c03", "it": "Puoi ripetere, per favore?", "pt": "Pode repetir, por favor?", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l00-c04", "it": "Più lentamente, per favore.", "pt": "Mais devagar, por favor.", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l00-c05", "it": "doppia ___", "pt": "dois ___ (letra dobrada)", "category": "ESPRESSIONE", "chunkType": "semiFixed", "slot": ["elle", "esse", "emme", "enne", "ti", "bi"] }
+  ],
+  "dialogo": {
+    "id": "l00-d01",
+    "titolo": "Come si scrive?",
+    "gloss": "Como se escreve?",
+    "consegna": "Um diálogo curtinho de soletração. Ouça primeiro sem ler nada.",
+    "battute": [
+      { "speaker": "A", "nome": "Giulia", "it": "Come si scrive?", "pt": "Como se escreve?" },
+      { "speaker": "B", "nome": "Marco", "it": "Ci, a, esse, ti, e, elle, elle, i.", "pt": "C, A, S, T, E, L, L, I." },
+      { "speaker": "A", "nome": "Giulia", "it": "Con doppia elle?", "pt": "Com dois L?" },
+      { "speaker": "B", "nome": "Marco", "it": "Sì, con doppia elle. Castelli.", "pt": "Sim, com dois L. Castelli." },
+      { "speaker": "A", "nome": "Giulia", "it": "Puoi ripetere, per favore?", "pt": "Pode repetir, por favor?" },
+      { "speaker": "B", "nome": "Marco", "it": "Certo. Ca-stel-li.", "pt": "Claro. Cas-te-li." }
+    ],
+    "passate": [
+      {
+        "focus": "gist",
+        "istruzione": "Passada 1 — <b>só ouça</b>. Não escreva nada e não leia a transcrição. Objetivo único: perceber quantas vozes falam e do que se trata.",
+        "inputBloccato": true
+      },
+      {
+        "focus": "note",
+        "istruzione": "Passada 2 — ouça e anote <b>só as letras</b> que você conseguir captar, na ordem. Não tente montar a palavra ainda.",
+        "inputBloccato": false
+      },
+      {
+        "focus": "detail",
+        "istruzione": "Passada 3 — agora responda: que nome está sendo soletrado, e o que a Giulia pergunta sobre a grafia?",
+        "inputBloccato": false,
+        "domande": [
+          { "id": "l00-d01-q1", "domanda": "Que nome está sendo soletrado?", "risposta": "Castelli" },
+          { "id": "l00-d01-q2", "domanda": "Qual consoante é dobrada nesse nome?", "risposta": "elle", "accettaAnche": ["l", "ll", "doppia elle"] }
+        ]
+      }
+    ]
+  },
+  "esercizi": [
+    {
+      "id": "l00-e01",
+      "type": "gap-audio",
+      "category": "PRONUNCIA",
+      "consegna": "Ascolta e completa. Duro ou brando?",
+      "audio": { "tts": "Ciao, come stai?", "src": null },
+      "testo": "___, come stai?",
+      "risposta": "Ciao",
+      "pt": "Oi, como você está?",
+      "aiuto": "Som de «tchau». O C é brando porque vem um I depois."
+    },
+    {
+      "id": "l00-e02",
+      "type": "gap-audio",
+      "category": "PRONUNCIA",
+      "consegna": "Ascolta e completa.",
+      "audio": { "tts": "Chi è?", "src": null },
+      "testo": "___ è?",
+      "risposta": "Chi",
+      "pt": "Quem é?",
+      "aiuto": "Lê-se «qui». O H mudo mantém o C duro antes do I."
+    },
+    {
+      "id": "l00-e03",
+      "type": "gap-audio",
+      "category": "PRONUNCIA",
+      "consegna": "Ascolta e completa. Atenção à consoante dobrada.",
+      "audio": { "tts": "La penna è sul tavolo.", "src": null },
+      "testo": "La ___ è sul tavolo.",
+      "risposta": "penna",
+      "pt": "A caneta está sobre a mesa.",
+      "aiuto": "Com <b>nn</b> é «caneta». Com um só <b>n</b> seria <em>pena</em>, outra palavra."
+    },
+    {
+      "id": "l00-e04",
+      "type": "gap-audio",
+      "category": "PRONUNCIA",
+      "consegna": "Ascolta e completa. Cuidado com o acento.",
+      "audio": { "tts": "Un caffè, per favore.", "src": null },
+      "testo": "Un ___, per favore.",
+      "risposta": "caffè",
+      "pt": "Um café, por favor.",
+      "aiuto": "Tônica na última sílaba, então leva acento grave — e o E é aberto.",
+      "tolleranzaAccenti": true
+    },
+    {
+      "id": "l00-e05",
+      "type": "qa-transcribe",
+      "category": "PRONUNCIA",
+      "consegna": "Ouça a pergunta e a resposta. Transcreva apenas a resposta.",
+      "domanda": { "tts": "Come si scrive «famiglia»?", "testo": "Come si scrive «famiglia»?", "pt": "Como se escreve «famiglia»?" },
+      "risposta": { "tts": "Effe, a, emme, i, gi, elle, i, a.", "testo": "Effe, a, emme, i, gi, elle, i, a.", "pt": "F, A, M, I, G, L, I, A." },
+      "aiuto": "Escreva os nomes das letras em italiano, separados por vírgula."
+    },
+    {
+      "id": "l00-e06",
+      "type": "qa-transcribe",
+      "category": "PRONUNCIA",
+      "consegna": "Ouça a pergunta e a resposta. Transcreva apenas a resposta.",
+      "domanda": { "tts": "Come si dice «obrigado» in italiano?", "testo": "Come si dice «obrigado» in italiano?", "pt": "Como se diz «obrigado» em italiano?" },
+      "risposta": { "tts": "Si dice grazie.", "testo": "Si dice grazie.", "pt": "Diz-se «grazie»." },
+      "aiuto": "Duas palavras depois de «Si dice»."
+    }
+  ],
+  "produzione": [
+    {
+      "id": "l00-p01",
+      "consegna": "Soletre o seu próprio nome em voz alta, em italiano, usando os nomes das letras. Se tiver consoante dobrada, use <em>doppia</em>. Grave no celular e escute: as vogais estão todas inteiras, sem nasalizar?"
+    },
+    {
+      "id": "l00-p02",
+      "consegna": "Diga estes pares em voz alta, segurando a dobrada: <em>caro / carro</em>, <em>nono / nonno</em>, <em>pena / penna</em>. Se os dois soarem iguais, insista."
+    },
+    {
+      "id": "l00-p03",
+      "consegna": "Volte ao aquecimento. Você acertou <em>Ciao</em>, <em>Chi</em>, <em>Gennaio</em> e <em>Spaghetti</em>? Escreva ao lado de cada um <b>qual regra</b> decide o som — não só o som."
+    }
+  ],
+  "bilancio": [
+    "Sei dizer os nomes das 21 letras e das 5 estrangeiras.",
+    "Sei explicar por que <em>Ciao</em> é brando e <em>Chi</em> é duro.",
+    "Seguro as consoantes dobradas e ouço a diferença entre <em>caro</em> e <em>carro</em>.",
+    "Não nasalizo mais as vogais finais.",
+    "Sei que acento escrito significa tônica na última sílaba.",
+    "Sei a diferença entre <em>è</em> e <em>e</em>."
+  ]
+}

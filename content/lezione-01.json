@@ -1,0 +1,753 @@
+{
+  "id": "01",
+  "numero": 1,
+  "titolo": "Io sono, tu sei",
+  "gloss": "Apresentar-se, dizer nacionalidade e idade",
+  "header": {
+    "comunicazione": [
+      "Salutare e rispondere al saluto",
+      "Dire la propria nazionalità",
+      "Dire l'età",
+      "Parlare di altre persone",
+      "Ringraziare e chiedere per favore"
+    ],
+    "lessico": [
+      "I paesi",
+      "Le nazionalità",
+      "I numeri 0–20",
+      "Saluti ed espressioni utili",
+      "anno / anni"
+    ],
+    "grammatica": [
+      "Presente di essere e avere",
+      "Articoli determinativi",
+      "Articoli indeterminativi",
+      "Plurale dei sostantivi",
+      "Accordo di genere e numero",
+      "avere + numero + anni",
+      "e / ma"
+    ]
+  },
+  "riscaldamento": {
+    "prompt": "Antes de estudar: escreva, do jeito que você imagina, como se diz em italiano «Eu sou brasileiro e tenho trinta anos». Não consulte nada. Guarde a frase — no fim da aula você volta e corrige a si mesmo.",
+    "spiegazione": [
+      "Esta aula entrega os dois verbos que sustentam metade de tudo o que se diz em italiano — <em>essere</em> e <em>avere</em> — e os usa imediatamente para duas coisas concretas: dizer de onde você é e quantos anos você tem.",
+      "Há uma boa notícia embutida: <b>idade em italiano usa «ter», exatamente como em português</b>. <em>Io ho trenta anni</em> é literalmente «eu tenho trinta anos». Quem aprendeu inglês antes sofre aqui («I am thirty»); você não."
+    ]
+  },
+  "sections": [
+    {
+      "id": "l01-s01",
+      "category": "VERBO",
+      "sottotitolo": "Presente Indicativo",
+      "titolo": "Essere · Avere",
+      "gloss": "ser/estar · ter",
+      "spiegazione": [
+        "<b>Essere</b> carrega sozinho o trabalho que o português divide entre <em>ser</em> e <em>estar</em>. <em>Io sono brasiliano</em> é «eu sou brasileiro», e <em>io sono a casa</em> é «eu estou em casa» — o mesmo verbo. Isso simplifica sua vida: você nunca precisa escolher entre ser e estar. Em compensação, tire da cabeça o reflexo de procurar um segundo verbo, porque ele não existe.",
+        "<b>Avere</b> é «ter». Repare que quatro formas começam com <b>H</b> — <em>ho, hai, ha, hanno</em> — e, como você viu na Aula 0, esse <b>h é completamente mudo</b>. <em>Ho</em> se pronuncia «ó». O H está ali só para separar na escrita de palavras homófonas: <em>ho</em> (eu tenho) contra <em>o</em> (ou), <em>hanno</em> (eles têm) contra <em>anno</em> (ano). Ouvindo, são idênticas; o contexto resolve.",
+        "Duas armadilhas na tabela. Primeira: <b><em>io sono</em> e <em>loro sono</em> são exatamente a mesma forma</b> — não há nada no verbo que distinga «eu sou» de «eles são», só o pronome ou o contexto. Segunda: <b><em>lui</em>, <em>lei</em> e <em>Lei</em> compartilham a mesma forma</b> (<em>è</em>, <em>ha</em>), e <em>Lei</em> com maiúscula é o «senhor / senhora» formal — ou seja, o italiano trata quem você respeita gramaticalmente como «ela».",
+        "Por último: o italiano, como o português, <b>pode omitir o pronome</b>. <em>Sono brasiliano</em> é tão correto quanto <em>Io sono brasiliano</em>. No começo, mantenha o pronome — ele te ajuda a fixar qual forma vai com quem. Com o tempo você vai soltando."
+      ],
+      "blocks": [
+        {
+          "type": "tabella",
+          "titolo": "Presente indicativo",
+          "intestazioni": ["Persona", "Essere", "Avere"],
+          "righe": [
+            ["io", "sono", "ho"],
+            ["tu", "sei", "hai"],
+            ["lui / lei / Lei", "è", "ha"],
+            ["noi", "siamo", "abbiamo"],
+            ["voi", "siete", "avete"],
+            ["loro", "sono", "hanno"]
+          ]
+        },
+        {
+          "type": "lista",
+          "titolo": "In uso",
+          "items": [
+            { "it": "Io sono brasiliano.", "pt": "Eu sou brasileiro." },
+            { "it": "Tu sei portoghese.", "pt": "Você é português." },
+            { "it": "Lui è americano.", "pt": "Ele é americano." },
+            { "it": "Lei è argentina.", "pt": "Ela é argentina." },
+            { "it": "Noi siamo italiani.", "pt": "Nós somos italianos." },
+            { "it": "Voi siete francesi.", "pt": "Vocês são franceses." },
+            { "it": "Loro sono svizzeri.", "pt": "Eles são suíços." },
+            { "it": "Io ho quindici anni.", "pt": "Eu tenho quinze anos." },
+            { "it": "Tu hai venti anni.", "pt": "Você tem vinte anos." },
+            { "it": "Lui ha nove anni.", "pt": "Ele tem nove anos." }
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "attenzione",
+          "titolo": "è não é e",
+          "testo": "<em><b>è</b></em> com acento é o verbo. <em>e</em> sem acento é a conjunção «e». <em>Lui <b>è</b> italiano <b>e</b> lei <b>è</b> spagnola.</em> Os dois aparecem na mesma frase o tempo todo — e trocar um pelo outro é o erro de escrita mais comum de quem começa."
+        }
+      ]
+    },
+    {
+      "id": "l01-s02",
+      "category": "VOCABOLARIO",
+      "sottotitolo": "Paesi",
+      "titolo": "I paesi",
+      "gloss": "Os países",
+      "spiegazione": [
+        "Nomes de país vão com <b>letra maiúscula</b>, como em português. Mas atenção ao contraste que vem na próxima seção: <b>nacionalidade vai com minúscula</b> — <em>Italia</em> mas <em>italiano</em>. Igualzinho ao português, então é de graça.",
+        "Para dizer «no/na» ou «para» um país, o italiano usa <b><em>in</em> sem artigo</b>: <em>in Italia</em>, <em>in Brasile</em>, <em>in Francia</em>. Isso é diferente do português, que exige artigo («no Brasil», «na Itália»).",
+        "A exceção interessante é <b>os Estados Unidos</b>, que em italiano é plural — <em>gli Stati Uniti</em> — e por ser plural puxa o artigo obrigatoriamente: <em>negli Stati Uniti</em>. O nome completo é <em>gli Stati Uniti d'America</em>, e é comum também dizer só <em>l'America</em>. Note que <em>Paesi Bassi</em> (Países Baixos) tem a mesma lógica de plural."
+      ],
+      "blocks": [
+        {
+          "type": "lista",
+          "titolo": "I paesi",
+          "items": [
+            { "it": "il Brasile", "pt": "Brasil" },
+            { "it": "l'Argentina", "pt": "Argentina" },
+            { "it": "il Portogallo", "pt": "Portugal" },
+            { "it": "la Spagna", "pt": "Espanha" },
+            { "it": "la Francia", "pt": "França" },
+            { "it": "l'Olanda / i Paesi Bassi", "pt": "Holanda / Países Baixos" },
+            { "it": "l'Inghilterra", "pt": "Inglaterra" },
+            { "it": "il Belgio", "pt": "Bélgica" },
+            { "it": "la Germania", "pt": "Alemanha" },
+            { "it": "la Svizzera", "pt": "Suíça" },
+            { "it": "l'Austria", "pt": "Áustria" },
+            { "it": "l'Italia", "pt": "Itália" },
+            { "it": "il Lussemburgo", "pt": "Luxemburgo" },
+            { "it": "gli Stati Uniti d'America", "pt": "Estados Unidos da América", "nota": "Plural. Também <em>l'America</em>." }
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "info",
+          "titolo": "Um cuidado de pronúncia",
+          "testo": "<em>Svizzera</em> tem <b>zz</b> — consoante dobrada, então segure. E o <b>s</b> inicial vem antes de consoante, o que na próxima seção vai explicar por que se diz <em>lo</em> svizzero e não <em>il</em> svizzero."
+        }
+      ]
+    },
+    {
+      "id": "l01-s03",
+      "category": "VOCABOLARIO",
+      "sottotitolo": "Nazionalità",
+      "titolo": "Le nazionalità",
+      "gloss": "As nacionalidades",
+      "spiegazione": [
+        "Nacionalidade em italiano é <b>adjetivo</b>, e adjetivo concorda com quem descreve — em gênero <em>e</em> em número. Você já faz isso em português sem pensar («brasileiro / brasileira / brasileiros / brasileiras»), então o mecanismo é familiar. O que muda são as terminações e, sobretudo, o fato de que <b>existem duas famílias com comportamentos diferentes</b>.",
+        "<b>Família 1 — termina em <em>-o</em>: quatro formas distintas.</b> <em>brasiliano / brasiliana / brasiliani / brasiliane</em>. Aqui você sempre sabe o gênero pela terminação. Entram nesta família: <em>italiano, americano, argentino, spagnolo, tedesco, svizzero, austriaco</em>.",
+        "<b>Família 2 — termina em <em>-e</em>: só duas formas.</b> <em>francese / francese / francesi / francesi</em>. No singular, masculino e feminino são <b>idênticos</b>, e no plural também. Ou seja, <em>il francese</em> e <em>la francese</em> só se distinguem pelo artigo — o adjetivo não ajuda. Entram aqui: <em>portoghese, olandese, inglese, statunitense, lussemburghese</em>. Essa família é mais fácil de decorar e mais difícil de interpretar.",
+        "E há um detalhe de plural que vem direto da Aula 0. Palavras em <b>-co / -ca</b> precisam decidir se o som fica duro ou brando no plural, e a decisão depende de <b>onde cai a tônica</b>. Se a tônica é na penúltima, mantém o som duro com <b>h</b>: <em>te-DE-sco → tedes<b>chi</b></em>. Se a tônica é na antepenúltima, o som fica brando: <em>au-STRI-a-co → austria<b>ci</b></em>. No feminino é sempre com <b>h</b>: <em>tedes<b>che</b></em>, <em>austria<b>che</b></em>. É a mesma regra de <em>amico → amici</em> mas <em>amica → amiche</em>."
+      ],
+      "blocks": [
+        {
+          "type": "paradigma",
+          "titolo": "Le quattro forme, con l'articolo",
+          "colonne": ["Maschile sing.", "Femminile sing.", "Maschile pl.", "Femminile pl."],
+          "righe": [
+            { "id": "l01-s03-p01", "pt": "brasileiro", "forme": ["il brasiliano", "la brasiliana", "i brasiliani", "le brasiliane"] },
+            { "id": "l01-s03-p02", "pt": "argentino", "forme": ["l'argentino", "l'argentina", "gli argentini", "le argentine"] },
+            { "id": "l01-s03-p03", "pt": "italiano", "forme": ["l'italiano", "l'italiana", "gli italiani", "le italiane"] },
+            { "id": "l01-s03-p04", "pt": "americano", "forme": ["l'americano", "l'americana", "gli americani", "le americane"] },
+            { "id": "l01-s03-p05", "pt": "espanhol", "forme": ["lo spagnolo", "la spagnola", "gli spagnoli", "le spagnole"] },
+            { "id": "l01-s03-p06", "pt": "alemão", "forme": ["il tedesco", "la tedesca", "i tedeschi", "le tedesche"] },
+            { "id": "l01-s03-p07", "pt": "suíço", "forme": ["lo svizzero", "la svizzera", "gli svizzeri", "le svizzere"] },
+            { "id": "l01-s03-p08", "pt": "austríaco", "forme": ["l'austriaco", "l'austriaca", "gli austriaci", "le austriache"] },
+            { "id": "l01-s03-p09", "pt": "português", "forme": ["il portoghese", "la portoghese", "i portoghesi", "le portoghesi"] },
+            { "id": "l01-s03-p10", "pt": "francês", "forme": ["il francese", "la francese", "i francesi", "le francesi"] },
+            { "id": "l01-s03-p11", "pt": "holandês", "forme": ["l'olandese", "l'olandese", "gli olandesi", "le olandesi"] },
+            { "id": "l01-s03-p12", "pt": "inglês", "forme": ["l'inglese", "l'inglese", "gli inglesi", "le inglesi"] },
+            { "id": "l01-s03-p13", "pt": "estadunidense", "forme": ["lo statunitense", "la statunitense", "gli statunitensi", "le statunitensi"] },
+            { "id": "l01-s03-p14", "pt": "luxemburguês", "forme": ["il lussemburghese", "la lussemburghese", "i lussemburghesi", "le lussemburghesi"] },
+            { "id": "l01-s03-p15", "pt": "belga", "forme": ["il belga", "la belga", "i belgi", "le belghe"], "eccezione": true }
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "eccezione",
+          "titolo": "belga: a exceção que confirma a regra",
+          "testo": "Adjetivos em <b>-a</b> como <em>belga</em> servem para os dois gêneros no singular: <em>il belga</em>, <em>la belga</em>. No plural o feminino é regular — <em>le belg<b>he</b></em>, com <b>h</b> para manter o som duro. Mas o masculino <b>não</b> segue a regra: seria de esperar <em>belghi</em>, e é <b>i belg<b>i</b></b>, com som brando. O Treccani registra o lema assim: <em>bèlga agg. e s. m. e f. (pl. m. -gi, f. -ghe)</em>. A explicação usual é influência do francês <em>Belges</em>. Ou seja: é exceção de verdade, e é para decorar — só o masculino plural."
+        },
+        {
+          "type": "lista",
+          "titolo": "Attenzione all'accordo",
+          "items": [
+            { "it": "Io sono tedesco.", "pt": "Eu sou alemão.", "nota": "homem falando" },
+            { "it": "Io sono tedesca.", "pt": "Eu sou alemã.", "nota": "mulher falando" },
+            { "it": "Voi siete tedeschi.", "pt": "Vocês são alemães.", "nota": "grupo masculino ou misto" },
+            { "it": "Voi siete tedesche.", "pt": "Vocês são alemãs.", "nota": "grupo só de mulheres" },
+            { "it": "Tu sei portoghese.", "pt": "Você é português / portuguesa.", "nota": "vale para os dois — a forma não distingue" }
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "info",
+          "titolo": "Grupo misto vai para o masculino",
+          "testo": "Como em português: um grupo com pelo menos um homem leva o plural masculino. <em>Loro sono italiani</em> pode ser só homens ou homens e mulheres; <em>Loro sono italiane</em> é obrigatoriamente só mulheres."
+        }
+      ]
+    },
+    {
+      "id": "l01-s04",
+      "category": "VOCABOLARIO",
+      "sottotitolo": "Numeri",
+      "titolo": "I numeri 0–20",
+      "gloss": "Os números de 0 a 20",
+      "spiegazione": [
+        "Zero a dez não têm lógica — são para decorar. De <b>onze a dezesseis</b> aparece um padrão: a unidade vem primeiro e o «dez» vem depois, contraído em <em>-dici</em>. <em>Undici</em> (un + dici), <em>dodici</em> (do + dici), <em>tredici</em>, <em>quattordici</em>, <em>quindici</em>, <em>sedici</em>.",
+        "De <b>dezessete a dezenove</b> o padrão <b>se inverte</b>: o «dez» passa para a frente. <em>Dici-assette</em>, <em>dici-otto</em>, <em>dici-annove</em>. É irregular e é exatamente onde todo mundo erra, então vale praticar esses três em voz alta separadamente.",
+        "Cuidado com as dobradas, que aqui mudam palavra: <em>se<b>tt</b>e</em>, <em>no<b>v</b>e</em> mas <em>dicia<b>nn</b>ove</em>, <em>dicia<b>ss</b>ette</em>. E <em>quindici</em> tem <b>c</b> brando («quin-di-tchi»), porque vem <b>i</b> depois — a regra da Aula 0 valendo aqui também."
+      ],
+      "blocks": [
+        {
+          "type": "tabella",
+          "titolo": "0–20",
+          "intestazioni": ["", "", "", ""],
+          "righe": [
+            ["0 zero", "1 uno", "2 due", "3 tre"],
+            ["4 quattro", "5 cinque", "6 sei", "7 sette"],
+            ["8 otto", "9 nove", "10 dieci", "11 undici"],
+            ["12 dodici", "13 tredici", "14 quattordici", "15 quindici"],
+            ["16 sedici", "17 diciassette", "18 diciotto", "19 diciannove"],
+            ["20 venti", "", "", ""]
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "attenzione",
+          "titolo": "sei tem dois significados",
+          "testo": "<em>Sei</em> é o número 6 <b>e</b> a forma «tu» do verbo <em>essere</em>. <em>Tu sei sei?</em> soa estranho mas é gramatical. O contexto sempre resolve."
+        }
+      ]
+    },
+    {
+      "id": "l01-s05",
+      "category": "ESPRESSIONE",
+      "sottotitolo": "Saluti",
+      "titolo": "Saluti ed espressioni utili",
+      "gloss": "Saudações e expressões úteis",
+      "spiegazione": [
+        "A distinção que importa aqui não é de horário, é de <b>formalidade</b>. <em>Ciao</em> é informal e serve para chegar <em>e</em> para sair — igual ao nosso «oi» e «tchau» na mesma palavra. Com quem você não conhece, ou em loja, banco, com professor, use <em>Buongiorno</em> ou <em>Buonasera</em>. <em>Salve</em> fica num meio-termo confortável quando você não sabe qual escolher.",
+        "A pegadinha real está em «boa noite», que o português resolve com <b>uma</b> expressão e o italiano com <b>duas</b>. <em>Buonasera</em> é a saudação de <b>chegada</b> à noite — você entra num restaurante às 20h e diz <em>Buonasera</em>. <em>Buonanotte</em> é só de <b>despedida</b>, quando alguém vai dormir ou a noite acabou. Dizer <em>Buonanotte</em> ao entrar num lugar soa como «vá dormir».",
+        "Para agradecer, <em>Grazie</em> é invariável e sempre serve. E para pedir, o italiano dá três formas que são <b>intercambiáveis</b>: <em>Per favore</em>, <em>Per piacere</em>, <em>Per cortesia</em>. Não há diferença prática de uso — escolha uma e siga."
+      ],
+      "blocks": [
+        {
+          "type": "tabella",
+          "titolo": "Arrivare o andare via?",
+          "intestazioni": ["Espressione", "Português", "Quando"],
+          "righe": [
+            ["Ciao", "oi / tchau", "informal — chegando <b>e</b> saindo"],
+            ["Salve", "olá", "neutro, meio-termo"],
+            ["Buongiorno", "bom dia", "manhã, formal — chegando"],
+            ["Buon pomeriggio", "boa tarde", "tarde — menos usado que <em>Buongiorno</em>"],
+            ["Buonasera", "boa noite", "noite — <b>só chegando</b>"],
+            ["Buonanotte", "boa noite", "noite — <b>só saindo</b>, ou antes de dormir"]
+          ]
+        },
+        {
+          "type": "lista",
+          "titolo": "Ringraziare e chiedere",
+          "items": [
+            { "it": "Grazie", "pt": "obrigado / obrigada", "nota": "Invariável — não muda com o gênero de quem fala." },
+            { "it": "Per favore", "pt": "por favor" },
+            { "it": "Per piacere", "pt": "por favor", "nota": "Mesma coisa que <em>per favore</em>." },
+            { "it": "Per cortesia", "pt": "por favor", "nota": "Mesma coisa, um pouco mais formal." },
+            { "it": "Sì", "pt": "sim", "nota": "Com acento, para não confundir com <em>si</em> (pronome)." },
+            { "it": "No", "pt": "não" }
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "attenzione",
+          "titolo": "Não diga Buonanotte ao chegar",
+          "testo": "Ao entrar num lugar à noite, é <em>Buonasera</em>. <em>Buonanotte</em> só na saída. É o erro que mais denuncia estrangeiro."
+        }
+      ]
+    },
+    {
+      "id": "l01-s06",
+      "category": "GRAMMATICA",
+      "sottotitolo": "Articoli determinativi",
+      "titolo": "Gli articoli determinativi",
+      "gloss": "Os artigos definidos",
+      "spiegazione": [
+        "Aqui está a diferença conceitual mais importante entre o italiano e o português neste tópico. Em português, o artigo depende <b>só do gênero</b>: <em>o</em> para masculino, <em>a</em> para feminino, e acabou. Em italiano, o masculino depende também <b>do som que começa a palavra seguinte</b>. É por isso que existem três artigos masculinos e não um.",
+        "<b>Masculino singular:</b> o padrão é <b><em>il</em></b> — <em>il cane</em>, <em>il francese</em>, <em>il brasiliano</em>. Antes de <b>vogal</b>, ele elide e vira <b><em>l'</em></b> — <em>l'amico</em>, <em>l'italiano</em>. E antes de certos grupos consonantais difíceis de pronunciar depois de «il», entra <b><em>lo</em></b>.",
+        "Quais grupos pedem <em>lo</em>? Foi exatamente o que o professor anotou na aula: <b>s + consoante</b> (<em>lo spagnolo</em>, <em>lo svizzero</em>, <em>lo statunitense</em>, <em>lo studente</em>), <b>z</b> (<em>lo zaino</em>), <b>gn</b> e <b>ps</b> (<em>lo gnomo</em>, <em>lo psicologo</em>), e as estrangeiras <b>x</b> e <b>y</b>. O motivo é puramente fonético: «il spagnolo» é desconfortável de dizer, «lo spagnolo» flui. Se você não conseguir decorar a lista, tente pronunciar com <em>il</em> — o desconforto é a própria pista.",
+        "<b>Feminino é muito mais simples:</b> <b><em>la</em></b> antes de consoante (<em>la penna</em>, <em>la spagnola</em> — note que o s+consoante <b>não</b> afeta o feminino), e <b><em>l'</em></b> antes de vogal (<em>l'amica</em>, <em>l'italiana</em>).",
+        "<b>No plural tudo colapsa</b>, e aqui vem a parte elegante, que o professor resumiu como <em>il → i</em> e <em>lo e l' → gli</em>. Ou seja: os dois casos «difíceis» do singular — <em>lo</em> e <em>l'</em> — se juntam num único plural <b><em>gli</em></b>. Por isso <em>lo spagnolo → gli spagnoli</em> e <em>l'amico → gli amici</em> têm o mesmo artigo, apesar de terem artigos diferentes no singular. No feminino, <em>la</em> e <em>l'</em> igualmente colapsam em <b><em>le</em></b>."
+      ],
+      "blocks": [
+        {
+          "type": "tabella",
+          "titolo": "Articoli determinativi",
+          "intestazioni": ["", "Maschile", "Femminile"],
+          "righe": [
+            ["Singolare", "il / lo / l'", "la / l'"],
+            ["Plurale", "i / gli", "le"]
+          ]
+        },
+        {
+          "type": "tabella",
+          "titolo": "Quando usare quale",
+          "intestazioni": ["Artigo", "Usa-se antes de", "Esempi", "Plurale"],
+          "righe": [
+            ["<b>il</b>", "consoante comum (masc.)", "<em>il cane, il francese, il tedesco</em>", "<b>i</b> — <em>i cani</em>"],
+            ["<b>lo</b>", "s+cons., z, gn, ps, x, y (masc.)", "<em>lo spagnolo, lo zaino, lo svizzero</em>", "<b>gli</b> — <em>gli spagnoli</em>"],
+            ["<b>l'</b>", "vogal (masc.)", "<em>l'amico, l'italiano, l'austriaco</em>", "<b>gli</b> — <em>gli amici</em>"],
+            ["<b>la</b>", "consoante (fem.)", "<em>la penna, la spagnola</em>", "<b>le</b> — <em>le penne</em>"],
+            ["<b>l'</b>", "vogal (fem.)", "<em>l'amica, l'italiana</em>", "<b>le</b> — <em>le amiche</em>"]
+          ]
+        },
+        {
+          "type": "lista",
+          "titolo": "Dal singolare al plurale",
+          "items": [
+            { "it": "il cane → i cani", "pt": "o cachorro → os cachorros" },
+            { "it": "l'amico → gli amici", "pt": "o amigo → os amigos", "nota": "<em>l'</em> vira <em>gli</em>." },
+            { "it": "lo spagnolo → gli spagnoli", "pt": "o espanhol → os espanhóis", "nota": "<em>lo</em> também vira <em>gli</em>." },
+            { "it": "la penna → le penne", "pt": "a caneta → as canetas" },
+            { "it": "l'amica → le amiche", "pt": "a amiga → as amigas", "nota": "<b>ch</b> mantém o som duro." }
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "info",
+          "titolo": "Um truque que funciona",
+          "testo": "Na dúvida entre <em>il</em> e <em>lo</em>, diga a palavra em voz alta com os dois. O italiano escolheu <em>lo</em> justamente nos casos em que <em>il</em> soa travado. Sua boca sabe a regra antes da sua memória."
+        }
+      ]
+    },
+    {
+      "id": "l01-s07",
+      "category": "GRAMMATICA",
+      "sottotitolo": "Articoli indeterminativi",
+      "titolo": "Gli articoli indeterminativi",
+      "gloss": "Os artigos indefinidos",
+      "spiegazione": [
+        "A lógica é a mesma dos definidos — o masculino olha para o som seguinte — mas com menos formas. <b>Masculino:</b> <b><em>un</em></b> é o padrão e serve tanto antes de consoante comuns quanto antes de vogal (<em>un cane</em>, <em>un amico</em>); <b><em>uno</em></b> aparece nos mesmos casos que pediam <em>lo</em>, ou seja s+consoante, z, gn, ps (<em>uno spagnolo</em>, <em>uno studente</em>, <em>uno zaino</em>).",
+        "<b>Feminino:</b> <b><em>una</em></b> antes de consoante (<em>una penna</em>, <em>una spagnola</em>) e <b><em>un'</em></b> antes de vogal (<em>un'amica</em>).",
+        "Agora a armadilha clássica, e ela vale ouro: <b><em>un amico</em> sem apóstrofo, <em>un'amica</em> com apóstrofo</b>. Parece arbitrário, mas tem razão. Apóstrofo em italiano sinaliza <b>letra que caiu</b>. No masculino, a forma já é <em>un</em> — não caiu nada, então não há apóstrofo. No feminino, a forma é <em>una</em> e o <b>-a</b> cai antes da vogal, deixando <em>un'</em>. Ou seja: <b>o apóstrofo é a marca do feminino</b> nesse par.",
+        "Consequência prática: se você escrever <em>un'amico</em>, você não cometeu um erro de pontuação — você disse «uma amigo». O apóstrofo carrega informação de gênero."
+      ],
+      "blocks": [
+        {
+          "type": "tabella",
+          "titolo": "Articoli indeterminativi",
+          "intestazioni": ["", "Maschile", "Femminile"],
+          "righe": [
+            ["Singolare", "un / uno", "una / un'"]
+          ]
+        },
+        {
+          "type": "tabella",
+          "titolo": "Quando usare quale",
+          "intestazioni": ["Artigo", "Usa-se antes de", "Esempi"],
+          "righe": [
+            ["<b>un</b>", "consoante comum <b>e vogal</b> (masc.)", "<em>un cane, un amico, un anno</em>"],
+            ["<b>uno</b>", "s+cons., z, gn, ps (masc.)", "<em>uno spagnolo, uno zaino, uno studente</em>"],
+            ["<b>una</b>", "consoante (fem.)", "<em>una penna, una spagnola</em>"],
+            ["<b>un'</b>", "vogal (fem.)", "<em>un'amica, un'italiana</em>"]
+          ]
+        },
+        {
+          "type": "contrasto",
+          "titolo": "L'apostrofo distingue il genere",
+          "gruppi": [
+            {
+              "etichetta": "Maschile — senza apostrofo",
+              "gloss": "nada caiu de «un»",
+              "esempi": [
+                { "it": "un amico", "pt": "um amigo" },
+                { "it": "un italiano", "pt": "um italiano" },
+                { "it": "un anno", "pt": "um ano" }
+              ]
+            },
+            {
+              "etichetta": "Femminile — con apostrofo",
+              "gloss": "o -a de «una» caiu",
+              "esempi": [
+                { "it": "un'amica", "pt": "uma amiga" },
+                { "it": "un'italiana", "pt": "uma italiana" },
+                { "it": "un'austriaca", "pt": "uma austríaca" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l01-s08",
+      "category": "GRAMMATICA",
+      "sottotitolo": "Plurale",
+      "titolo": "Il plurale dei sostantivi",
+      "gloss": "O plural dos substantivos",
+      "spiegazione": [
+        "O italiano <b>não usa -s</b> para plural. Ele <b>troca a vogal final</b>. Esse é um reflexo difícil de desmontar para quem fala português, e vale repetir em voz alta até incomodar: <em>libri</em>, não «libros»; <em>cani</em>, não «canes».",
+        "São três padrões, e eles cobrem quase tudo: <b>-o → -i</b> (<em>libro → libri</em>), <b>-a → -e</b> (<em>lingua → lingue</em>), <b>-e → -i</b> (<em>inglese → inglesi</em>).",
+        "Repare no terceiro: <b>as palavras em -e vão para -i independentemente do gênero</b>. <em>il cane → i cani</em> (masculino) e <em>la madre → le madri</em> (feminino) fazem a mesma coisa. É por isso que as nacionalidades da «família 2» tinham só duas formas — o plural não distingue gênero.",
+        "E a interação com a Aula 0 volta aqui: palavras em <b>-co / -ca / -go / -ga</b> precisam decidir sobre o som. Feminino em <b>-ca / -ga</b> sempre insere <b>h</b> para manter o som duro: <em>amica → ami<b>ch</b>e</em>, <em>tedesca → tedes<b>ch</b>e</em>. Masculino em <b>-co</b> depende da tônica: penúltima mantém duro (<em>tedesco → tedes<b>ch</b>i</em>), antepenúltima fica brando (<em>amico → ami<b>c</b>i</em>, <em>austriaco → austria<b>c</b>i</em>)."
+      ],
+      "blocks": [
+        {
+          "type": "tabella",
+          "titolo": "I tre modelli",
+          "intestazioni": ["Singolare", "Plurale", "Esempio"],
+          "righe": [
+            ["-o", "-i", "<em>libro → libri</em> (livro → livros)"],
+            ["-a", "-e", "<em>lingua → lingue</em> (língua → línguas)"],
+            ["-e", "-i", "<em>inglese → inglesi</em> (inglês → ingleses)"]
+          ]
+        },
+        {
+          "type": "lista",
+          "titolo": "Dalla lezione",
+          "items": [
+            { "it": "il cane → i cani", "pt": "o cachorro → os cachorros", "nota": "-e → -i" },
+            { "it": "la penna → le penne", "pt": "a caneta → as canetas", "nota": "-a → -e" },
+            { "it": "l'amico → gli amici", "pt": "o amigo → os amigos", "nota": "-o → -i, com som brando" },
+            { "it": "l'amica → le amiche", "pt": "a amiga → as amigas", "nota": "-a → -e, com <b>h</b> para som duro" },
+            { "it": "l'anno → gli anni", "pt": "o ano → os anos", "nota": "-o → -i" }
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "attenzione",
+          "titolo": "amici e amiche: o par que confunde",
+          "testo": "<em>ami<b>ci</b></em> tem som brando («amítchi») e <em>ami<b>ch</b>e</em> tem som duro («amíke»). Não é inconsistência: o feminino insere o <b>h</b> para <em>preservar</em> o som do singular <em>amica</em>, enquanto o masculino deixa o som mudar. Volte à tabela de C e G da Aula 0 se isso não fizer sentido."
+        }
+      ]
+    },
+    {
+      "id": "l01-s09",
+      "category": "VERBO",
+      "sottotitolo": "avere + anni",
+      "titolo": "L'età",
+      "gloss": "A idade",
+      "spiegazione": [
+        "Idade em italiano se diz com <b><em>avere</em></b>, não com <em>essere</em> — e a estrutura é <b><em>avere</em> + número + <em>anni</em></b>. <em>Io ho quindici anni</em>. Isso é idêntico ao português («eu tenho quinze anos»), então você só precisa não deixar o inglês interferir.",
+        "A palavra <em>anni</em> é <b>obrigatória</b>. Em português a gente pode responder «tenho quinze»; em italiano <em>Io ho quindici</em> soa incompleto. Sempre feche com <em>anni</em>.",
+        "Singular e plural mudam: <b>um</b> ano é <em>un <b>anno</b></em>, de dois em diante é <em>anni</em>. <em>Tu hai un anno</em> mas <em>Tu hai due anni</em>.",
+        "E há uma elisão que apareceu na aula e vale guardar: <b><em>venti</em> + <em>anni</em> = <em>vent'anni</em></b>. O <b>-i</b> de <em>venti</em> cai antes da vogal e entra apóstrofo — o mesmo mecanismo de <em>una → un'</em>. Isso acontece com as dezenas: <em>trent'anni</em>, <em>quarant'anni</em>. Note que <em>venti anni</em> escrito por extenso não está errado, mas <em>vent'anni</em> é o que se fala."
+      ],
+      "blocks": [
+        {
+          "type": "lista",
+          "titolo": "Dire l'età",
+          "items": [
+            { "it": "Io ho quindici anni.", "pt": "Eu tenho quinze anos." },
+            { "it": "Io ho undici anni.", "pt": "Eu tenho onze anos." },
+            { "it": "Tu hai un anno.", "pt": "Você tem um ano.", "nota": "Singular: <em>anno</em>." },
+            { "it": "Tu hai tre anni.", "pt": "Você tem três anos." },
+            { "it": "Tu hai vent'anni.", "pt": "Você tem vinte anos.", "nota": "<em>venti</em> + <em>anni</em> → <em>vent'anni</em>." },
+            { "it": "Lui ha sette anni.", "pt": "Ele tem sete anos." },
+            { "it": "Lui ha diciassette anni.", "pt": "Ele tem dezessete anos." },
+            { "it": "Noi abbiamo vent'anni.", "pt": "Nós temos vinte anos." },
+            { "it": "Voi avete sedici anni.", "pt": "Vocês têm dezesseis anos." },
+            { "it": "Loro hanno quindici anni.", "pt": "Eles têm quinze anos." }
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "info",
+          "titolo": "anno e hanno",
+          "testo": "<em>anno</em> (ano) e <em>hanno</em> (eles têm) se pronunciam <b>exatamente igual</b> — o H é mudo. A escrita distingue, a fala não. <em>Loro hanno un anno</em> soa como «loro ano un ano», e está tudo certo."
+        }
+      ]
+    },
+    {
+      "id": "l01-s10",
+      "category": "GRAMMATICA",
+      "sottotitolo": "Congiunzioni",
+      "titolo": "Mettere insieme: e / ma",
+      "gloss": "Juntando frases: «e» / «mas»",
+      "spiegazione": [
+        "Com dois verbos e algumas nacionalidades você já consegue frases de verdade, e para isso bastam duas conjunções. <b><em>e</em></b> soma (= «e») e <b><em>ma</em></b> contrasta (= «mas»). Ambas funcionam exatamente como em português.",
+        "Duas convenções de escrita: antes de <b><em>ma</em></b> costuma-se pôr <b>vírgula</b> (<em>Lei è francese<b>,</b> ma ha undici anni</em>), enquanto antes de <em>e</em> normalmente não se põe. E — repetindo porque é o erro mais frequente — <b><em>e</em></b> sem acento é a conjunção, <b><em>è</em></b> com acento é o verbo. Uma frase como <em>Lui <b>è</b> italiano <b>e</b> lei <b>è</b> spagnola</em> usa as duas coisas e nenhuma pode trocar de lugar.",
+        "Detalhe de concordância que essas frases expõem: quando você junta duas pessoas, cada adjetivo concorda com <b>seu próprio</b> sujeito. <em>Io sono brasilian<b>o</b> e tu sei argentin<b>a</b></em> — um masculino e um feminino na mesma frase, cada um com sua terminação."
+      ],
+      "blocks": [
+        {
+          "type": "lista",
+          "titolo": "Con «e»",
+          "items": [
+            { "it": "Io sono inglese e tu sei spagnola.", "pt": "Eu sou inglês e você é espanhola." },
+            { "it": "Io sono brasiliano e tu sei argentina.", "pt": "Eu sou brasileiro e você é argentina." },
+            { "it": "Io sono tedesco e tu sei austriaca.", "pt": "Eu sou alemão e você é austríaca." },
+            { "it": "Noi siamo americani e abbiamo vent'anni.", "pt": "Nós somos americanos e temos vinte anos." },
+            { "it": "Voi siete olandesi e avete sedici anni.", "pt": "Vocês são holandeses e têm dezesseis anos." },
+            { "it": "Loro sono tedeschi e hanno quindici anni.", "pt": "Eles são alemães e têm quinze anos." }
+          ]
+        },
+        {
+          "type": "lista",
+          "titolo": "Con «ma»",
+          "items": [
+            { "it": "Lei è francese, ma ha undici anni.", "pt": "Ela é francesa, mas tem onze anos." },
+            { "it": "Lei è spagnola, ma ha cinque anni.", "pt": "Ela é espanhola, mas tem cinco anos." },
+            { "it": "Lui è olandese, ma ha diciassette anni.", "pt": "Ele é holandês, mas tem dezessete anos." },
+            { "it": "Lui è belga, ma ha vent'anni.", "pt": "Ele é belga, mas tem vinte anos." }
+          ]
+        }
+      ]
+    }
+  ],
+  "chunks": [
+    { "id": "l01-c01", "it": "Io sono ___.", "pt": "Eu sou ___.", "category": "VERBO", "chunkType": "semiFixed", "slot": ["brasiliano", "italiano", "francese", "spagnolo", "tedesco", "tedesca"] },
+    { "id": "l01-c02", "it": "Tu sei ___.", "pt": "Você é ___.", "category": "VERBO", "chunkType": "semiFixed", "slot": ["austriaca", "portoghese", "svizzera", "belga", "olandese"] },
+    { "id": "l01-c03", "it": "Lui è ___.", "pt": "Ele é ___.", "category": "VERBO", "chunkType": "semiFixed", "slot": ["lussemburghese", "inglese", "americano", "belga"] },
+    { "id": "l01-c04", "it": "Lei è ___.", "pt": "Ela é ___.", "category": "VERBO", "chunkType": "semiFixed", "slot": ["argentina", "belga", "inglese", "spagnola"] },
+    { "id": "l01-c05", "it": "Noi siamo ___.", "pt": "Nós somos ___.", "category": "VERBO", "chunkType": "semiFixed", "slot": ["americani", "inglesi", "italiani"] },
+    { "id": "l01-c06", "it": "Voi siete ___.", "pt": "Vocês são ___.", "category": "VERBO", "chunkType": "semiFixed", "slot": ["brasiliani", "italiane", "francesi", "spagnole", "tedeschi", "tedesche"] },
+    { "id": "l01-c07", "it": "Loro sono ___.", "pt": "Eles/elas são ___.", "category": "VERBO", "chunkType": "semiFixed", "slot": ["austriache", "portoghesi", "svizzere", "belghe", "olandesi", "svizzeri"] },
+    { "id": "l01-c08", "it": "Io ho ___ anni.", "pt": "Eu tenho ___ anos.", "category": "VERBO", "chunkType": "semiFixed", "slot": ["undici", "dodici", "tredici", "quattordici", "quindici"] },
+    { "id": "l01-c09", "it": "Tu hai ___ anni.", "pt": "Você tem ___ anos.", "category": "VERBO", "chunkType": "semiFixed", "slot": ["due", "tre", "quattro", "venti"] },
+    { "id": "l01-c10", "it": "Lui ha ___ anni.", "pt": "Ele tem ___ anos.", "category": "VERBO", "chunkType": "semiFixed", "slot": ["cinque", "sette", "nove", "diciassette", "diciannove"] },
+    { "id": "l01-c11", "it": "Buongiorno", "pt": "Bom dia", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l01-c12", "it": "Buon pomeriggio", "pt": "Boa tarde", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l01-c13", "it": "Buonasera", "pt": "Boa noite (ao chegar)", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l01-c14", "it": "Buonanotte", "pt": "Boa noite (ao se despedir)", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l01-c15", "it": "Ciao", "pt": "Oi / Tchau", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l01-c16", "it": "Salve", "pt": "Olá", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l01-c17", "it": "Grazie", "pt": "Obrigado / Obrigada", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l01-c18", "it": "Per favore", "pt": "Por favor", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l01-c19", "it": "E tu?", "pt": "E você?", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l01-c20", "it": "il cane", "pt": "o cachorro", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l01-c21", "it": "l'amico", "pt": "o amigo", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l01-c22", "it": "l'amica", "pt": "a amiga", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l01-c23", "it": "la penna", "pt": "a caneta", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l01-c24", "it": "l'anno", "pt": "o ano", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l01-c25", "it": "vent'anni", "pt": "vinte anos", "category": "VOCABOLARIO", "chunkType": "collocation" },
+    { "id": "l01-c26", "it": "gli Stati Uniti d'America", "pt": "os Estados Unidos da América", "category": "VOCABOLARIO", "chunkType": "collocation" }
+  ],
+  "dialogo": {
+    "id": "l01-d01",
+    "titolo": "Piacere!",
+    "gloss": "Prazer!",
+    "consegna": "Duas pessoas se apresentam. Só vocabulário desta aula e da Aula 0.",
+    "battute": [
+      { "speaker": "A", "nome": "Giulia", "it": "Buongiorno! Io sono Giulia e sono italiana.", "pt": "Bom dia! Eu sou a Giulia e sou italiana." },
+      { "speaker": "B", "nome": "Marco", "it": "Buongiorno, Giulia! Io sono Marco. Sono brasiliano.", "pt": "Bom dia, Giulia! Eu sou o Marco. Sou brasileiro." },
+      { "speaker": "A", "nome": "Giulia", "it": "Tu hai vent'anni?", "pt": "Você tem vinte anos?" },
+      { "speaker": "B", "nome": "Marco", "it": "No, io ho diciotto anni. E tu?", "pt": "Não, eu tenho dezoito anos. E você?" },
+      { "speaker": "A", "nome": "Giulia", "it": "Io ho diciannove anni.", "pt": "Eu tenho dezenove anos." },
+      { "speaker": "B", "nome": "Marco", "it": "Loro sono spagnoli?", "pt": "Eles são espanhóis?" },
+      { "speaker": "A", "nome": "Giulia", "it": "No, loro sono austriaci. Lui è austriaco, ma ha sette anni.", "pt": "Não, eles são austríacos. Ele é austríaco, mas tem sete anos." },
+      { "speaker": "B", "nome": "Marco", "it": "Grazie, Giulia!", "pt": "Obrigado, Giulia!" }
+    ],
+    "passate": [
+      {
+        "focus": "gist",
+        "istruzione": "Passada 1 — <b>só ouça</b>. Não escreva e não leia a transcrição. Objetivo: quantas pessoas falam, e o assunto é nacionalidade, idade, ou os dois?",
+        "inputBloccato": true
+      },
+      {
+        "focus": "note",
+        "istruzione": "Passada 2 — ouça e anote <b>só os números</b> que você captar. Não tente escrever as frases inteiras.",
+        "inputBloccato": false
+      },
+      {
+        "focus": "detail",
+        "istruzione": "Passada 3 — agora as perguntas. Use o botão de cada linha para repetir só aquele trecho quantas vezes quiser.",
+        "inputBloccato": false,
+        "domande": [
+          { "id": "l01-d01-q1", "domanda": "Quantos anos tem o Marco?", "risposta": "diciotto", "accettaAnche": ["18", "diciotto anni", "ha diciotto anni"] },
+          { "id": "l01-d01-q2", "domanda": "Quantos anos tem a Giulia?", "risposta": "diciannove", "accettaAnche": ["19", "diciannove anni", "ha diciannove anni"] },
+          { "id": "l01-d01-q3", "domanda": "Qual é a nacionalidade da Giulia? Escreva a forma que ela usa.", "risposta": "italiana" },
+          { "id": "l01-d01-q4", "domanda": "As outras pessoas são espanholas? Se não, o que são? (masculino plural)", "risposta": "austriaci", "accettaAnche": ["sono austriaci", "no, austriaci"] }
+        ]
+      }
+    ]
+  },
+  "esercizi": [
+    {
+      "id": "l01-e01",
+      "type": "gap-audio",
+      "category": "VERBO",
+      "consegna": "Ascolta e completa.",
+      "audio": { "tts": "Io sono brasiliano.", "src": null },
+      "testo": "Io ___ brasiliano.",
+      "risposta": "sono",
+      "pt": "Eu sou brasileiro.",
+      "aiuto": "Verbo <em>essere</em>, primeira pessoa do singular."
+    },
+    {
+      "id": "l01-e02",
+      "type": "gap-audio",
+      "category": "VERBO",
+      "consegna": "Ascolta e completa.",
+      "audio": { "tts": "Tu sei austriaca.", "src": null },
+      "testo": "Tu ___ austriaca.",
+      "risposta": "sei",
+      "pt": "Você é austríaca.",
+      "aiuto": "Verbo <em>essere</em>, «tu». Cuidado: essa forma também é o número 6."
+    },
+    {
+      "id": "l01-e03",
+      "type": "gap-audio",
+      "category": "VERBO",
+      "consegna": "Ascolta e completa. Atenção ao H mudo.",
+      "audio": { "tts": "Io ho quindici anni.", "src": null },
+      "testo": "Io ___ quindici anni.",
+      "risposta": "ho",
+      "pt": "Eu tenho quinze anos.",
+      "aiuto": "Soa exatamente como «ó», mas se escreve com H."
+    },
+    {
+      "id": "l01-e04",
+      "type": "gap-audio",
+      "category": "VERBO",
+      "consegna": "Ascolta e completa. Quantos anos?",
+      "audio": { "tts": "Lui ha diciassette anni.", "src": null },
+      "testo": "Lui ha ___ anni.",
+      "risposta": "diciassette",
+      "pt": "Ele tem dezessete anos.",
+      "aiuto": "Dezessete. Repare que o «dez» vem na frente, e tem <b>ss</b> dobrado."
+    },
+    {
+      "id": "l01-e05",
+      "type": "gap-audio",
+      "category": "GRAMMATICA",
+      "consegna": "Ascolta e completa con l'articolo.",
+      "audio": { "tts": "Lo spagnolo e l'amico.", "src": null },
+      "testo": "___ spagnolo e l'amico.",
+      "risposta": "Lo",
+      "pt": "O espanhol e o amigo.",
+      "aiuto": "S + consoante pede o artigo especial do masculino."
+    },
+    {
+      "id": "l01-e06",
+      "type": "gap-audio",
+      "category": "GRAMMATICA",
+      "consegna": "Ascolta e completa con l'articolo plurale.",
+      "audio": { "tts": "Gli amici sono italiani.", "src": null },
+      "testo": "___ amici sono italiani.",
+      "risposta": "Gli",
+      "pt": "Os amigos são italianos.",
+      "aiuto": "No plural, <em>lo</em> e <em>l'</em> colapsam num só artigo."
+    },
+    {
+      "id": "l01-e07",
+      "type": "gap-audio",
+      "category": "GRAMMATICA",
+      "consegna": "Ascolta e completa. Apóstrofo ou não?",
+      "audio": { "tts": "Un'amica e un amico.", "src": null },
+      "testo": "___ e un amico.",
+      "risposta": "Un'amica",
+      "pt": "Uma amiga e um amigo.",
+      "aiuto": "Feminino antes de vogal: o <b>-a</b> de <em>una</em> cai e entra apóstrofo. Sem espaço depois dele.",
+      "tolleranzaElisione": false
+    },
+    {
+      "id": "l01-e08",
+      "type": "gap-audio",
+      "category": "VERBO",
+      "consegna": "Ascolta e completa. Atenção à elisão.",
+      "audio": { "tts": "Noi abbiamo vent'anni.", "src": null },
+      "testo": "Noi abbiamo ___.",
+      "risposta": "vent'anni",
+      "pt": "Nós temos vinte anos.",
+      "aiuto": "<em>venti</em> + <em>anni</em>, com o <b>-i</b> caindo."
+    },
+    {
+      "id": "l01-e09",
+      "type": "gap-audio",
+      "category": "GRAMMATICA",
+      "consegna": "Ascolta e completa. Concordância!",
+      "audio": { "tts": "Loro sono austriache.", "src": null },
+      "testo": "Loro sono ___.",
+      "risposta": "austriache",
+      "pt": "Elas são austríacas.",
+      "aiuto": "Feminino plural. O <b>h</b> mantém o som duro."
+    },
+    {
+      "id": "l01-e10",
+      "type": "qa-transcribe",
+      "category": "VERBO",
+      "consegna": "Ouça a pergunta e a resposta. Transcreva apenas a resposta.",
+      "domanda": { "tts": "Tu sei italiano?", "testo": "Tu sei italiano?", "pt": "Você é italiano?" },
+      "risposta": { "tts": "No, io sono brasiliano.", "testo": "No, io sono brasiliano.", "pt": "Não, eu sou brasileiro." },
+      "aiuto": "Quatro palavras. Começa com uma negação."
+    },
+    {
+      "id": "l01-e11",
+      "type": "qa-transcribe",
+      "category": "VERBO",
+      "consegna": "Ouça a pergunta e a resposta. Transcreva apenas a resposta.",
+      "domanda": { "tts": "Quanti anni hai?", "testo": "Quanti anni hai?", "pt": "Quantos anos você tem?" },
+      "risposta": { "tts": "Io ho vent'anni.", "testo": "Io ho vent'anni.", "pt": "Eu tenho vinte anos." },
+      "aiuto": "Não esqueça o apóstrofo da elisão."
+    },
+    {
+      "id": "l01-e12",
+      "type": "qa-transcribe",
+      "category": "GRAMMATICA",
+      "consegna": "Ouça a pergunta e a resposta. Transcreva apenas a resposta.",
+      "domanda": { "tts": "Loro sono spagnoli?", "testo": "Loro sono spagnoli?", "pt": "Eles são espanhóis?" },
+      "risposta": { "tts": "No, loro sono tedeschi e hanno quindici anni.", "testo": "No, loro sono tedeschi e hanno quindici anni.", "pt": "Não, eles são alemães e têm quinze anos." },
+      "aiuto": "Frase longa, com <em>e</em> no meio. Use o botão de repetir quantas vezes precisar."
+    },
+    {
+      "id": "l01-e13",
+      "type": "paradigm-fill",
+      "category": "VOCABOLARIO",
+      "consegna": "Complete o paradigma. Escreva <b>com o artigo</b>, como na tabela da seção Nazionalità.",
+      "colonne": ["Maschile sing.", "Femminile sing.", "Maschile pl.", "Femminile pl."],
+      "righe": [
+        { "id": "l01-e13-r1", "pt": "brasileiro", "forme": ["il brasiliano", "la brasiliana", "i brasiliani", "le brasiliane"], "nascondi": [1, 3] },
+        { "id": "l01-e13-r2", "pt": "espanhol", "forme": ["lo spagnolo", "la spagnola", "gli spagnoli", "le spagnole"], "nascondi": [0, 2] },
+        { "id": "l01-e13-r3", "pt": "alemão", "forme": ["il tedesco", "la tedesca", "i tedeschi", "le tedesche"], "nascondi": [2, 3] },
+        { "id": "l01-e13-r4", "pt": "austríaco", "forme": ["l'austriaco", "l'austriaca", "gli austriaci", "le austriache"], "nascondi": [2, 3] },
+        { "id": "l01-e13-r5", "pt": "inglês", "forme": ["l'inglese", "l'inglese", "gli inglesi", "le inglesi"], "nascondi": [1, 3] },
+        { "id": "l01-e13-r6", "pt": "belga", "forme": ["il belga", "la belga", "i belgi", "le belghe"], "nascondi": [2, 3], "nota": "Lembre: o masculino plural é a exceção." }
+      ]
+    },
+    {
+      "id": "l01-e14",
+      "type": "paradigm-fill",
+      "category": "GRAMMATICA",
+      "consegna": "Complete com o artigo definido, singular e plural.",
+      "colonne": ["Singolare", "Plurale"],
+      "righe": [
+        { "id": "l01-e14-r1", "pt": "o cachorro", "forme": ["il cane", "i cani"], "nascondi": [1] },
+        { "id": "l01-e14-r2", "pt": "o amigo", "forme": ["l'amico", "gli amici"], "nascondi": [1] },
+        { "id": "l01-e14-r3", "pt": "a amiga", "forme": ["l'amica", "le amiche"], "nascondi": [1] },
+        { "id": "l01-e14-r4", "pt": "a caneta", "forme": ["la penna", "le penne"], "nascondi": [1] },
+        { "id": "l01-e14-r5", "pt": "o espanhol", "forme": ["lo spagnolo", "gli spagnoli"], "nascondi": [0] },
+        { "id": "l01-e14-r6", "pt": "o ano", "forme": ["l'anno", "gli anni"], "nascondi": [0, 1] }
+      ]
+    }
+  ],
+  "produzione": [
+    {
+      "id": "l01-p01",
+      "consegna": "Escreva cinco frases sobre pessoas reais que você conhece, usando <em>essere</em> + nacionalidade <b>e</b> <em>avere</em> + idade na mesma frase, ligadas por <em>e</em> ou <em>ma</em>. Confira a concordância de cada adjetivo separadamente."
+    },
+    {
+      "id": "l01-p02",
+      "consegna": "Grave-se dizendo a tabela de <em>essere</em> e <em>avere</em> em voz alta, de <em>io</em> a <em>loro</em>, sem olhar. Ouça de volta: você pronunciou <em>ho</em>, <em>hai</em>, <em>ha</em>, <em>hanno</em> <b>sem</b> nenhum som de H?"
+    },
+    {
+      "id": "l01-p03",
+      "consegna": "Pegue cinco nacionalidades e diga as quatro formas de cada uma em voz alta, com artigo. Faça as difíceis: <em>austriaco</em>, <em>tedesco</em>, <em>belga</em>, <em>statunitense</em>."
+    },
+    {
+      "id": "l01-p04",
+      "consegna": "Volte ao aquecimento. Compare sua tentativa de «Eu sou brasileiro e tenho trinta anos» com o que você sabe agora. A resposta é <em>Io sono brasiliano e ho trent'anni</em> — você acertou a elisão?"
+    }
+  ],
+  "bilancio": [
+    "Sei conjugar <em>essere</em> e <em>avere</em> no presente, sem hesitar.",
+    "Sei que <em>essere</em> cobre «ser» e «estar».",
+    "Não pronuncio o H de <em>ho, hai, ha, hanno</em>.",
+    "Sei dizer minha nacionalidade com a concordância certa de gênero.",
+    "Sei as quatro formas das nacionalidades em <em>-o</em> e sei que as em <em>-e</em> têm só duas.",
+    "Sei escolher entre <em>il</em>, <em>lo</em> e <em>l'</em> — e sei explicar por quê.",
+    "Sei que <em>lo</em> e <em>l'</em> viram <em>gli</em> no plural.",
+    "Sei por que é <em>un amico</em> mas <em>un'amica</em>.",
+    "Sei dizer minha idade com <em>avere</em> + número + <em>anni</em>.",
+    "Sei a elisão de <em>vent'anni</em>.",
+    "Não confundo <em>è</em> com <em>e</em>.",
+    "Sei que <em>Buonasera</em> é de chegada e <em>Buonanotte</em> é de despedida."
+  ]
+}

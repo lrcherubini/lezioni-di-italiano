@@ -1,0 +1,182 @@
+/* ==========================================================================
+   tokens.css — design tokens
+   Paleta derivada do deck de slides usado nas aulas: navy, crimson, verde
+   e a faixa tricolor italiana.
+   ========================================================================== */
+
+:root {
+  /* --- Marca -------------------------------------------------------------- */
+  --navy: #1a3a6b;
+  --navy-600: #234a86;
+  --navy-300: #6d8cbb;
+  --crimson: #b3272d;
+  --crimson-600: #cc3339;
+  --verde: #1e7a4b;
+  --verde-600: #259159;
+
+  /* --- Superfícies -------------------------------------------------------- */
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --surface-alt: #eef1f6;
+  --surface-sunken: #e4e8f0;
+  --border: #d3d9e4;
+  --border-strong: #b3bccd;
+
+  /* --- Texto -------------------------------------------------------------- */
+  --text: #16202e;
+  --text-muted: #5b6779;
+  --text-faint: #8a94a3;
+  --text-on-dark: #ffffff;
+
+  /* Azul de destaque para títulos e ênfase. Existe como token próprio
+     porque --navy não tem contraste suficiente sobre fundo escuro; este
+     inverte no dark mode e --navy continua reservado a fundos/chips. */
+  --accent: var(--navy);
+
+  /* --- Semântica de feedback --------------------------------------------- */
+  --ok: #1e7a4b;
+  --ok-bg: #e7f4ec;
+  --ok-border: #a8d8bd;
+  --warn: #9a6212;
+  --warn-bg: #fdf3e0;
+  --warn-border: #edd3a1;
+  --err: #b3272d;
+  --err-bg: #fdeaea;
+  --err-border: #efb9bb;
+  --info-bg: #eaf0f9;
+  --info-border: #bccfe8;
+
+  /* --- Chips de categoria ------------------------------------------------
+     A taxonomia vem dos chips coloridos do deck. PRONUNCIA é uma extensão
+     nossa: o deck não tinha chip para fonética. Ver CLAUDE.md.            */
+  --chip-verbo: var(--navy);
+  --chip-vocabolario: var(--verde);
+  --chip-espressione: var(--crimson);
+  --chip-grammatica: var(--navy-600);
+  --chip-pronuncia: #7a4bb3;
+
+  /* --- Tipografia --------------------------------------------------------- */
+  --font-sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --font-mono: "Cascadia Code", "SF Mono", Consolas, "Liberation Mono", monospace;
+
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-md: 1.0625rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 1.5rem;
+  --fs-2xl: 2rem;
+  --fs-3xl: 2.5rem;
+
+  --lh-tight: 1.25;
+  --lh-normal: 1.5;
+  --lh-loose: 1.7;
+
+  /* --- Espaçamento (escala 4px) ------------------------------------------ */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+
+  /* --- Forma -------------------------------------------------------------- */
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(22, 32, 46, 0.06);
+  --shadow: 0 2px 8px rgba(22, 32, 46, 0.08);
+  --shadow-lg: 0 8px 28px rgba(22, 32, 46, 0.12);
+
+  --ring: 0 0 0 3px rgba(35, 74, 134, 0.35);
+
+  /* --- Layout ------------------------------------------------------------- */
+  --measure: 68ch;
+  --page-max: 1080px;
+}
+
+/* --- Dark mode ----------------------------------------------------------
+   O toggle de tema estampa data-theme na raiz; ele precisa vencer nos dois
+   sentidos, então cada bloco aparece como media query E como atributo.   */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11161f;
+    --surface: #1a212d;
+    --surface-alt: #222b3a;
+    --surface-sunken: #151c26;
+    --border: #313c4e;
+    --border-strong: #47556b;
+
+    --text: #e6eaf1;
+    --text-muted: #a3aebf;
+    --text-faint: #77839a;
+
+    --navy-300: #8fa9d4;
+    --accent: #8fa9d4;
+    --chip-verbo: #2f5796;
+    --chip-grammatica: #3a63a5;
+    --chip-vocabolario: #23875a;
+    --chip-espressione: #c8353b;
+    --chip-pronuncia: #8f5cc9;
+
+    --ok: #55c98e;
+    --ok-bg: #12281d;
+    --ok-border: #2b5c40;
+    --warn: #e0b169;
+    --warn-bg: #2a2113;
+    --warn-border: #5c4826;
+    --err: #f08c90;
+    --err-bg: #2b1517;
+    --err-border: #5e2e31;
+    --info-bg: #182231;
+    --info-border: #2f4763;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.55);
+    --ring: 0 0 0 3px rgba(143, 169, 212, 0.4);
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #11161f;
+  --surface: #1a212d;
+  --surface-alt: #222b3a;
+  --surface-sunken: #151c26;
+  --border: #313c4e;
+  --border-strong: #47556b;
+
+  --text: #e6eaf1;
+  --text-muted: #a3aebf;
+  --text-faint: #77839a;
+
+  --navy-300: #8fa9d4;
+  --chip-verbo: #2f5796;
+  --chip-grammatica: #3a63a5;
+  --chip-vocabolario: #23875a;
+  --chip-espressione: #c8353b;
+  --chip-pronuncia: #8f5cc9;
+
+  --ok: #55c98e;
+  --ok-bg: #12281d;
+  --ok-border: #2b5c40;
+  --warn: #e0b169;
+  --warn-bg: #2a2113;
+  --warn-border: #5c4826;
+  --err: #f08c90;
+  --err-bg: #2b1517;
+  --err-border: #5e2e31;
+  --info-bg: #182231;
+  --info-border: #2f4763;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.55);
+  --ring: 0 0 0 3px rgba(143, 169, 212, 0.4);
+}

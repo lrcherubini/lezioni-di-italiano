@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lezioni di italiano · material de estudo</title>
+  <meta name="description" content="Material de estudo de italiano A1: conteúdo explicado e exercícios de audição.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🇮🇹</text></svg>">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Pular para o conteúdo</a>
+  <div class="tricolore"></div>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__title" href="index.html">
+        Lezioni di italiano
+        <small>material de estudo · A1</small>
+      </a>
+      <div class="toolbar">
+        <button class="btn btn--sm" type="button" data-action="export" title="Baixar seu progresso como JSON">⬇ Progresso</button>
+        <button class="btn btn--sm" type="button" data-action="import" title="Restaurar progresso de um arquivo">⬆ Importar</button>
+        <button class="btn btn--sm btn--ghost" type="button" data-action="theme" aria-label="Alternar tema">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page" id="main">
+    <div id="audio-status"></div>
+
+    <section class="hero">
+      <h1>Lezioni di italiano</h1>
+      <p>
+        Material de estudo montado a partir das aulas, com a explicação escrita por inteiro —
+        não depende de nenhum slide ou arquivo externo. Cada linha em italiano tem áudio,
+        e os exercícios treinam <strong>audição</strong> antes de leitura.
+      </p>
+      <p style="margin-top:var(--sp-3)">
+        Seu progresso fica só neste navegador. Nada é enviado para nenhum servidor.
+      </p>
+    </section>
+
+    <h2 class="stage__kicker" style="margin-bottom:var(--sp-3)">Aulas</h2>
+    <ul class="lesson-grid" id="lesson-grid">
+      <li class="loading">Carregando as aulas…</li>
+    </ul>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <p>Material de estudo pessoal, gerado a partir das anotações de aula. Sem fins comerciais.</p>
+      <p>Sem rastreamento, sem cookies, sem servidor. Progresso salvo no <code>localStorage</code> do navegador.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

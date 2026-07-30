@@ -1,0 +1,29 @@
+{
+  "corso": {
+    "titolo": "Lezioni di italiano",
+    "gloss": "Material de estudo — italiano A1",
+    "livello": "A1",
+    "lingua": "it-IT",
+    "glossa": "pt-BR"
+  },
+  "lezioni": [
+    {
+      "id": "00",
+      "numero": 0,
+      "file": "lezione-00.json",
+      "titolo": "L'alfabeto e i suoni",
+      "gloss": "O alfabeto e os sons",
+      "categorie": ["PRONUNCIA"],
+      "temi": ["Alfabeto", "Vocali", "C e G", "Digrammi", "Doppie", "Accento"]
+    },
+    {
+      "id": "01",
+      "numero": 1,
+      "file": "lezione-01.json",
+      "titolo": "Io sono, tu sei",
+      "gloss": "Apresentar-se, dizer nacionalidade e idade",
+      "categorie": ["VERBO", "VOCABOLARIO", "ESPRESSIONE", "GRAMMATICA"],
+      "temi": ["Essere e Avere", "Paesi", "Nazionalità", "Numeri 0–20", "Saluti", "Articoli", "Plurale", "L'età"]
+    }
+  ]
+}
