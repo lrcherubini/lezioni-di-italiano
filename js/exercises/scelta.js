@@ -10,7 +10,7 @@
    precisa saber que você erra `lo` e acerta `il`, não que "errou artigos".
    ========================================================================== */
 
-import { el, speakButton } from '../render.js';
+import { el, speakButton, prose } from '../render.js';
 import { checkAnswer, escapeHtml } from '../check.js';
 import * as speech from '../speech.js';
 
@@ -118,11 +118,11 @@ export default {
       r.esito.innerHTML = '';
       r.esito.append(
         speakButton(frase(r.q)),
-        el('span', { html: r.correct
+        prose(r.correct
           ? (r.q.nota ?? 'Esatto.')
           : (r.dato
             ? `Você marcou <b>${escapeHtml(r.dato)}</b>. ${r.q.nota ?? ''}`
-            : `Em branco. ${r.q.nota ?? ''}`) })
+            : `Em branco. ${r.q.nota ?? ''}`), 'span')
       );
     }
 

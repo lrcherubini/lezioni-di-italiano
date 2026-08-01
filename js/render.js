@@ -157,7 +157,7 @@ function renderLista(block) {
         el('div', { class: 'item__text' },
           el('span', { class: 'item__it', html: item.it }),
           item.pt ? el('span', { class: 'item__pt', html: item.pt }) : null,
-          item.nota ? el('span', { class: 'item__nota', html: item.nota }) : null
+          item.nota ? prose(item.nota, 'span', { class: 'item__nota' }) : null
         )
       )
     );
@@ -221,6 +221,10 @@ function renderParadigma(block) {
 
   const table = el('table', { class: 'paradigma' }, el('thead', {}, thead), tbody);
   const wrap = el('div', { class: 'table-wrap' }, table);
+
+  for (const row of block.righe ?? []) {
+    if (row.nota) wrap.append(prose(row.nota, 'p', { class: 'item__nota' }));
+  }
 
   if (block.righe?.some((r) => r.eccezione)) {
     wrap.append(

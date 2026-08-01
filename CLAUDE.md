@@ -17,7 +17,7 @@ O objetivo principal deste projeto é um **loop de autoria repetível**: a cada 
 6. **`id` de item é imutável.** Ele é a chave do progresso no `localStorage`. Renomear um `id` apaga o histórico daquele item; reaproveitar um `id` mistura históricos de coisas diferentes.
 7. **Toda seção precisa de `spiegazione`.** É o que torna o site independente dos slides. O validador reprova se faltar.
 7.1. **Todo texto italiano exibido tem botão de áudio — sem exceção.** Isso vale para `titolo` de aula/seção, itens de `header` (comunicazione/lessico/grammatica), toda célula de `tabella` que não esteja marcada `pt: true`, cabeçalhos de coluna de `paradigma` e `paradigm-fill`, e o título+gloss do `dialogo`. Ao criar uma tabela nova, pergunte célula por célula: "isto é italiano ou é rótulo/descrição em português?" — no segundo caso, marque `{ "html": "…", "pt": true }`. Ver a seção *Tipos de bloco*.
-7.2. **Em texto corrido, forma italiana citada vai dentro de `<it>…</it>`.** Vale para `spiegazione`, `nota.testo` e o `prompt` do riscaldamento — os três lugares onde uma palavra italiana costuma aparecer pela primeira vez, dentro da explicação que a introduz, e onde até então ela ficava muda. Ver *A pseudo-tag `<it>`*.
+7.2. **Marque sempre a minoria.** É a regra única por trás dos dois mecanismos de "isto é italiano?", e a razão de eles terem polaridades opostas. Em **célula de tabela**, italiano é 76% do conteúdo → o padrão é italiano e você marca a exceção portuguesa com `pt: true`. Em **texto corrido**, italiano é ~13% → o padrão é português e você marca a exceção italiana com `<it>…</it>`. Os dois nomeiam o que é marcado, nunca o padrão. Ver *Os dois mecanismos de "isto é italiano?"*.
 8. **Nada de atividade em par ou grupo.** A aula é particular 1-a-1. Materiais A1 de referência estão cheios de *"in coppia"* e *"girate per la classe"* — tudo isso é inaplicável aqui.
 9. **`category` só entre os cinco valores permitidos** (abaixo). Acrescentar um valor exige editar `tools/validate.py`, `css/tokens.css` **e** este documento.
 
@@ -214,11 +214,39 @@ Fonte da verdade. `tools/validate.py` verifica tudo abaixo.
 
 Campos de texto aceitam HTML inline (`<b>`, `<em>`, `<code>`). O TTS remove tags antes de falar.
 
-### A pseudo-tag `<it>`
+### Os dois mecanismos de "isto é italiano?"
 
-Texto corrido — `spiegazione`, `nota.testo`, `riscaldamento.prompt` — era o
-único lugar onde uma forma italiana aparecia **sem 🔊**. E é justamente onde
-ela costuma aparecer pela primeira vez: dentro da frase que a apresenta.
+Há **dois**, com polaridade oposta, e isso é de propósito. A regra que
+unifica os dois é uma só: **marque a minoria, deixe a maioria implícita.**
+
+| Onde | Maioria | Você marca | Como |
+|---|---|---|---|
+| Célula de `tabella` | italiano (76%) | a exceção **portuguesa** | `{ "html": "…", "pt": true }` |
+| Texto corrido | português (~87%) | a exceção **italiana** | `<it>…</it>` |
+
+Os dois **nomeiam o que é marcado**, nunca o padrão — e é por isso que um se
+chama `pt` e o outro `it` sem serem incoerentes. Inverter qualquer um deles
+seria pior: exigir `<it>` em cada célula poria a marcação em 271 células
+para poupar 87, e um `pt: true` em prosa obrigaria a envelopar a explicação
+inteira em português para liberar quatro palavras italianas.
+
+A polaridade difere porque **a granularidade difere**, não por acaso: uma
+célula é um valor JSON discreto e comporta um campo; uma frase precisa de
+marcação a nível de trecho, e não existe "campo" para meia oração.
+
+#### Onde `<it>` vale
+
+**Em todo campo de prosa** — e a lista é fechada, porque `<it>` num campo
+que não passa por `prose()` **não vira botão e não avisa**:
+
+`riscaldamento.prompt` · `riscaldamento.spiegazione` · `section.spiegazione` ·
+`nota.testo` · `lista.item.nota` · `contrasto.esempio.nota` ·
+`paradigma.riga.nota` · `esercizio.consegna` · `esercizio.aiuto` ·
+nota de sub-item dos drills · `produzione.consegna` · `bilancio`
+
+Acrescentou campo de texto novo? Passe-o por `prose()` em `js/` **e**
+acrescente-o a `check_lesson`/`check_section` em `tools/validate.py`. Os
+dois lados juntos, sempre — é o que impede o `<it>` de morrer calado.
 
 `<it>…</it>` marca uma forma italiana citada em meio à prosa. O renderer a
 troca por *texto + botão de áudio*, nessa ordem:

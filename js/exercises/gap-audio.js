@@ -7,7 +7,7 @@
    ser de audição.
    ========================================================================== */
 
-import { el, audioBar, speakButton } from '../render.js';
+import { el, audioBar, speakButton, prose } from '../render.js';
 import { checkAnswer, escapeHtml } from '../check.js';
 import * as speech from '../speech.js';
 
@@ -44,7 +44,7 @@ export default {
 
     root.append(el('div', { class: 'ex__row' }, input, send, hintBtn));
 
-    const hint = el('div', { class: 'feedback', hidden: true, html: item.aiuto ?? '' });
+    const hint = prose(item.aiuto ?? '', 'div', { class: 'feedback', hidden: true });
     if (hintBtn) {
       root.append(hint);
       hintBtn.addEventListener('click', () => {

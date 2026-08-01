@@ -16,7 +16,7 @@
    prosódia do português.
    ========================================================================== */
 
-import { el, speakButton, audioBar } from '../render.js';
+import { el, speakButton, audioBar, prose } from '../render.js';
 import { checkAnswer, escapeHtml } from '../check.js';
 import * as speech from '../speech.js';
 
@@ -131,9 +131,9 @@ export default {
       r.esito.innerHTML = '';
       r.esito.append(
         speakButton(r.giro.risposta),
-        el('span', { html: r.correct
+        prose(r.correct
           ? (r.nota ?? `<b>${escapeHtml(r.giro.risposta)}</b>`)
-          : `Era <b>${escapeHtml(r.giro.risposta)}</b>` })
+          : `Era <b>${escapeHtml(r.giro.risposta)}</b>`, 'span')
       );
     }
 

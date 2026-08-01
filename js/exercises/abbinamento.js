@@ -11,7 +11,7 @@
    mínimo da suíte consegue exercitar de verdade.
    ========================================================================== */
 
-import { el, speakButton } from '../render.js';
+import { el, speakButton, prose } from '../render.js';
 import { escapeHtml } from '../check.js';
 import { mescola } from './shuffle.js';
 
@@ -105,9 +105,9 @@ export default {
       r.esito.innerHTML = '';
       r.esito.append(
         speakButton(r.coppia.destra),
-        el('span', { html: r.correct
+        prose(r.correct
           ? `<b>${escapeHtml(r.coppia.destra)}</b>${r.coppia.pt ? ` — ${r.coppia.pt}` : ''}`
-          : `Era <b>${escapeHtml(r.coppia.destra)}</b>${r.coppia.pt ? ` — ${r.coppia.pt}` : ''}` })
+          : `Era <b>${escapeHtml(r.coppia.destra)}</b>${r.coppia.pt ? ` — ${r.coppia.pt}` : ''}`, 'span')
       );
     }
 

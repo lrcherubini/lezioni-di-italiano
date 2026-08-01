@@ -7,7 +7,7 @@
    paradigma de brasiliano".
    ========================================================================== */
 
-import { el, speakButton } from '../render.js';
+import { el, speakButton, prose } from '../render.js';
 import { checkAnswer, escapeHtml } from '../check.js';
 
 export default {
@@ -56,7 +56,7 @@ export default {
       });
 
       if (row.nota) {
-        tr.append(el('td', { class: 'item__nota', html: row.nota }));
+        tr.append(prose(row.nota, 'td', { class: 'item__nota' }));
       }
       tbody.append(tr);
     }

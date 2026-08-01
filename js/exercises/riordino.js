@@ -11,7 +11,7 @@
    navegador de verdade na suíte, por decisão de arquitetura.
    ========================================================================== */
 
-import { el, speakButton } from '../render.js';
+import { el, speakButton, prose } from '../render.js';
 import { checkAnswer, escapeHtml } from '../check.js';
 import { mescola } from './shuffle.js';
 
@@ -122,11 +122,11 @@ export default {
       r.esito.innerHTML = '';
       r.esito.append(
         speakButton(r.frase.risposta),
-        el('span', { html: r.correct
+        prose(r.correct
           ? `<b>${escapeHtml(r.frase.risposta)}</b>${r.frase.nota ? ` — ${r.frase.nota}` : ''}`
           : (r.dato
             ? `Você montou «${escapeHtml(r.dato)}».`
-            : 'Nenhuma palavra escolhida.') })
+            : 'Nenhuma palavra escolhida.'), 'span')
       );
     }
 

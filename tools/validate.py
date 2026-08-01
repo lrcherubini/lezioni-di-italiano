@@ -184,6 +184,16 @@ def check_section(name: str, section: dict, ids: Counter) -> None:
         elif btype == 'contrasto' and len(block.get('gruppi', [])) < 2:
             err(f'{name} {sid}: contrasto precisa de 2+ grupos')
 
+        # Toda nota de item é prosa e passa por prose() no render.
+        for it in block.get('items', []):
+            check_prose(name, f'{sid}.lista.nota', it.get('nota'))
+        for g in block.get('gruppi', []):
+            for e in g.get('esempi', []):
+                check_prose(name, f'{sid}.contrasto.nota', e.get('nota'))
+        for row in block.get('righe', []):
+            if isinstance(row, dict):
+                check_prose(name, f'{sid}.{row.get("id", "riga")}.nota', row.get('nota'))
+
 
 def check_gap_audio(name: str, ex: dict) -> None:
     if '___' not in ex.get('testo', ''):
@@ -356,6 +366,16 @@ def check_lesson(name: str, d: dict, ids: Counter) -> None:
         ids[ex['id']] += 1
         etype = ex.get('type')
         types[etype] += 1
+
+        # Todo campo de prosa do exercício passa por prose() no render, então
+        # todo campo de prosa é conferido aqui. A lista tem que ficar completa:
+        # um campo esquecido aqui é um `<it>` que morre calado lá.
+        check_prose(name, f'{ex["id"]}.consegna', ex.get('consegna'))
+        check_prose(name, f'{ex["id"]}.aiuto', ex.get('aiuto'))
+        for campo in ('domande', 'frasi', 'coppie', 'giri', 'righe'):
+            for sub in ex.get(campo, []):
+                if isinstance(sub, dict):
+                    check_prose(name, f'{sub.get("id", ex["id"])}.nota', sub.get('nota'))
         if etype not in REGISTERED_TYPES:
             err(f'{name} {ex["id"]}: type «{etype}» não está no registry de js/exercises/index.js')
         if etype == 'gap-audio':
@@ -386,6 +406,10 @@ def check_lesson(name: str, d: dict, ids: Counter) -> None:
 
     for p in d.get('produzione', []):
         ids[p['id']] += 1
+        check_prose(name, f'{p["id"]}.consegna', p.get('consegna'))
+
+    for i, b in enumerate(d.get('bilancio', [])):
+        check_prose(name, f'bilancio[{i}]', b)
 
 
 # --- Léxico cumulativo ---------------------------------------------------

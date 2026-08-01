@@ -125,7 +125,7 @@ export function mountExercise(item, lessonId, opts = {}) {
     el('span', { class: 'ex__num' }, opts.headLabel ?? `Ex. ${String(exCounter).padStart(2, '0')}`),
     opts.headTitle
       ? el('span', { class: 'ex__consegna' }, speakButton(opts.headTitle), ' ', el('span', { html: opts.headTitle }))
-      : el('span', { class: 'ex__consegna', html: item.consegna ?? '' }),
+      : prose(item.consegna ?? '', 'span', { class: 'ex__consegna' }),
     opts.headGloss ? el('span', { class: 'section__gloss', html: opts.headGloss }) : null,
     item.category ? chip(item.category) : null
   );
@@ -452,7 +452,7 @@ async function renderLesson() {
              + 'Se travar em algo, é exatamente isso que vale levar para a próxima aula.',
       },
       el('ol', { class: 'produzione' },
-        ...lesson.produzione.map((p) => el('li', { id: p.id, html: p.consegna }))
+        ...lesson.produzione.map((p) => prose(p.consegna, 'li', { id: p.id }))
       )
     ));
   }
@@ -465,7 +465,7 @@ async function renderLesson() {
     lesson.bilancio.forEach((b, i) => {
       const input = el('input', { type: 'checkbox', checked: checked.has(i) || null });
       input.addEventListener('change', () => store.setBilancio(id, i, input.checked));
-      ul.append(el('li', {}, el('label', {}, input, el('span', { html: b }))));
+      ul.append(el('li', {}, el('label', {}, input, prose(b, 'span'))));
     });
 
     main.append(renderStage(
