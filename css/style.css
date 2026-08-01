@@ -136,6 +136,59 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
 .speak:hover { background: var(--info-bg); }
 .speak[data-speaking="true"] { background: var(--navy); color: var(--text-on-dark); }
 
+/* Italiano dentro de prosa: `<it>…</it>` em spiegazione, nota e prompt.
+   O botão é menor que o de linha de lista porque aqui ele convive com o
+   texto, e no tamanho cheio empurraria a entrelinha do parágrafo. */
+.it-inline { display: inline; white-space: normal; }
+/* O par palavra+botão não se separa em quebra de linha — ler «amiche» no
+   fim de uma linha e achar o 🔊 no começo da outra confunde de qual forma
+   é o áudio. */
+.it-inline__text { white-space: nowrap; }
+
+.speak--inline {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--accent);
+  width: 1.35rem; height: 1.35rem; padding: 0;
+  margin-left: 0.15rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; line-height: 1;
+  vertical-align: baseline;
+  transition: background 120ms ease;
+}
+.speak--inline:hover { background: var(--info-bg); }
+.speak--inline[data-speaking="true"] { background: var(--navy); color: var(--text-on-dark); }
+
+/* Modo «misto»/«it»: a prosa É o insumo, então o botão vale o parágrafo
+   inteiro e vem ANTES dele — como já acontece nas linhas de lista, onde o
+   botão possui o italiano em vez de anotá-lo. */
+.speak--para {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--accent);
+  width: 1.9rem; height: 1.9rem; padding: 0;
+  margin-right: var(--sp-2);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: var(--fs-sm); line-height: 1;
+  vertical-align: text-bottom;
+  transition: background 120ms ease;
+}
+.speak--para:hover { background: var(--info-bg); }
+.speak--para[data-speaking="true"] { background: var(--navy); color: var(--text-on-dark); }
+
+/* Português dentro de prosa italiana: a glosa de compreensão. Mesmo
+   tratamento visual das outras traduções do site — menor, apagada, itálica
+   — e sem 🔊, porque não existe voz portuguesa aqui, por decisão. */
+.pt-inline {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
 /* --- Chips -------------------------------------------------------------- */
 
 .chip {
@@ -583,7 +636,9 @@ table em { font-style: italic; }
   font-size: var(--fs-lg); line-height: var(--lh-loose);
   margin-bottom: var(--sp-3);
 }
-.ex__prompt .gap {
+/* A lacuna é a mesma affordance em todo drill que tem uma — gap-audio,
+   scelta e o molde do slot-frame. */
+.ex__prompt .gap, .scelta__testo .gap, .frame__it .gap {
   display: inline-block; min-width: 6rem;
   border-bottom: 2px solid var(--navy-300);
 }
@@ -633,6 +688,162 @@ textarea { min-height: 5rem; resize: vertical; line-height: var(--lh-normal); }
   padding: 0 2px; border-radius: 2px;
 }
 .diff .same { opacity: 0.75; }
+
+/* --- Scelta: múltipla escolha ------------------------------------------ */
+
+.scelta { list-style: decimal; padding-left: var(--sp-5); display: grid; gap: var(--sp-5); }
+.scelta__q { padding-left: var(--sp-1); }
+.scelta__testo { font-size: var(--fs-lg); line-height: var(--lh-loose); margin-bottom: var(--sp-2); }
+.scelta__pt { font-size: var(--fs-sm); color: var(--text-muted); margin-top: var(--sp-2); }
+
+.scelta__opzioni { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+
+.opzione {
+  font: inherit; cursor: pointer;
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface); color: var(--text);
+}
+.opzione:hover:not(:disabled) { background: var(--surface-alt); }
+.opzione--on { border-color: var(--accent); background: var(--info-bg); font-weight: 600; }
+/* Certa e errada convivem na tela de propósito: o contraste lado a lado é
+   o que ensina, mais do que o veredito isolado. */
+.opzione--giusta { border-color: var(--ok-border); background: var(--ok-bg); color: var(--ok); }
+.opzione--sbagliata { border-color: var(--err-border); background: var(--err-bg); color: var(--err); }
+.opzione:disabled { cursor: default; opacity: 1; }
+
+.scelta__esito { display: flex; align-items: center; gap: var(--sp-2); margin-top: var(--sp-2); font-size: var(--fs-sm); }
+.scelta__esito--ok { color: var(--ok); }
+.scelta__esito--err { color: var(--err); }
+
+/* --- Riordino: remontar a frase ---------------------------------------- */
+
+.riordino { display: grid; gap: var(--sp-2); margin-bottom: var(--sp-5); }
+.riordino__pt { font-size: var(--fs-sm); color: var(--text-muted); }
+
+.riordino__linea {
+  display: flex; gap: var(--sp-2); flex-wrap: wrap; align-items: center;
+  min-height: 3rem; padding: var(--sp-2);
+  border: 2px dashed var(--border-strong); border-radius: var(--radius);
+  background: var(--surface-sunken);
+}
+.riordino__vuoto { color: var(--text-faint); font-size: var(--fs-sm); }
+.riordino__pool { display: flex; gap: var(--sp-2); flex-wrap: wrap; padding: var(--sp-2) 0; }
+
+.parola {
+  font: inherit; cursor: pointer;
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text);
+}
+.parola:hover { background: var(--surface-alt); }
+.parola--in { border-color: var(--accent); background: var(--info-bg); }
+
+.riordino__esito { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-sm); }
+.riordino__esito--ok { color: var(--ok); }
+.riordino__esito--err { color: var(--err); }
+
+/* --- Abbinamento: associar --------------------------------------------- */
+
+.abbina { list-style: decimal; padding-left: var(--sp-5); display: grid; gap: var(--sp-4); }
+.abbina__riga { display: grid; gap: var(--sp-2); }
+.abbina__sinistra { display: flex; align-items: center; gap: var(--sp-2); font-weight: 600; }
+
+.abbina__select {
+  font: inherit; width: 100%; max-width: 30rem;
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface); color: var(--text);
+}
+.abbina__select--ok { border-color: var(--ok-border); background: var(--ok-bg); }
+.abbina__select--err { border-color: var(--err-border); background: var(--err-bg); }
+
+.abbina__esito { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-sm); }
+.abbina__esito--ok { color: var(--ok); }
+.abbina__esito--err { color: var(--err); }
+
+/* --- Slot-frame: drill de substituição --------------------------------- */
+
+.frame {
+  padding: var(--sp-4);
+  border-left: 4px solid var(--accent);
+  background: var(--surface-alt);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin-bottom: var(--sp-3);
+}
+.frame__it { font-size: var(--fs-lg); font-weight: 600; line-height: var(--lh-loose); }
+.frame__pt { font-size: var(--fs-sm); color: var(--text-muted); margin-top: var(--sp-1); }
+
+.frame__modello { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; margin-bottom: var(--sp-2); }
+.frame__etichetta {
+  font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: .06em;
+  color: var(--text-muted); font-weight: 700;
+}
+
+.giri { list-style: none; padding: 0; display: grid; gap: var(--sp-3); margin-top: var(--sp-4); }
+.giro { display: grid; gap: var(--sp-1); }
+.giro__prompt { font-size: var(--fs-sm); color: var(--text-muted); }
+.giro__input { width: 100%; }
+.giro__input--ok { border-color: var(--ok); background: var(--ok-bg); }
+.giro__input--err { border-color: var(--err); background: var(--err-bg); }
+.giro__input--warn { border-color: var(--warn); background: var(--warn-bg); }
+
+.giro__esito { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-sm); }
+.giro__esito--ok { color: var(--ok); }
+.giro__esito--err { color: var(--err); }
+
+/* --- Flashcard: o léxico da aula em cartas ----------------------------- */
+
+.carte { list-style: none; padding: 0; display: grid; gap: var(--sp-3); }
+
+.carta {
+  padding: var(--sp-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  display: grid; gap: var(--sp-2);
+}
+/* A frente é o português, e é grande: é o estímulo, não a glosa. */
+.carta__pt { font-size: var(--fs-lg); }
+.carta__it { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-lg); }
+
+.carta__voto[aria-pressed="true"] { font-weight: 700; }
+.carta__voto--on[data-voto="si"] { border-color: var(--ok-border); background: var(--ok-bg); color: var(--ok); }
+.carta__voto--on[data-voto="no"] { border-color: var(--err-border); background: var(--err-bg); color: var(--err); }
+
+/* --- Gravação de voz --------------------------------------------------- */
+
+.rec { margin-top: var(--sp-3); display: grid; gap: var(--sp-2); }
+.rec__player { width: 100%; max-width: 24rem; }
+.rec__stato { font-size: var(--fs-sm); color: var(--text-muted); align-self: center; }
+
+/* --- Dictogloss -------------------------------------------------------- */
+
+.dicto__conta {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  margin: var(--sp-2) 0;
+}
+.dicto__input { width: 100%; }
+
+/* --- Caderno léxico ---------------------------------------------------- */
+
+.nota-lex__gruppo { margin-bottom: var(--sp-6); display: grid; gap: var(--sp-3); }
+
+.nota-lex {
+  padding: var(--sp-4);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: var(--surface);
+  display: grid; gap: var(--sp-2);
+}
+.nota-lex__head { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+.nota-lex__mio { width: 100%; }
+.nota-lex__stato { font-size: var(--fs-sm); color: var(--ok); align-self: center; }
 
 /* --- Diálogo ----------------------------------------------------------- */
 

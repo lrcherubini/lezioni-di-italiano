@@ -8,7 +8,7 @@
    palavra você não ouviu é a informação útil — "errado" não ensina nada.
    ========================================================================== */
 
-import { el, audioBar, speakButton } from '../render.js';
+import { el, audioBar, speakButton, prose } from '../render.js';
 import { checkAnswer, renderDiff, escapeHtml } from '../check.js';
 import * as speech from '../speech.js';
 
@@ -56,7 +56,7 @@ export default {
     const hintBtn = item.aiuto ? el('button', { class: 'btn', type: 'button' }, '💡 Dica') : null;
     root.append(el('div', { class: 'ex__actions' }, send, hintBtn));
 
-    const hint = el('div', { class: 'feedback', hidden: true, html: item.aiuto ?? '' });
+    const hint = prose(item.aiuto ?? '', 'div', { class: 'feedback', hidden: true }, ctx.modo ?? 'pt');
     if (hintBtn) {
       root.append(hint);
       hintBtn.addEventListener('click', () => { hint.hidden = !hint.hidden; });

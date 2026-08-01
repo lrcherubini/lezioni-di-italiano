@@ -15,9 +15,10 @@
    ========================================================================== */
 
 import * as store from './store.js';
+import { flashcardDeck } from './exercises/index.js';
 import { el, renderStage } from './render.js';
 import {
-  loadJSON, mountExercise, resetExerciseCounter, initChrome, fail,
+  loadJSON, mountExercise, resetExerciseCounter, initChrome, fail, subItemIds,
 } from './app.js';
 
 const CONTENT = 'content/';
@@ -41,13 +42,23 @@ export function indexById(lesson) {
   for (const ex of lesson.esercizi ?? []) {
     mapa.set(ex.id, ex);
 
-    // Paradigma: cada célula oculta é um item de progresso próprio, mas
-    // não se renderiza sozinha — o card é a tabela inteira.
-    if (ex.type === 'paradigm-fill') {
-      for (const row of ex.righe ?? []) {
-        for (const i of row.nascondi ?? []) mapa.set(`${row.id}-c${i}`, ex);
-      }
-    }
+    // Sub-item não se renderiza sozinho: uma célula de paradigma, uma
+    // pergunta de escolha ou um giro de substituição só existem dentro do
+    // card inteiro. Todos apontam para o mesmo exercício.
+    //
+    // Quem sabe quais ids um tipo produz é o módulo do tipo. Enumerar aqui
+    // por `if (ex.type === …)` foi exatamente o bug que deixou os sub-itens
+    // das quatro drills novas órfãos — vencidos no progresso, invisíveis na
+    // revisão, e sem nenhum sinal de erro.
+    for (const id of subItemIds(ex)) mapa.set(id, ex);
+  }
+
+  // O baralho de flashcards não está em `esercizi` — é derivado dos chunks.
+  // Sem isto, cada carta revisada venceria no progresso e nunca voltaria.
+  const deck = flashcardDeck(lesson);
+  if (deck) {
+    mapa.set(deck.id, deck);
+    for (const cid of subItemIds(deck)) mapa.set(cid, deck);
   }
 
   const d = lesson.dialogo;
@@ -75,9 +86,14 @@ export async function collectDue(limite = LIMITE) {
   if (!due.length) return [];
 
   const aulas = new Map();
+  const modos = new Map();
   for (const id of new Set(due.map((d) => d.lessonId))) {
     try {
-      aulas.set(id, indexById(await loadJSON(`${CONTENT}lezione-${id}.json`)));
+      const lesson = await loadJSON(`${CONTENT}lezione-${id}.json`);
+      aulas.set(id, indexById(lesson));
+      // O modo viaja COM o item, não com a página: esta lista mistura aulas,
+      // e uma delas pode ser em português enquanto outra é em italiano.
+      modos.set(id, lesson.modo ?? 'pt');
     } catch {
       // Aula sumiu ou foi renomeada: o progresso dela fica órfão, mas a
       // revisão das outras não pode parar por isso.
@@ -95,7 +111,7 @@ export async function collectDue(limite = LIMITE) {
     if (vistos.has(chave)) continue;
     vistos.add(chave);
 
-    out.push({ lessonId: d.lessonId, item, errRate: d.errRate });
+    out.push({ lessonId: d.lessonId, item, errRate: d.errRate, modo: modos.get(d.lessonId) ?? 'pt' });
     if (out.length >= limite) break;
   }
 
@@ -142,10 +158,10 @@ export async function renderRipasso() {
 
   main.append(renderStage(
     { id: 'ripasso', kicker: 'Revisão', title: 'Ripasso', intro },
-    ...lista.map(({ item, lessonId }) => {
+    ...lista.map(({ item, lessonId, modo }) => {
       const card = mountExercise(item, lessonId, item.type === 'dialogue'
-        ? { headLabel: 'Dialogo', headTitle: item.titolo, headGloss: item.gloss, countInIndex: false }
-        : {});
+        ? { headLabel: 'Dialogo', headTitle: item.titolo, headGloss: item.gloss, countInIndex: false, modo }
+        : { modo });
       // De onde veio: numa revisão que mistura aulas, isso é a diferença
       // entre reconhecer o item e ficar perdido.
       card.append(el('div', { class: 'ripasso-fonte' },

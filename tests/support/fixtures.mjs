@@ -25,13 +25,25 @@ export function readText(...parts) {
   return readFileSync(join(ROOT, ...parts), 'utf-8');
 }
 
-/** fetch() que serve os arquivos reais do repositório. */
-export function installFetch({ fail = null } = {}) {
+/**
+ * fetch() que serve os arquivos reais do repositório.
+ *
+ * @param {object}  opts
+ * @param {string}  opts.fail      caminho que deve responder 404
+ * @param {object}  opts.overrides mapa caminho → objeto JSON, servido no
+ *   lugar do arquivo do disco. Existe para poder testar uma aula sintética
+ *   (um `modo` que ainda não há em content/, por exemplo) sem inventar um
+ *   arquivo de conteúdo só para o teste.
+ */
+export function installFetch({ fail = null, overrides = {} } = {}) {
   const calls = [];
   globalThis.fetch = async (path) => {
     calls.push(path);
     if (fail && path.includes(fail)) {
       return { ok: false, status: 404, json: async () => ({}) };
+    }
+    if (Object.prototype.hasOwnProperty.call(overrides, path)) {
+      return { ok: true, status: 200, json: async () => overrides[path] };
     }
     try {
       const body = readFileSync(join(ROOT, path), 'utf-8');

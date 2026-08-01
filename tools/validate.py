@@ -45,10 +45,34 @@ NAO_LEZIONE = {'manifest.json', 'lessico.json'}
 # exige acrescentar no CLAUDE.md também — é de propósito que dê trabalho.
 VALID_CATEGORY = {'VERBO', 'VOCABOLARIO', 'ESPRESSIONE', 'GRAMMATICA', 'PRONUNCIA'}
 VALID_CHUNK_TYPE = {'fixed', 'semiFixed', 'collocation', 'word'}
+# chunkTypes que viram carta de flashcard. ESPELHA TIPI_CARTA em
+# js/exercises/flashcard.js. `semiFixed` fica de fora: tem lacuna por
+# definição («Io sono ___») e não tem verso — é matéria do slot-frame.
+TIPI_CARTA = {'word', 'collocation', 'fixed'}
 VALID_BLOCK = {'lista', 'tabella', 'contrasto', 'paradigma', 'nota'}
 VALID_TONO = {'info', 'attenzione', 'eccezione'}
+# Língua da prosa da aula. O curso caminha de 'pt' para 'it' — ver CLAUDE.md.
+# Ausente = 'pt', para que toda aula escrita antes do mecanismo continue válida.
+MODI = ('pt', 'misto', 'it')
 # Precisa casar com o registry em js/exercises/index.js.
-REGISTERED_TYPES = {'gap-audio', 'qa-transcribe', 'dialogue', 'paradigm-fill'}
+REGISTERED_TYPES = {
+    'gap-audio', 'qa-transcribe', 'dialogue', 'paradigm-fill',
+    'scelta', 'riordino', 'abbinamento', 'slot-frame', 'dictogloss',
+}
+# `flashcard` NÃO entra aqui de propósito: o baralho é derivado dos chunks
+# por flashcardDeck(), nunca escrito em `esercizi`. Escrever um à mão
+# duplicaria os ids e o conteggio contaria duas vezes.
+
+# Tipos com sub-itens: cada elemento do campo listado tem id próprio e vira
+# uma linha no progresso. ESPELHA o método `countItems` de cada módulo em
+# js/exercises/ — `paradigm-fill` fica de fora porque conta células ocultas,
+# não linhas, e por isso é tratado à parte em count_items().
+SUBITEM_FIELD = {
+    'scelta': 'domande',
+    'riordino': 'frasi',
+    'abbinamento': 'coppie',
+    'slot-frame': 'giri',
+}
 
 # Mínimos por aula, conforme o passo 7 da checklist.
 MINIMUMS = {'gap-audio': 2, 'qa-transcribe': 1}
@@ -117,7 +141,49 @@ def check_paradigma(name: str, ctx: str, block: dict, ids: Counter) -> None:
             err(f'{name} {row["id"]}: {len(row.get("forme", []))} formas para {width} colunas')
 
 
-def check_section(name: str, section: dict, ids: Counter) -> None:
+TAG_RE = {
+    'it': (re.compile(r'<it>'), re.compile(r'</it>'), re.compile(r'<it>\s*(<[^>]*>\s*)*</it>')),
+    'pt': (re.compile(r'<pt>'), re.compile(r'</pt>'), re.compile(r'<pt>\s*(<[^>]*>\s*)*</pt>')),
+}
+
+
+def tag_viva(modo: str) -> str:
+    """Qual pseudo-tag marca a MINORIA neste modo. Ver CLAUDE.md."""
+    return 'pt' if modo in ('misto', 'it') else 'it'
+
+
+def check_prose(name: str, ctx: str, testo, modo: str = 'pt') -> None:
+    """As pseudo-tags `<it>` / `<pt>` de texto corrido.
+
+    `render.js` as casa por regex sobre a string, não por parse de DOM — o
+    DOM mínimo da suíte não parseia innerHTML. Consequência: tag torta não
+    estoura a página, ela só deixa a forma muda, e ninguém percebe. Por isso
+    tudo aqui é erro, nunca aviso.
+
+    As duas tags são conferidas em TODOS os modos: uma `<pt>` desbalanceada
+    numa aula em modo «pt» é igualmente um bug, mesmo que inerte hoje.
+    """
+    s = str(testo or '')
+    viva = tag_viva(modo)
+
+    for tag, (abre, fecha, vazia) in TAG_RE.items():
+        abertas, fechadas = len(abre.findall(s)), len(fecha.findall(s))
+        if abertas != fechadas:
+            err(f'{name} {ctx}: <{tag}> desbalanceada ({abertas} aberta(s), {fechadas} '
+                f'fechada(s)) — a forma ficaria sem áudio silenciosamente')
+        if vazia.search(s):
+            err(f'{name} {ctx}: <{tag}> sem texto — não geraria botão nenhum')
+
+        # Tag da língua majoritária: redundante e ambígua. Em modo «pt» a
+        # prosa já é portuguesa, então <pt> não marca nada; em modo italiano,
+        # <it> idem. Não renderiza errado — mas declara uma intenção que o
+        # modo contradiz, e isso é sempre um engano de autoria.
+        if tag != viva and abertas:
+            err(f'{name} {ctx}: <{tag}> em aula de modo «{modo}» — neste modo a prosa já é '
+                f'{"portuguesa" if tag == "pt" else "italiana"}; a tag a usar é <{viva}>')
+
+
+def check_section(name: str, section: dict, ids: Counter, modo: str = 'pt') -> None:
     sid = section.get('id', '?')
     ids[sid] += 1
 
@@ -130,6 +196,9 @@ def check_section(name: str, section: dict, ids: Counter) -> None:
     elif len(section['spiegazione']) < 2:
         warn(f'{name} {sid}: spiegazione com 1 parágrafo só; a regra pede o "porquê" também')
 
+    for i, p in enumerate(section.get('spiegazione', [])):
+        check_prose(name, f'{sid}.spiegazione[{i}]', p, modo)
+
     for block in section.get('blocks', []):
         btype = block.get('type')
         if btype not in VALID_BLOCK:
@@ -138,10 +207,22 @@ def check_section(name: str, section: dict, ids: Counter) -> None:
             check_table(name, sid, block)
         elif btype == 'paradigma':
             check_paradigma(name, sid, block, ids)
-        elif btype == 'nota' and block.get('tono') not in VALID_TONO:
-            err(f'{name} {sid}: nota com tono inválido «{block.get("tono")}»')
+        elif btype == 'nota':
+            if block.get('tono') not in VALID_TONO:
+                err(f'{name} {sid}: nota com tono inválido «{block.get("tono")}»')
+            check_prose(name, f'{sid}.nota', block.get('testo'), modo)
         elif btype == 'contrasto' and len(block.get('gruppi', [])) < 2:
             err(f'{name} {sid}: contrasto precisa de 2+ grupos')
+
+        # Toda nota de item é prosa e passa por prose() no render.
+        for it in block.get('items', []):
+            check_prose(name, f'{sid}.lista.nota', it.get('nota'), modo)
+        for g in block.get('gruppi', []):
+            for e in g.get('esempi', []):
+                check_prose(name, f'{sid}.contrasto.nota', e.get('nota'), modo)
+        for row in block.get('righe', []):
+            if isinstance(row, dict):
+                check_prose(name, f'{sid}.{row.get("id", "riga")}.nota', row.get('nota'), modo)
 
 
 def check_gap_audio(name: str, ex: dict) -> None:
@@ -175,6 +256,104 @@ def check_paradigm_fill(name: str, ex: dict, ids: Counter) -> None:
                 ids[f'{row["id"]}-c{i}'] += 1
 
 
+def check_subitems(name: str, ex: dict, ids: Counter) -> list[dict]:
+    """Registra os ids dos sub-itens e devolve a lista. Comum aos 4 drills."""
+    campo = SUBITEM_FIELD[ex['type']]
+    itens = ex.get(campo, [])
+    if not itens:
+        err(f'{name} {ex["id"]}: «{ex["type"]}» sem «{campo}» — não exercita nada')
+    for it in itens:
+        if 'id' not in it:
+            err(f'{name} {ex["id"]}: item de «{campo}» sem id — sem id não há progresso')
+        else:
+            ids[it['id']] += 1
+    return itens
+
+
+def check_scelta(name: str, ex: dict, ids: Counter) -> None:
+    for q in check_subitems(name, ex, ids):
+        qid = q.get('id', '?')
+        if '___' not in q.get('testo', ''):
+            err(f'{name} {qid}: scelta sem lacuna «___» no testo')
+        opzioni = q.get('opzioni', [])
+        if len(opzioni) < 2:
+            err(f'{name} {qid}: scelta com menos de 2 opções')
+        # Sem isto o exercício não tem gabarito clicável: a resposta certa
+        # precisa estar entre as alternativas oferecidas.
+        if q.get('risposta') not in opzioni:
+            err(f'{name} {qid}: risposta {q.get("risposta")!r} não está entre as opções {opzioni!r}')
+        if len(set(opzioni)) != len(opzioni):
+            err(f'{name} {qid}: opções repetidas em {opzioni!r}')
+
+
+def check_riordino(name: str, ex: dict, ids: Counter) -> None:
+    for f in check_subitems(name, ex, ids):
+        fid = f.get('id', '?')
+        parole = f.get('parole', [])
+        if len(parole) < 3:
+            warn(f'{name} {fid}: riordino com {len(parole)} peça(s) — abaixo de 3 não é exercício')
+        # As peças precisam remontar exatamente o gabarito: se sobrar ou
+        # faltar palavra, o exercício é impossível e só se descobre clicando.
+        alvo = [p.strip('.,;:!?').lower() for p in str(f.get('risposta', '')).split()]
+        pecas = [p.strip('.,;:!?').lower() for p in parole]
+        if sorted(alvo) != sorted(pecas):
+            err(f'{name} {fid}: as peças não remontam a risposta\n'
+                f'      peças:    {sorted(pecas)}\n'
+                f'      risposta: {sorted(alvo)}')
+
+
+def check_abbinamento(name: str, ex: dict, ids: Counter) -> None:
+    coppie = check_subitems(name, ex, ids)
+    if len(coppie) < 2:
+        err(f'{name} {ex["id"]}: abbinamento com menos de 2 pares — nada a associar')
+    destre = [c.get('destra') for c in coppie]
+    for c in coppie:
+        cid = c.get('id', '?')
+        if not c.get('sinistra') or not c.get('destra'):
+            err(f'{name} {cid}: par sem «sinistra» ou «destra»')
+    # Alternativas iguais tornariam a correção literal ambígua: duas linhas
+    # aceitariam a mesma string e uma delas seria marcada errada sem motivo.
+    if len(set(destre)) != len(destre):
+        err(f'{name} {ex["id"]}: respostas repetidas em «destra» — a associação fica ambígua')
+
+
+def check_slot_frame(name: str, ex: dict, ids: Counter, modo: str = 'pt') -> None:
+    frame = ex.get('frame', {})
+    if '___' not in frame.get('it', ''):
+        err(f'{name} {ex["id"]}: slot-frame sem slot «___» no frame.it')
+
+    for g in check_subitems(name, ex, ids):
+        gid = g.get('id', '?')
+        if not g.get('risposta'):
+            err(f'{name} {gid}: giro sem risposta')
+        # O prompt existe para o aluno PRODUZIR, nunca para copiar. Em modo
+        # 'pt' isso significa um prompt português. Em modo italiano o próprio
+        # `slot` serve: ver «italiano» e ter de escrever «Io parlo italiano.»
+        # continua sendo produzir o molde, que é o que o drill automatiza.
+        # slot-frame.js já faz o fallback `giro.pt ?? giro.slot`.
+        if modo == 'it':
+            if not g.get('pt') and not g.get('slot'):
+                err(f'{name} {gid}: giro sem «pt» nem «slot» — não há prompt nenhum')
+        elif not g.get('pt'):
+            err(f'{name} {gid}: giro sem prompt «pt» — em modo «{modo}» o aluno produz '
+                f'a partir do português')
+        # O drill só é de substituição se a resposta for de fato o molde com
+        # o slot preenchido. Uma resposta que foge do molde é outro exercício.
+        molde = frame.get('it', '')
+        if molde and g.get('slot') is not None:
+            esperado = molde.replace('___', str(g['slot']))
+            # A elisão come o espaço seguinte («vent'» + « anni» = «vent'anni»),
+            # então comparar cru acusaria falso positivo em todo slot elidido.
+            if _sem_spazio_dopo_apostrofo(esperado) != _sem_spazio_dopo_apostrofo(g.get('risposta', '')):
+                warn(f'{name} {gid}: risposta não é o molde com o slot preenchido\n'
+                     f'      molde+slot: {esperado!r}\n'
+                     f'      risposta:   {g.get("risposta")!r}')
+
+
+def _sem_spazio_dopo_apostrofo(s: str) -> str:
+    return norm(re.sub(r"'\s+", "'", str(s)))
+
+
 def check_dialogo(name: str, d: dict, ids: Counter) -> None:
     ids[d['id']] += 1
 
@@ -204,8 +383,20 @@ def check_dialogo(name: str, d: dict, ids: Counter) -> None:
 
 
 def check_lesson(name: str, d: dict, ids: Counter) -> None:
+    # Língua da prosa desta aula. Ausente = 'pt': toda aula escrita antes do
+    # mecanismo continua válida sem edição nenhuma.
+    modo = d.get('modo', 'pt')
+    if modo not in MODI:
+        err(f'{name}: modo «{modo}» inválido — use um de {MODI}')
+        modo = 'pt'
+
+    r = d.get('riscaldamento') or {}
+    check_prose(name, 'riscaldamento.prompt', r.get('prompt'), modo)
+    for i, p in enumerate(r.get('spiegazione', [])):
+        check_prose(name, f'riscaldamento.spiegazione[{i}]', p, modo)
+
     for section in d.get('sections', []):
-        check_section(name, section, ids)
+        check_section(name, section, ids, modo)
 
     for chunk in d.get('chunks', []):
         ids[chunk['id']] += 1
@@ -221,12 +412,30 @@ def check_lesson(name: str, d: dict, ids: Counter) -> None:
         ids[ex['id']] += 1
         etype = ex.get('type')
         types[etype] += 1
+
+        # Todo campo de prosa do exercício passa por prose() no render, então
+        # todo campo de prosa é conferido aqui. A lista tem que ficar completa:
+        # um campo esquecido aqui é um `<it>` que morre calado lá.
+        check_prose(name, f'{ex["id"]}.consegna', ex.get('consegna'), modo)
+        check_prose(name, f'{ex["id"]}.aiuto', ex.get('aiuto'), modo)
+        for campo in ('domande', 'frasi', 'coppie', 'giri', 'righe'):
+            for sub in ex.get(campo, []):
+                if isinstance(sub, dict):
+                    check_prose(name, f'{sub.get("id", ex["id"])}.nota', sub.get('nota'), modo)
         if etype not in REGISTERED_TYPES:
             err(f'{name} {ex["id"]}: type «{etype}» não está no registry de js/exercises/index.js')
         if etype == 'gap-audio':
             check_gap_audio(name, ex)
         elif etype == 'paradigm-fill':
             check_paradigm_fill(name, ex, ids)
+        elif etype == 'scelta':
+            check_scelta(name, ex, ids)
+        elif etype == 'riordino':
+            check_riordino(name, ex, ids)
+        elif etype == 'abbinamento':
+            check_abbinamento(name, ex, ids)
+        elif etype == 'slot-frame':
+            check_slot_frame(name, ex, ids, modo)
 
     if d.get('dialogo'):
         check_dialogo(name, d['dialogo'], ids)
@@ -243,6 +452,10 @@ def check_lesson(name: str, d: dict, ids: Counter) -> None:
 
     for p in d.get('produzione', []):
         ids[p['id']] += 1
+        check_prose(name, f'{p["id"]}.consegna', p.get('consegna'), modo)
+
+    for i, b in enumerate(d.get('bilancio', [])):
+        check_prose(name, f'bilancio[{i}]', b, modo)
 
 
 # --- Léxico cumulativo ---------------------------------------------------
@@ -394,20 +607,32 @@ def count_items(lesson: dict) -> int:
     """
     n = 0
     for ex in lesson.get('esercizi', []):
-        if ex.get('type') == 'paradigm-fill':
+        etype = ex.get('type')
+        if etype == 'paradigm-fill':
             for row in ex.get('righe', []):
                 n += len(row.get('nascondi', []))
+        elif etype in SUBITEM_FIELD:
+            n += len(ex.get(SUBITEM_FIELD[etype], []))
         else:
             n += 1
 
     for p in (lesson.get('dialogo') or {}).get('passate', []):
         if p.get('focus') == 'detail':
             n += len(p.get('domande', []))
+
+    # O baralho de flashcards é DERIVADO dos chunks — não está em `esercizi`
+    # — mas cada carta grava progresso pelo id do chunk. ESPELHA
+    # flashcardDeck() em js/exercises/index.js.
+    n += sum(1 for c in lesson.get('chunks', []) if c.get('chunkType') in TIPI_CARTA)
+
     return n
 
 
 def check_manifest(data: dict, files: dict[str, dict]) -> None:
     seen_ids = set()
+    # O manifest é o único lugar que vê as aulas em ordem de `numero`, então é
+    # aqui que dá para conferir a PROGRESSÃO de língua.
+    modo_anterior = None
     for entry in data.get('lezioni', []):
         if entry['file'] not in files:
             err(f'manifest.json: aponta para «{entry["file"]}», que não existe em content/')
@@ -427,6 +652,16 @@ def check_manifest(data: dict, files: dict[str, dict]) -> None:
         if entry.get('conteggio') != esperado:
             err(f'manifest.json: «{entry["id"]}» tem conteggio {entry.get("conteggio")!r}, '
                 f'mas a aula tem {esperado} itens rastreáveis — rode «python tools/validate.py --fix»')
+
+        # O curso caminha do português para o italiano, nunca ao contrário.
+        # Aviso e não erro: uma aula deliberadamente mais leve é imaginável, e
+        # a convenção do projeto é que heurística avisa. Mas o caso comum de
+        # regressão é esquecer o campo numa aula nova.
+        modo = lesson.get('modo', 'pt')
+        if modo in MODI and modo_anterior in MODI and MODI.index(modo) < MODI.index(modo_anterior):
+            warn(f'manifest.json: aula «{entry["id"]}» volta de modo «{modo_anterior}» para '
+                 f'«{modo}» — a progressão de língua costuma só avançar; foi de propósito?')
+        modo_anterior = modo if modo in MODI else modo_anterior
 
     for fname in files:
         if fname in NAO_LEZIONE:

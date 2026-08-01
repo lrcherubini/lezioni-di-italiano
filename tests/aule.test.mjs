@@ -27,6 +27,40 @@ const { indexById } = await import('../js/ripasso.js');
 const manifest = readContent('manifest.json');
 const aulas = manifest.lezioni.map((entry) => ({ entry, lesson: readContent(entry.file) }));
 
+/** Campos que carregam sub-itens com id próprio, por tipo de exercício.
+ *  Espelha SUBITEM_FIELD em tools/validate.py — e é escrito aqui à mão, a
+ *  partir do schema, justamente para não perguntar a resposta ao código que
+ *  está sendo testado. */
+const CAMPOS_SUBITEM = ['domande', 'frasi', 'coppie', 'giri'];
+
+/** Todo id que o progresso pode gravar numa aula, lido do JSON cru. */
+function idsRastreaveis(lesson) {
+  const ids = [];
+
+  for (const ex of lesson.esercizi ?? []) {
+    ids.push(ex.id);
+
+    for (const campo of CAMPOS_SUBITEM) {
+      for (const sub of ex[campo] ?? []) if (sub.id) ids.push(sub.id);
+    }
+
+    // paradigm-fill é o caso irregular: o id da célula é derivado do id da
+    // linha mais o índice, e só as células ocultas contam.
+    if (ex.type === 'paradigm-fill') {
+      for (const row of ex.righe ?? []) {
+        for (const i of row.nascondi ?? []) ids.push(`${row.id}-c${i}`);
+      }
+    }
+  }
+
+  for (const p of lesson.dialogo?.passate ?? []) {
+    for (const q of p.domande ?? []) ids.push(q.id);
+  }
+  if (lesson.dialogo?.id) ids.push(lesson.dialogo.id);
+
+  return ids;
+}
+
 describe('manifest', () => {
   test('lista pelo menos uma aula', () => {
     assert.ok(aulas.length > 0);
@@ -113,21 +147,16 @@ for (const { entry, lesson } of aulas) {
     test('todo id rastreável resolve para um exercício montável', () => {
       // O que o Ripasso precisa: nenhum id gravado no progresso pode ficar
       // órfão, senão a revisão silenciosamente pula o item.
+      //
+      // A enumeração abaixo varre o JSON CRU, sem perguntar nada aos módulos
+      // de exercício. É de propósito: a versão anterior deste teste repetia
+      // os mesmos dois casos especiais que o indexById tratava, então
+      // espelhava o bug em vez de pegá-lo — e passou enquanto 51% dos ids
+      // ficavam órfãos. Uma enumeração derivada do conteúdo não tem como
+      // concordar com a implementação por construção.
       const idx = indexById(lesson);
-
-      for (const ex of lesson.esercizi ?? []) {
-        assert.ok(idx.has(ex.id), ex.id);
-        if (ex.type === 'paradigm-fill') {
-          for (const row of ex.righe ?? []) {
-            for (const i of row.nascondi ?? []) {
-              assert.ok(idx.has(`${row.id}-c${i}`), `${row.id}-c${i}`);
-            }
-          }
-        }
-      }
-
-      for (const p of lesson.dialogo?.passate ?? []) {
-        for (const q of p.domande ?? []) assert.ok(idx.has(q.id), q.id);
+      for (const id of idsRastreaveis(lesson)) {
+        assert.ok(idx.has(id), `id órfão no Ripasso: ${id}`);
       }
     });
 

@@ -24,7 +24,7 @@
         "Doppie",
         "Accento"
       ],
-      "conteggio": 8
+      "conteggio": 12
     },
     {
       "id": "01",
@@ -48,7 +48,31 @@
         "Plurale",
         "L'età"
       ],
-      "conteggio": 35
+      "conteggio": 113
+    },
+    {
+      "id": "02",
+      "numero": 2,
+      "file": "lezione-02.json",
+      "titolo": "Io parlo, io abito",
+      "gloss": "Verbos regulares em -ARE, línguas e onde se mora",
+      "categorie": [
+        "VERBO",
+        "VOCABOLARIO",
+        "ESPRESSIONE",
+        "GRAMMATICA"
+      ],
+      "temi": [
+        "Parlare e Abitare",
+        "Verbos regulares -ARE",
+        "Le lingue",
+        "Europa centrale",
+        "Le città",
+        "in + paese, a + città",
+        "Espressioni utili",
+        "Formale e informale"
+      ],
+      "conteggio": 173
     }
   ]
 }

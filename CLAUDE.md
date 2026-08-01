@@ -10,12 +10,14 @@ O objetivo principal deste projeto é um **loop de autoria repetível**: a cada 
 
 1. **Nunca commite `presentations/` nem `ERRATA.md`.** Ambos estão no `.gitignore`. O primeiro é material de terceiros e contém dados pessoais; o segundo é caderno de trabalho local.
 2. **Nenhum arquivo versionado cita nome de pessoa ou da plataforma de aula.** Vale para os docs também — este repositório é público. Diálogos usam nomes italianos genéricos (Marco, Giulia, Luca). Não use dados pessoais reais (idade, cidade) em exemplos.
+2.1. **`content/` nunca fala em terceira pessoa sobre a origem do material.** Nada de "o professor anotou/resumiu/explicou", "na aula ele disse", "É o Exercício N do Compito M", ou qualquer frase que denuncie a existência de um professor, aula ao vivo, apostila ou deck por trás do conteúdo. O invariante 3 já exige que todo conteúdo explicativo seja transcrito para `content/*.json`; isso vai além e exige que a transcrição também **apague a voz de quem entregou o material** — o texto final tem que se ler como se o próprio site fosse a fonte original. Reformule como explicação direta ("a regra é X") ou apague a referência.
 3. **Nunca linke PDF nem sirva arquivo de `presentations/`.** O site é autocontido: todo conteúdo explicativo é transcrito para `content/*.json`.
 4. **Zero dependências e zero passo de build.** Sem `package.json`, sem bundler, sem CI de build, sem CDN. O site é HTML + CSS + JS vanilla servido direto. Vale para as ferramentas também: o validador é stdlib do Python e a suíte é o `node --test` embutido com um DOM próprio — se a resposta para um problema for `npm install`, ela está errada.
 5. **Ao adicionar uma aula, edite apenas `content/`.** Não toque em `js/`, `css/` nem nos JSONs de aulas anteriores. As duas exceções são geradas por ferramenta, nunca à mão: o `conteggio` do manifest e o `content/lessico.json`, que saem de `python tools/validate.py --fix`.
 6. **`id` de item é imutável.** Ele é a chave do progresso no `localStorage`. Renomear um `id` apaga o histórico daquele item; reaproveitar um `id` mistura históricos de coisas diferentes.
 7. **Toda seção precisa de `spiegazione`.** É o que torna o site independente dos slides. O validador reprova se faltar.
 7.1. **Todo texto italiano exibido tem botão de áudio — sem exceção.** Isso vale para `titolo` de aula/seção, itens de `header` (comunicazione/lessico/grammatica), toda célula de `tabella` que não esteja marcada `pt: true`, cabeçalhos de coluna de `paradigma` e `paradigm-fill`, e o título+gloss do `dialogo`. Ao criar uma tabela nova, pergunte célula por célula: "isto é italiano ou é rótulo/descrição em português?" — no segundo caso, marque `{ "html": "…", "pt": true }`. Ver a seção *Tipos de bloco*.
+7.2. **Marque sempre a minoria — e o `modo` da aula diz quem é a minoria.** É a regra única por trás dos mecanismos de "isto é italiano?". Em **célula de tabela** o italiano é sempre a maioria → marque a exceção portuguesa com `pt: true`. Em **texto corrido** depende do `modo`: em `pt` a prosa é portuguesa e você marca o italiano com `<it>`; em `misto`/`it` a prosa é italiana e você marca o português com `<pt>`. Todos nomeiam o que é marcado, nunca o padrão. Ver *Os dois mecanismos* e *Modo de língua*.
 8. **Nada de atividade em par ou grupo.** A aula é particular 1-a-1. Materiais A1 de referência estão cheios de *"in coppia"* e *"girate per la classe"* — tudo isso é inaplicável aqui.
 9. **`category` só entre os cinco valores permitidos** (abaixo). Acrescentar um valor exige editar `tools/validate.py`, `css/tokens.css` **e** este documento.
 
@@ -212,9 +214,79 @@ Fonte da verdade. `tools/validate.py` verifica tudo abaixo.
 
 Campos de texto aceitam HTML inline (`<b>`, `<em>`, `<code>`). O TTS remove tags antes de falar.
 
+### Os dois mecanismos de "isto é italiano?"
+
+Há **dois**, com polaridade oposta, e isso é de propósito. A regra que
+unifica os dois é uma só: **marque a minoria, deixe a maioria implícita.**
+
+| Onde | Maioria | Você marca | Como |
+|---|---|---|---|
+| Célula de `tabella` | italiano (76%) | a exceção **portuguesa** | `{ "html": "…", "pt": true }` |
+| Texto corrido | português (~87%) | a exceção **italiana** | `<it>…</it>` |
+
+Os dois **nomeiam o que é marcado**, nunca o padrão — e é por isso que um se
+chama `pt` e o outro `it` sem serem incoerentes. Inverter qualquer um deles
+seria pior: exigir `<it>` em cada célula poria a marcação em 271 células
+para poupar 87, e um `pt: true` em prosa obrigaria a envelopar a explicação
+inteira em português para liberar quatro palavras italianas.
+
+A polaridade difere porque **a granularidade difere**, não por acaso: uma
+célula é um valor JSON discreto e comporta um campo; uma frase precisa de
+marcação a nível de trecho, e não existe "campo" para meia oração.
+
+#### Onde `<it>` vale
+
+**Em todo campo de prosa** — e a lista é fechada, porque `<it>` num campo
+que não passa por `prose()` **não vira botão e não avisa**:
+
+`riscaldamento.prompt` · `riscaldamento.spiegazione` · `section.spiegazione` ·
+`nota.testo` · `lista.item.nota` · `contrasto.esempio.nota` ·
+`paradigma.riga.nota` · `esercizio.consegna` · `esercizio.aiuto` ·
+nota de sub-item dos drills · `produzione.consegna` · `bilancio`
+
+Acrescentou campo de texto novo? Passe-o por `prose()` em `js/` **e**
+acrescente-o a `check_lesson`/`check_section` em `tools/validate.py`. Os
+dois lados juntos, sempre — é o que impede o `<it>` de morrer calado.
+
+`<it>…</it>` marca uma forma italiana citada em meio à prosa. O renderer a
+troca por *texto + botão de áudio*, nessa ordem:
+
+```jsonc
+"testo": "Quando você vir <it><em>amico</em></it> → <it><em>amici</em></it> mas <it><em>amica</em></it> → <it><em>amiche</em></it>, não é capricho: …"
+```
+
+Regras de uso:
+
+- **Marque a forma, não a frase.** `<it>amici</it>`, e não
+  `<it>amico → amici</it>` — a seta iria para o TTS, e o aluno ouviria as
+  duas formas grudadas quando o que ele quer é comparar uma com a outra.
+- **Só italiano.** `<em>` continua sendo ênfase genérica e cai também sobre
+  palavra portuguesa; é por isso que `<it>` existe em vez de a gente
+  pendurar áudio no `<em>`. Marcar «capricho» com `<it>` faria o site
+  oferecer voz italiana para uma palavra portuguesa.
+- **Marcação interna sobrevive:** `<it><em>amici</em></it>` mantém o
+  itálico na tela e manda `amici` limpo para o TTS.
+- Parênteses de glosa saem do áudio, como em célula de tabela:
+  `<it>lieta (feminino)</it>` fala só `lieta`.
+
+> **Por que o validador reprova `<it>` torta.** O casamento é por regex sobre
+> a string, não por parse de DOM — o DOM mínimo da suíte guarda `innerHTML`
+> como texto e não o percorre. Consequência: uma tag desbalanceada **não
+> quebra a página**, ela só deixa a forma muda, e ninguém percebe. Por isso
+> `<it>` desbalanceada ou vazia é **erro**, não aviso.
+
+**`<it>` não entra em `content/lessico.json`.** É a única exceção à
+equivalência "ganha 🔊 ⇒ entra no léxico", e é deliberada: a prosa
+*menciona* uma forma, o inventário de ensino continua sendo `chunks`,
+`lista`, `tabella`, `contrasto` e `paradigma`. Se a citação em prosa
+autorizasse vocabulário, bastaria mencionar uma palavra na explicação para
+liberá-la no diálogo — e a checagem do i+1 perderia o sentido.
+
 ### Exercícios
 
 Tipos registrados em `js/exercises/index.js`. Usar tipo não registrado é erro de validação.
+
+**`flashcard` é a exceção:** ele nunca se escreve em `esercizi`. O baralho é **derivado** dos `chunks` da aula por `flashcardDeck()`, e escrever um à mão duplicaria os ids e faria o `conteggio` contar duas vezes. Entram os chunks `word`, `collocation` e `fixed` — `semiFixed` fica de fora porque tem lacuna por definição (`Io sono ___`) e não tem verso; ele é matéria do `slot-frame`.
 
 ```jsonc
 // gap-audio — ouvir e completar a lacuna
@@ -251,6 +323,65 @@ Tipos registrados em `js/exercises/index.js`. Usar tipo não registrado é erro 
               "nota": "…", "eccezione": false }] }
 ```
 
+#### Os quatro drills de fixação
+
+São os tipos de **volume**: cada um leva vários sub-itens, e **cada sub-item
+tem id próprio e vira uma linha do progresso**. É por isso que eles precisam
+de `subItemIds` no módulo (ver `js/exercises/index.js`) — sem isso o
+`conteggio` do manifest conta 1 onde há 8, a barra de progresso mente **e o
+Ripasso nunca traz aquele sub-item de volta**.
+
+```jsonc
+// scelta — escolher a forma certa entre alternativas.
+// Para o que se decide por contraste, não por regra: in×a, il×lo, -i×-e.
+{ "id": "l02-e09", "type": "scelta", "category": "GRAMMATICA",
+  "consegna": "…",
+  "domande": [{ "id": "l02-e09-q1",
+                "testo": "Noi abitiamo ___ Brasile.",  // a lacuna é obrigatória
+                "opzioni": ["in", "a", "di", "per"],   // 2+, sem repetição
+                "risposta": "in",                      // TEM que estar em opzioni
+                "pt": "…", "nota": "…" }] }
+
+// riordino — remontar a frase com as palavras fora de ordem.
+// As peças precisam remontar EXATAMENTE a risposta; o validador confere.
+{ "id": "l02-e14", "type": "riordino", "category": "GRAMMATICA",
+  "consegna": "…",
+  "frasi": [{ "id": "l02-e14-f1",
+              "parole": ["Io", "abito", "a", "Roma"],
+              "risposta": "Io abito a Roma.",   // pontuação é normalizada
+              "pt": "…", "nota": "…", "accettaAnche": ["…"] }] }
+
+// abbinamento — associar duas colunas. `destra` não pode repetir, senão a
+// correção fica ambígua e uma linha certa seria marcada errada.
+{ "id": "l02-e16", "type": "abbinamento", "category": "ESPRESSIONE",
+  "consegna": "…",
+  "coppie": [{ "id": "l02-e16-p1",
+               "sinistra": "Dove abiti?",
+               "destra": "Abito a Vienna, in Austria.", "pt": "…" }] }
+
+// slot-frame — drill de substituição sobre frase semifixa (o do método
+// lexical). O aluno escreve a frase INTEIRA a cada giro: o que se automatiza
+// é o molde, e o molde só se automatiza passando inteiro.
+{ "id": "l02-e04", "type": "slot-frame", "category": "VERBO",
+  "consegna": "…",
+  "frame": { "it": "Io parlo ___.", "pt": "Eu falo ___." },  // ___ obrigatório
+  "modello": "Io parlo italiano.",   // opcional; default = risposta do 1º giro
+  "giri": [{ "id": "l02-e04-g1",
+             "slot": "italiano",     // o que entra no ___
+             "pt": "italiano",       // prompt em PORTUGUÊS — o aluno produz
+             "risposta": "Io parlo italiano.",
+             "accettaAnche": ["…"] }] }
+```
+
+> **`slot` e `risposta` têm que casar.** O validador avisa quando
+> `frame.it` com o `slot` no lugar do `___` não reproduz a `risposta` — é o
+> sinal de que aquilo deixou de ser drill de substituição e virou outro
+> exercício. Elisão é o caso legítimo (`vent'` + ` anni` = `vent'anni`), e o
+> validador já sabe disso.
+
+**Regra dura dos quatro:** `id` de sub-item é tão imutável quanto o do
+exercício. Renomear um apaga o histórico daquela pergunta específica.
+
 ### Diálogo
 
 ```jsonc
@@ -280,6 +411,38 @@ Tipos registrados em `js/exercises/index.js`. Usar tipo não registrado é erro 
 - Use **apenas vocabulário desta aula e das anteriores** (regra do i+1).
 - 6–10 turnos.
 
+
+### Modo de língua
+
+Aula nova declara em que língua está a prosa. Campo opcional no topo do JSON:
+
+```jsonc
+{ "id": "12", "numero": 12, "modo": "misto", … }   // "pt" | "misto" | "it"
+```
+
+Ausente = `"pt"`, então toda aula escrita antes deste mecanismo continua válida sem edição.
+
+| `modo` | Prosa é | Tag viva | Tag inerte | Áudio da prosa |
+|---|---|---|---|---|
+| `pt` | portuguesa | `<it>` | `<pt>` → **erro** | um 🔊 por forma citada, depois dela |
+| `misto` | italiana | `<pt>` | `<it>` → **erro** | um 🔊 por **parágrafo**, antes dele |
+| `it` | italiana | `<pt>` | `<it>` → **erro** | idem |
+
+`misto` e `it` **renderizam idêntico**. A diferença entre eles é editorial — quanto português você deixa — não mecânica. Ter os três valores serve ao seu mapa mental da progressão; inventar uma diferença de código para justificar o terceiro seria generalidade especulativa.
+
+O que **não** muda com o modo, em nenhuma hipótese:
+
+- **`spiegazione` continua obrigatória, com 2+ parágrafos.** O validador exige que exista uma *explicação*, não que ela seja portuguesa. Este é o erro mais provável de quem raciocina da premissa errada.
+- **Glossas de vocabulário ficam em português**: `lesson.gloss`, `section.gloss`, `lista.items[].pt`, `chunks[].pt`, `paradigma.righe[].pt`, células `pt: true`. São o ponto fixo da progressão, e não precisam de tag: são campos discretos, e **o campo já é a marcação**. Corolário: o cabeçalho `'Português'` do paradigma é rótulo de coluna de glossa — é conteúdo, não chrome, e nunca muda de língua.
+- **O léxico e a checagem do i+1.** Em modo `it` a spiegazione ganha 🔊 mas continua fora de `lessico.json`: se explicação toda-italiana autorizasse vocabulário, o aviso de escopo do diálogo perderia o sentido.
+- **A chrome da interface.** `Verificar`, `Mostrar resposta`, banners e a home ficam em português sempre.
+
+Só um campo relaxa: **`slot-frame.giri[].pt`**. Em modo `it`, o próprio `slot` serve de prompt (ver `italiano` e ter de escrever `Io parlo italiano.` continua sendo produzir o molde). Nos outros modos ele segue obrigatório.
+
+> **Glossa de vocabulário × tradução de frase inteira.** São coisas diferentes e vale não confundir. Glossa (`chunks[].pt`, `lista.items[].pt`, célula `pt: true`) fica para sempre. **Tradução de frase inteira** — `dialogo.battute[].pt`, `gap-audio.pt`, `qa-transcribe.*.pt`, `scelta.domande[].pt`, `riordino.frasi[].pt`, `abbinamento.coppie[].pt`, `slot-frame.frame.pt` — é candidata a ficar atrás de um `<details>` em modo `it`. **Isso ainda não está implementado**, de propósito: só a primeira aula real em `it` vai dizer quais incomodam. Quando for, esconda no render — nunca apague do JSON.
+
+**Como o modo chega ao render:** por parâmetro explícito, `prose(html, tag, attrs, modo)`, com default `'pt'` em toda a cadeia. **Nunca por estado de módulo** — `ripasso.html` monta itens de várias aulas na mesma página, e um `modo` global renderizaria uma delas errada, sem ordem de chamada que resolva.
+
 ---
 
 ## Como escrever `spiegazione`
@@ -305,7 +468,7 @@ Tipos registrados em `js/exercises/index.js`. Usar tipo não registrado é erro 
 4. **Extraia o inventário de chunks** e classifique cada um em `chunkType`.
 5. **Valide formas duvidosas** contra Treccani/Crusca e aplique a classificação de 3 saídas.
 6. **Escreva o diálogo** (6–10 turnos), só com vocabulário em escopo.
-7. **Gere exercícios:** ≥2 `gap-audio`, ≥1 `qa-transcribe`, ≥1 `paradigm-fill` por paradigma, ≥1 `dialogo`.
+7. **Gere exercícios:** ≥2 `gap-audio`, ≥1 `qa-transcribe`, ≥1 `paradigm-fill` por paradigma, ≥1 `dialogo`. Para **volume de fixação**, use os quatro drills: `scelta` e `slot-frame` são os que mais rendem por linha escrita, e `riordino`/`abbinamento` quebram a monotonia de digitar. Os *Compito* do professor são a melhor matéria-prima — cada exercício deles mapeia direto num tipo (`Scegli` → `scelta`, `Riordina` → `riordino`, `Abbina` → `abbinamento`, `Coniuga` → `paradigm-fill`).
 8. **Acrescente a entrada em `content/manifest.json`** (`id`, `numero`, `file`, `titolo`, `gloss`, `categorie`, `temi`). **Não escreva `conteggio` à mão** — é derivado, sai do `--fix`.
 9. **Rode `python tools/validate.py --fix`** (grava os derivados) e depois **`python tools/validate.py`** até zerar os erros. Rode também **`node tools/test.mjs`**: os testes de página carregam os JSONs reais, então uma aula que não renderiza falha ali.
 9.1. **Leia os avisos de escopo.** O validador compara o italiano do seu diálogo com `content/lessico.json`, o léxico acumulado até aquela aula, e avisa sobre forma nunca ensinada. É **aviso, não erro**, porque a checagem é heurística e existe caso legítimo — o diálogo da Aula 0 soletra *Castelli* de propósito, e a palavra não é vocabulário a ensinar. Para cada aviso, decida: ou a palavra entra no conteúdo da aula (num `chunk`, `lista` ou `tabella`), ou ela sai do diálogo, ou é caso legítimo e fica. O que não vale é ignorar sem olhar.
@@ -330,6 +493,14 @@ js/store.js           ÚNICO lugar que toca localStorage
 js/check.js           normalização de resposta e diff por token
 js/render.js          seções, chips, blocos, botão de áudio, barra de player
 js/exercises/         um módulo por tipo + index.js (registry)
+                      shuffle.js: embaralhamento semeado pelo id — determinístico
+                      para o aluno não perder a referência visual num F5, e para
+                      a suíte afirmar posições sem stubar Math.random
+                      index.js também exporta flashcardDeck(), que DERIVA o
+                      baralho dos chunks da aula
+js/notebook.js        ponto de entrada do caderno léxico; reusa initChrome/fail
+js/record.js          ÚNICO lugar que toca em getUserMedia e MediaRecorder
+notebook.html         o caderno léxico
 content/              manifest.json + lezione-NN.json + lessico.json (derivado)
 tests/                suíte node:test; support/ tem DOM mínimo e dublês
 tools/validate.py     valida os invariantes deste documento; --fix grava derivados
@@ -394,7 +565,9 @@ export default {
 ```
 
 - O elemento devolvido por `render` carrega `_parts` com as referências de DOM que os outros métodos precisam. É o canal entre eles.
-- Se `check` devolver `results: [{id, correct}]`, o `app.js` registra **cada sub-item** separadamente. É assim que paradigma e diálogo têm progresso por célula/pergunta.
+- Se `check` devolver `results: [{id, correct}]`, o `app.js` registra **cada sub-item** separadamente. É assim que paradigma, diálogo e os quatro drills têm progresso por célula/pergunta.
+- Quem devolve `results` com vários sub-itens **precisa** implementar `subItemIds(item) → string[]`. É a fonte **única** da verdade sobre esses ids: `countItems` em `app.js` mede a lista para o `conteggio`, e `indexById` em `ripasso.js` resolve cada id de volta para o card. Enquanto os dois enumeravam os tipos por conta própria, 140 dos 272 ids rastreáveis venciam no progresso e nunca apareciam na revisão, sem erro nenhum. `count_items`/`SUBITEM_FIELD` em `tools/validate.py` são o espelho em Python — mudou aqui, mude lá.
+- **Nada de arrastar.** Um drill que só funciona com drag-and-drop é inacessível por teclado, ruim no celular e impossível de testar sem navegador de verdade — que a suíte não tem. `riordino` e `abbinamento` são clique e `<select>` por isso.
 - **Nenhum módulo de exercício fala com `store.js`.** Quem grava é o `app.js`.
 - **Nenhum módulo chama `speechSynthesis` direto.** Use `speech.js`.
 

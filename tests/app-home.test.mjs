@@ -115,8 +115,9 @@ describe('chamada do Ripasso', () => {
 });
 
 describe('blocos de aulas', () => {
-  test('com 2 aulas há um bloco só, e ele nasce aberto', () => {
+  test('abaixo de 10 aulas há um bloco só, e ele nasce aberto', () => {
     const blocos = grid.querySelectorAll('.bloco');
+    assert.ok(manifest.lezioni.length <= 10, 'premissa deste teste');
     assert.equal(blocos.length, 1);
     assert.equal(blocos[0].getAttribute('data-inicio'), '0');
     assert.equal(blocos[0].hasAttribute('open'), true, 'a home não pode nascer vazia');
@@ -124,7 +125,9 @@ describe('blocos de aulas', () => {
   });
 
   test('o resumo do bloco conta as aulas completas', () => {
-    assert.match(grid.querySelector('.bloco__conta').textContent, /0\/2 completas/);
+    // Total derivado do manifest: uma aula nova não pode quebrar este teste.
+    const total = manifest.lezioni.length;
+    assert.match(grid.querySelector('.bloco__conta').textContent, new RegExp(`0/${total} completas`));
   });
 
   test('um card por aula do manifest, na ordem', () => {

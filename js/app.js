@@ -10,9 +10,10 @@
 
 import * as speech from './speech.js';
 import * as store from './store.js';
-import { getExercise } from './exercises/index.js';
+import { getExercise, flashcardDeck } from './exercises/index.js';
+import { recorder } from './record.js';
 import {
-  el, chip, speakButton, renderSection, renderObiettivi, renderStage,
+  el, chip, speakButton, prose, renderSection, renderObiettivi, renderStage,
 } from './render.js';
 
 const CONTENT = 'content/';
@@ -108,6 +109,9 @@ export function resetExerciseCounter() {
  * opts.headTitle/headGloss/headLabel/countInIndex existem só para o
  * diálogo: ele tem título e gloss em italiano próprios (não um `consegna`
  * comum) e não deve entrar na numeração "Ex. NN" dos exercícios.
+ *
+ * opts.modo é a língua da prosa da aula deste item — por item, e não por
+ * página, porque o Ripasso mistura aulas de modos diferentes.
  */
 export function mountExercise(item, lessonId, opts = {}) {
   const mod = getExercise(item.type);
@@ -125,7 +129,7 @@ export function mountExercise(item, lessonId, opts = {}) {
     el('span', { class: 'ex__num' }, opts.headLabel ?? `Ex. ${String(exCounter).padStart(2, '0')}`),
     opts.headTitle
       ? el('span', { class: 'ex__consegna' }, speakButton(opts.headTitle), ' ', el('span', { html: opts.headTitle }))
-      : el('span', { class: 'ex__consegna', html: item.consegna ?? '' }),
+      : prose(item.consegna ?? '', 'span', { class: 'ex__consegna' }, opts.modo ?? 'pt'),
     opts.headGloss ? el('span', { class: 'section__gloss', html: opts.headGloss }) : null,
     item.category ? chip(item.category) : null
   );
@@ -158,6 +162,23 @@ export function mountExercise(item, lessonId, opts = {}) {
     },
     speak: speech.speak,
     lesson: lessonId,
+    // Os módulos guardam isto em `root._parts.modo`: feedback() e reveal()
+    // não recebem ctx, e `_parts` é o canal documentado entre os métodos.
+    modo: opts.modo ?? 'pt',
+    /* Caderno léxico. Vai pelo ctx e não por import direto porque a regra
+       «nenhum módulo de exercício fala com o store» continua valendo — o
+       módulo pede, o app.js grava. */
+    notebook: {
+      has: (id) => store.inNotebook(id),
+      toggle(carta) {
+        if (store.inNotebook(carta.id)) {
+          store.removeFromNotebook(carta.id);
+          return false;
+        }
+        store.addToNotebook({ ...carta, lesson: lessonId });
+        return true;
+      },
+    },
   };
 
   const body = mod.render(item, ctx);
@@ -281,6 +302,24 @@ export async function renderHome() {
         )
       );
     }
+
+    // Caderno léxico: mesma regra do Ripasso, só aparece quando tem algo.
+    // Um link permanente para um caderno vazio só ensinaria a ignorá-lo.
+    const guardadas = store.notebook().length;
+    if (guardadas > 0) {
+      const semFrase = store.notebook().filter((e) => !(e.myExample ?? '').trim()).length;
+      topo.append(
+        el('a', { class: 'ripasso-call', href: 'notebook.html' },
+          el('span', { class: 'ripasso-call__n' }, String(guardadas)),
+          el('span', {},
+            el('strong', {}, guardadas === 1 ? 'forma no caderno' : 'formas no caderno'),
+            el('span', { class: 'ripasso-call__gloss' }, semFrase > 0
+              ? ` — ${semFrase} ainda sem uma frase sua`
+              : ' — todas já com uma frase sua')
+          )
+        )
+      );
+    }
   }
 
   const grupos = blocos(lezioni);
@@ -317,17 +356,34 @@ export async function renderHome() {
  * reproduz a mesma lógica e reprova se os dois divergirem. Mudou aqui,
  * mude lá.
  */
+/**
+ * Os ids de progresso que um exercício produz — vazio quando o exercício é
+ * um item só. Fonte ÚNICA da verdade: `countItems` mede esta lista e o
+ * Ripasso resolve por ela. Ver o contrato em js/exercises/index.js.
+ */
+export function subItemIds(ex) {
+  const mod = getExercise(ex.type);
+  return typeof mod?.subItemIds === 'function' ? mod.subItemIds(ex) : [];
+}
+
 export function countItems(lesson) {
   let n = 0;
   for (const ex of lesson.esercizi ?? []) {
-    if (ex.type === 'paradigm-fill') {
-      for (const r of ex.righe ?? []) n += (r.nascondi ?? []).length;
-    } else {
-      n += 1;
-    }
+    // Um exercício com sub-itens conta cada sub-item, porque é cada um deles
+    // que vira uma linha no progresso. Quem sabe QUAIS são é o próprio módulo
+    // do tipo — o core não deve ter um `if` por tipo. Contar é só medir essa
+    // mesma lista: derivar em vez de duplicar foi o que consertou o bug em
+    // que metade dos ids existia no progresso e não existia no Ripasso.
+    n += subItemIds(ex).length || 1;
   }
   const detail = lesson.dialogo?.passate?.find((p) => p.focus === 'detail');
   n += detail?.domande?.length ?? 0;
+
+  // O baralho de flashcards é derivado dos chunks, não escrito em `esercizi`
+  // — mas cada carta grava progresso pelo id do chunk, então conta.
+  const deck = flashcardDeck(lesson);
+  n += deck ? subItemIds(deck).length : 0;
+
   return n;
 }
 
@@ -345,6 +401,11 @@ async function renderLesson() {
 
   const lesson = await loadJSON(`${CONTENT}${entry.file}`);
   store.markVisited(id);
+
+  // A língua da prosa desta aula. Vai por PARÂMETRO até cada render, nunca
+  // por estado de módulo: o Ripasso monta itens de várias aulas na mesma
+  // página, e um global renderizaria uma delas com a polaridade errada.
+  const modo = lesson.modo ?? 'pt';
 
   document.title = `Lezione ${lesson.numero} · ${lesson.titolo}`;
 
@@ -366,10 +427,14 @@ async function renderLesson() {
   const obiettivi = renderObiettivi(lesson.header);
   if (obiettivi) main.append(obiettivi);
 
+  // O baralho sai dos chunks da aula; null quando não há chunk elegível.
+  const deck = flashcardDeck(lesson);
+
   /* Trilha sticky — só com as etapas que a aula realmente tem */
   const stages = [
     ['riscaldamento', 'Riscaldamento', Boolean(lesson.riscaldamento)],
     ['studio', 'Studio', Boolean(lesson.sections?.length)],
+    ['lessico', 'Lessico', Boolean(deck)],
     ['ascolto', 'Ascolto', Boolean(lesson.dialogo)],
     ['esercizi', 'Esercizi', Boolean(lesson.esercizi?.length)],
     ['produzione', 'Produzione', Boolean(lesson.produzione?.length)],
@@ -388,9 +453,9 @@ async function renderLesson() {
   if (lesson.riscaldamento) {
     const r = lesson.riscaldamento;
     main.append(renderStage(
-      { id: 'riscaldamento', kicker: 'Etapa 1', title: 'Riscaldamento', intro: r.prompt },
+      { id: 'riscaldamento', kicker: 'Etapa 1', title: 'Riscaldamento', intro: r.prompt, modo },
       ...(r.spiegazione ?? []).map((p) =>
-        el('div', { class: 'spiegazione' }, el('p', { html: p }))
+        el('div', { class: 'spiegazione' }, prose(p, 'p', {}, modo))
       )
     ));
   }
@@ -404,8 +469,24 @@ async function renderLesson() {
         title: 'Studio',
         intro: 'Cada linha em italiano tem 🔊. Ouça antes de ler a tradução — '
              + 'e leia a explicação, não só a tabela.',
+        modo,
       },
-      ...lesson.sections.map(renderSection)
+      ...lesson.sections.map((s) => renderSection(s, modo))
+    ));
+  }
+
+  /* Lessico — o baralho da aula */
+  if (deck) {
+    main.append(renderStage(
+      {
+        id: 'lessico',
+        kicker: 'Etapa 3',
+        title: 'Lessico',
+        intro: 'O léxico da aula em cartas. Tente lembrar antes de virar — '
+             + 'a recuperação é o que fixa; reler não fixa nada.',
+        modo,
+      },
+      mountExercise(deck, id, { headLabel: 'Lessico', countInIndex: false, modo })
     ));
   }
 
@@ -417,12 +498,13 @@ async function renderLesson() {
     // cabeçalho próprio (título+gloss em italiano, com áudio) em vez do
     // "Ex. NN" genérico — e sem entrar na numeração dos exercícios.
     main.append(renderStage(
-      { id: 'ascolto', kicker: 'Etapa 3', title: 'Ascolto', intro: d.consegna ?? '' },
+      { id: 'ascolto', kicker: 'Etapa 4', title: 'Ascolto', intro: d.consegna ?? '', modo },
       mountExercise({ ...d, type: 'dialogue' }, id, {
         headLabel: 'Dialogo',
         headTitle: d.titolo,
         headGloss: d.gloss,
         countInIndex: false,
+        modo,
       })
     ));
   }
@@ -432,12 +514,13 @@ async function renderLesson() {
     main.append(renderStage(
       {
         id: 'esercizi',
-        kicker: 'Etapa 4',
+        kicker: 'Etapa 5',
         title: 'Esercizi',
         intro: 'A resposta só libera depois de você tentar. Use <b>Lento</b> à vontade — '
              + 'repetir não é trapaça, é o método.',
+        modo,
       },
-      ...lesson.esercizi.map((ex) => mountExercise(ex, id))
+      ...lesson.esercizi.map((ex) => mountExercise(ex, id, { modo }))
     ));
   }
 
@@ -446,13 +529,24 @@ async function renderLesson() {
     main.append(renderStage(
       {
         id: 'produzione',
-        kicker: 'Etapa 5',
+        kicker: 'Etapa 6',
         title: 'Produzione',
         intro: 'Sem gabarito, e de propósito: aqui você produz. '
-             + 'Se travar em algo, é exatamente isso que vale levar para a próxima aula.',
+             + 'Se travar em algo, é exatamente isso que vale levar para a próxima aula. '
+             + 'Grave-se: ouvir a própria voz ao lado do modelo é o que mostra o que corrigir.',
+        modo,
       },
       el('ol', { class: 'produzione' },
-        ...lesson.produzione.map((p) => el('li', { id: p.id, html: p.consegna }))
+        ...lesson.produzione.map((p) => {
+          const li = prose(p.consegna, 'li', { id: p.id }, modo);
+          // A produção oral era a única etapa sem nenhuma interação: só um
+          // enunciado. Gravar e reouvir é o mínimo para ela virar prática.
+          li.append(recorder({
+            label: 'Gravar minha resposta',
+            onModel: p.modello ? () => speech.speak(p.modello) : null,
+          }));
+          return li;
+        })
       )
     ));
   }
@@ -465,13 +559,13 @@ async function renderLesson() {
     lesson.bilancio.forEach((b, i) => {
       const input = el('input', { type: 'checkbox', checked: checked.has(i) || null });
       input.addEventListener('change', () => store.setBilancio(id, i, input.checked));
-      ul.append(el('li', {}, el('label', {}, input, el('span', { html: b }))));
+      ul.append(el('li', {}, el('label', {}, input, prose(b, 'span', {}, modo))));
     });
 
     main.append(renderStage(
       {
         id: 'bilancio',
-        kicker: 'Etapa 6',
+        kicker: 'Etapa 7',
         title: 'Bilancio',
         intro: 'Marque com honestidade. O que ficar desmarcado é o seu roteiro de revisão.',
       },

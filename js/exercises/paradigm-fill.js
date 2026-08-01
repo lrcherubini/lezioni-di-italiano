@@ -7,11 +7,16 @@
    paradigma de brasiliano".
    ========================================================================== */
 
-import { el, speakButton } from '../render.js';
+import { el, speakButton, prose } from '../render.js';
 import { checkAnswer, escapeHtml } from '../check.js';
 
 export default {
   type: 'paradigm-fill',
+
+  /** Cada célula OCULTA é um item de progresso; as dadas são só âncora. */
+  subItemIds: (ex) => (ex.righe ?? []).flatMap(
+    (r) => (r.nascondi ?? []).map((i) => `${r.id}-c${i}`)
+  ),
 
   render(item, ctx) {
     const root = el('div', { class: 'ex__body' });
@@ -53,7 +58,7 @@ export default {
       });
 
       if (row.nota) {
-        tr.append(el('td', { class: 'item__nota', html: row.nota }));
+        tr.append(prose(row.nota, 'td', { class: 'item__nota' }, ctx.modo ?? 'pt'));
       }
       tbody.append(tr);
     }
@@ -76,7 +81,7 @@ export default {
     const feedback = el('div', { class: 'feedback', role: 'status', 'aria-live': 'polite', hidden: true });
     root.append(feedback);
 
-    root._parts = { cells, feedback };
+    root._parts = { cells, feedback, modo: ctx.modo ?? 'pt' };
     return root;
   },
 

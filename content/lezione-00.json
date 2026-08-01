@@ -116,7 +116,7 @@
       "titolo": "C e G: dura o dolce?",
       "gloss": "C e G: som duro ou brando?",
       "spiegazione": [
-        "Esta é a regra mais valiosa do italiano, porque uma só regra resolve <b>c</b>, <b>g</b>, <b>sc</b>, os digramas <b>ch/gh</b>, e — mais adiante — até plurais como <em>amico → amici</em> e <em>amica → amiche</em>. Vale a pena entender de verdade em vez de decorar.",
+        "Esta é a regra mais valiosa do italiano, porque uma só regra resolve <b>c</b>, <b>g</b>, <b>sc</b>, os digramas <b>ch/gh</b>, e — mais adiante — até plurais como <it><em>amico</em></it> → <it><em>amici</em></it> e <it><em>amica</em></it> → <it><em>amiche</em></it>. Vale a pena entender de verdade em vez de decorar.",
         "A regra: <b>c</b> e <b>g</b> têm som <em>duro</em> antes de <b>a</b>, <b>o</b>, <b>u</b>, e som <em>brando</em> antes de <b>e</b> e <b>i</b>. Duro é o som de «casa» e «gato». Brando é o som de «tchau» e de «dia» carioca — os dois sons que o português escreve como <em>tch</em> e <em>dj</em>.",
         "E se eu quiser o som duro antes de <b>e</b> ou <b>i</b>? Aí o italiano <b>enfia um H no meio</b>: <em>che</em>, <em>chi</em>, <em>ghe</em>, <em>ghi</em>. O H não tem som nenhum — ele é só um sinal de trânsito dizendo «este C continua duro». Daí <em>Chi</em> se lê «qui» e <em>spaghetti</em> tem <b>g</b> de «gato».",
         "E o contrário: se eu quiser o som brando antes de <b>a</b>, <b>o</b>, <b>u</b>? Aí o italiano <b>enfia um I</b>: <em>cia</em>, <em>cio</em>, <em>ciu</em>, <em>gia</em>, <em>gio</em>, <em>giu</em>. E esse <b>i</b> também não se pronuncia como vogal separada — é só sinalização. Por isso <em>Ciao</em> é «tchau» com duas sílabas, não «tchi-a-o», e <em>Giorno</em> é «djorno», não «dji-orno»."
@@ -128,7 +128,7 @@
           "gruppi": [
             {
               "etichetta": "C dura /k/ — davanti a A, O, U",
-              "gloss": "som de «casa» — o professor anotou como 'K'",
+              "gloss": "som de «casa» — som de 'K' em português",
               "esempi": [
                 { "it": "Come", "pt": "como" },
                 { "it": "Casa", "pt": "casa" },
@@ -137,7 +137,7 @@
             },
             {
               "etichetta": "C dolce /tʃ/ — davanti a E, I",
-              "gloss": "som de «tchau» — o professor anotou como 'Tch'",
+              "gloss": "som de «tchau» — som de 'Tch' em português",
               "esempi": [
                 { "it": "Ciao", "pt": "oi / tchau" },
                 { "it": "Cioccolato", "pt": "chocolate" },
@@ -162,7 +162,7 @@
             },
             {
               "etichetta": "G dolce /dʒ/ — davanti a E, I",
-              "gloss": "som de «dia» carioca — o professor anotou como 'Dj'",
+              "gloss": "som de «dia» carioca — som de 'Dj' em português",
               "esempi": [
                 { "it": "Giorno", "pt": "dia" },
                 { "it": "Giraffa", "pt": "girafa" },
@@ -181,17 +181,17 @@
             { "html": "Antes de E, I", "pt": true }
           ],
           "righe": [
-            [{ "html": "duro /k/", "pt": true }, "ca, co, cu — <em>casa</em>", "<b>ch</b>e, <b>ch</b>i — <em>che, chi</em>"],
-            [{ "html": "brando /tʃ/", "pt": true }, "<b>ci</b>a, <b>ci</b>o, <b>ci</b>u — <em>ciao</em>", "ce, ci — <em>cena</em>"],
-            [{ "html": "duro /g/", "pt": true }, "ga, go, gu — <em>gatto</em>", "<b>gh</b>e, <b>gh</b>i — <em>spaghetti</em>"],
-            [{ "html": "brando /dʒ/", "pt": true }, "<b>gi</b>a, <b>gi</b>o, <b>gi</b>u — <em>giorno</em>", "ge, gi — <em>gentile</em>"]
+            [{ "html": "duro /k/ — 'K'", "pt": true }, "ca, co, cu — <em>casa</em>", "<b>ch</b>e, <b>ch</b>i — <em>che, chi</em>"],
+            [{ "html": "brando /tʃ/ — 'Tch'", "pt": true }, "<b>ci</b>a, <b>ci</b>o, <b>ci</b>u — <em>ciao</em>", "ce, ci — <em>cena</em>"],
+            [{ "html": "duro /g/ — 'G'", "pt": true }, "ga, go, gu — <em>gatto</em>", "<b>gh</b>e, <b>gh</b>i — <em>spaghetti</em>"],
+            [{ "html": "brando /dʒ/ — 'Dj'", "pt": true }, "<b>gi</b>a, <b>gi</b>o, <b>gi</b>u — <em>giorno</em>", "ge, gi — <em>gentile</em>"]
           ]
         },
         {
           "type": "nota",
           "tono": "info",
           "titolo": "Por que isso vai te salvar na Aula 1",
-          "testo": "Quando você vir <em>amico → amici</em> mas <em>amica → amiche</em>, não é capricho: o italiano escolhe entre <b>-ci</b> e <b>-chi</b> justamente para decidir se o som fica brando ou duro. A grafia muda para o som ficar igual, ou para mudar de propósito. Guarde isso."
+          "testo": "Quando você vir <it><em>amico</em></it> → <it><em>amici</em></it> mas <it><em>amica</em></it> → <it><em>amiche</em></it>, não é capricho: o italiano escolhe entre <b>-ci</b> e <b>-chi</b> justamente para decidir se o som fica brando ou duro. A grafia muda para o som ficar igual, ou para mudar de propósito. Guarde isso."
         }
       ]
     },
@@ -204,7 +204,7 @@
       "spiegazione": [
         "O <b>z</b> italiano nunca tem o som do <em>z</em> português de «zero». Ele tem dois valores, os dois com um <em>t</em> ou <em>d</em> escondido na frente: surdo /ts/, como em «tsé-tsé», e sonoro /dz/, parecido com o «ds» de «adsorver» dito rápido. Não existe regra confiável para saber qual é qual — vai por exposição.",
         "Agora o segundo grande hábito do português a desmontar: <b>as consoantes dobradas são reais e alteram o significado</b>. Em português, <em>carro</em> e <em>caro</em> diferem no som do R, mas ninguém segura o R. Em italiano você <b>segura a consoante</b> — ela dura o dobro do tempo.",
-        "E isso não é detalhe estético, é diferença de palavra: <em>caro</em> (caro, querido) contra <em>carro</em> (carroça); <em>nono</em> (nono) contra <em>nonno</em> (avô); <em>pena</em> (pena) contra <em>penna</em> (caneta). Se você não segurar a dobrada, você disse outra palavra. Repare que <em>penna</em> vai aparecer na Aula 1."
+        "E isso não é detalhe estético, é diferença de palavra: <it><em>caro</em></it> (caro, querido) contra <it><em>carro</em></it> (carroça); <it><em>nono</em></it> (nono) contra <it><em>nonno</em></it> (avô); <it><em>pena</em></it> (pena) contra <it><em>penna</em></it> (caneta). Se você não segurar a dobrada, você disse outra palavra. Repare que <em>penna</em> vai aparecer na Aula 1."
       ],
       "blocks": [
         {
@@ -213,7 +213,7 @@
           "gruppi": [
             {
               "etichetta": "Z sonora /dz/",
-              "gloss": "o professor anotou como 'Dz'",
+              "gloss": "som de 'D' mudo + 'Z'",
               "esempi": [
                 { "it": "Zaino", "pt": "mochila" },
                 { "it": "Zero", "pt": "zero" },
@@ -222,7 +222,7 @@
             },
             {
               "etichetta": "Z sorda /ts/",
-              "gloss": "o professor anotou como 'ts'",
+              "gloss": "som de 'T' mudo + 'Z'",
               "esempi": [
                 { "it": "Pizza", "pt": "pizza" },
                 { "it": "Alzare", "pt": "levantar" }
@@ -260,8 +260,8 @@
       "gloss": "Os dígrafos",
       "spiegazione": [
         "Aqui você ganha de graça. Dois dígrafos italianos são exatamente sons que o português já tem e escreve de outro jeito: <b>gn</b> é o nosso <em>nh</em>, e <b>gl</b> (seguido de <b>i</b>) é o nosso <em>lh</em>. <em>Bagno</em> é «banho», <em>famiglia</em> é «família» com lh. Nada novo para aprender, só uma grafia nova para reconhecer.",
-        "O <b>sc</b> segue a mesma lógica de C e G que você já viu: antes de <b>e</b> e <b>i</b> ele fica brando e vira o som de «chá» /ʃ/ — <em>scendere</em>, <em>scienza</em>. Antes de <b>a</b>, <b>o</b>, <b>u</b> ele é duro /sk/ — <em>scocca</em>. E, coerentemente, <b>sch</b> devolve o som duro antes de e/i.",
-        "Já <b>ch</b> e <b>gh</b> você conhece da seção anterior: são o H mudo mantendo o som duro. E <b>gu</b> antes de e/i também soa duro, como em <em>guerra</em> — mesmo efeito, letra diferente."
+        "O <b>sc</b> segue a mesma lógica de C e G que você já viu: antes de <b>e</b> e <b>i</b> ele fica brando e vira o som de «chá» /ʃ/ — <it><em>scendere</em></it>, <it><em>scienza</em></it>. Antes de <b>a</b>, <b>o</b>, <b>u</b> ele é duro /sk/ — <it><em>scocca</em></it>. E, coerentemente, <b>sch</b> devolve o som duro antes de e/i.",
+        "Já <b>ch</b> e <b>gh</b> você conhece da seção anterior: são o H mudo mantendo o som duro. E <b>gu</b> antes de e/i também soa duro, como em <it><em>guerra</em></it> — mesmo efeito, letra diferente."
       ],
       "blocks": [
         {
@@ -303,8 +303,8 @@
           "items": [
             { "it": "Chi", "pt": "quem", "nota": "Lê-se «qui». O H é mudo." },
             { "it": "Che", "pt": "que", "nota": "Lê-se «que»." },
-            { "it": "Spaghetti", "pt": "espaguete", "nota": "<b>gh</b> = g de «gato»." },
-            { "it": "Ghiaccio", "pt": "gelo" },
+            { "it": "Spaghetti", "pt": "espaguete", "nota": "<b>gh</b> = gue." },
+            { "it": "Ghiaccio", "pt": "gelo", "nota": "<b>gh</b> = gui." },
             { "it": "Guerra", "pt": "guerra", "nota": "<b>gu</b> + e também é duro." }
           ]
         }

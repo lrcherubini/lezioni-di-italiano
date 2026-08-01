@@ -13,6 +13,7 @@ do i+1.
 """
 
 import unittest
+from collections import Counter
 from pathlib import Path
 import json
 import sys
@@ -162,6 +163,198 @@ class TestBuildLessico(unittest.TestCase):
     def test_saida_ordenada_para_diff_estavel(self):
         f = self.formas(aula(chunks=[{'id': 'c', 'it': 'zebra alfa mela'}]))
         self.assertEqual(list(f), sorted(f))
+
+
+class TestCheckProse(unittest.TestCase):
+    """As pseudo-tags <it>/<pt> falham em silêncio no render, então o
+    validador é a única rede: tag torta não quebra a página, só deixa a
+    forma muda."""
+
+    def setUp(self):
+        v.errors.clear()
+
+    def test_tag_bem_formada_passa(self):
+        v.check_prose('x.json', 's01', 'plurais como <it><em>amici</em></it> e <it>amiche</it>.')
+        self.assertEqual(v.errors, [])
+
+    def test_texto_sem_tag_nenhuma_passa(self):
+        v.check_prose('x.json', 's01', 'A regra vale para <b>c</b> e <b>g</b>.')
+        self.assertEqual(v.errors, [])
+
+    def test_tag_sem_fechamento_e_erro(self):
+        v.check_prose('x.json', 's01', 'vale para <it>amico e <it>amica</it>')
+        self.assertEqual(len(v.errors), 1)
+        self.assertIn('desbalanceada', v.errors[0])
+
+    def test_fechamento_sobrando_e_erro(self):
+        v.check_prose('x.json', 's01', 'vale para amico</it>')
+        self.assertEqual(len(v.errors), 1)
+
+    def test_tag_vazia_e_erro(self):
+        v.check_prose('x.json', 's01', 'nada <it></it> aqui')
+        self.assertEqual(len(v.errors), 1)
+        self.assertIn('sem texto', v.errors[0])
+
+    def test_tag_so_com_marcacao_dentro_e_erro(self):
+        # <it><em></em></it> renderizaria um botão mudo.
+        v.check_prose('x.json', 's01', 'olhe <it><em></em></it> isto')
+        self.assertEqual(len(v.errors), 1)
+
+    def test_none_nao_quebra(self):
+        v.check_prose('x.json', 's01', None)
+        self.assertEqual(v.errors, [])
+
+
+class TestProseMatriz(unittest.TestCase):
+    """Matriz modo × tag. São 3 modos e 2 tags: o que precisa de prova é a
+    tabela, não cada célula solta — é assim que não se esquece um par."""
+
+    def setUp(self):
+        v.errors.clear()
+
+    def test_tag_viva_por_modo(self):
+        self.assertEqual(v.tag_viva('pt'), 'it')
+        self.assertEqual(v.tag_viva('misto'), 'pt')
+        self.assertEqual(v.tag_viva('it'), 'pt')
+        # Modo desconhecido cai no default, igual ao render.js.
+        self.assertEqual(v.tag_viva('xyz'), 'it')
+
+    def test_matriz_completa(self):
+        # (modo, texto, deve_dar_erro, trecho esperado na mensagem)
+        casos = [
+            ('pt', 'cita <it>parlo</it> aqui', False, None),
+            ('pt', 'glosa <pt>falo</pt> aqui', True, 'a tag a usar é <it>'),
+            ('misto', 'glosa <pt>falo</pt> aqui', False, None),
+            ('misto', 'cita <it>parlo</it> aqui', True, 'a tag a usar é <pt>'),
+            ('it', 'glosa <pt>falo</pt> aqui', False, None),
+            ('it', 'cita <it>parlo</it> aqui', True, 'a tag a usar é <pt>'),
+            # Sem tag nenhuma é válido em todos os modos.
+            ('pt', 'texto simples', False, None),
+            ('misto', 'texto simples', False, None),
+            ('it', 'texto simples', False, None),
+        ]
+        for modo, texto, deve_falhar, trecho in casos:
+            with self.subTest(modo=modo, texto=texto):
+                v.errors.clear()
+                v.check_prose('x.json', 's01', texto, modo)
+                if deve_falhar:
+                    self.assertTrue(v.errors, f'esperava erro em modo {modo}: {texto}')
+                    self.assertIn(trecho, v.errors[0])
+                else:
+                    self.assertEqual(v.errors, [], f'não deveria falhar: {modo} / {texto}')
+
+    def test_tag_inerte_desbalanceada_ainda_e_erro(self):
+        # <pt> não é a tag viva em modo 'pt', mas torta é bug do mesmo jeito:
+        # se a aula virar 'misto' amanhã, ela passa a renderizar errado.
+        v.check_prose('x.json', 's01', 'texto <pt>sem fechar', 'pt')
+        self.assertTrue(any('desbalanceada' in e for e in v.errors))
+
+    def test_tag_inerte_vazia_ainda_e_erro(self):
+        v.check_prose('x.json', 's01', 'texto <pt></pt> aqui', 'it')
+        self.assertTrue(any('sem texto' in e for e in v.errors))
+
+
+class TestModoDaAula(unittest.TestCase):
+    def setUp(self):
+        v.errors.clear()
+        v.warnings.clear()
+
+    def test_modo_ausente_e_valido_e_vale_pt(self):
+        v.check_lesson('x.json', aula(), Counter())
+        self.assertEqual(v.errors, [])
+
+    def test_modo_valido_passa(self):
+        for m in v.MODI:
+            with self.subTest(modo=m):
+                v.errors.clear()
+                v.check_lesson('x.json', aula(modo=m), Counter())
+                self.assertEqual(v.errors, [])
+
+    def test_modo_invalido_e_erro(self):
+        v.check_lesson('x.json', aula(modo='inglese'), Counter())
+        self.assertTrue(any('modo «inglese» inválido' in e for e in v.errors))
+
+    def test_modo_desce_ate_a_spiegazione_da_secao(self):
+        # Se o modo não chegasse a check_section, este <it> passaria batido.
+        d = aula(modo='it', sections=[{
+            'id': 's1', 'category': 'VERBO', 'titolo': 'T', 'gloss': 'g',
+            'spiegazione': ['Il verbo <it>parlare</it> è regolare.', 'Secondo paragrafo.'],
+        }])
+        v.check_lesson('x.json', d, Counter())
+        self.assertTrue(any('a tag a usar é <pt>' in e for e in v.errors))
+
+    def test_modo_desce_ate_o_bilancio(self):
+        d = aula(modo='it', bilancio=['So <it>parlare</it>.'])
+        v.check_lesson('x.json', d, Counter())
+        self.assertTrue(any('a tag a usar é <pt>' in e for e in v.errors))
+
+
+class TestSlotFramePorModo(unittest.TestCase):
+    """O único campo que a mudança de língua realmente relaxa."""
+
+    def setUp(self):
+        v.errors.clear()
+
+    def _ex(self, giro):
+        return {
+            'id': 'e01', 'type': 'slot-frame',
+            'frame': {'it': 'Io parlo ___.'},
+            'giri': [giro],
+        }
+
+    def test_giro_sem_pt_falha_em_pt_e_misto(self):
+        for modo in ('pt', 'misto'):
+            with self.subTest(modo=modo):
+                v.errors.clear()
+                v.check_slot_frame('x.json', self._ex(
+                    {'id': 'g1', 'slot': 'italiano', 'risposta': 'Io parlo italiano.'}
+                ), Counter(), modo)
+                self.assertTrue(any('sem prompt «pt»' in e for e in v.errors))
+
+    def test_giro_com_slot_basta_em_it(self):
+        v.check_slot_frame('x.json', self._ex(
+            {'id': 'g1', 'slot': 'italiano', 'risposta': 'Io parlo italiano.'}
+        ), Counter(), 'it')
+        self.assertEqual(v.errors, [])
+
+    def test_giro_sem_pt_nem_slot_falha_ate_em_it(self):
+        v.check_slot_frame('x.json', self._ex(
+            {'id': 'g1', 'risposta': 'Io parlo italiano.'}
+        ), Counter(), 'it')
+        self.assertTrue(any('nem «slot»' in e for e in v.errors))
+
+    def test_giro_com_pt_passa_em_todos_os_modos(self):
+        for modo in v.MODI:
+            with self.subTest(modo=modo):
+                v.errors.clear()
+                v.check_slot_frame('x.json', self._ex(
+                    {'id': 'g1', 'slot': 'italiano', 'pt': 'italiano',
+                     'risposta': 'Io parlo italiano.'}
+                ), Counter(), modo)
+                self.assertEqual(v.errors, [])
+
+
+class TestLessicoIndependeDoModo(unittest.TestCase):
+    """A spiegazione em modo «it» ganha 🔊 mas NÃO entra no léxico. Se
+    entrasse, uma explicação toda em italiano autorizaria qualquer palavra
+    no diálogo e a checagem do i+1 morreria."""
+
+    def test_lessico_identico_com_e_sem_modo(self):
+        secao = {
+            'id': 's1', 'category': 'VERBO', 'titolo': 'T', 'gloss': 'g',
+            'spiegazione': ['Il verbo <pt>o verbo</pt> è regolare.', 'Due.'],
+            'blocks': [{'type': 'lista', 'items': [{'it': 'parlo', 'pt': 'falo'}]}],
+        }
+        sem = v.build_lessico({'lezione-05.json': aula(sections=[secao])})
+        com = v.build_lessico({'lezione-05.json': aula(modo='it', sections=[secao])})
+        self.assertEqual(sem, com)
+
+    def test_palavra_so_da_spiegazione_nao_entra(self):
+        lex = v.build_lessico({'lezione-05.json': aula(modo='it', sections=[{
+            'id': 's1', 'category': 'VERBO', 'titolo': 'T', 'gloss': 'g',
+            'spiegazione': ['Una parola inventata: sgrunfio.', 'Due.'],
+        }])})
+        self.assertNotIn('sgrunfio', lex['forme'])
 
 
 class TestCheckScope(unittest.TestCase):

@@ -50,7 +50,8 @@ describe('banner de degradação', () => {
 describe('o site continua inteiro', () => {
   test('todas as etapas renderizaram', () => {
     const main = dom.document.getElementById('lesson');
-    assert.equal(main.querySelectorAll('.stage').length, 6);
+    assert.equal(main.querySelectorAll('.stage').length,
+      main.querySelectorAll('.rail a').length, 'uma etapa renderizada por link da trilha');
     assert.equal(main.querySelectorAll('.section').length, aula.sections.length);
   });
 
