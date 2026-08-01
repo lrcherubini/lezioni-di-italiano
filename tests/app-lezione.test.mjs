@@ -137,9 +137,13 @@ describe('etapas', () => {
   });
 
   test('a navegação entre aulas aponta para a aula anterior', () => {
-    const links = main.querySelector('.lesson-nav').querySelectorAll('a');
-    assert.equal(links.length, 1, 'a aula 1 é a última: só tem "anterior"');
-    assert.equal(links[0].getAttribute('href'), 'lezione.html?l=00');
+    // Sem número mágico de links: a aula 1 deixa de ser a última assim que
+    // uma aula 2 entra no manifest, e o teste não pode quebrar por isso.
+    const hrefs = main.querySelector('.lesson-nav')
+      .querySelectorAll('a')
+      .map((a) => a.getAttribute('href'));
+    assert.ok(hrefs.includes('lezione.html?l=00'), 'tem link para a aula anterior');
+    assert.ok(hrefs.every((h) => h !== 'lezione.html?l=01'), 'não aponta para si mesma');
   });
 });
 

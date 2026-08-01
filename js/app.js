@@ -320,11 +320,11 @@ export async function renderHome() {
 export function countItems(lesson) {
   let n = 0;
   for (const ex of lesson.esercizi ?? []) {
-    if (ex.type === 'paradigm-fill') {
-      for (const r of ex.righe ?? []) n += (r.nascondi ?? []).length;
-    } else {
-      n += 1;
-    }
+    // Um exercício com sub-itens conta cada sub-item, porque é cada um deles
+    // que vira uma linha no progresso. Quem sabe quantos são é o próprio
+    // módulo do tipo — o core não deve ter um `if` por tipo.
+    const mod = getExercise(ex.type);
+    n += typeof mod?.countItems === 'function' ? mod.countItems(ex) : 1;
   }
   const detail = lesson.dialogo?.passate?.find((p) => p.focus === 'detail');
   n += detail?.domande?.length ?? 0;

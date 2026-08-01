@@ -128,7 +128,7 @@
           "gruppi": [
             {
               "etichetta": "C dura /k/ — davanti a A, O, U",
-              "gloss": "som de «casa» — o professor anotou como 'K'",
+              "gloss": "som de «casa» — som de 'K' em português",
               "esempi": [
                 { "it": "Come", "pt": "como" },
                 { "it": "Casa", "pt": "casa" },
@@ -137,7 +137,7 @@
             },
             {
               "etichetta": "C dolce /tʃ/ — davanti a E, I",
-              "gloss": "som de «tchau» — o professor anotou como 'Tch'",
+              "gloss": "som de «tchau» — som de 'Tch' em português",
               "esempi": [
                 { "it": "Ciao", "pt": "oi / tchau" },
                 { "it": "Cioccolato", "pt": "chocolate" },
@@ -162,7 +162,7 @@
             },
             {
               "etichetta": "G dolce /dʒ/ — davanti a E, I",
-              "gloss": "som de «dia» carioca — o professor anotou como 'Dj'",
+              "gloss": "som de «dia» carioca — som de 'Dj' em português",
               "esempi": [
                 { "it": "Giorno", "pt": "dia" },
                 { "it": "Giraffa", "pt": "girafa" },
@@ -213,7 +213,7 @@
           "gruppi": [
             {
               "etichetta": "Z sonora /dz/",
-              "gloss": "o professor anotou como 'Dz'",
+              "gloss": "som de 'D' mudo + 'Z'",
               "esempi": [
                 { "it": "Zaino", "pt": "mochila" },
                 { "it": "Zero", "pt": "zero" },
@@ -222,7 +222,7 @@
             },
             {
               "etichetta": "Z sorda /ts/",
-              "gloss": "o professor anotou como 'ts'",
+              "gloss": "som de 'T' mudo + 'Z'",
               "esempi": [
                 { "it": "Pizza", "pt": "pizza" },
                 { "it": "Alzare", "pt": "levantar" }

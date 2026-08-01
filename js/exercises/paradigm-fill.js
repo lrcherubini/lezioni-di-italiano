@@ -13,6 +13,9 @@ import { checkAnswer, escapeHtml } from '../check.js';
 export default {
   type: 'paradigm-fill',
 
+  /** Cada célula OCULTA é um item de progresso; as dadas são só âncora. */
+  countItems: (ex) => (ex.righe ?? []).reduce((n, r) => n + (r.nascondi ?? []).length, 0),
+
   render(item, ctx) {
     const root = el('div', { class: 'ex__body' });
     const cells = new Map();

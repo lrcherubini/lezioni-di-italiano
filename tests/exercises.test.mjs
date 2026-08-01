@@ -30,8 +30,11 @@ function montar(item) {
 }
 
 describe('registry', () => {
-  test('conhece exatamente os quatro tipos implementados', () => {
-    assert.deepEqual(knownTypes().sort(), ['dialogue', 'gap-audio', 'paradigm-fill', 'qa-transcribe']);
+  test('conhece exatamente os tipos implementados', () => {
+    assert.deepEqual(knownTypes().sort(), [
+      'abbinamento', 'dialogue', 'gap-audio', 'paradigm-fill',
+      'qa-transcribe', 'riordino', 'scelta', 'slot-frame',
+    ]);
   });
 
   test('tipo desconhecido devolve null em vez de lançar', () => {

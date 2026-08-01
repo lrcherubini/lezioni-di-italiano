@@ -48,7 +48,21 @@ VALID_CHUNK_TYPE = {'fixed', 'semiFixed', 'collocation', 'word'}
 VALID_BLOCK = {'lista', 'tabella', 'contrasto', 'paradigma', 'nota'}
 VALID_TONO = {'info', 'attenzione', 'eccezione'}
 # Precisa casar com o registry em js/exercises/index.js.
-REGISTERED_TYPES = {'gap-audio', 'qa-transcribe', 'dialogue', 'paradigm-fill'}
+REGISTERED_TYPES = {
+    'gap-audio', 'qa-transcribe', 'dialogue', 'paradigm-fill',
+    'scelta', 'riordino', 'abbinamento', 'slot-frame',
+}
+
+# Tipos com sub-itens: cada elemento do campo listado tem id próprio e vira
+# uma linha no progresso. ESPELHA o método `countItems` de cada módulo em
+# js/exercises/ — `paradigm-fill` fica de fora porque conta células ocultas,
+# não linhas, e por isso é tratado à parte em count_items().
+SUBITEM_FIELD = {
+    'scelta': 'domande',
+    'riordino': 'frasi',
+    'abbinamento': 'coppie',
+    'slot-frame': 'giri',
+}
 
 # Mínimos por aula, conforme o passo 7 da checklist.
 MINIMUMS = {'gap-audio': 2, 'qa-transcribe': 1}
@@ -175,6 +189,95 @@ def check_paradigm_fill(name: str, ex: dict, ids: Counter) -> None:
                 ids[f'{row["id"]}-c{i}'] += 1
 
 
+def check_subitems(name: str, ex: dict, ids: Counter) -> list[dict]:
+    """Registra os ids dos sub-itens e devolve a lista. Comum aos 4 drills."""
+    campo = SUBITEM_FIELD[ex['type']]
+    itens = ex.get(campo, [])
+    if not itens:
+        err(f'{name} {ex["id"]}: «{ex["type"]}» sem «{campo}» — não exercita nada')
+    for it in itens:
+        if 'id' not in it:
+            err(f'{name} {ex["id"]}: item de «{campo}» sem id — sem id não há progresso')
+        else:
+            ids[it['id']] += 1
+    return itens
+
+
+def check_scelta(name: str, ex: dict, ids: Counter) -> None:
+    for q in check_subitems(name, ex, ids):
+        qid = q.get('id', '?')
+        if '___' not in q.get('testo', ''):
+            err(f'{name} {qid}: scelta sem lacuna «___» no testo')
+        opzioni = q.get('opzioni', [])
+        if len(opzioni) < 2:
+            err(f'{name} {qid}: scelta com menos de 2 opções')
+        # Sem isto o exercício não tem gabarito clicável: a resposta certa
+        # precisa estar entre as alternativas oferecidas.
+        if q.get('risposta') not in opzioni:
+            err(f'{name} {qid}: risposta {q.get("risposta")!r} não está entre as opções {opzioni!r}')
+        if len(set(opzioni)) != len(opzioni):
+            err(f'{name} {qid}: opções repetidas em {opzioni!r}')
+
+
+def check_riordino(name: str, ex: dict, ids: Counter) -> None:
+    for f in check_subitems(name, ex, ids):
+        fid = f.get('id', '?')
+        parole = f.get('parole', [])
+        if len(parole) < 3:
+            warn(f'{name} {fid}: riordino com {len(parole)} peça(s) — abaixo de 3 não é exercício')
+        # As peças precisam remontar exatamente o gabarito: se sobrar ou
+        # faltar palavra, o exercício é impossível e só se descobre clicando.
+        alvo = [p.strip('.,;:!?').lower() for p in str(f.get('risposta', '')).split()]
+        pecas = [p.strip('.,;:!?').lower() for p in parole]
+        if sorted(alvo) != sorted(pecas):
+            err(f'{name} {fid}: as peças não remontam a risposta\n'
+                f'      peças:    {sorted(pecas)}\n'
+                f'      risposta: {sorted(alvo)}')
+
+
+def check_abbinamento(name: str, ex: dict, ids: Counter) -> None:
+    coppie = check_subitems(name, ex, ids)
+    if len(coppie) < 2:
+        err(f'{name} {ex["id"]}: abbinamento com menos de 2 pares — nada a associar')
+    destre = [c.get('destra') for c in coppie]
+    for c in coppie:
+        cid = c.get('id', '?')
+        if not c.get('sinistra') or not c.get('destra'):
+            err(f'{name} {cid}: par sem «sinistra» ou «destra»')
+    # Alternativas iguais tornariam a correção literal ambígua: duas linhas
+    # aceitariam a mesma string e uma delas seria marcada errada sem motivo.
+    if len(set(destre)) != len(destre):
+        err(f'{name} {ex["id"]}: respostas repetidas em «destra» — a associação fica ambígua')
+
+
+def check_slot_frame(name: str, ex: dict, ids: Counter) -> None:
+    frame = ex.get('frame', {})
+    if '___' not in frame.get('it', ''):
+        err(f'{name} {ex["id"]}: slot-frame sem slot «___» no frame.it')
+
+    for g in check_subitems(name, ex, ids):
+        gid = g.get('id', '?')
+        if not g.get('risposta'):
+            err(f'{name} {gid}: giro sem risposta')
+        if not g.get('pt'):
+            err(f'{name} {gid}: giro sem prompt «pt» — o aluno tem que produzir a partir do português')
+        # O drill só é de substituição se a resposta for de fato o molde com
+        # o slot preenchido. Uma resposta que foge do molde é outro exercício.
+        molde = frame.get('it', '')
+        if molde and g.get('slot') is not None:
+            esperado = molde.replace('___', str(g['slot']))
+            # A elisão come o espaço seguinte («vent'» + « anni» = «vent'anni»),
+            # então comparar cru acusaria falso positivo em todo slot elidido.
+            if _sem_spazio_dopo_apostrofo(esperado) != _sem_spazio_dopo_apostrofo(g.get('risposta', '')):
+                warn(f'{name} {gid}: risposta não é o molde com o slot preenchido\n'
+                     f'      molde+slot: {esperado!r}\n'
+                     f'      risposta:   {g.get("risposta")!r}')
+
+
+def _sem_spazio_dopo_apostrofo(s: str) -> str:
+    return norm(re.sub(r"'\s+", "'", str(s)))
+
+
 def check_dialogo(name: str, d: dict, ids: Counter) -> None:
     ids[d['id']] += 1
 
@@ -227,6 +330,14 @@ def check_lesson(name: str, d: dict, ids: Counter) -> None:
             check_gap_audio(name, ex)
         elif etype == 'paradigm-fill':
             check_paradigm_fill(name, ex, ids)
+        elif etype == 'scelta':
+            check_scelta(name, ex, ids)
+        elif etype == 'riordino':
+            check_riordino(name, ex, ids)
+        elif etype == 'abbinamento':
+            check_abbinamento(name, ex, ids)
+        elif etype == 'slot-frame':
+            check_slot_frame(name, ex, ids)
 
     if d.get('dialogo'):
         check_dialogo(name, d['dialogo'], ids)
@@ -394,9 +505,12 @@ def count_items(lesson: dict) -> int:
     """
     n = 0
     for ex in lesson.get('esercizi', []):
-        if ex.get('type') == 'paradigm-fill':
+        etype = ex.get('type')
+        if etype == 'paradigm-fill':
             for row in ex.get('righe', []):
                 n += len(row.get('nascondi', []))
+        elif etype in SUBITEM_FIELD:
+            n += len(ex.get(SUBITEM_FIELD[etype], []))
         else:
             n += 1
 

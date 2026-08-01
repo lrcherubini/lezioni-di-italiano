@@ -4,6 +4,34 @@
       "aula": "01",
       "origine": "tabella"
     },
+    "abita": {
+      "aula": "02",
+      "origine": "tabella"
+    },
+    "abitano": {
+      "aula": "02",
+      "origine": "chunk"
+    },
+    "abitare": {
+      "aula": "02",
+      "origine": "chunk"
+    },
+    "abitate": {
+      "aula": "02",
+      "origine": "tabella"
+    },
+    "abiti": {
+      "aula": "02",
+      "origine": "header"
+    },
+    "abitiamo": {
+      "aula": "02",
+      "origine": "tabella"
+    },
+    "abito": {
+      "aula": "02",
+      "origine": "header"
+    },
     "acca": {
       "aula": "00",
       "origine": "tabella"
@@ -11,6 +39,10 @@
     "accordo": {
       "aula": "01",
       "origine": "header"
+    },
+    "aires": {
+      "aula": "02",
+      "origine": "tabella"
     },
     "al": {
       "aula": "01",
@@ -60,6 +92,10 @@
       "aula": "01",
       "origine": "header"
     },
+    "ano": {
+      "aula": "02",
+      "origine": "header"
+    },
     "aperte": {
       "aula": "00",
       "origine": "header"
@@ -67,6 +103,10 @@
     "aquilone": {
       "aula": "00",
       "origine": "lista"
+    },
+    "are": {
+      "aula": "02",
+      "origine": "header"
     },
     "argentina": {
       "aula": "01",
@@ -83,6 +123,14 @@
     "articoli": {
       "aula": "01",
       "origine": "header"
+    },
+    "ate": {
+      "aula": "02",
+      "origine": "header"
+    },
+    "austria": {
+      "aula": "02",
+      "origine": "slot"
     },
     "austriaca": {
       "aula": "01",
@@ -140,6 +188,14 @@
       "aula": "01",
       "origine": "lista"
     },
+    "bene": {
+      "aula": "02",
+      "origine": "header"
+    },
+    "berlino": {
+      "aula": "02",
+      "origine": "contrasto"
+    },
     "bi": {
       "aula": "00",
       "origine": "slot"
@@ -163,6 +219,10 @@
     "brasiliano": {
       "aula": "01",
       "origine": "slot"
+    },
+    "buenos": {
+      "aula": "02",
+      "origine": "tabella"
     },
     "buon": {
       "aula": "01",
@@ -216,9 +276,29 @@
       "aula": "00",
       "origine": "tabella"
     },
+    "ceca": {
+      "aula": "02",
+      "origine": "chunk"
+    },
+    "ceche": {
+      "aula": "02",
+      "origine": "paradigma"
+    },
+    "cechi": {
+      "aula": "02",
+      "origine": "paradigma"
+    },
+    "ceco": {
+      "aula": "02",
+      "origine": "slot"
+    },
     "cena": {
       "aula": "00",
       "origine": "contrasto"
+    },
+    "centrale": {
+      "aula": "02",
+      "origine": "header"
     },
     "cesare": {
       "aula": "00",
@@ -264,6 +344,14 @@
       "aula": "00",
       "origine": "tabella"
     },
+    "conoscerla": {
+      "aula": "02",
+      "origine": "chunk"
+    },
+    "conoscerti": {
+      "aula": "02",
+      "origine": "chunk"
+    },
     "consonanti": {
       "aula": "00",
       "origine": "header"
@@ -296,8 +384,16 @@
       "aula": "01",
       "origine": "header"
     },
+    "dell'europa": {
+      "aula": "02",
+      "origine": "header"
+    },
     "delle": {
       "aula": "00",
+      "origine": "header"
+    },
+    "desinenze": {
+      "aula": "02",
       "origine": "header"
     },
     "determinativi": {
@@ -336,6 +432,10 @@
       "aula": "00",
       "origine": "header"
     },
+    "dispiace": {
+      "aula": "02",
+      "origine": "chunk"
+    },
     "dodici": {
       "aula": "01",
       "origine": "slot"
@@ -351,6 +451,10 @@
     "doppie": {
       "aula": "00",
       "origine": "header"
+    },
+    "dove": {
+      "aula": "01",
+      "origine": "chunk"
     },
     "due": {
       "aula": "01",
@@ -443,6 +547,10 @@
     "figlio": {
       "aula": "00",
       "origine": "lista"
+    },
+    "formale": {
+      "aula": "02",
+      "origine": "header"
     },
     "francese": {
       "aula": "01",
@@ -564,6 +672,10 @@
       "aula": "00",
       "origine": "tabella"
     },
+    "iamo": {
+      "aula": "02",
+      "origine": "header"
+    },
     "ics": {
       "aula": "00",
       "origine": "tabella"
@@ -574,6 +686,10 @@
     },
     "indeterminativi": {
       "aula": "01",
+      "origine": "header"
+    },
+    "informale": {
+      "aula": "02",
       "origine": "header"
     },
     "inglese": {
@@ -712,6 +828,14 @@
       "aula": "01",
       "origine": "paradigma"
     },
+    "l'ungherese": {
+      "aula": "02",
+      "origine": "chunk"
+    },
+    "l'ungheria": {
+      "aula": "02",
+      "origine": "chunk"
+    },
     "lasagna": {
       "aula": "00",
       "origine": "lista"
@@ -736,12 +860,24 @@
       "aula": "01",
       "origine": "tabella"
     },
+    "lieta": {
+      "aula": "02",
+      "origine": "chunk"
+    },
+    "lieto": {
+      "aula": "02",
+      "origine": "chunk"
+    },
     "lingua": {
       "aula": "00",
       "origine": "tabella"
     },
     "lingue": {
       "aula": "01",
+      "origine": "tabella"
+    },
+    "lisbona": {
+      "aula": "02",
       "origine": "tabella"
     },
     "livro": {
@@ -751,6 +887,14 @@
     "livros": {
       "aula": "01",
       "origine": "tabella"
+    },
+    "londra": {
+      "aula": "02",
+      "origine": "slot"
+    },
+    "lugano": {
+      "aula": "02",
+      "origine": "chunk"
     },
     "lunga": {
       "aula": "00",
@@ -780,6 +924,26 @@
       "aula": "00",
       "origine": "tabella"
     },
+    "madrid": {
+      "aula": "02",
+      "origine": "tabella"
+    },
+    "magiara": {
+      "aula": "02",
+      "origine": "paradigma"
+    },
+    "magiare": {
+      "aula": "02",
+      "origine": "paradigma"
+    },
+    "magiari": {
+      "aula": "02",
+      "origine": "paradigma"
+    },
+    "magiaro": {
+      "aula": "02",
+      "origine": "chunk"
+    },
     "mamma": {
       "aula": "00",
       "origine": "lista"
@@ -792,9 +956,21 @@
       "aula": "01",
       "origine": "paradigma"
     },
+    "mi": {
+      "aula": "02",
+      "origine": "chunk"
+    },
+    "milano": {
+      "aula": "02",
+      "origine": "slot"
+    },
     "minaccia": {
       "aula": "00",
       "origine": "lista"
+    },
+    "modo": {
+      "aula": "02",
+      "origine": "header"
     },
     "n": {
       "aula": "00",
@@ -856,8 +1032,36 @@
       "aula": "01",
       "origine": "header"
     },
+    "parigi": {
+      "aula": "02",
+      "origine": "slot"
+    },
+    "parla": {
+      "aula": "02",
+      "origine": "chunk"
+    },
+    "parlano": {
+      "aula": "02",
+      "origine": "chunk"
+    },
     "parlare": {
       "aula": "01",
+      "origine": "header"
+    },
+    "parlate": {
+      "aula": "02",
+      "origine": "chunk"
+    },
+    "parli": {
+      "aula": "02",
+      "origine": "chunk"
+    },
+    "parliamo": {
+      "aula": "02",
+      "origine": "chunk"
+    },
+    "parlo": {
+      "aula": "02",
       "origine": "header"
     },
     "penna": {
@@ -908,6 +1112,30 @@
       "aula": "01",
       "origine": "header"
     },
+    "po'": {
+      "aula": "02",
+      "origine": "header"
+    },
+    "polacca": {
+      "aula": "02",
+      "origine": "paradigma"
+    },
+    "polacche": {
+      "aula": "02",
+      "origine": "paradigma"
+    },
+    "polacchi": {
+      "aula": "02",
+      "origine": "paradigma"
+    },
+    "polacco": {
+      "aula": "02",
+      "origine": "slot"
+    },
+    "polonia": {
+      "aula": "02",
+      "origine": "slot"
+    },
     "pomeriggio": {
       "aula": "01",
       "origine": "chunk"
@@ -928,6 +1156,10 @@
       "aula": "01",
       "origine": "slot"
     },
+    "presentarsi": {
+      "aula": "02",
+      "origine": "header"
+    },
     "presente": {
       "aula": "01",
       "origine": "header"
@@ -943,6 +1175,14 @@
     "q": {
       "aula": "00",
       "origine": "tabella"
+    },
+    "quali": {
+      "aula": "02",
+      "origine": "header"
+    },
+    "quanti": {
+      "aula": "01",
+      "origine": "chunk"
     },
     "quattordici": {
       "aula": "01",
@@ -975,6 +1215,14 @@
     "regno": {
       "aula": "00",
       "origine": "lista"
+    },
+    "regolari": {
+      "aula": "02",
+      "origine": "header"
+    },
+    "repubblica": {
+      "aula": "02",
+      "origine": "chunk"
     },
     "ringraziare": {
       "aula": "01",
@@ -1020,6 +1268,10 @@
       "aula": "01",
       "origine": "chunk"
     },
+    "san": {
+      "aula": "02",
+      "origine": "contrasto"
+    },
     "sapore": {
       "aula": "00",
       "origine": "contrasto"
@@ -1052,6 +1304,18 @@
       "aula": "00",
       "origine": "contrasto"
     },
+    "scusa": {
+      "aula": "02",
+      "origine": "chunk"
+    },
+    "scusarsi": {
+      "aula": "02",
+      "origine": "header"
+    },
+    "scusi": {
+      "aula": "02",
+      "origine": "chunk"
+    },
     "sedici": {
       "aula": "01",
       "origine": "tabella"
@@ -1079,6 +1343,46 @@
     "singolare": {
       "aula": "01",
       "origine": "tabella"
+    },
+    "slovacca": {
+      "aula": "02",
+      "origine": "paradigma"
+    },
+    "slovacche": {
+      "aula": "02",
+      "origine": "paradigma"
+    },
+    "slovacchi": {
+      "aula": "02",
+      "origine": "paradigma"
+    },
+    "slovacchia": {
+      "aula": "02",
+      "origine": "chunk"
+    },
+    "slovacco": {
+      "aula": "02",
+      "origine": "slot"
+    },
+    "slovena": {
+      "aula": "02",
+      "origine": "paradigma"
+    },
+    "slovene": {
+      "aula": "02",
+      "origine": "paradigma"
+    },
+    "sloveni": {
+      "aula": "02",
+      "origine": "paradigma"
+    },
+    "slovenia": {
+      "aula": "02",
+      "origine": "chunk"
+    },
+    "sloveno": {
+      "aula": "02",
+      "origine": "slot"
     },
     "solo": {
       "aula": "00",
@@ -1240,6 +1544,18 @@
       "aula": "01",
       "origine": "slot"
     },
+    "ungherese": {
+      "aula": "02",
+      "origine": "slot"
+    },
+    "ungheresi": {
+      "aula": "02",
+      "origine": "paradigma"
+    },
+    "ungheria": {
+      "aula": "02",
+      "origine": "slot"
+    },
     "uniti": {
       "aula": "01",
       "origine": "chunk"
@@ -1256,6 +1572,10 @@
       "aula": "00",
       "origine": "tabella"
     },
+    "varsavia": {
+      "aula": "02",
+      "origine": "slot"
+    },
     "veloce": {
       "aula": "00",
       "origine": "tabella"
@@ -1266,6 +1586,14 @@
     },
     "venti": {
       "aula": "01",
+      "origine": "slot"
+    },
+    "verbi": {
+      "aula": "02",
+      "origine": "header"
+    },
+    "vienna": {
+      "aula": "02",
       "origine": "slot"
     },
     "vocali": {

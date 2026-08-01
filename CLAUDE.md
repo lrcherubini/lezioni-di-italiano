@@ -10,6 +10,7 @@ O objetivo principal deste projeto é um **loop de autoria repetível**: a cada 
 
 1. **Nunca commite `presentations/` nem `ERRATA.md`.** Ambos estão no `.gitignore`. O primeiro é material de terceiros e contém dados pessoais; o segundo é caderno de trabalho local.
 2. **Nenhum arquivo versionado cita nome de pessoa ou da plataforma de aula.** Vale para os docs também — este repositório é público. Diálogos usam nomes italianos genéricos (Marco, Giulia, Luca). Não use dados pessoais reais (idade, cidade) em exemplos.
+2.1. **`content/` nunca fala em terceira pessoa sobre a origem do material.** Nada de "o professor anotou/resumiu/explicou", "na aula ele disse", "É o Exercício N do Compito M", ou qualquer frase que denuncie a existência de um professor, aula ao vivo, apostila ou deck por trás do conteúdo. O invariante 3 já exige que todo conteúdo explicativo seja transcrito para `content/*.json`; isso vai além e exige que a transcrição também **apague a voz de quem entregou o material** — o texto final tem que se ler como se o próprio site fosse a fonte original. Reformule como explicação direta ("a regra é X") ou apague a referência.
 3. **Nunca linke PDF nem sirva arquivo de `presentations/`.** O site é autocontido: todo conteúdo explicativo é transcrito para `content/*.json`.
 4. **Zero dependências e zero passo de build.** Sem `package.json`, sem bundler, sem CI de build, sem CDN. O site é HTML + CSS + JS vanilla servido direto. Vale para as ferramentas também: o validador é stdlib do Python e a suíte é o `node --test` embutido com um DOM próprio — se a resposta para um problema for `npm install`, ela está errada.
 5. **Ao adicionar uma aula, edite apenas `content/`.** Não toque em `js/`, `css/` nem nos JSONs de aulas anteriores. As duas exceções são geradas por ferramenta, nunca à mão: o `conteggio` do manifest e o `content/lessico.json`, que saem de `python tools/validate.py --fix`.
@@ -251,6 +252,64 @@ Tipos registrados em `js/exercises/index.js`. Usar tipo não registrado é erro 
               "nota": "…", "eccezione": false }] }
 ```
 
+#### Os quatro drills de fixação
+
+São os tipos de **volume**: cada um leva vários sub-itens, e **cada sub-item
+tem id próprio e vira uma linha do progresso**. É por isso que eles precisam
+de `countItems` no módulo (ver `js/exercises/index.js`) — sem isso o
+`conteggio` do manifest conta 1 onde há 8, e a barra de progresso mente.
+
+```jsonc
+// scelta — escolher a forma certa entre alternativas.
+// Para o que se decide por contraste, não por regra: in×a, il×lo, -i×-e.
+{ "id": "l02-e09", "type": "scelta", "category": "GRAMMATICA",
+  "consegna": "…",
+  "domande": [{ "id": "l02-e09-q1",
+                "testo": "Noi abitiamo ___ Brasile.",  // a lacuna é obrigatória
+                "opzioni": ["in", "a", "di", "per"],   // 2+, sem repetição
+                "risposta": "in",                      // TEM que estar em opzioni
+                "pt": "…", "nota": "…" }] }
+
+// riordino — remontar a frase com as palavras fora de ordem.
+// As peças precisam remontar EXATAMENTE a risposta; o validador confere.
+{ "id": "l02-e14", "type": "riordino", "category": "GRAMMATICA",
+  "consegna": "…",
+  "frasi": [{ "id": "l02-e14-f1",
+              "parole": ["Io", "abito", "a", "Roma"],
+              "risposta": "Io abito a Roma.",   // pontuação é normalizada
+              "pt": "…", "nota": "…", "accettaAnche": ["…"] }] }
+
+// abbinamento — associar duas colunas. `destra` não pode repetir, senão a
+// correção fica ambígua e uma linha certa seria marcada errada.
+{ "id": "l02-e16", "type": "abbinamento", "category": "ESPRESSIONE",
+  "consegna": "…",
+  "coppie": [{ "id": "l02-e16-p1",
+               "sinistra": "Dove abiti?",
+               "destra": "Abito a Vienna, in Austria.", "pt": "…" }] }
+
+// slot-frame — drill de substituição sobre frase semifixa (o do método
+// lexical). O aluno escreve a frase INTEIRA a cada giro: o que se automatiza
+// é o molde, e o molde só se automatiza passando inteiro.
+{ "id": "l02-e04", "type": "slot-frame", "category": "VERBO",
+  "consegna": "…",
+  "frame": { "it": "Io parlo ___.", "pt": "Eu falo ___." },  // ___ obrigatório
+  "modello": "Io parlo italiano.",   // opcional; default = risposta do 1º giro
+  "giri": [{ "id": "l02-e04-g1",
+             "slot": "italiano",     // o que entra no ___
+             "pt": "italiano",       // prompt em PORTUGUÊS — o aluno produz
+             "risposta": "Io parlo italiano.",
+             "accettaAnche": ["…"] }] }
+```
+
+> **`slot` e `risposta` têm que casar.** O validador avisa quando
+> `frame.it` com o `slot` no lugar do `___` não reproduz a `risposta` — é o
+> sinal de que aquilo deixou de ser drill de substituição e virou outro
+> exercício. Elisão é o caso legítimo (`vent'` + ` anni` = `vent'anni`), e o
+> validador já sabe disso.
+
+**Regra dura dos quatro:** `id` de sub-item é tão imutável quanto o do
+exercício. Renomear um apaga o histórico daquela pergunta específica.
+
 ### Diálogo
 
 ```jsonc
@@ -305,7 +364,7 @@ Tipos registrados em `js/exercises/index.js`. Usar tipo não registrado é erro 
 4. **Extraia o inventário de chunks** e classifique cada um em `chunkType`.
 5. **Valide formas duvidosas** contra Treccani/Crusca e aplique a classificação de 3 saídas.
 6. **Escreva o diálogo** (6–10 turnos), só com vocabulário em escopo.
-7. **Gere exercícios:** ≥2 `gap-audio`, ≥1 `qa-transcribe`, ≥1 `paradigm-fill` por paradigma, ≥1 `dialogo`.
+7. **Gere exercícios:** ≥2 `gap-audio`, ≥1 `qa-transcribe`, ≥1 `paradigm-fill` por paradigma, ≥1 `dialogo`. Para **volume de fixação**, use os quatro drills: `scelta` e `slot-frame` são os que mais rendem por linha escrita, e `riordino`/`abbinamento` quebram a monotonia de digitar. Os *Compito* do professor são a melhor matéria-prima — cada exercício deles mapeia direto num tipo (`Scegli` → `scelta`, `Riordina` → `riordino`, `Abbina` → `abbinamento`, `Coniuga` → `paradigm-fill`).
 8. **Acrescente a entrada em `content/manifest.json`** (`id`, `numero`, `file`, `titolo`, `gloss`, `categorie`, `temi`). **Não escreva `conteggio` à mão** — é derivado, sai do `--fix`.
 9. **Rode `python tools/validate.py --fix`** (grava os derivados) e depois **`python tools/validate.py`** até zerar os erros. Rode também **`node tools/test.mjs`**: os testes de página carregam os JSONs reais, então uma aula que não renderiza falha ali.
 9.1. **Leia os avisos de escopo.** O validador compara o italiano do seu diálogo com `content/lessico.json`, o léxico acumulado até aquela aula, e avisa sobre forma nunca ensinada. É **aviso, não erro**, porque a checagem é heurística e existe caso legítimo — o diálogo da Aula 0 soletra *Castelli* de propósito, e a palavra não é vocabulário a ensinar. Para cada aviso, decida: ou a palavra entra no conteúdo da aula (num `chunk`, `lista` ou `tabella`), ou ela sai do diálogo, ou é caso legítimo e fica. O que não vale é ignorar sem olhar.
@@ -330,6 +389,9 @@ js/store.js           ÚNICO lugar que toca localStorage
 js/check.js           normalização de resposta e diff por token
 js/render.js          seções, chips, blocos, botão de áudio, barra de player
 js/exercises/         um módulo por tipo + index.js (registry)
+                      shuffle.js: embaralhamento semeado pelo id — determinístico
+                      para o aluno não perder a referência visual num F5, e para
+                      a suíte afirmar posições sem stubar Math.random
 content/              manifest.json + lezione-NN.json + lessico.json (derivado)
 tests/                suíte node:test; support/ tem DOM mínimo e dublês
 tools/validate.py     valida os invariantes deste documento; --fix grava derivados
@@ -394,7 +456,9 @@ export default {
 ```
 
 - O elemento devolvido por `render` carrega `_parts` com as referências de DOM que os outros métodos precisam. É o canal entre eles.
-- Se `check` devolver `results: [{id, correct}]`, o `app.js` registra **cada sub-item** separadamente. É assim que paradigma e diálogo têm progresso por célula/pergunta.
+- Se `check` devolver `results: [{id, correct}]`, o `app.js` registra **cada sub-item** separadamente. É assim que paradigma, diálogo e os quatro drills têm progresso por célula/pergunta.
+- Quem devolve `results` com vários sub-itens **precisa** implementar `countItems(item) → number`. `app.js` o consulta para montar o `conteggio` do manifest, e `count_items` em `tools/validate.py` espelha a conta. Sem o método o core assume 1 por exercício, e a barra de progresso passa a mentir sem avisar.
+- **Nada de arrastar.** Um drill que só funciona com drag-and-drop é inacessível por teclado, ruim no celular e impossível de testar sem navegador de verdade — que a suíte não tem. `riordino` e `abbinamento` são clique e `<select>` por isso.
 - **Nenhum módulo de exercício fala com `store.js`.** Quem grava é o `app.js`.
 - **Nenhum módulo chama `speechSynthesis` direto.** Use `speech.js`.
 

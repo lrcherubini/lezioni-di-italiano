@@ -277,9 +277,9 @@
       "spiegazione": [
         "Aqui está a diferença conceitual mais importante entre o italiano e o português neste tópico. Em português, o artigo depende <b>só do gênero</b>: <em>o</em> para masculino, <em>a</em> para feminino, e acabou. Em italiano, o masculino depende também <b>do som que começa a palavra seguinte</b>. É por isso que existem três artigos masculinos e não um.",
         "<b>Masculino singular:</b> o padrão é <b><em>il</em></b> — <em>il cane</em>, <em>il francese</em>, <em>il brasiliano</em>. Antes de <b>vogal</b>, ele elide e vira <b><em>l'</em></b> — <em>l'amico</em>, <em>l'italiano</em>. E antes de certos grupos consonantais difíceis de pronunciar depois de «il», entra <b><em>lo</em></b>.",
-        "Quais grupos pedem <em>lo</em>? Foi exatamente o que o professor anotou na aula: <b>s + consoante</b> (<em>lo spagnolo</em>, <em>lo svizzero</em>, <em>lo statunitense</em>, <em>lo studente</em>), <b>z</b> (<em>lo zaino</em>), <b>gn</b> e <b>ps</b> (<em>lo gnomo</em>, <em>lo psicologo</em>), e as estrangeiras <b>x</b> e <b>y</b>. O motivo é puramente fonético: «il spagnolo» é desconfortável de dizer, «lo spagnolo» flui. Se você não conseguir decorar a lista, tente pronunciar com <em>il</em> — o desconforto é a própria pista.",
+        "Quais grupos pedem <em>lo</em>? <b>s + consoante</b> (<em>lo spagnolo</em>, <em>lo svizzero</em>, <em>lo statunitense</em>, <em>lo studente</em>), <b>z</b> (<em>lo zaino</em>), <b>gn</b> e <b>ps</b> (<em>lo gnomo</em>, <em>lo psicologo</em>), e as estrangeiras <b>x</b> e <b>y</b>. O motivo é puramente fonético: «il spagnolo» é desconfortável de dizer, «lo spagnolo» flui. Se você não conseguir decorar a lista, tente pronunciar com <em>il</em> — o desconforto é a própria pista.",
         "<b>Feminino é muito mais simples:</b> <b><em>la</em></b> antes de consoante (<em>la penna</em>, <em>la spagnola</em> — note que o s+consoante <b>não</b> afeta o feminino), e <b><em>l'</em></b> antes de vogal (<em>l'amica</em>, <em>l'italiana</em>).",
-        "<b>No plural tudo colapsa</b>, e aqui vem a parte elegante, que o professor resumiu como <em>il → i</em> e <em>lo e l' → gli</em>. Ou seja: os dois casos «difíceis» do singular — <em>lo</em> e <em>l'</em> — se juntam num único plural <b><em>gli</em></b>. Por isso <em>lo spagnolo → gli spagnoli</em> e <em>l'amico → gli amici</em> têm o mesmo artigo, apesar de terem artigos diferentes no singular. No feminino, <em>la</em> e <em>l'</em> igualmente colapsam em <b><em>le</em></b>."
+        "<b>No plural tudo colapsa</b>, e aqui vem a parte elegante: <em>il → i</em> e <em>lo e l' → gli</em>. Ou seja: os dois casos «difíceis» do singular — <em>lo</em> e <em>l'</em> — se juntam num único plural <b><em>gli</em></b>. Por isso <em>lo spagnolo → gli spagnoli</em> e <em>l'amico → gli amici</em> têm o mesmo artigo, apesar de terem artigos diferentes no singular. No feminino, <em>la</em> e <em>l'</em> igualmente colapsam em <b><em>le</em></b>."
       ],
       "blocks": [
         {
@@ -503,6 +503,51 @@
           ]
         }
       ]
+    },
+    {
+      "id": "l01-s11",
+      "category": "GRAMMATICA",
+      "titolo": "La negazione: non",
+      "gloss": "a negação — «não»",
+      "spiegazione": [
+        "Negar em italiano é a coisa mais simples desta aula: põe-se <b><em>non</em></b> imediatamente antes do verbo, e acabou. <em>Lui è spagnolo</em> → <em>Lui <b>non</b> è spagnolo</em>. <em>Noi abbiamo diciotto anni</em> → <em>Noi <b>non</b> abbiamo diciotto anni</em>. Nada mais muda: o verbo fica igual, a ordem do resto fica igual.",
+        "A armadilha é justamente a posição, e ela é diferente do português falado. Nós dizemos «eu não sou espanhol», mas também «eu não sou espanhol <b>não</b>», e às vezes só «sou espanhol, não». O italiano não tem nada disso: o <em>non</em> vem <b>antes do verbo</b> e em nenhum outro lugar. Escrever <em>Lui è non spagnolo</em> ou <em>Lui è spagnolo non</em> não é sotaque, é agramatical.",
+        "Cuidado para não confundir com o <em>no</em> de resposta. <em>No</em> (sem <b>n</b> final) é a resposta seca a uma pergunta: <em>Sei francese? — No.</em> Já <em>non</em> (com <b>n</b> final) é o advérbio que nega o verbo dentro da frase. Os dois costumam aparecer juntos: <em>Sei francese? — <b>No</b>, <b>non</b> sono francese.</em>"
+      ],
+      "blocks": [
+        {
+          "type": "contrasto",
+          "titolo": "Afirmativa → negativa",
+          "gruppi": [
+            {
+              "etichetta": "Affermativa",
+              "gloss": "afirmativa",
+              "esempi": [
+                { "it": "Lui è spagnolo.", "pt": "Ele é espanhol." },
+                { "it": "Voi siete italiane.", "pt": "Vocês são italianas." },
+                { "it": "Tu hai dodici anni.", "pt": "Você tem doze anos." },
+                { "it": "Loro sono olandesi.", "pt": "Eles são holandeses." }
+              ]
+            },
+            {
+              "etichetta": "Negativa",
+              "gloss": "negativa — «non» antes do verbo",
+              "esempi": [
+                { "it": "Lui non è spagnolo.", "pt": "Ele não é espanhol." },
+                { "it": "Voi non siete italiane.", "pt": "Vocês não são italianas." },
+                { "it": "Tu non hai dodici anni.", "pt": "Você não tem doze anos." },
+                { "it": "Loro non sono olandesi.", "pt": "Eles não são holandeses." }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "attenzione",
+          "titolo": "no ≠ non",
+          "testo": "<em>No</em> responde; <em>non</em> nega o verbo. Numa resposta completa aparecem os dois: <em>Siete francesi? — <b>No</b>, <b>non</b> siamo francesi.</em>"
+        }
+      ]
     }
   ],
   "chunks": [
@@ -531,7 +576,9 @@
     { "id": "l01-c23", "it": "la penna", "pt": "a caneta", "category": "VOCABOLARIO", "chunkType": "word" },
     { "id": "l01-c24", "it": "l'anno", "pt": "o ano", "category": "VOCABOLARIO", "chunkType": "word" },
     { "id": "l01-c25", "it": "vent'anni", "pt": "vinte anos", "category": "VOCABOLARIO", "chunkType": "collocation" },
-    { "id": "l01-c26", "it": "gli Stati Uniti d'America", "pt": "os Estados Unidos da América", "category": "VOCABOLARIO", "chunkType": "collocation" }
+    { "id": "l01-c26", "it": "gli Stati Uniti d'America", "pt": "os Estados Unidos da América", "category": "VOCABOLARIO", "chunkType": "collocation" },
+    { "id": "l01-c27", "it": "Quanti anni hai?", "pt": "Quantos anos você tem?", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l01-c28", "it": "Di dove sei?", "pt": "De onde você é?", "category": "ESPRESSIONE", "chunkType": "fixed" }
   ],
   "dialogo": {
     "id": "l01-d01",
@@ -729,6 +776,166 @@
         { "id": "l01-e14-r5", "pt": "o espanhol", "forme": ["lo spagnolo", "gli spagnoli"], "nascondi": [0] },
         { "id": "l01-e14-r6", "pt": "o ano", "forme": ["l'anno", "gli anni"], "nascondi": [0, 1] }
       ]
+    },
+
+    {
+      "id": "l01-e15",
+      "type": "scelta",
+      "category": "VERBO",
+      "consegna": "Usa i verbi corretti.",
+      "domande": [
+        { "id": "l01-e15-q1", "testo": "Lui ___ belga.", "opzioni": ["è", "sei", "sono", "siamo"], "risposta": "è", "pt": "Ele é belga.", "nota": "<em>lui</em> → <b>è</b>, com acento." },
+        { "id": "l01-e15-q2", "testo": "Noi ___ sei anni.", "opzioni": ["siamo", "abbiamo", "avete", "hanno"], "risposta": "abbiamo", "pt": "Nós temos seis anos.", "nota": "Idade usa <em>avere</em>, igual ao português." },
+        { "id": "l01-e15-q3", "testo": "Voi ___ nove anni e ___ austriaci.", "opzioni": ["avete … siete", "siete … avete", "abbiamo … siamo", "hanno … sono"], "risposta": "avete … siete", "pt": "Vocês têm nove anos e são austríacos." },
+        { "id": "l01-e15-q4", "testo": "Tu ___ argentino, ma io ___ spagnolo.", "opzioni": ["sei … sono", "sono … sei", "è … sono", "sei … siamo"], "risposta": "sei … sono", "pt": "Você é argentino, mas eu sou espanhol." },
+        { "id": "l01-e15-q5", "testo": "Tu ___ lussemburghese e ___ sette anni.", "opzioni": ["sei … hai", "hai … sei", "sei … sei", "hai … hai"], "risposta": "sei … hai", "pt": "Você é luxemburguês e tem sete anos." },
+        { "id": "l01-e15-q6", "testo": "Tu ___ quattordici anni e ___ francese.", "opzioni": ["hai … sei", "sei … hai", "hai … hai", "sei … sei"], "risposta": "hai … sei", "pt": "Você tem catorze anos e é francês." },
+        { "id": "l01-e15-q7", "testo": "Io ___ italiana e voi ___ spagnole.", "opzioni": ["sono … siete", "siete … sono", "sono … siamo", "ho … avete"], "risposta": "sono … siete", "pt": "Eu sou italiana e vocês são espanholas." },
+        { "id": "l01-e15-q8", "testo": "Lei ___ portoghese? Quanti anni ___?", "opzioni": ["è … ha", "è … hai", "sei … hai", "ha … è"], "risposta": "è … ha", "pt": "A senhora é portuguesa? Quantos anos tem?", "nota": "<em>Lei</em> formal usa as formas de 3ª pessoa." }
+      ]
+    },
+    {
+      "id": "l01-e16",
+      "type": "scelta",
+      "category": "GRAMMATICA",
+      "consegna": "Usa gli articoli corretti. Pense sempre no SOM que vem depois.",
+      "domande": [
+        { "id": "l01-e16-q1", "testo": "___ spagnola", "opzioni": ["la", "lo", "il", "l'"], "risposta": "la", "pt": "a espanhola" },
+        { "id": "l01-e16-q2", "testo": "___ austriache", "opzioni": ["i", "gli", "le", "la"], "risposta": "le", "pt": "as austríacas" },
+        { "id": "l01-e16-q3", "testo": "___ svizzera", "opzioni": ["lo", "la", "il", "l'"], "risposta": "la", "pt": "a suíça" },
+        { "id": "l01-e16-q4", "testo": "___ francese (femminile)", "opzioni": ["il", "la", "lo", "l'"], "risposta": "la", "pt": "a francesa", "nota": "Em <b>-e</b> a palavra não muda; quem marca o gênero é o artigo." },
+        { "id": "l01-e16-q5", "testo": "___ spagnole", "opzioni": ["gli", "i", "le", "la"], "risposta": "le", "pt": "as espanholas" },
+        { "id": "l01-e16-q6", "testo": "___ americano", "opzioni": ["il", "lo", "l'", "la"], "risposta": "l'", "pt": "o americano", "nota": "Começa por vogal → <b>l'</b>." },
+        { "id": "l01-e16-q7", "testo": "___ svizzero", "opzioni": ["il", "lo", "l'", "i"], "risposta": "lo", "pt": "o suíço", "nota": "<em>sv-</em> = s + consoante → <b>lo</b>." },
+        { "id": "l01-e16-q8", "testo": "___ olandesi (maschile)", "opzioni": ["i", "gli", "le", "lo"], "risposta": "gli", "pt": "os holandeses", "nota": "Começa por vogal → plural <b>gli</b>." },
+        { "id": "l01-e16-q9", "testo": "___ portoghesi (maschile)", "opzioni": ["gli", "i", "le", "il"], "risposta": "i", "pt": "os portugueses", "nota": "Consoante comum → plural <b>i</b>." },
+        { "id": "l01-e16-q10", "testo": "___ brasiliane", "opzioni": ["i", "gli", "le", "la"], "risposta": "le", "pt": "as brasileiras" }
+      ]
+    },
+    {
+      "id": "l01-e17",
+      "type": "scelta",
+      "category": "GRAMMATICA",
+      "consegna": "Trasforma le frasi in negativo. Onde entra o «non»?",
+      "domande": [
+        { "id": "l01-e17-q1", "testo": "Lui ___ spagnolo.", "opzioni": ["non è", "è non", "no è", "è no"], "risposta": "non è", "pt": "Ele não é espanhol.", "nota": "<em>non</em> vem sempre ANTES do verbo." },
+        { "id": "l01-e17-q2", "testo": "Noi ___ diciotto anni.", "opzioni": ["abbiamo non", "non abbiamo", "no abbiamo", "abbiamo no"], "risposta": "non abbiamo", "pt": "Nós não temos dezoito anos." },
+        { "id": "l01-e17-q3", "testo": "Voi ___ italiane.", "opzioni": ["siete non", "no siete", "non siete", "siete no"], "risposta": "non siete", "pt": "Vocês não são italianas." },
+        { "id": "l01-e17-q4", "testo": "Tu ___ dodici anni.", "opzioni": ["non hai", "hai non", "no hai", "hai no"], "risposta": "non hai", "pt": "Você não tem doze anos." },
+        { "id": "l01-e17-q5", "testo": "Loro ___ olandesi.", "opzioni": ["sono non", "non sono", "no sono", "sono no"], "risposta": "non sono", "pt": "Eles não são holandeses." },
+        { "id": "l01-e17-q6", "testo": "Siete francesi? — ___, non siamo francesi.", "opzioni": ["Non", "No", "Ne", "Né"], "risposta": "No", "pt": "Vocês são franceses? — Não, não somos franceses.", "nota": "<em>No</em> responde, <em>non</em> nega o verbo." }
+      ]
+    },
+    {
+      "id": "l01-e18",
+      "type": "abbinamento",
+      "category": "ESPRESSIONE",
+      "consegna": "Abbina domande e risposte.",
+      "coppie": [
+        { "id": "l01-e18-p1", "sinistra": "Di dove sei?", "destra": "Sono brasiliano.", "pt": "Sou brasileiro." },
+        { "id": "l01-e18-p2", "sinistra": "Quanti anni hai?", "destra": "Ho diciannove anni.", "pt": "Tenho dezenove anos." },
+        { "id": "l01-e18-p3", "sinistra": "Voi siete francesi?", "destra": "No, non siamo francesi.", "pt": "Não, não somos franceses." },
+        { "id": "l01-e18-p4", "sinistra": "Loro sono austriache?", "destra": "Sì, e hanno sedici anni.", "pt": "Sim, e têm dezesseis anos." }
+      ]
+    },
+
+    {
+      "id": "l01-e19",
+      "type": "slot-frame",
+      "category": "VERBO",
+      "consegna": "Drill de substituição: essere trocando de pessoa. Escreva a frase INTEIRA a cada volta.",
+      "frame": { "it": "___ italiano.", "pt": "___ italiano." },
+      "modello": "Io sono italiano.",
+      "giri": [
+        { "id": "l01-e19-g1", "slot": "Io sono", "pt": "Eu sou…", "risposta": "Io sono italiano." },
+        { "id": "l01-e19-g2", "slot": "Tu sei", "pt": "Você é…", "risposta": "Tu sei italiano." },
+        { "id": "l01-e19-g3", "slot": "Lui è", "pt": "Ele é…", "risposta": "Lui è italiano." },
+        { "id": "l01-e19-g4", "slot": "Noi siamo", "pt": "Nós somos… (atenção ao plural)", "risposta": "Noi siamo italiano.", "accettaAnche": ["Noi siamo italiani."] },
+        { "id": "l01-e19-g5", "slot": "Voi siete", "pt": "Vocês são… (atenção ao plural)", "risposta": "Voi siete italiano.", "accettaAnche": ["Voi siete italiani."] },
+        { "id": "l01-e19-g6", "slot": "Loro sono", "pt": "Eles são… (atenção ao plural)", "risposta": "Loro sono italiano.", "accettaAnche": ["Loro sono italiani."] }
+      ]
+    },
+    {
+      "id": "l01-e20",
+      "type": "slot-frame",
+      "category": "VERBO",
+      "consegna": "Agora avere + número + anni. Escreva a frase inteira, com o número por extenso.",
+      "frame": { "it": "Io ho ___ anni.", "pt": "Eu tenho ___ anos." },
+      "modello": "Io ho undici anni.",
+      "giri": [
+        { "id": "l01-e20-g1", "slot": "undici", "pt": "11", "risposta": "Io ho undici anni." },
+        { "id": "l01-e20-g2", "slot": "dodici", "pt": "12", "risposta": "Io ho dodici anni." },
+        { "id": "l01-e20-g3", "slot": "quattordici", "pt": "14", "risposta": "Io ho quattordici anni." },
+        { "id": "l01-e20-g4", "slot": "sedici", "pt": "16", "risposta": "Io ho sedici anni." },
+        { "id": "l01-e20-g5", "slot": "diciannove", "pt": "19", "risposta": "Io ho diciannove anni." },
+        { "id": "l01-e20-g6", "slot": "vent'", "pt": "20 — cuidado com a elisão", "risposta": "Io ho vent'anni." }
+      ]
+    },
+    {
+      "id": "l01-e21",
+      "type": "slot-frame",
+      "category": "GRAMMATICA",
+      "consegna": "Concordância de gênero e número. O adjetivo muda com quem ele descreve.",
+      "frame": { "it": "Loro sono ___.", "pt": "Eles/elas são ___." },
+      "modello": "Loro sono brasiliani.",
+      "giri": [
+        { "id": "l01-e21-g1", "slot": "brasiliani", "pt": "brasileiros", "risposta": "Loro sono brasiliani." },
+        { "id": "l01-e21-g2", "slot": "brasiliane", "pt": "brasileiras", "risposta": "Loro sono brasiliane." },
+        { "id": "l01-e21-g3", "slot": "tedeschi", "pt": "alemães", "risposta": "Loro sono tedeschi." },
+        { "id": "l01-e21-g4", "slot": "tedesche", "pt": "alemãs", "risposta": "Loro sono tedesche." },
+        { "id": "l01-e21-g5", "slot": "austriache", "pt": "austríacas", "risposta": "Loro sono austriache." },
+        { "id": "l01-e21-g6", "slot": "francesi", "pt": "franceses (em -e: uma forma só no plural)", "risposta": "Loro sono francesi." },
+        { "id": "l01-e21-g7", "slot": "belgi", "pt": "belgas (masc. — a exceção)", "risposta": "Loro sono belgi." },
+        { "id": "l01-e21-g8", "slot": "belghe", "pt": "belgas (fem.)", "risposta": "Loro sono belghe." }
+      ]
+    },
+    {
+      "id": "l01-e22",
+      "type": "riordino",
+      "category": "VERBO",
+      "consegna": "Riordina le parole.",
+      "frasi": [
+        { "id": "l01-e22-f1", "parole": ["Tu", "sei", "argentino", "ma", "io", "sono", "spagnolo"], "risposta": "Tu sei argentino, ma io sono spagnolo.", "pt": "Você é argentino, mas eu sou espanhol." },
+        { "id": "l01-e22-f2", "parole": ["Voi", "avete", "nove", "anni", "e", "siete", "austriaci"], "risposta": "Voi avete nove anni e siete austriaci.", "pt": "Vocês têm nove anos e são austríacos." },
+        { "id": "l01-e22-f3", "parole": ["No", "non", "siamo", "francesi"], "risposta": "No, non siamo francesi.", "pt": "Não, não somos franceses." },
+        { "id": "l01-e22-f4", "parole": ["Lei", "è", "francese", "ma", "ha", "undici", "anni"], "risposta": "Lei è francese, ma ha undici anni.", "pt": "Ela é francesa, mas tem onze anos." }
+      ]
+    },
+    {
+      "id": "l01-e23",
+      "type": "abbinamento",
+      "category": "GRAMMATICA",
+      "consegna": "Abbina il singolare al plurale.",
+      "coppie": [
+        { "id": "l01-e23-p1", "sinistra": "l'amico", "destra": "gli amici", "pt": "os amigos" },
+        { "id": "l01-e23-p2", "sinistra": "l'amica", "destra": "le amiche", "pt": "as amigas" },
+        { "id": "l01-e23-p3", "sinistra": "lo spagnolo", "destra": "gli spagnoli", "pt": "os espanhóis" },
+        { "id": "l01-e23-p4", "sinistra": "il cane", "destra": "i cani", "pt": "os cachorros" },
+        { "id": "l01-e23-p5", "sinistra": "la penna", "destra": "le penne", "pt": "as canetas" },
+        { "id": "l01-e23-p6", "sinistra": "l'anno", "destra": "gli anni", "pt": "os anos" }
+      ]
+    },
+    {
+      "id": "l01-e24",
+      "type": "gap-audio",
+      "category": "GRAMMATICA",
+      "consegna": "Ascolta e completa con la negazione.",
+      "audio": { "tts": "Loro non sono olandesi.", "src": null },
+      "testo": "Loro ___ olandesi.",
+      "risposta": "non sono",
+      "pt": "Eles não são holandeses.",
+      "aiuto": "<em>non</em> vem antes do verbo."
+    },
+    {
+      "id": "l01-e25",
+      "type": "gap-audio",
+      "category": "VERBO",
+      "consegna": "Ascolta e completa.",
+      "audio": { "tts": "Voi avete nove anni e siete austriaci.", "src": null },
+      "testo": "Voi ___ nove anni e siete austriaci.",
+      "risposta": "avete",
+      "pt": "Vocês têm nove anos e são austríacos.",
+      "aiuto": "Idade usa <em>avere</em>."
     }
   ],
   "produzione": [

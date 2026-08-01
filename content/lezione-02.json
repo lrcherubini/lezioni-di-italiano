@@ -1,0 +1,810 @@
+{
+  "id": "02",
+  "numero": 2,
+  "titolo": "Io parlo, io abito",
+  "gloss": "Verbos regulares em -ARE, línguas e onde se mora",
+
+  "header": {
+    "comunicazione": [
+      "Dire quali lingue parlo",
+      "Dire dove abito",
+      "Chiedere «Dove abiti?»",
+      "Presentarsi in modo formale e informale",
+      "Scusarsi"
+    ],
+    "lessico": [
+      "Le lingue",
+      "I paesi dell'Europa centrale",
+      "Le città",
+      "un po' · molto bene · solo",
+      "a casa"
+    ],
+    "grammatica": [
+      "Presente dei verbi regolari in -ARE",
+      "Le desinenze -o -i -a -iamo -ate -ano",
+      "in + paese · a + città",
+      "Accordo delle nazionalità in -co e -go"
+    ]
+  },
+
+  "riscaldamento": {
+    "prompt": "Na Aula 1 você aprendeu dois verbos, <em>essere</em> e <em>avere</em> — e teve que decorar as seis formas de cada um, uma por uma. Agora vem a boa notícia: <b>a maioria esmagadora dos verbos italianos não precisa ser decorada assim.</b> Antes de continuar, olhe estas seis formas e tente descobrir sozinho o que muda e o que fica: <em>parlo, parli, parla, parliamo, parlate, parlano</em>.",
+    "spiegazione": [
+      "O que fica é <em>parl-</em>. O que muda é o pedacinho final: <em>-o, -i, -a, -iamo, -ate, -ano</em>. Esse pedaço que fica é a <b>raiz</b>, e o que muda é a <b>desinência</b>. Descobrir isso é o pulo do gato da Aula 2: as mesmas seis desinências servem para centenas de verbos italianos terminados em <em>-are</em>.",
+      "É por isso que <em>essere</em> e <em>avere</em> deram tanto trabalho e <em>parlare</em> vai dar pouco. Aqueles dois são irregulares — <em>sono, sei, è</em> não têm raiz reconhecível. Justamente por serem os mais usados da língua, resistiram à regularização. Os outros seguem o padrão."
+    ]
+  },
+
+  "sections": [
+    {
+      "id": "l02-s01",
+      "category": "VERBO",
+      "sottotitolo": "Presente Indicativo",
+      "titolo": "Parlare · Abitare",
+      "gloss": "falar · morar — verbos regulares em -ARE",
+      "spiegazione": [
+        "Conjugar um verbo regular em <em>-are</em> é um procedimento de duas etapas, e vale fazê-lo devagar até virar automático. Primeiro você <b>tira o <em>-are</em></b> do infinitivo: <em>parlare</em> → <em>parl-</em>, <em>abitare</em> → <em>abit-</em>. O que sobra é a raiz. Depois você <b>cola a desinência</b> da pessoa que quer: <em>-o</em> para <em>io</em>, <em>-i</em> para <em>tu</em>, <em>-a</em> para <em>lui/lei</em>, <em>-iamo</em> para <em>noi</em>, <em>-ate</em> para <em>voi</em>, <em>-ano</em> para <em>loro</em>.",
+        "Compare com o português e a economia fica evidente: <em>falar</em> → <em>falo, falas, fala, falamos, falais, falam</em>. É a mesma mecânica — raiz fixa, terminação variável. Você já faz isso a vida toda em português sem pensar; o trabalho aqui é só trocar a tabela de terminações. Um par merece atenção: em português a 1ª pessoa do plural é <em>-amos</em> (<em>falamos</em>), em italiano é <em>-iamo</em> (<em>parliamo</em>), com <b>i</b>. É o erro mais comum de lusófono, e é só um i.",
+        "Repare também em <em>loro parlano</em>: a sílaba tônica é a <b>primeira</b> — PAR-la-no, não par-LA-no. Isso vale para toda a 3ª pessoa do plural dos regulares (<em>ÀBI-ta-no</em>, <em>PÀR-la-no</em>). Como o italiano quase nunca escreve o acento no meio da palavra, essa é uma informação que só se pega ouvindo — use o botão 🔊 de cada linha da tabela."
+      ],
+      "blocks": [
+        {
+          "type": "tabella",
+          "titolo": "Presente indicativo",
+          "intestazioni": [
+            { "html": "Pessoa", "pt": true },
+            "Parlare",
+            "Abitare"
+          ],
+          "righe": [
+            ["io", "parlo", "abito"],
+            ["tu", "parli", "abiti"],
+            ["lui / lei / Lei", "parla", "abita"],
+            ["noi", "parliamo", "abitiamo"],
+            ["voi", "parlate", "abitate"],
+            ["loro", "parlano", "abitano"]
+          ]
+        },
+        {
+          "type": "tabella",
+          "titolo": "As seis desinências, isoladas",
+          "intestazioni": [
+            { "html": "Pessoa", "pt": true },
+            { "html": "Desinência", "pt": true },
+            "Esempio"
+          ],
+          "righe": [
+            ["io", { "html": "<b>-o</b>", "pt": true }, "parlo"],
+            ["tu", { "html": "<b>-i</b>", "pt": true }, "parli"],
+            ["lui / lei / Lei", { "html": "<b>-a</b>", "pt": true }, "parla"],
+            ["noi", { "html": "<b>-iamo</b>", "pt": true }, "parliamo"],
+            ["voi", { "html": "<b>-ate</b>", "pt": true }, "parlate"],
+            ["loro", { "html": "<b>-ano</b>", "pt": true }, "parlano"]
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "attenzione",
+          "titolo": "-iamo, não -amo",
+          "testo": "É <em>parl<b>i</b>amo</em>, <em>abit<b>i</b>amo</em> — com <b>i</b>. O português puxa para <em>parlamo</em>, que não existe. Vale a pena falar em voz alta umas dez vezes: <em>parliamo, abitiamo, parliamo, abitiamo</em>."
+        },
+        {
+          "type": "nota",
+          "tono": "info",
+          "titolo": "O pronome sujeito é opcional",
+          "testo": "Como a desinência já diz quem é o sujeito, o italiano costuma dispensar o pronome: <em>Parlo italiano</em> vale tanto quanto <em>Io parlo italiano</em>. Nesta aula o pronome aparece sempre, para você fixar a associação pessoa↔terminação — mas saiba que na fala corrente ele cai, e só volta quando há ênfase ou contraste (<em>Io parlo italiano, ma lui parla tedesco</em>)."
+        }
+      ]
+    },
+
+    {
+      "id": "l02-s02",
+      "category": "VOCABOLARIO",
+      "titolo": "Paesi e nazionalità",
+      "gloss": "países e nacionalidades — a Europa central",
+      "spiegazione": [
+        "Estas seis nacionalidades novas foram escolhidas por um motivo específico, e não por acaso: elas exercitam exatamente as regras de artigo e de plural das Aulas 0 e 1, todas de uma vez. Repare no artigo de cada uma. <em>il ceco</em> leva <b>il</b> porque começa por consoante comum. <em>lo slovacco</em> e <em>lo sloveno</em> levam <b>lo</b> porque começam por <b>s + consoante</b>. <em>l'ungherese</em> leva <b>l'</b> porque começa por vogal. Nada aqui é novo — é a mesma regra do som seguinte que você viu na Aula 1, aplicada a palavras novas.",
+        "No plural, a coisa fica ainda mais interessante e amarra com a Aula 0. <em>ceco</em> vira <em>ce<b>ch</b>i</em>, e não <em>ceci</em>. Por quê? Porque o <b>c</b> de <em>ceco</em> tem som de K, e se você só trocasse o <em>-o</em> por <em>-i</em>, o C ficaria antes de I e passaria a soar <em>tch</em>. O <b>h</b> entra justamente para segurar o som duro — é a regra do dígrafo <b>CH</b> da Aula 0 fazendo trabalho gramatical. O mesmo vale para <em>slovacco → slovacchi</em>, <em>polacco → polacchi</em>, e para o feminino <em>ceca → ceche</em>, <em>polacca → polacche</em>.",
+        "Duas observações que fecham o quadro. <em>ungherese</em> termina em <b>-e</b>, então, como <em>francese</em> e <em>inglese</em> da Aula 1, tem só <b>duas</b> formas: <em>ungherese</em> no singular (masculino e feminino) e <em>ungheresi</em> no plural (masculino e feminino). E <em>magiaro</em> é sinônimo de <em>ungherese</em>: as duas palavras designam o mesmo povo, sendo <em>magiaro</em> a forma que o próprio húngaro usa (<em>magyar</em>). <em>magiaro</em> é regular em <b>-o</b> e tem as quatro formas."
+      ],
+      "blocks": [
+        {
+          "type": "tabella",
+          "titolo": "Paese → nazionalità",
+          "intestazioni": ["Paese", "Nazionalità", { "html": "Português", "pt": true }],
+          "righe": [
+            ["la Repubblica Ceca", "ceco", { "html": "República Tcheca · tcheco", "pt": true }],
+            ["la Slovacchia", "slovacco", { "html": "Eslováquia · eslovaco", "pt": true }],
+            ["la Polonia", "polacco", { "html": "Polônia · polonês", "pt": true }],
+            ["l'Ungheria", "ungherese / magiaro", { "html": "Hungria · húngaro", "pt": true }],
+            ["la Slovenia", "sloveno", { "html": "Eslovênia · esloveno", "pt": true }]
+          ]
+        },
+        {
+          "type": "paradigma",
+          "titolo": "As quatro formas",
+          "colonne": ["Maschile sing.", "Femminile sing.", "Maschile pl.", "Femminile pl."],
+          "righe": [
+            {
+              "id": "l02-s02-p01",
+              "pt": "tcheco",
+              "forme": ["il ceco", "la ceca", "i cechi", "le ceche"],
+              "eccezione": false,
+              "nota": "O <b>h</b> do plural segura o som de K."
+            },
+            {
+              "id": "l02-s02-p02",
+              "pt": "eslovaco",
+              "forme": ["lo slovacco", "la slovacca", "gli slovacchi", "le slovacche"],
+              "eccezione": false,
+              "nota": "<em>s + consoante</em> → <b>lo</b> / <b>gli</b>."
+            },
+            {
+              "id": "l02-s02-p03",
+              "pt": "polonês",
+              "forme": ["il polacco", "la polacca", "i polacchi", "le polacche"],
+              "eccezione": false
+            },
+            {
+              "id": "l02-s02-p04",
+              "pt": "húngaro",
+              "forme": ["l'ungherese", "l'ungherese", "gli ungheresi", "le ungheresi"],
+              "eccezione": false,
+              "nota": "Termina em <b>-e</b>: só duas formas."
+            },
+            {
+              "id": "l02-s02-p05",
+              "pt": "húngaro (magiar)",
+              "forme": ["il magiaro", "la magiara", "i magiari", "le magiare"],
+              "eccezione": false
+            },
+            {
+              "id": "l02-s02-p06",
+              "pt": "esloveno",
+              "forme": ["lo sloveno", "la slovena", "gli sloveni", "le slovene"],
+              "eccezione": false,
+              "nota": "<em>s + consoante</em> → <b>lo</b> / <b>gli</b>."
+            }
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "info",
+          "titolo": "Nacionalidade em minúscula",
+          "testo": "O nome do <b>país</b> vai com maiúscula (<em>la Polonia</em>), mas a <b>nacionalidade</b> e a <b>língua</b> vão com minúscula (<em>un polacco</em>, <em>parlo polacco</em>). É o oposto do inglês e igual ao português."
+        }
+      ]
+    },
+
+    {
+      "id": "l02-s03",
+      "category": "VOCABOLARIO",
+      "titolo": "Le lingue",
+      "gloss": "as línguas — o que se põe depois de «parlo»",
+      "spiegazione": [
+        "Em italiano, o nome da língua é <b>igual à forma masculina singular da nacionalidade</b>. <em>Un polacco parla polacco</em>; <em>un ungherese parla ungherese</em>. Não existe palavra separada como o português tem em alguns casos (<em>holandês</em> serve para as duas coisas, mas <em>alemão</em>/<em>alemão</em> também) — a regra italiana é simplesmente reaproveitar o masculino singular.",
+        "Consequência prática que economiza decoreba: cada nacionalidade que você aprende já vem com a língua de brinde. E, ao contrário da nacionalidade, a língua <b>nunca varia</b> — é sempre a forma masculina singular, mesmo que quem fala seja mulher ou sejam várias pessoas. <em>Lei parla tedesco</em>, <em>Loro parlano tedesco</em>: <em>tedesco</em> fica parado. Concordar a língua com o sujeito (<em>lei parla tedesca</em>) é erro."
+      ],
+      "blocks": [
+        {
+          "type": "lista",
+          "titolo": "As línguas desta aula e da anterior",
+          "items": [
+            { "it": "l'italiano", "pt": "o italiano" },
+            { "it": "l'inglese", "pt": "o inglês" },
+            { "it": "il francese", "pt": "o francês" },
+            { "it": "lo spagnolo", "pt": "o espanhol", "nota": "s + consoante → lo" },
+            { "it": "il tedesco", "pt": "o alemão" },
+            { "it": "il portoghese", "pt": "o português" },
+            { "it": "l'olandese", "pt": "o holandês" },
+            { "it": "il polacco", "pt": "o polonês" },
+            { "it": "il ceco", "pt": "o tcheco" },
+            { "it": "lo slovacco", "pt": "o eslovaco", "nota": "s + consoante → lo" },
+            { "it": "lo sloveno", "pt": "o esloveno", "nota": "s + consoante → lo" },
+            { "it": "l'ungherese", "pt": "o húngaro" },
+            { "it": "il lussemburghese", "pt": "o luxemburguês" }
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "attenzione",
+          "titolo": "Depois de «parlare», sem artigo",
+          "testo": "Diz-se <em>Parlo italiano</em>, e não <em>Parlo l'italiano</em>. O artigo só aparece quando a língua é o assunto da frase (<em>L'italiano è bello</em>), não quando é o objeto de <em>parlare</em>. Igual ao português: «falo italiano», não «falo o italiano»."
+        }
+      ]
+    },
+
+    {
+      "id": "l02-s04",
+      "category": "GRAMMATICA",
+      "titolo": "Complemento di luogo: in e a",
+      "gloss": "onde se mora — «in» + país, «a» + cidade",
+      "spiegazione": [
+        "Esta é curta de enunciar e difícil de automatizar: <b>país leva <em>in</em>, cidade leva <em>a</em></b>. <em>Abito in Italia</em>, mas <em>Abito a Roma</em>. Não há exceção a memorizar nesta aula — a dificuldade não é entender, é lembrar na hora de falar, porque o português usa a mesma preposição para os dois casos (<em>moro na Itália</em>, <em>moro em Roma</em>) e portanto não te dá nenhuma pista.",
+        "Repare numa coisa que ajuda a fixar: depois de <em>in</em>, o nome do país aparece <b>sem artigo</b>. É <em>in Italia</em>, não <em>in l'Italia</em>; <em>in Brasile</em>, não <em>nel Brasile</em>. Isso é diferente do português, onde o artigo é obrigatório («no Brasil», «na Itália»). Então a fórmula é limpa dos dois lados: <em>in</em> + nome do país, <em>a</em> + nome da cidade, e nada entre a preposição e o nome.",
+        "Uma expressão fixa vale guardar inteira, sem analisar: <em>a casa</em>, «em casa». <em>Loro abitano in Francia, ma parlano ceco a casa</em> — moram na França, mas falam tcheco em casa. Não tente encaixar <em>casa</em> na regra de cidade; é só uma locução feita, do mesmo tipo que o português tem em «em casa» (e não «na casa»)."
+      ],
+      "blocks": [
+        {
+          "type": "contrasto",
+          "titolo": "in ou a?",
+          "gruppi": [
+            {
+              "etichetta": "IN + paese",
+              "gloss": "em + país",
+              "esempi": [
+                { "it": "Abito in Italia.", "pt": "Moro na Itália." },
+                { "it": "Abito in Brasile.", "pt": "Moro no Brasil." },
+                { "it": "Abito in Francia.", "pt": "Moro na França." },
+                { "it": "Abito in Svizzera.", "pt": "Moro na Suíça." },
+                { "it": "Abito in Polonia.", "pt": "Moro na Polônia." }
+              ]
+            },
+            {
+              "etichetta": "A + città",
+              "gloss": "em + cidade",
+              "esempi": [
+                { "it": "Abito a Roma.", "pt": "Moro em Roma." },
+                { "it": "Abito a San Paolo.", "pt": "Moro em São Paulo." },
+                { "it": "Abito a Berlino.", "pt": "Moro em Berlim." },
+                { "it": "Abito a Parigi.", "pt": "Moro em Paris." },
+                { "it": "Abito a Varsavia.", "pt": "Moro em Varsóvia." }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "tabella",
+          "titolo": "Le città",
+          "intestazioni": ["Italiano", { "html": "Português", "pt": true }],
+          "righe": [
+            ["Roma", { "html": "Roma", "pt": true }],
+            ["Milano", { "html": "Milão", "pt": true }],
+            ["San Paolo", { "html": "São Paulo", "pt": true }],
+            ["Londra", { "html": "Londres", "pt": true }],
+            ["Parigi", { "html": "Paris", "pt": true }],
+            ["Berlino", { "html": "Berlim", "pt": true }],
+            ["Madrid", { "html": "Madri", "pt": true }],
+            ["Lisbona", { "html": "Lisboa", "pt": true }],
+            ["Vienna", { "html": "Viena", "pt": true }],
+            ["Varsavia", { "html": "Varsóvia", "pt": true }],
+            ["Buenos Aires", { "html": "Buenos Aires", "pt": true }]
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "attenzione",
+          "titolo": "Cidade estrangeira também é italianizada",
+          "testo": "O italiano traduz nomes de cidade com muito mais liberdade que o português: <em>Londra</em>, <em>Parigi</em>, <em>Varsavia</em>, <em>San Paolo</em>. Dizer «Abito a London» soa errado em italiano. Vale ouvir cada uma na tabela acima — a tônica costuma cair onde o português não espera (<em>PA-ri-gi</em>, <em>Var-SA-via</em>)."
+        }
+      ]
+    },
+
+    {
+      "id": "l02-s05",
+      "category": "GRAMMATICA",
+      "titolo": "un po' · molto bene · solo",
+      "gloss": "quanto e como se fala uma língua",
+      "spiegazione": [
+        "Três palavrinhas que transformam «falo inglês» em algo que soa natural. <em>un po'</em> é «um pouco»: <em>Parli spagnolo? — Sì, parlo un po'.</em> Repare no <b>apóstrofo</b>: escreve-se <em>un po'</em>, com apóstrofo e sem acento, porque é o que sobrou de <em>un poco</em>. Escrever <em>un pò</em>, com acento, é um dos erros de ortografia mais comuns entre os próprios italianos — e está errado.",
+        "<em>molto bene</em> é «muito bem», e vem <b>depois</b> do complemento: <em>Lui parla francese molto bene</em>. E <em>solo</em> é «só, somente»: <em>No, parliamo solo italiano</em>. Juntas, essas três dão conta de quase toda conversa inicial sobre línguas — que é, na prática, uma das primeiras coisas que se pergunta a um estrangeiro."
+      ],
+      "blocks": [
+        {
+          "type": "lista",
+          "titolo": "Em uso",
+          "items": [
+            { "it": "Tu parli spagnolo? — Sì, parlo un po'.", "pt": "Você fala espanhol? — Sim, falo um pouco." },
+            { "it": "Lui parla francese molto bene.", "pt": "Ele fala francês muito bem." },
+            { "it": "Voi parlate olandese? — No, parliamo solo italiano.", "pt": "Vocês falam holandês? — Não, falamos só italiano." },
+            { "it": "Loro abitano in Francia, ma parlano ceco a casa.", "pt": "Eles moram na França, mas falam tcheco em casa." },
+            { "it": "Dove abiti? — Abito in Italia, e tu?", "pt": "Onde você mora? — Moro na Itália, e você?" }
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "eccezione",
+          "titolo": "un po' leva apóstrofo, nunca acento",
+          "testo": "<em>po'</em> é <b>truncamento</b> de <em>poco</em>, e truncamento se marca com apóstrofo. Não confunda com <em>può</em> (do verbo <em>potere</em>), que leva acento porque é palavra inteira. Regra prática: se dá para trocar por «um pouco», é <em>un po'</em> com apóstrofo."
+        }
+      ]
+    },
+
+    {
+      "id": "l02-s06",
+      "category": "ESPRESSIONE",
+      "titolo": "Espressioni utili",
+      "gloss": "expressões úteis — apresentações formais e informais",
+      "spiegazione": [
+        "O italiano marca formalidade em quase toda fórmula social, e marcar errado é mais visível do que errar uma desinência. O par central desta aula é <em>Piacere di conoscerti</em> (informal, para quem você trata por <em>tu</em>) contra <em>Piacere di conoscerLa</em> (formal, para quem você trata por <em>Lei</em>). O <b>L maiúsculo</b> no meio da palavra não é erro de digitação: é a marca escrita do tratamento formal, a mesma do <em>Lei</em> da Aula 1.",
+        "O mesmo corte reaparece em <em>Scusa</em> (informal) contra <em>Scusi</em> (formal) — e note que aqui a diferença é a desinência do verbo, exatamente as terminações <em>-a</em> e <em>-i</em> que você acabou de ver em <em>parlare</em>. Não é coincidência: <em>Scusi</em> é a forma de <em>Lei</em>, que é gramaticalmente uma terceira pessoa. Já <em>Mi dispiace</em> («sinto muito») é neutro e serve nos dois registros — e é diferente de <em>Scusa/Scusi</em>: <em>scusare</em> pede desculpa ou chama atenção («com licença»), <em>mi dispiace</em> lamenta.",
+        "<em>Molto lieto</em> / <em>Molto lieta</em> é o mais formal do conjunto, e é o único que <b>concorda com quem fala</b>: homem diz <em>lieto</em>, mulher diz <em>lieta</em>. É concordância de gênero igual à das nacionalidades — mais uma oportunidade de praticar a mesma regra num contexto novo."
+      ],
+      "blocks": [
+        {
+          "type": "tabella",
+          "titolo": "Apresentar-se",
+          "intestazioni": ["Espressione", { "html": "Registro", "pt": true }, { "html": "Português", "pt": true }],
+          "righe": [
+            ["Piacere di conoscerti.", { "html": "informal", "pt": true }, { "html": "Prazer em te conhecer.", "pt": true }],
+            ["Piacere di conoscerLa.", { "html": "formal", "pt": true }, { "html": "Prazer em conhecê-lo/la.", "pt": true }],
+            ["Molto lieto.", { "html": "formal (homem)", "pt": true }, { "html": "Muito prazer.", "pt": true }],
+            ["Molto lieta.", { "html": "formal (mulher)", "pt": true }, { "html": "Muito prazer.", "pt": true }]
+          ]
+        },
+        {
+          "type": "tabella",
+          "titolo": "Pedir desculpa e lamentar",
+          "intestazioni": ["Espressione", { "html": "Registro", "pt": true }, { "html": "Português", "pt": true }],
+          "righe": [
+            ["Scusa.", { "html": "informal", "pt": true }, { "html": "Desculpa. / Com licença.", "pt": true }],
+            ["Scusi.", { "html": "formal", "pt": true }, { "html": "Desculpe. / Com licença.", "pt": true }],
+            ["Mi dispiace.", { "html": "neutro", "pt": true }, { "html": "Sinto muito.", "pt": true }]
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "info",
+          "titolo": "Scusa/Scusi ≠ Mi dispiace",
+          "testo": "<em>Scusi, Lei parla inglese?</em> — aqui <em>Scusi</em> é «com licença», serve para abordar alguém. Já <em>Mi dispiace</em> nunca abre uma conversa: é resposta a uma má notícia, ou o que se diz quando não se pode ajudar. Trocar os dois é o deslize mais comum de quem está começando."
+        }
+      ]
+    }
+  ],
+
+  "chunks": [
+    { "id": "l02-c01", "it": "Io parlo ___.", "pt": "Eu falo ___.", "category": "VERBO", "chunkType": "semiFixed", "slot": ["italiano", "inglese", "tedesco", "francese", "polacco", "spagnolo", "portoghese", "olandese"] },
+    { "id": "l02-c02", "it": "Tu parli ___?", "pt": "Você fala ___?", "category": "VERBO", "chunkType": "semiFixed", "slot": ["spagnolo", "portoghese", "tedesco", "francese", "inglese"] },
+    { "id": "l02-c03", "it": "Lui parla ___ molto bene.", "pt": "Ele fala ___ muito bem.", "category": "VERBO", "chunkType": "semiFixed", "slot": ["francese", "olandese", "spagnolo", "ungherese", "lussemburghese"] },
+    { "id": "l02-c04", "it": "Noi parliamo ___.", "pt": "Nós falamos ___.", "category": "VERBO", "chunkType": "semiFixed", "slot": ["sloveno", "ceco", "slovacco", "italiano"] },
+    { "id": "l02-c05", "it": "Voi parlate ___?", "pt": "Vocês falam ___?", "category": "VERBO", "chunkType": "semiFixed", "slot": ["olandese", "ungherese", "polacco", "lussemburghese"] },
+    { "id": "l02-c06", "it": "Loro parlano ___ a casa.", "pt": "Eles falam ___ em casa.", "category": "VERBO", "chunkType": "semiFixed", "slot": ["ceco", "polacco", "tedesco", "inglese", "portoghese"] },
+    { "id": "l02-c07", "it": "Io abito a ___.", "pt": "Eu moro em ___.", "category": "GRAMMATICA", "chunkType": "semiFixed", "slot": ["Roma", "Parigi", "Vienna", "Varsavia", "Milano", "Londra"] },
+    { "id": "l02-c08", "it": "Io abito in ___.", "pt": "Eu moro em ___ (país).", "category": "GRAMMATICA", "chunkType": "semiFixed", "slot": ["Italia", "Francia", "Austria", "Svizzera", "Polonia", "Ungheria"] },
+    { "id": "l02-c09", "it": "Loro abitano in ___.", "pt": "Eles moram em ___ (país).", "category": "GRAMMATICA", "chunkType": "semiFixed", "slot": ["Francia", "Ungheria", "Italia", "Spagna", "Germania"] },
+    { "id": "l02-c10", "it": "Dove abiti?", "pt": "Onde você mora?", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l02-c11", "it": "Sì, parlo un po'.", "pt": "Sim, falo um pouco.", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l02-c12", "it": "No, parliamo solo italiano.", "pt": "Não, falamos só italiano.", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l02-c13", "it": "Piacere di conoscerti.", "pt": "Prazer em te conhecer.", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l02-c14", "it": "Piacere di conoscerLa.", "pt": "Prazer em conhecê-lo/la.", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l02-c15", "it": "Molto lieto.", "pt": "Muito prazer. (homem)", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l02-c16", "it": "Molto lieta.", "pt": "Muito prazer. (mulher)", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l02-c17", "it": "Scusa.", "pt": "Desculpa. / Com licença. (informal)", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l02-c18", "it": "Scusi.", "pt": "Desculpe. / Com licença. (formal)", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l02-c19", "it": "Mi dispiace.", "pt": "Sinto muito.", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l02-c20", "it": "molto bene", "pt": "muito bem", "category": "ESPRESSIONE", "chunkType": "collocation" },
+    { "id": "l02-c21", "it": "un po'", "pt": "um pouco", "category": "ESPRESSIONE", "chunkType": "collocation" },
+    { "id": "l02-c22", "it": "a casa", "pt": "em casa", "category": "ESPRESSIONE", "chunkType": "collocation" },
+    { "id": "l02-c23", "it": "solo", "pt": "só, somente", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l02-c24", "it": "parlare", "pt": "falar", "category": "VERBO", "chunkType": "word" },
+    { "id": "l02-c25", "it": "abitare", "pt": "morar", "category": "VERBO", "chunkType": "word" },
+    { "id": "l02-c26", "it": "il ceco", "pt": "o tcheco", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l02-c27", "it": "lo slovacco", "pt": "o eslovaco", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l02-c28", "it": "il polacco", "pt": "o polonês", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l02-c29", "it": "l'ungherese", "pt": "o húngaro", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l02-c30", "it": "il magiaro", "pt": "o magiar", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l02-c31", "it": "lo sloveno", "pt": "o esloveno", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l02-c32", "it": "la Repubblica Ceca", "pt": "a República Tcheca", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l02-c33", "it": "la Slovacchia", "pt": "a Eslováquia", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l02-c34", "it": "la Polonia", "pt": "a Polônia", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l02-c35", "it": "l'Ungheria", "pt": "a Hungria", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l02-c36", "it": "la Slovenia", "pt": "a Eslovênia", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l02-c37", "it": "la Germania", "pt": "a Alemanha", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l02-c38", "it": "l'Inghilterra", "pt": "a Inglaterra", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l02-c39", "it": "l'Austria", "pt": "a Áustria", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l02-c40", "it": "la Spagna", "pt": "a Espanha", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l02-c41", "it": "Lugano", "pt": "Lugano", "category": "VOCABOLARIO", "chunkType": "word" }
+  ],
+
+  "dialogo": {
+    "id": "l02-d01",
+    "titolo": "Dove abiti?",
+    "gloss": "Onde você mora?",
+    "consegna": "Giulia e Marco se conhecem. Três passadas no mesmo áudio, com tarefa diferente em cada uma.",
+    "battute": [
+      { "speaker": "A", "nome": "Giulia", "it": "Buongiorno! Io sono Giulia. Piacere di conoscerti.", "pt": "Bom dia! Eu sou a Giulia. Prazer em te conhecer." },
+      { "speaker": "B", "nome": "Marco", "it": "Piacere! Io sono Marco. Di dove sei?", "pt": "Prazer! Eu sou o Marco. De onde você é?" },
+      { "speaker": "A", "nome": "Giulia", "it": "Sono ungherese, ma abito a Roma, in Italia. E tu?", "pt": "Sou húngara, mas moro em Roma, na Itália. E você?" },
+      { "speaker": "B", "nome": "Marco", "it": "Io sono polacco. Abito a Varsavia, in Polonia.", "pt": "Eu sou polonês. Moro em Varsóvia, na Polônia." },
+      { "speaker": "A", "nome": "Giulia", "it": "Tu parli italiano molto bene!", "pt": "Você fala italiano muito bem!" },
+      { "speaker": "B", "nome": "Marco", "it": "Grazie! Parlo italiano e inglese. E tu, parli polacco?", "pt": "Obrigado! Falo italiano e inglês. E você, fala polonês?" },
+      { "speaker": "A", "nome": "Giulia", "it": "No, parlo solo ungherese e italiano. Ma parlo un po' di francese.", "pt": "Não, falo só húngaro e italiano. Mas falo um pouco de francês." },
+      { "speaker": "B", "nome": "Marco", "it": "Scusa, quanti anni hai?", "pt": "Desculpa, quantos anos você tem?" },
+      { "speaker": "A", "nome": "Giulia", "it": "Ho venti anni. E tu?", "pt": "Tenho vinte anos. E você?" },
+      { "speaker": "B", "nome": "Marco", "it": "Io ho diciotto anni. Ciao, Giulia!", "pt": "Eu tenho dezoito anos. Tchau, Giulia!" }
+    ],
+    "passate": [
+      {
+        "focus": "gist",
+        "istruzione": "Só ouça. Não escreva nada e não leia a transcrição. Sua única tarefa: descobrir de que dois países são as duas pessoas.",
+        "inputBloccato": true
+      },
+      {
+        "focus": "note",
+        "istruzione": "Ouça de novo e anote as línguas que aparecem. Quantas cada um fala?",
+        "inputBloccato": false
+      },
+      {
+        "focus": "detail",
+        "istruzione": "Última passada. Agora responda às perguntas — pode ouvir quantas vezes quiser.",
+        "inputBloccato": false,
+        "domande": [
+          { "id": "l02-d01-q1", "domanda": "Marco è polacco o ungherese?", "risposta": "polacco" },
+          { "id": "l02-d01-q2", "domanda": "In quale città abita Giulia?", "risposta": "Roma", "accettaAnche": ["a Roma"] },
+          { "id": "l02-d01-q3", "domanda": "Quanti anni ha Giulia? (in lettere)", "risposta": "venti", "accettaAnche": ["20", "ho venti anni"] },
+          { "id": "l02-d01-q4", "domanda": "In quale paese abita Marco?", "risposta": "Polonia", "accettaAnche": ["in Polonia", "la Polonia"] }
+        ]
+      }
+    ]
+  },
+
+  "esercizi": [
+    {
+      "id": "l02-e01",
+      "type": "paradigm-fill",
+      "category": "VERBO",
+      "consegna": "Coniuga i verbi regolari in -ARE. Completa le celle vuote.",
+      "colonne": ["io", "tu", "lui / lei", "noi", "voi", "loro"],
+      "righe": [
+        { "id": "l02-e01-r1", "pt": "parlare — falar", "forme": ["parlo", "parli", "parla", "parliamo", "parlate", "parlano"], "nascondi": [1, 3, 5], "eccezione": false },
+        { "id": "l02-e01-r2", "pt": "abitare — morar", "forme": ["abito", "abiti", "abita", "abitiamo", "abitate", "abitano"], "nascondi": [0, 2, 4], "eccezione": false }
+      ]
+    },
+    {
+      "id": "l02-e02",
+      "type": "paradigm-fill",
+      "category": "VERBO",
+      "consegna": "Agora as seis formas de cada um, do zero.",
+      "colonne": ["io", "tu", "lui / lei", "noi", "voi", "loro"],
+      "righe": [
+        { "id": "l02-e02-r1", "pt": "parlare", "forme": ["parlo", "parli", "parla", "parliamo", "parlate", "parlano"], "nascondi": [0, 1, 2, 3, 4, 5], "eccezione": false },
+        { "id": "l02-e02-r2", "pt": "abitare", "forme": ["abito", "abiti", "abita", "abitiamo", "abitate", "abitano"], "nascondi": [0, 1, 2, 3, 4, 5], "eccezione": false },
+        { "id": "l02-e02-r3", "pt": "essere (irregular — da Aula 1)", "forme": ["sono", "sei", "è", "siamo", "siete", "sono"], "nascondi": [0, 1, 2, 3, 4, 5], "eccezione": true, "nota": "Irregular: não tem raiz fixa." },
+        { "id": "l02-e02-r4", "pt": "avere (irregular — da Aula 1)", "forme": ["ho", "hai", "ha", "abbiamo", "avete", "hanno"], "nascondi": [0, 1, 2, 3, 4, 5], "eccezione": true, "nota": "Irregular. O <b>h</b> não se pronuncia." }
+      ]
+    },
+    {
+      "id": "l02-e03",
+      "type": "paradigm-fill",
+      "category": "VOCABOLARIO",
+      "consegna": "As quatro formas de cada nacionalidade, com o artigo certo.",
+      "colonne": ["Maschile sing.", "Femminile sing.", "Maschile pl.", "Femminile pl."],
+      "righe": [
+        { "id": "l02-e03-r1", "pt": "tcheco", "forme": ["il ceco", "la ceca", "i cechi", "le ceche"], "nascondi": [2, 3], "eccezione": false, "nota": "Cuidado com o <b>h</b> do plural." },
+        { "id": "l02-e03-r2", "pt": "eslovaco", "forme": ["lo slovacco", "la slovacca", "gli slovacchi", "le slovacche"], "nascondi": [0, 2], "eccezione": false, "nota": "s + consoante." },
+        { "id": "l02-e03-r3", "pt": "polonês", "forme": ["il polacco", "la polacca", "i polacchi", "le polacche"], "nascondi": [1, 3], "eccezione": false },
+        { "id": "l02-e03-r4", "pt": "húngaro", "forme": ["l'ungherese", "l'ungherese", "gli ungheresi", "le ungheresi"], "nascondi": [1, 2, 3], "eccezione": false, "nota": "Termina em -e: só duas formas." },
+        { "id": "l02-e03-r5", "pt": "magiar", "forme": ["il magiaro", "la magiara", "i magiari", "le magiare"], "nascondi": [1, 2, 3], "eccezione": false },
+        { "id": "l02-e03-r6", "pt": "esloveno", "forme": ["lo sloveno", "la slovena", "gli sloveni", "le slovene"], "nascondi": [0, 1, 2, 3], "eccezione": false }
+      ]
+    },
+
+    {
+      "id": "l02-e04",
+      "type": "slot-frame",
+      "category": "VERBO",
+      "consegna": "Drill de substituição. Escreva a frase INTEIRA a cada volta — é o molde que se automatiza, não a palavra.",
+      "frame": { "it": "Io parlo ___.", "pt": "Eu falo ___." },
+      "modello": "Io parlo italiano.",
+      "giri": [
+        { "id": "l02-e04-g1", "slot": "italiano", "pt": "italiano", "risposta": "Io parlo italiano." },
+        { "id": "l02-e04-g2", "slot": "inglese", "pt": "inglês", "risposta": "Io parlo inglese." },
+        { "id": "l02-e04-g3", "slot": "tedesco", "pt": "alemão", "risposta": "Io parlo tedesco." },
+        { "id": "l02-e04-g4", "slot": "francese", "pt": "francês", "risposta": "Io parlo francese." },
+        { "id": "l02-e04-g5", "slot": "polacco", "pt": "polonês", "risposta": "Io parlo polacco." },
+        { "id": "l02-e04-g6", "slot": "portoghese", "pt": "português", "risposta": "Io parlo portoghese." }
+      ]
+    },
+    {
+      "id": "l02-e05",
+      "type": "slot-frame",
+      "category": "VERBO",
+      "consegna": "Agora o mesmo molde, mas com o sujeito mudando. Repare que só a desinência muda.",
+      "frame": { "it": "___ ceco.", "pt": "___ tcheco." },
+      "modello": "Io parlo ceco.",
+      "giri": [
+        { "id": "l02-e05-g1", "slot": "Io parlo", "pt": "Eu falo…", "risposta": "Io parlo ceco." },
+        { "id": "l02-e05-g2", "slot": "Tu parli", "pt": "Você fala…", "risposta": "Tu parli ceco." },
+        { "id": "l02-e05-g3", "slot": "Lui parla", "pt": "Ele fala…", "risposta": "Lui parla ceco." },
+        { "id": "l02-e05-g4", "slot": "Noi parliamo", "pt": "Nós falamos…", "risposta": "Noi parliamo ceco." },
+        { "id": "l02-e05-g5", "slot": "Voi parlate", "pt": "Vocês falam…", "risposta": "Voi parlate ceco." },
+        { "id": "l02-e05-g6", "slot": "Loro parlano", "pt": "Eles falam…", "risposta": "Loro parlano ceco." }
+      ]
+    },
+    {
+      "id": "l02-e06",
+      "type": "slot-frame",
+      "category": "GRAMMATICA",
+      "consegna": "Cidade pede «a». Escreva a frase inteira.",
+      "frame": { "it": "Io abito a ___.", "pt": "Eu moro em ___." },
+      "modello": "Io abito a Roma.",
+      "giri": [
+        { "id": "l02-e06-g1", "slot": "Roma", "pt": "Roma", "risposta": "Io abito a Roma." },
+        { "id": "l02-e06-g2", "slot": "Parigi", "pt": "Paris", "risposta": "Io abito a Parigi." },
+        { "id": "l02-e06-g3", "slot": "Vienna", "pt": "Viena", "risposta": "Io abito a Vienna." },
+        { "id": "l02-e06-g4", "slot": "Varsavia", "pt": "Varsóvia", "risposta": "Io abito a Varsavia." },
+        { "id": "l02-e06-g5", "slot": "Londra", "pt": "Londres", "risposta": "Io abito a Londra." },
+        { "id": "l02-e06-g6", "slot": "San Paolo", "pt": "São Paulo", "risposta": "Io abito a San Paolo." }
+      ]
+    },
+    {
+      "id": "l02-e07",
+      "type": "slot-frame",
+      "category": "GRAMMATICA",
+      "consegna": "País pede «in» — e sem artigo depois da preposição.",
+      "frame": { "it": "Loro abitano in ___.", "pt": "Eles moram ___." },
+      "modello": "Loro abitano in Italia.",
+      "giri": [
+        { "id": "l02-e07-g1", "slot": "Italia", "pt": "na Itália", "risposta": "Loro abitano in Italia." },
+        { "id": "l02-e07-g2", "slot": "Francia", "pt": "na França", "risposta": "Loro abitano in Francia." },
+        { "id": "l02-e07-g3", "slot": "Polonia", "pt": "na Polônia", "risposta": "Loro abitano in Polonia." },
+        { "id": "l02-e07-g4", "slot": "Ungheria", "pt": "na Hungria", "risposta": "Loro abitano in Ungheria." },
+        { "id": "l02-e07-g5", "slot": "Spagna", "pt": "na Espanha", "risposta": "Loro abitano in Spagna." },
+        { "id": "l02-e07-g6", "slot": "Svizzera", "pt": "na Suíça", "risposta": "Loro abitano in Svizzera." }
+      ]
+    },
+    {
+      "id": "l02-e08",
+      "type": "slot-frame",
+      "category": "VOCABOLARIO",
+      "consegna": "Concordância de gênero e número. O artigo muda junto — pense no som que vem depois.",
+      "frame": { "it": "Loro sono ___.", "pt": "Eles/elas são ___." },
+      "modello": "Loro sono i cechi.",
+      "giri": [
+        { "id": "l02-e08-g1", "slot": "i cechi", "pt": "os tchecos", "risposta": "Loro sono i cechi." },
+        { "id": "l02-e08-g2", "slot": "le ceche", "pt": "as tchecas", "risposta": "Loro sono le ceche." },
+        { "id": "l02-e08-g3", "slot": "gli slovacchi", "pt": "os eslovacos", "risposta": "Loro sono gli slovacchi." },
+        { "id": "l02-e08-g4", "slot": "le slovacche", "pt": "as eslovacas", "risposta": "Loro sono le slovacche." },
+        { "id": "l02-e08-g5", "slot": "i polacchi", "pt": "os poloneses", "risposta": "Loro sono i polacchi." },
+        { "id": "l02-e08-g6", "slot": "gli ungheresi", "pt": "os húngaros", "risposta": "Loro sono gli ungheresi." },
+        { "id": "l02-e08-g7", "slot": "gli sloveni", "pt": "os eslovenos", "risposta": "Loro sono gli sloveni." },
+        { "id": "l02-e08-g8", "slot": "le slovene", "pt": "as eslovenas", "risposta": "Loro sono le slovene." }
+      ]
+    },
+
+    {
+      "id": "l02-e09",
+      "type": "scelta",
+      "category": "GRAMMATICA",
+      "consegna": "«in» ou «a»? Lembre: país leva in, cidade leva a.",
+      "domande": [
+        { "id": "l02-e09-q1", "testo": "Noi abitiamo ___ Brasile.", "opzioni": ["in", "a", "di", "per"], "risposta": "in", "pt": "Nós moramos no Brasil.", "nota": "<b>Brasile</b> é país → <em>in</em>." },
+        { "id": "l02-e09-q2", "testo": "Io abito ___ Milano.", "opzioni": ["in", "a", "di", "su"], "risposta": "a", "pt": "Eu moro em Milão.", "nota": "<b>Milano</b> é cidade → <em>a</em>." },
+        { "id": "l02-e09-q3", "testo": "Lui abita ___ Svizzera.", "opzioni": ["a", "in", "di", "per"], "risposta": "in", "pt": "Ele mora na Suíça." },
+        { "id": "l02-e09-q4", "testo": "Loro abitano ___ Varsavia.", "opzioni": ["in", "a", "su", "di"], "risposta": "a", "pt": "Eles moram em Varsóvia." },
+        { "id": "l02-e09-q5", "testo": "Voi abitate ___ Ungheria.", "opzioni": ["a", "in", "per", "di"], "risposta": "in", "pt": "Vocês moram na Hungria." },
+        { "id": "l02-e09-q6", "testo": "Tu abiti ___ Buenos Aires.", "opzioni": ["in", "a", "di", "su"], "risposta": "a", "pt": "Você mora em Buenos Aires." }
+      ]
+    },
+    {
+      "id": "l02-e10",
+      "type": "scelta",
+      "category": "VERBO",
+      "consegna": "Qual é a desinência certa para este sujeito?",
+      "domande": [
+        { "id": "l02-e10-q1", "testo": "Noi ___ brasiliani e abitiamo a Milano.", "opzioni": ["siamo", "siete", "sono", "sei"], "risposta": "siamo", "pt": "Nós somos brasileiros e moramos em Milão." },
+        { "id": "l02-e10-q2", "testo": "Noi siamo brasiliani e ___ a Milano.", "opzioni": ["abitate", "abita", "abitiamo", "abito"], "risposta": "abitiamo", "pt": "Nós somos brasileiros e moramos em Milão.", "nota": "<em>noi</em> → <b>-iamo</b>, com i." },
+        { "id": "l02-e10-q3", "testo": "Voi ___ olandese?", "opzioni": ["parlano", "parlate", "parliamo", "parli"], "risposta": "parlate", "pt": "Vocês falam holandês?" },
+        { "id": "l02-e10-q4", "testo": "Loro ___ in Francia.", "opzioni": ["abitano", "abitate", "abitiamo", "abita"], "risposta": "abitano", "pt": "Eles moram na França.", "nota": "Tônica na primeira sílaba: <em>A-bi-ta-no</em>." },
+        { "id": "l02-e10-q5", "testo": "Lui ___ francese molto bene.", "opzioni": ["parlo", "parli", "parla", "parlano"], "risposta": "parla", "pt": "Ele fala francês muito bem." },
+        { "id": "l02-e10-q6", "testo": "Tu ___ a Vienna, ma ___ italiano.", "opzioni": ["abiti … parli", "abita … parla", "abito … parlo", "abitate … parlate"], "risposta": "abiti … parli", "pt": "Você mora em Viena, mas fala italiano." }
+      ]
+    },
+    {
+      "id": "l02-e11",
+      "type": "scelta",
+      "category": "GRAMMATICA",
+      "consegna": "Escolha o artigo certo. Pense no SOM que vem logo depois.",
+      "domande": [
+        { "id": "l02-e11-q1", "testo": "___ sloveno parla sloveno.", "opzioni": ["Il", "Lo", "L'", "La"], "risposta": "Lo", "pt": "O esloveno fala esloveno.", "nota": "<em>sl-</em> = s + consoante → <b>lo</b>." },
+        { "id": "l02-e11-q2", "testo": "___ ceco abita a Praga.", "opzioni": ["Lo", "Il", "L'", "Gli"], "risposta": "Il", "pt": "O tcheco mora em Praga.", "nota": "Consoante comum → <b>il</b>." },
+        { "id": "l02-e11-q3", "testo": "___ ungherese parla magiaro.", "opzioni": ["Il", "Lo", "L'", "Le"], "risposta": "L'", "pt": "O húngaro fala magiar.", "nota": "Vogal → <b>l'</b>." },
+        { "id": "l02-e11-q4", "testo": "___ slovacchi abitano in Slovacchia.", "opzioni": ["I", "Gli", "Le", "Lo"], "risposta": "Gli", "pt": "Os eslovacos moram na Eslováquia.", "nota": "Plural de <em>lo</em> é <b>gli</b>." },
+        { "id": "l02-e11-q5", "testo": "___ polacche parlano polacco.", "opzioni": ["I", "Gli", "Le", "La"], "risposta": "Le", "pt": "As polonesas falam polonês." },
+        { "id": "l02-e11-q6", "testo": "___ cechi parlano ceco.", "opzioni": ["Gli", "I", "Le", "Lo"], "risposta": "I", "pt": "Os tchecos falam tcheco.", "nota": "Plural de <em>il</em> é <b>i</b>." }
+      ]
+    },
+    {
+      "id": "l02-e12",
+      "type": "scelta",
+      "category": "VOCABOLARIO",
+      "consegna": "Concordância de gênero e número: qual forma combina?",
+      "domande": [
+        { "id": "l02-e12-q1", "testo": "Giulia è ___.", "opzioni": ["ungherese", "ungheresi", "ungheresa", "ungherso"], "risposta": "ungherese", "pt": "Giulia é húngara.", "nota": "Em <b>-e</b> não muda no feminino singular." },
+        { "id": "l02-e12-q2", "testo": "Le ragazze sono ___.", "opzioni": ["slovacchi", "slovacche", "slovacca", "slovacco"], "risposta": "slovacche", "pt": "As moças são eslovacas." },
+        { "id": "l02-e12-q3", "testo": "Marco e Luca sono ___.", "opzioni": ["polacche", "polacca", "polacchi", "polacco"], "risposta": "polacchi", "pt": "Marco e Luca são poloneses." },
+        { "id": "l02-e12-q4", "testo": "Lei è ___.", "opzioni": ["ceco", "cechi", "ceca", "ceche"], "risposta": "ceca", "pt": "Ela é tcheca." },
+        { "id": "l02-e12-q5", "testo": "Loro (due donne) sono ___.", "opzioni": ["sloveni", "slovene", "slovena", "sloveno"], "risposta": "slovene", "pt": "Elas (duas mulheres) são eslovenas." },
+        { "id": "l02-e12-q6", "testo": "Lui parla ___, non tedesco.", "opzioni": ["magiara", "magiare", "magiaro", "magiari"], "risposta": "magiaro", "pt": "Ele fala magiar, não alemão.", "nota": "A <b>língua</b> nunca concorda: fica sempre no masculino singular." }
+      ]
+    },
+    {
+      "id": "l02-e13",
+      "type": "scelta",
+      "category": "ESPRESSIONE",
+      "consegna": "Formal ou informal? Escolha a expressão certa para a situação.",
+      "domande": [
+        { "id": "l02-e13-q1", "testo": "Buongiorno, piacere ___ conoscerLa.", "opzioni": ["che", "di", "a", "per"], "risposta": "di", "pt": "Bom dia, prazer em conhecê-lo." },
+        { "id": "l02-e13-q2", "testo": "___, Lei parla inglese?", "opzioni": ["Scusa", "Scusi", "Mi dispiace", "Prego"], "risposta": "Scusi", "pt": "Com licença, o senhor fala inglês?", "nota": "<em>Lei</em> na frase → tratamento formal → <b>Scusi</b>." },
+        { "id": "l02-e13-q3", "testo": "Ciao, ___ di dove sei?", "opzioni": ["Lei", "noi", "tu", "Loro"], "risposta": "tu", "pt": "Oi, você é de onde?", "nota": "<em>Ciao</em> e <em>sei</em> já marcam informal." },
+        { "id": "l02-e13-q4", "testo": "Sono una donna e dico: ___.", "opzioni": ["Molto lieto", "Molto lieta", "Molto lieti", "Molto liete"], "risposta": "Molto lieta", "pt": "Sou uma mulher e digo: muito prazer.", "nota": "Concorda com quem fala." },
+        { "id": "l02-e13-q5", "testo": "Non parlo francese, ___.", "opzioni": ["scusi", "mi dispiace", "prego", "piacere"], "risposta": "mi dispiace", "pt": "Não falo francês, sinto muito.", "nota": "Lamentar, não pedir licença." },
+        { "id": "l02-e13-q6", "testo": "Sì, parlo ___ po'.", "opzioni": ["un", "una", "il", "lo"], "risposta": "un", "pt": "Sim, falo um pouco." }
+      ]
+    },
+
+    {
+      "id": "l02-e14",
+      "type": "riordino",
+      "category": "GRAMMATICA",
+      "consegna": "Riordina le parole.",
+      "frasi": [
+        { "id": "l02-e14-f1", "parole": ["Io", "e", "Pietro", "siamo", "brasiliani", "e", "abbiamo", "quattordici", "anni"], "risposta": "Io e Pietro siamo brasiliani e abbiamo quattordici anni.", "pt": "Eu e Pietro somos brasileiros e temos catorze anos." },
+        { "id": "l02-e14-f2", "parole": ["Buonasera", "Lei", "di", "dove", "è"], "risposta": "Buonasera, Lei di dove è?", "pt": "Boa noite, o senhor é de onde?" },
+        { "id": "l02-e14-f3", "parole": ["Io", "e", "Anna", "abitiamo", "in", "Ungheria", "e", "siamo", "polacche"], "risposta": "Io e Anna abitiamo in Ungheria e siamo polacche.", "pt": "Eu e Anna moramos na Hungria e somos polonesas." }
+      ]
+    },
+    {
+      "id": "l02-e15",
+      "type": "riordino",
+      "category": "VERBO",
+      "consegna": "Monte as frases do drill da aula.",
+      "frasi": [
+        { "id": "l02-e15-f1", "parole": ["Loro", "abitano", "in", "Francia", "ma", "parlano", "ceco", "a", "casa"], "risposta": "Loro abitano in Francia, ma parlano ceco a casa.", "pt": "Eles moram na França, mas falam tcheco em casa." },
+        { "id": "l02-e15-f2", "parole": ["Lui", "parla", "olandese", "molto", "bene"], "risposta": "Lui parla olandese molto bene.", "pt": "Ele fala holandês muito bem." },
+        { "id": "l02-e15-f3", "parole": ["No", "parliamo", "solo", "italiano"], "risposta": "No, parliamo solo italiano.", "pt": "Não, falamos só italiano." },
+        { "id": "l02-e15-f4", "parole": ["Io", "abito", "a", "Varsavia", "ma", "sono", "italiano"], "risposta": "Io abito a Varsavia, ma sono italiano.", "pt": "Eu moro em Varsóvia, mas sou italiano." },
+        { "id": "l02-e15-f5", "parole": ["Dove", "abiti", "Abito", "in", "Germania", "e", "tu"], "risposta": "Dove abiti? Abito in Germania, e tu?", "pt": "Onde você mora? Moro na Alemanha, e você?" }
+      ]
+    },
+
+    {
+      "id": "l02-e16",
+      "type": "abbinamento",
+      "category": "ESPRESSIONE",
+      "consegna": "Abbina domande e risposte.",
+      "coppie": [
+        { "id": "l02-e16-p1", "sinistra": "Dove abiti?", "destra": "Abito a Vienna, in Austria.", "pt": "Moro em Viena, na Áustria." },
+        { "id": "l02-e16-p2", "sinistra": "Tu parli spagnolo?", "destra": "Sì, parlo un po'.", "pt": "Sim, falo um pouco." },
+        { "id": "l02-e16-p3", "sinistra": "Voi parlate olandese?", "destra": "No, parliamo solo italiano.", "pt": "Não, falamos só italiano." },
+        { "id": "l02-e16-p4", "sinistra": "Di dove sei?", "destra": "Sono ungherese.", "pt": "Sou húngaro." },
+        { "id": "l02-e16-p5", "sinistra": "Quanti anni hai?", "destra": "Ho diciannove anni.", "pt": "Tenho dezenove anos." },
+        { "id": "l02-e16-p6", "sinistra": "Piacere di conoscerLa.", "destra": "Molto lieto.", "pt": "Muito prazer. (formal)" }
+      ]
+    },
+    {
+      "id": "l02-e17",
+      "type": "abbinamento",
+      "category": "VOCABOLARIO",
+      "consegna": "Abbina il paese alla nazionalità (maschile singolare).",
+      "coppie": [
+        { "id": "l02-e17-p1", "sinistra": "la Repubblica Ceca", "destra": "il ceco", "pt": "o tcheco" },
+        { "id": "l02-e17-p2", "sinistra": "la Slovacchia", "destra": "lo slovacco", "pt": "o eslovaco" },
+        { "id": "l02-e17-p3", "sinistra": "la Polonia", "destra": "il polacco", "pt": "o polonês" },
+        { "id": "l02-e17-p4", "sinistra": "l'Ungheria", "destra": "l'ungherese", "pt": "o húngaro" },
+        { "id": "l02-e17-p5", "sinistra": "la Slovenia", "destra": "lo sloveno", "pt": "o esloveno" },
+        { "id": "l02-e17-p6", "sinistra": "la Germania", "destra": "il tedesco", "pt": "o alemão" }
+      ]
+    },
+
+    {
+      "id": "l02-e18",
+      "type": "gap-audio",
+      "category": "VERBO",
+      "consegna": "Ascolta e completa.",
+      "audio": { "tts": "Noi parliamo sloveno.", "src": null },
+      "testo": "Noi ___ sloveno.",
+      "risposta": "parliamo",
+      "pt": "Nós falamos esloveno.",
+      "aiuto": "<em>noi</em> → desinência <b>-iamo</b>, com i."
+    },
+    {
+      "id": "l02-e19",
+      "type": "gap-audio",
+      "category": "VERBO",
+      "consegna": "Ascolta e completa.",
+      "audio": { "tts": "Loro abitano in Spagna, ma parlano portoghese.", "src": null },
+      "testo": "Loro ___ in Spagna, ma parlano portoghese.",
+      "risposta": "abitano",
+      "pt": "Eles moram na Espanha, mas falam português.",
+      "aiuto": "Tônica na primeira sílaba: <em>A-bi-ta-no</em>."
+    },
+    {
+      "id": "l02-e20",
+      "type": "gap-audio",
+      "category": "GRAMMATICA",
+      "consegna": "Ascolta e completa con la preposizione.",
+      "audio": { "tts": "Io abito a Lugano, in Svizzera.", "src": null },
+      "testo": "Io abito ___ Lugano, in Svizzera.",
+      "risposta": "a",
+      "pt": "Eu moro em Lugano, na Suíça.",
+      "aiuto": "Lugano é cidade."
+    },
+    {
+      "id": "l02-e21",
+      "type": "gap-audio",
+      "category": "GRAMMATICA",
+      "consegna": "Ascolta e completa con la preposizione.",
+      "audio": { "tts": "Lei abita a Varsavia, in Polonia.", "src": null },
+      "testo": "Lei abita a Varsavia, ___ Polonia.",
+      "risposta": "in",
+      "pt": "Ela mora em Varsóvia, na Polônia.",
+      "aiuto": "Polonia é país."
+    },
+    {
+      "id": "l02-e22",
+      "type": "gap-audio",
+      "category": "VOCABOLARIO",
+      "consegna": "Ascolta e completa con l'articolo e la nazionalità al plurale.",
+      "audio": { "tts": "Gli slovacchi parlano slovacco.", "src": null },
+      "testo": "___ parlano slovacco.",
+      "risposta": "Gli slovacchi",
+      "pt": "Os eslovacos falam eslovaco.",
+      "aiuto": "s + consoante no plural masculino → <b>gli</b>.",
+      "tolleranzaElisione": false
+    },
+    {
+      "id": "l02-e23",
+      "type": "gap-audio",
+      "category": "ESPRESSIONE",
+      "consegna": "Ascolta e completa.",
+      "audio": { "tts": "Sì, parlo un po'.", "src": null },
+      "testo": "Sì, parlo ___.",
+      "risposta": "un po'",
+      "pt": "Sim, falo um pouco.",
+      "aiuto": "Apóstrofo, nunca acento: <em>un po'</em>.",
+      "tolleranzaElisione": false
+    },
+
+    {
+      "id": "l02-e24",
+      "type": "qa-transcribe",
+      "category": "VERBO",
+      "consegna": "Ouça a pergunta e a resposta, e transcreva a RESPOSTA.",
+      "domanda": { "tts": "Dove abiti?", "testo": "Dove abiti?", "pt": "Onde você mora?" },
+      "risposta": { "tts": "Abito in Italia, e tu?", "testo": "Abito in Italia, e tu?", "pt": "Moro na Itália, e você?" },
+      "aiuto": "País → <em>in</em>, sem artigo depois."
+    },
+    {
+      "id": "l02-e25",
+      "type": "qa-transcribe",
+      "category": "VERBO",
+      "consegna": "Ouça a pergunta e a resposta, e transcreva a RESPOSTA.",
+      "domanda": { "tts": "Voi parlate ungherese?", "testo": "Voi parlate ungherese?", "pt": "Vocês falam húngaro?" },
+      "risposta": { "tts": "No, parliamo solo tedesco.", "testo": "No, parliamo solo tedesco.", "pt": "Não, falamos só alemão." },
+      "aiuto": "<em>noi</em> → <b>parliamo</b>, com i."
+    },
+    {
+      "id": "l02-e26",
+      "type": "qa-transcribe",
+      "category": "ESPRESSIONE",
+      "consegna": "Ouça e transcreva a RESPOSTA. Atenção ao registro formal.",
+      "domanda": { "tts": "Scusi, Lei di dove è?", "testo": "Scusi, Lei di dove è?", "pt": "Com licença, o senhor é de onde?" },
+      "risposta": { "tts": "Sono polacco, ma abito a Milano.", "testo": "Sono polacco, ma abito a Milano.", "pt": "Sou polonês, mas moro em Milão." },
+      "aiuto": "Cidade → <em>a</em>."
+    }
+  ],
+
+  "produzione": [
+    { "id": "l02-p01", "consegna": "Grave-se dizendo, em italiano: quais línguas você fala, e quanto de cada uma (<em>molto bene</em>, <em>un po'</em>, <em>solo</em>). Três frases bastam." },
+    { "id": "l02-p02", "consegna": "Escreva quatro frases no molde <em>Abito a … , in …</em> — cidade e país — sobre quatro pessoas diferentes, variando a pessoa do verbo (io, tu, lui, noi)." },
+    { "id": "l02-p03", "consegna": "Escreva a mesma apresentação duas vezes: uma informal (<em>Piacere di conoscerti</em>, <em>tu</em>, <em>Scusa</em>) e uma formal (<em>Piacere di conoscerLa</em>, <em>Lei</em>, <em>Scusi</em>). Compare o que mudou." },
+    { "id": "l02-p04", "consegna": "Conjugue de cabeça, em voz alta e sem olhar a tabela: <em>parlare</em>, depois <em>abitare</em>. Cronometre. Repita até sair abaixo de dez segundos cada um." }
+  ],
+
+  "bilancio": [
+    "Sei tirar o <em>-are</em> e colar as seis desinências, sem consultar a tabela.",
+    "Não escrevo mais <em>parlamo</em>: é <em>parl<b>i</b>amo</em>, com i.",
+    "Sei que a tônica de <em>parlano</em> e <em>abitano</em> cai na primeira sílaba.",
+    "Sei quando usar <em>in</em> e quando usar <em>a</em> para dizer onde moro.",
+    "Sei que depois de <em>in</em> o país vai sem artigo.",
+    "Sei as quatro formas de <em>ceco</em>, <em>slovacco</em>, <em>polacco</em>, <em>sloveno</em> e <em>magiaro</em>.",
+    "Sei explicar por que <em>ceco</em> faz <em>cechi</em> e não <em>ceci</em>.",
+    "Sei que <em>ungherese</em> tem só duas formas, como <em>francese</em>.",
+    "Sei que o nome da língua nunca concorda: é sempre o masculino singular.",
+    "Sei escolher entre <em>il</em>, <em>lo</em> e <em>l'</em> nas nacionalidades novas.",
+    "Escrevo <em>un po'</em> com apóstrofo, nunca <em>un pò</em>.",
+    "Sei a diferença entre <em>Scusa</em>, <em>Scusi</em> e <em>Mi dispiace</em>.",
+    "Sei apresentar-me nas duas formas: <em>conoscerti</em> e <em>conoscerLa</em>."
+  ]
+}
