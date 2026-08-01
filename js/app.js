@@ -12,7 +12,7 @@ import * as speech from './speech.js';
 import * as store from './store.js';
 import { getExercise } from './exercises/index.js';
 import {
-  el, chip, speakButton, renderSection, renderObiettivi, renderStage,
+  el, chip, speakButton, prose, renderSection, renderObiettivi, renderStage,
 } from './render.js';
 
 const CONTENT = 'content/';
@@ -390,7 +390,7 @@ async function renderLesson() {
     main.append(renderStage(
       { id: 'riscaldamento', kicker: 'Etapa 1', title: 'Riscaldamento', intro: r.prompt },
       ...(r.spiegazione ?? []).map((p) =>
-        el('div', { class: 'spiegazione' }, el('p', { html: p }))
+        el('div', { class: 'spiegazione' }, prose(p))
       )
     ));
   }

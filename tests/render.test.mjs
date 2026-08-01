@@ -16,7 +16,7 @@ installDOM({ speechSynthesis: synth });
 installStorage();
 
 const {
-  el, speakButton, chip, subChip, renderBlock, renderSection, renderObiettivi,
+  el, speakButton, chip, subChip, prose, renderBlock, renderSection, renderObiettivi,
   renderStage, audioBar,
 } = await import('../js/render.js');
 const speech = await import('../js/speech.js');
@@ -225,6 +225,77 @@ describe('bloco nota', () => {
 
   test('tono ausente vira info', () => {
     assert.equal(renderBlock({ type: 'nota', testo: 'x' }).className, 'nota nota--info');
+  });
+
+  test('o <it> da nota ganha 🔊, e o resto do texto não', () => {
+    const b = renderBlock({
+      type: 'nota',
+      testo: 'Quando você vir <it><em>amico</em></it> → <it><em>amici</em></it>, não é capricho.',
+    });
+    assert.deepEqual(spokenLabels(b), ['amico', 'amici']);
+    assert.match(b.textContent, /não é capricho/);
+  });
+});
+
+describe('prose — italiano dentro de texto corrido', () => {
+  test('sem <it>, devolve um nó só com o HTML intacto', () => {
+    const p = prose('A regra vale para <b>c</b> e <b>g</b>.');
+    assert.equal(p.tagName, 'P');
+    assert.equal(p.innerHTML, 'A regra vale para <b>c</b> e <b>g</b>.');
+    assert.equal(speakButtons(p).length, 0, 'nada de botão onde não há italiano');
+  });
+
+  test('cada <it> vira texto + botão, na ordem do parágrafo', () => {
+    const p = prose('Daí <it>chi</it> se lê «qui» e <it>spaghetti</it> tem g de gato.');
+    assert.deepEqual(spokenLabels(p), ['chi', 'spaghetti']);
+    assert.match(p.textContent, /se lê «qui»/);
+    assert.match(p.textContent, /tem g de gato/);
+  });
+
+  test('o botão vem DEPOIS da palavra, não antes', () => {
+    const p = prose('vale para <it>amiche</it> também');
+    const inline = p.querySelector('.it-inline');
+    const filhos = inline.children;
+    assert.ok(filhos[0].classList.contains('it-inline__text'));
+    assert.ok(filhos[1].classList.contains('speak--inline'));
+  });
+
+  test('a marcação interna sobrevive, mas não é falada', () => {
+    const p = prose('plurais como <it><em>amici</em></it>.');
+    assert.match(p.innerHTML, /<em>amici<\/em>/, 'o itálico continua no texto');
+    assert.deepEqual(spokenLabels(p), ['amici'], 'o TTS recebe a forma limpa');
+  });
+
+  test('parêntese de glosa não vai para o áudio', () => {
+    const p = prose('a forma <it>lieta (feminino)</it> concorda com quem fala.');
+    assert.deepEqual(spokenLabels(p), ['lieta']);
+  });
+
+  test('clicar no botão inline fala em italiano', async () => {
+    const p = prose('a palavra <it>ciao</it> é informal.');
+    const antes = synth.spoken.length;
+    speakButtons(p)[0].dispatchEvent({ type: 'click' });
+    await flush();
+    assert.equal(synth.spoken.at(-1).text, 'ciao');
+    assert.equal(synth.spoken.at(-1).lang, 'it-IT');
+    assert.equal(synth.spoken.length, antes + 1);
+  });
+
+  test('aceita tag e atributos externos', () => {
+    const p = prose('olhe <it>chi</it>', 'div', { class: 'stage__intro' });
+    assert.equal(p.tagName, 'DIV');
+    assert.equal(p.className, 'stage__intro');
+  });
+
+  test('entrada vazia ou nula não quebra', () => {
+    assert.equal(prose('').textContent, '');
+    assert.equal(prose(null).textContent, '');
+    assert.equal(prose(undefined).textContent, '');
+  });
+
+  test('<it> vazio não gera botão mudo', () => {
+    const p = prose('nada aqui <it></it> mesmo');
+    assert.equal(speakButtons(p).length, 0);
   });
 });
 

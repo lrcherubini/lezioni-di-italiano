@@ -136,6 +136,31 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
 .speak:hover { background: var(--info-bg); }
 .speak[data-speaking="true"] { background: var(--navy); color: var(--text-on-dark); }
 
+/* Italiano dentro de prosa: `<it>…</it>` em spiegazione, nota e prompt.
+   O botão é menor que o de linha de lista porque aqui ele convive com o
+   texto, e no tamanho cheio empurraria a entrelinha do parágrafo. */
+.it-inline { display: inline; white-space: normal; }
+/* O par palavra+botão não se separa em quebra de linha — ler «amiche» no
+   fim de uma linha e achar o 🔊 no começo da outra confunde de qual forma
+   é o áudio. */
+.it-inline__text { white-space: nowrap; }
+
+.speak--inline {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--accent);
+  width: 1.35rem; height: 1.35rem; padding: 0;
+  margin-left: 0.15rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; line-height: 1;
+  vertical-align: baseline;
+  transition: background 120ms ease;
+}
+.speak--inline:hover { background: var(--info-bg); }
+.speak--inline[data-speaking="true"] { background: var(--navy); color: var(--text-on-dark); }
+
 /* --- Chips -------------------------------------------------------------- */
 
 .chip {

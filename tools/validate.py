@@ -131,6 +131,28 @@ def check_paradigma(name: str, ctx: str, block: dict, ids: Counter) -> None:
             err(f'{name} {row["id"]}: {len(row.get("forme", []))} formas para {width} colunas')
 
 
+IT_APERTA = re.compile(r'<it>')
+IT_CHIUSA = re.compile(r'</it>')
+IT_VUOTA = re.compile(r'<it>\s*(<[^>]*>\s*)*</it>')
+
+
+def check_prose(name: str, ctx: str, testo) -> None:
+    """A pseudo-tag `<it>` de texto corrido (spiegazione, nota, prompt).
+
+    `render.js` casa `<it>…</it>` por regex sobre a string, não por parse de
+    DOM — o DOM mínimo da suíte não parseia innerHTML. Uma tag desbalanceada
+    não estoura: ela simplesmente não vira botão, e a forma italiana fica
+    muda sem ninguém notar. Por isso a checagem é aqui, e é erro.
+    """
+    s = str(testo or '')
+    abertas, fechadas = len(IT_APERTA.findall(s)), len(IT_CHIUSA.findall(s))
+    if abertas != fechadas:
+        err(f'{name} {ctx}: <it> desbalanceada ({abertas} aberta(s), {fechadas} fechada(s)) — '
+            f'a forma ficaria sem áudio silenciosamente')
+    if IT_VUOTA.search(s):
+        err(f'{name} {ctx}: <it> sem texto — não geraria botão nenhum')
+
+
 def check_section(name: str, section: dict, ids: Counter) -> None:
     sid = section.get('id', '?')
     ids[sid] += 1
@@ -144,6 +166,9 @@ def check_section(name: str, section: dict, ids: Counter) -> None:
     elif len(section['spiegazione']) < 2:
         warn(f'{name} {sid}: spiegazione com 1 parágrafo só; a regra pede o "porquê" também')
 
+    for i, p in enumerate(section.get('spiegazione', [])):
+        check_prose(name, f'{sid}.spiegazione[{i}]', p)
+
     for block in section.get('blocks', []):
         btype = block.get('type')
         if btype not in VALID_BLOCK:
@@ -152,8 +177,10 @@ def check_section(name: str, section: dict, ids: Counter) -> None:
             check_table(name, sid, block)
         elif btype == 'paradigma':
             check_paradigma(name, sid, block, ids)
-        elif btype == 'nota' and block.get('tono') not in VALID_TONO:
-            err(f'{name} {sid}: nota com tono inválido «{block.get("tono")}»')
+        elif btype == 'nota':
+            if block.get('tono') not in VALID_TONO:
+                err(f'{name} {sid}: nota com tono inválido «{block.get("tono")}»')
+            check_prose(name, f'{sid}.nota', block.get('testo'))
         elif btype == 'contrasto' and len(block.get('gruppi', [])) < 2:
             err(f'{name} {sid}: contrasto precisa de 2+ grupos')
 
@@ -307,6 +334,11 @@ def check_dialogo(name: str, d: dict, ids: Counter) -> None:
 
 
 def check_lesson(name: str, d: dict, ids: Counter) -> None:
+    r = d.get('riscaldamento') or {}
+    check_prose(name, 'riscaldamento.prompt', r.get('prompt'))
+    for i, p in enumerate(r.get('spiegazione', [])):
+        check_prose(name, f'riscaldamento.spiegazione[{i}]', p)
+
     for section in d.get('sections', []):
         check_section(name, section, ids)
 

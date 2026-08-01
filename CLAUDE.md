@@ -17,6 +17,7 @@ O objetivo principal deste projeto é um **loop de autoria repetível**: a cada 
 6. **`id` de item é imutável.** Ele é a chave do progresso no `localStorage`. Renomear um `id` apaga o histórico daquele item; reaproveitar um `id` mistura históricos de coisas diferentes.
 7. **Toda seção precisa de `spiegazione`.** É o que torna o site independente dos slides. O validador reprova se faltar.
 7.1. **Todo texto italiano exibido tem botão de áudio — sem exceção.** Isso vale para `titolo` de aula/seção, itens de `header` (comunicazione/lessico/grammatica), toda célula de `tabella` que não esteja marcada `pt: true`, cabeçalhos de coluna de `paradigma` e `paradigm-fill`, e o título+gloss do `dialogo`. Ao criar uma tabela nova, pergunte célula por célula: "isto é italiano ou é rótulo/descrição em português?" — no segundo caso, marque `{ "html": "…", "pt": true }`. Ver a seção *Tipos de bloco*.
+7.2. **Em texto corrido, forma italiana citada vai dentro de `<it>…</it>`.** Vale para `spiegazione`, `nota.testo` e o `prompt` do riscaldamento — os três lugares onde uma palavra italiana costuma aparecer pela primeira vez, dentro da explicação que a introduz, e onde até então ela ficava muda. Ver *A pseudo-tag `<it>`*.
 8. **Nada de atividade em par ou grupo.** A aula é particular 1-a-1. Materiais A1 de referência estão cheios de *"in coppia"* e *"girate per la classe"* — tudo isso é inaplicável aqui.
 9. **`category` só entre os cinco valores permitidos** (abaixo). Acrescentar um valor exige editar `tools/validate.py`, `css/tokens.css` **e** este documento.
 
@@ -212,6 +213,46 @@ Fonte da verdade. `tools/validate.py` verifica tudo abaixo.
 ```
 
 Campos de texto aceitam HTML inline (`<b>`, `<em>`, `<code>`). O TTS remove tags antes de falar.
+
+### A pseudo-tag `<it>`
+
+Texto corrido — `spiegazione`, `nota.testo`, `riscaldamento.prompt` — era o
+único lugar onde uma forma italiana aparecia **sem 🔊**. E é justamente onde
+ela costuma aparecer pela primeira vez: dentro da frase que a apresenta.
+
+`<it>…</it>` marca uma forma italiana citada em meio à prosa. O renderer a
+troca por *texto + botão de áudio*, nessa ordem:
+
+```jsonc
+"testo": "Quando você vir <it><em>amico</em></it> → <it><em>amici</em></it> mas <it><em>amica</em></it> → <it><em>amiche</em></it>, não é capricho: …"
+```
+
+Regras de uso:
+
+- **Marque a forma, não a frase.** `<it>amici</it>`, e não
+  `<it>amico → amici</it>` — a seta iria para o TTS, e o aluno ouviria as
+  duas formas grudadas quando o que ele quer é comparar uma com a outra.
+- **Só italiano.** `<em>` continua sendo ênfase genérica e cai também sobre
+  palavra portuguesa; é por isso que `<it>` existe em vez de a gente
+  pendurar áudio no `<em>`. Marcar «capricho» com `<it>` faria o site
+  oferecer voz italiana para uma palavra portuguesa.
+- **Marcação interna sobrevive:** `<it><em>amici</em></it>` mantém o
+  itálico na tela e manda `amici` limpo para o TTS.
+- Parênteses de glosa saem do áudio, como em célula de tabela:
+  `<it>lieta (feminino)</it>` fala só `lieta`.
+
+> **Por que o validador reprova `<it>` torta.** O casamento é por regex sobre
+> a string, não por parse de DOM — o DOM mínimo da suíte guarda `innerHTML`
+> como texto e não o percorre. Consequência: uma tag desbalanceada **não
+> quebra a página**, ela só deixa a forma muda, e ninguém percebe. Por isso
+> `<it>` desbalanceada ou vazia é **erro**, não aviso.
+
+**`<it>` não entra em `content/lessico.json`.** É a única exceção à
+equivalência "ganha 🔊 ⇒ entra no léxico", e é deliberada: a prosa
+*menciona* uma forma, o inventário de ensino continua sendo `chunks`,
+`lista`, `tabella`, `contrasto` e `paradigma`. Se a citação em prosa
+autorizasse vocabulário, bastaria mencionar uma palavra na explicação para
+liberá-la no diálogo — e a checagem do i+1 perderia o sentido.
 
 ### Exercícios
 

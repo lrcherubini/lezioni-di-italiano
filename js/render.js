@@ -31,7 +31,7 @@ export function el(tag, attrs = {}, ...children) {
 export function speakButton(text, opts = {}) {
   const label = opts.label ?? `Ouvir: ${stripTags(text)}`;
   const btn = el('button', {
-    class: 'speak',
+    class: opts.class ?? 'speak',
     type: 'button',
     'aria-label': label,
     title: 'Ouvir',
@@ -77,6 +77,65 @@ function renderCell(tag, cell) {
   if (c.pt || !plain) return el(tag, { html: c.html });
   const spoken = stripParens(plain) || plain;
   return el(tag, {}, el('span', { class: 'cell' }, speakButton(spoken), el('span', { html: c.html })));
+}
+
+/* --- Italiano dentro de prosa --------------------------------------------
+
+   `spiegazione`, `nota.testo` e o `prompt` do riscaldamento são texto
+   corrido, e até aqui eram o único lugar onde uma forma italiana aparecia
+   sem 🔊 — justamente onde ela costuma aparecer pela primeira vez, dentro
+   da explicação que a introduz.
+
+   A marcação é `<it>…</it>`, e não `<em>`: `<em>` já é ênfase genérica
+   neste conteúdo e cai também sobre palavra portuguesa, então pendurar
+   áudio nele faria o site oferecer voz italiana para «capricho».
+
+   A troca é feita na STRING, antes de virar nó. Tem que ser assim: o DOM
+   mínimo da suíte guarda innerHTML como texto e não o parseia, então
+   percorrer a árvore depois de atribuir innerHTML não acharia nada.       */
+
+const IT_INLINE = /<it>([\s\S]*?)<\/it>/g;
+
+function splitProse(html) {
+  const parts = [];
+  let last = 0;
+  let m;
+  IT_INLINE.lastIndex = 0;
+  while ((m = IT_INLINE.exec(html)) !== null) {
+    if (m.index > last) parts.push({ it: false, html: html.slice(last, m.index) });
+    parts.push({ it: true, html: m[1] });
+    last = m.index + m[0].length;
+  }
+  if (last < html.length) parts.push({ it: false, html: html.slice(last) });
+  return parts;
+}
+
+/**
+ * Texto corrido com áudio nas formas marcadas `<it>…</it>`.
+ * Sem nenhuma marca, devolve exatamente o que devolvia antes — um nó só
+ * com innerHTML, sem custo nem nó extra.
+ *
+ * @param {string} html conteúdo, podendo conter `<it>`
+ * @param {string} tag elemento externo ('p' por padrão)
+ * @param {object} attrs atributos do elemento externo
+ */
+export function prose(html, tag = 'p', attrs = {}) {
+  const raw = String(html ?? '');
+  const parts = splitProse(raw);
+
+  if (parts.length <= 1 && !parts[0]?.it) {
+    return el(tag, { ...attrs, html: raw });
+  }
+
+  return el(tag, attrs, ...parts.map((p) => {
+    const plain = p.it ? stripTags(p.html).trim() : '';
+    // `<it>` sem texto legível não vira botão: um 🔊 mudo é pior que nenhum.
+    if (!p.it || !plain) return el('span', { html: p.html });
+    return el('span', { class: 'it-inline' },
+      el('span', { class: 'it-inline__text', html: p.html }),
+      speakButton(stripParens(plain) || plain, { class: 'speak speak--inline' })
+    );
+  }));
 }
 
 export function chip(category) {
@@ -175,7 +234,7 @@ function renderNota(block) {
   const tono = block.tono ?? 'info';
   return el('aside', { class: `nota nota--${tono}`, role: 'note' },
     block.titolo ? el('div', { class: 'nota__title', html: block.titolo }) : null,
-    el('div', { html: block.testo })
+    prose(block.testo, 'div')
   );
 }
 
@@ -221,7 +280,7 @@ export function renderSection(section) {
   // A explicação vem primeiro: é o que torna o site independente dos slides.
   if (section.spiegazione?.length) {
     const sp = el('div', { class: 'spiegazione' });
-    for (const p of section.spiegazione) sp.append(el('p', { html: p }));
+    for (const p of section.spiegazione) sp.append(prose(p));
     body.append(sp);
   }
 
@@ -258,7 +317,7 @@ export function renderStage({ id, kicker, title, intro }, ...children) {
     el('div', { class: 'stage__head' },
       el('div', { class: 'stage__kicker' }, kicker),
       el('h2', { class: 'stage__title' }, title),
-      intro ? el('p', { class: 'stage__intro', html: intro }) : null
+      intro ? prose(intro, 'p', { class: 'stage__intro' }) : null
     ),
     ...children
   );

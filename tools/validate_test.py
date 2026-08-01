@@ -164,6 +164,45 @@ class TestBuildLessico(unittest.TestCase):
         self.assertEqual(list(f), sorted(f))
 
 
+class TestCheckProse(unittest.TestCase):
+    """A pseudo-tag <it> falha em silêncio no render, então o validador é a
+    única rede: uma tag torta não quebra a página, só deixa a forma muda."""
+
+    def setUp(self):
+        v.errors.clear()
+
+    def test_tag_bem_formada_passa(self):
+        v.check_prose('x.json', 's01', 'plurais como <it><em>amici</em></it> e <it>amiche</it>.')
+        self.assertEqual(v.errors, [])
+
+    def test_texto_sem_tag_nenhuma_passa(self):
+        v.check_prose('x.json', 's01', 'A regra vale para <b>c</b> e <b>g</b>.')
+        self.assertEqual(v.errors, [])
+
+    def test_tag_sem_fechamento_e_erro(self):
+        v.check_prose('x.json', 's01', 'vale para <it>amico e <it>amica</it>')
+        self.assertEqual(len(v.errors), 1)
+        self.assertIn('desbalanceada', v.errors[0])
+
+    def test_fechamento_sobrando_e_erro(self):
+        v.check_prose('x.json', 's01', 'vale para amico</it>')
+        self.assertEqual(len(v.errors), 1)
+
+    def test_tag_vazia_e_erro(self):
+        v.check_prose('x.json', 's01', 'nada <it></it> aqui')
+        self.assertEqual(len(v.errors), 1)
+        self.assertIn('sem texto', v.errors[0])
+
+    def test_tag_so_com_marcacao_dentro_e_erro(self):
+        # <it><em></em></it> renderizaria um botão mudo.
+        v.check_prose('x.json', 's01', 'olhe <it><em></em></it> isto')
+        self.assertEqual(len(v.errors), 1)
+
+    def test_none_nao_quebra(self):
+        v.check_prose('x.json', 's01', None)
+        self.assertEqual(v.errors, [])
+
+
 class TestCheckScope(unittest.TestCase):
     def setUp(self):
         v.warnings.clear()

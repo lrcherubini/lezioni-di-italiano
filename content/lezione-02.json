@@ -648,7 +648,7 @@
       "id": "l02-e15",
       "type": "riordino",
       "category": "VERBO",
-      "consegna": "Monte as frases do drill da aula.",
+      "consegna": "Monte as frases.",
       "frasi": [
         { "id": "l02-e15-f1", "parole": ["Loro", "abitano", "in", "Francia", "ma", "parlano", "ceco", "a", "casa"], "risposta": "Loro abitano in Francia, ma parlano ceco a casa.", "pt": "Eles moram na França, mas falam tcheco em casa." },
         { "id": "l02-e15-f2", "parole": ["Lui", "parla", "olandese", "molto", "bene"], "risposta": "Lui parla olandese molto bene.", "pt": "Ele fala holandês muito bem." },
