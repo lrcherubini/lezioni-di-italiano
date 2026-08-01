@@ -69,7 +69,8 @@ describe('cabeçalho da aula', () => {
 describe('trilha de etapas', () => {
   test('lista só as etapas que a aula realmente tem', () => {
     const labels = main.querySelectorAll('.rail a').map((a) => a.textContent);
-    assert.deepEqual(labels, ['Riscaldamento', 'Studio', 'Ascolto', 'Esercizi', 'Produzione', 'Bilancio']);
+    assert.deepEqual(labels,
+      ['Riscaldamento', 'Studio', 'Lessico', 'Ascolto', 'Esercizi', 'Produzione', 'Bilancio']);
   });
 
   test('cada link aponta para uma âncora que existe', () => {
@@ -81,7 +82,9 @@ describe('trilha de etapas', () => {
 
   test('o IntersectionObserver marca a etapa visível', () => {
     const obs = dom.observers.at(-1);
-    assert.equal(obs.observed.length, 6);
+    // Uma entrada por etapa da trilha — derivado, para uma etapa nova não
+    // obrigar a mexer num número mágico aqui.
+    assert.equal(obs.observed.length, main.querySelectorAll('.rail a').length);
 
     obs.trigger(dom.document.getElementById('esercizi'), true);
     const marcados = main.querySelectorAll('.rail a').filter((a) => a.getAttribute('aria-current'));

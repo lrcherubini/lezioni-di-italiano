@@ -23,7 +23,7 @@ const VUOTO = '';
 export default {
   type: 'abbinamento',
 
-  countItems: (ex) => (ex.coppie ?? []).length,
+  subItemIds: (ex) => (ex.coppie ?? []).map((c) => c.id),
 
   render(item, ctx) {
     const root = el('div', { class: 'ex__body' });
@@ -71,7 +71,7 @@ export default {
     const feedback = el('div', { class: 'feedback', role: 'status', 'aria-live': 'polite', hidden: true });
     root.append(feedback);
 
-    root._parts = { rows, feedback, alternative };
+    root._parts = { rows, feedback, alternative, modo: ctx.modo ?? 'pt' };
     return root;
   },
 
@@ -107,7 +107,7 @@ export default {
         speakButton(r.coppia.destra),
         prose(r.correct
           ? `<b>${escapeHtml(r.coppia.destra)}</b>${r.coppia.pt ? ` — ${r.coppia.pt}` : ''}`
-          : `Era <b>${escapeHtml(r.coppia.destra)}</b>${r.coppia.pt ? ` — ${r.coppia.pt}` : ''}`, 'span')
+          : `Era <b>${escapeHtml(r.coppia.destra)}</b>${r.coppia.pt ? ` — ${r.coppia.pt}` : ''}`, 'span', {}, root._parts.modo)
       );
     }
 

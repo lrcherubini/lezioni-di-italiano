@@ -45,13 +45,23 @@ NAO_LEZIONE = {'manifest.json', 'lessico.json'}
 # exige acrescentar no CLAUDE.md também — é de propósito que dê trabalho.
 VALID_CATEGORY = {'VERBO', 'VOCABOLARIO', 'ESPRESSIONE', 'GRAMMATICA', 'PRONUNCIA'}
 VALID_CHUNK_TYPE = {'fixed', 'semiFixed', 'collocation', 'word'}
+# chunkTypes que viram carta de flashcard. ESPELHA TIPI_CARTA em
+# js/exercises/flashcard.js. `semiFixed` fica de fora: tem lacuna por
+# definição («Io sono ___») e não tem verso — é matéria do slot-frame.
+TIPI_CARTA = {'word', 'collocation', 'fixed'}
 VALID_BLOCK = {'lista', 'tabella', 'contrasto', 'paradigma', 'nota'}
 VALID_TONO = {'info', 'attenzione', 'eccezione'}
+# Língua da prosa da aula. O curso caminha de 'pt' para 'it' — ver CLAUDE.md.
+# Ausente = 'pt', para que toda aula escrita antes do mecanismo continue válida.
+MODI = ('pt', 'misto', 'it')
 # Precisa casar com o registry em js/exercises/index.js.
 REGISTERED_TYPES = {
     'gap-audio', 'qa-transcribe', 'dialogue', 'paradigm-fill',
-    'scelta', 'riordino', 'abbinamento', 'slot-frame',
+    'scelta', 'riordino', 'abbinamento', 'slot-frame', 'dictogloss',
 }
+# `flashcard` NÃO entra aqui de propósito: o baralho é derivado dos chunks
+# por flashcardDeck(), nunca escrito em `esercizi`. Escrever um à mão
+# duplicaria os ids e o conteggio contaria duas vezes.
 
 # Tipos com sub-itens: cada elemento do campo listado tem id próprio e vira
 # uma linha no progresso. ESPELHA o método `countItems` de cada módulo em
@@ -131,29 +141,49 @@ def check_paradigma(name: str, ctx: str, block: dict, ids: Counter) -> None:
             err(f'{name} {row["id"]}: {len(row.get("forme", []))} formas para {width} colunas')
 
 
-IT_APERTA = re.compile(r'<it>')
-IT_CHIUSA = re.compile(r'</it>')
-IT_VUOTA = re.compile(r'<it>\s*(<[^>]*>\s*)*</it>')
+TAG_RE = {
+    'it': (re.compile(r'<it>'), re.compile(r'</it>'), re.compile(r'<it>\s*(<[^>]*>\s*)*</it>')),
+    'pt': (re.compile(r'<pt>'), re.compile(r'</pt>'), re.compile(r'<pt>\s*(<[^>]*>\s*)*</pt>')),
+}
 
 
-def check_prose(name: str, ctx: str, testo) -> None:
-    """A pseudo-tag `<it>` de texto corrido (spiegazione, nota, prompt).
+def tag_viva(modo: str) -> str:
+    """Qual pseudo-tag marca a MINORIA neste modo. Ver CLAUDE.md."""
+    return 'pt' if modo in ('misto', 'it') else 'it'
 
-    `render.js` casa `<it>…</it>` por regex sobre a string, não por parse de
-    DOM — o DOM mínimo da suíte não parseia innerHTML. Uma tag desbalanceada
-    não estoura: ela simplesmente não vira botão, e a forma italiana fica
-    muda sem ninguém notar. Por isso a checagem é aqui, e é erro.
+
+def check_prose(name: str, ctx: str, testo, modo: str = 'pt') -> None:
+    """As pseudo-tags `<it>` / `<pt>` de texto corrido.
+
+    `render.js` as casa por regex sobre a string, não por parse de DOM — o
+    DOM mínimo da suíte não parseia innerHTML. Consequência: tag torta não
+    estoura a página, ela só deixa a forma muda, e ninguém percebe. Por isso
+    tudo aqui é erro, nunca aviso.
+
+    As duas tags são conferidas em TODOS os modos: uma `<pt>` desbalanceada
+    numa aula em modo «pt» é igualmente um bug, mesmo que inerte hoje.
     """
     s = str(testo or '')
-    abertas, fechadas = len(IT_APERTA.findall(s)), len(IT_CHIUSA.findall(s))
-    if abertas != fechadas:
-        err(f'{name} {ctx}: <it> desbalanceada ({abertas} aberta(s), {fechadas} fechada(s)) — '
-            f'a forma ficaria sem áudio silenciosamente')
-    if IT_VUOTA.search(s):
-        err(f'{name} {ctx}: <it> sem texto — não geraria botão nenhum')
+    viva = tag_viva(modo)
+
+    for tag, (abre, fecha, vazia) in TAG_RE.items():
+        abertas, fechadas = len(abre.findall(s)), len(fecha.findall(s))
+        if abertas != fechadas:
+            err(f'{name} {ctx}: <{tag}> desbalanceada ({abertas} aberta(s), {fechadas} '
+                f'fechada(s)) — a forma ficaria sem áudio silenciosamente')
+        if vazia.search(s):
+            err(f'{name} {ctx}: <{tag}> sem texto — não geraria botão nenhum')
+
+        # Tag da língua majoritária: redundante e ambígua. Em modo «pt» a
+        # prosa já é portuguesa, então <pt> não marca nada; em modo italiano,
+        # <it> idem. Não renderiza errado — mas declara uma intenção que o
+        # modo contradiz, e isso é sempre um engano de autoria.
+        if tag != viva and abertas:
+            err(f'{name} {ctx}: <{tag}> em aula de modo «{modo}» — neste modo a prosa já é '
+                f'{"portuguesa" if tag == "pt" else "italiana"}; a tag a usar é <{viva}>')
 
 
-def check_section(name: str, section: dict, ids: Counter) -> None:
+def check_section(name: str, section: dict, ids: Counter, modo: str = 'pt') -> None:
     sid = section.get('id', '?')
     ids[sid] += 1
 
@@ -167,7 +197,7 @@ def check_section(name: str, section: dict, ids: Counter) -> None:
         warn(f'{name} {sid}: spiegazione com 1 parágrafo só; a regra pede o "porquê" também')
 
     for i, p in enumerate(section.get('spiegazione', [])):
-        check_prose(name, f'{sid}.spiegazione[{i}]', p)
+        check_prose(name, f'{sid}.spiegazione[{i}]', p, modo)
 
     for block in section.get('blocks', []):
         btype = block.get('type')
@@ -180,19 +210,19 @@ def check_section(name: str, section: dict, ids: Counter) -> None:
         elif btype == 'nota':
             if block.get('tono') not in VALID_TONO:
                 err(f'{name} {sid}: nota com tono inválido «{block.get("tono")}»')
-            check_prose(name, f'{sid}.nota', block.get('testo'))
+            check_prose(name, f'{sid}.nota', block.get('testo'), modo)
         elif btype == 'contrasto' and len(block.get('gruppi', [])) < 2:
             err(f'{name} {sid}: contrasto precisa de 2+ grupos')
 
         # Toda nota de item é prosa e passa por prose() no render.
         for it in block.get('items', []):
-            check_prose(name, f'{sid}.lista.nota', it.get('nota'))
+            check_prose(name, f'{sid}.lista.nota', it.get('nota'), modo)
         for g in block.get('gruppi', []):
             for e in g.get('esempi', []):
-                check_prose(name, f'{sid}.contrasto.nota', e.get('nota'))
+                check_prose(name, f'{sid}.contrasto.nota', e.get('nota'), modo)
         for row in block.get('righe', []):
             if isinstance(row, dict):
-                check_prose(name, f'{sid}.{row.get("id", "riga")}.nota', row.get('nota'))
+                check_prose(name, f'{sid}.{row.get("id", "riga")}.nota', row.get('nota'), modo)
 
 
 def check_gap_audio(name: str, ex: dict) -> None:
@@ -287,7 +317,7 @@ def check_abbinamento(name: str, ex: dict, ids: Counter) -> None:
         err(f'{name} {ex["id"]}: respostas repetidas em «destra» — a associação fica ambígua')
 
 
-def check_slot_frame(name: str, ex: dict, ids: Counter) -> None:
+def check_slot_frame(name: str, ex: dict, ids: Counter, modo: str = 'pt') -> None:
     frame = ex.get('frame', {})
     if '___' not in frame.get('it', ''):
         err(f'{name} {ex["id"]}: slot-frame sem slot «___» no frame.it')
@@ -296,8 +326,17 @@ def check_slot_frame(name: str, ex: dict, ids: Counter) -> None:
         gid = g.get('id', '?')
         if not g.get('risposta'):
             err(f'{name} {gid}: giro sem risposta')
-        if not g.get('pt'):
-            err(f'{name} {gid}: giro sem prompt «pt» — o aluno tem que produzir a partir do português')
+        # O prompt existe para o aluno PRODUZIR, nunca para copiar. Em modo
+        # 'pt' isso significa um prompt português. Em modo italiano o próprio
+        # `slot` serve: ver «italiano» e ter de escrever «Io parlo italiano.»
+        # continua sendo produzir o molde, que é o que o drill automatiza.
+        # slot-frame.js já faz o fallback `giro.pt ?? giro.slot`.
+        if modo == 'it':
+            if not g.get('pt') and not g.get('slot'):
+                err(f'{name} {gid}: giro sem «pt» nem «slot» — não há prompt nenhum')
+        elif not g.get('pt'):
+            err(f'{name} {gid}: giro sem prompt «pt» — em modo «{modo}» o aluno produz '
+                f'a partir do português')
         # O drill só é de substituição se a resposta for de fato o molde com
         # o slot preenchido. Uma resposta que foge do molde é outro exercício.
         molde = frame.get('it', '')
@@ -344,13 +383,20 @@ def check_dialogo(name: str, d: dict, ids: Counter) -> None:
 
 
 def check_lesson(name: str, d: dict, ids: Counter) -> None:
+    # Língua da prosa desta aula. Ausente = 'pt': toda aula escrita antes do
+    # mecanismo continua válida sem edição nenhuma.
+    modo = d.get('modo', 'pt')
+    if modo not in MODI:
+        err(f'{name}: modo «{modo}» inválido — use um de {MODI}')
+        modo = 'pt'
+
     r = d.get('riscaldamento') or {}
-    check_prose(name, 'riscaldamento.prompt', r.get('prompt'))
+    check_prose(name, 'riscaldamento.prompt', r.get('prompt'), modo)
     for i, p in enumerate(r.get('spiegazione', [])):
-        check_prose(name, f'riscaldamento.spiegazione[{i}]', p)
+        check_prose(name, f'riscaldamento.spiegazione[{i}]', p, modo)
 
     for section in d.get('sections', []):
-        check_section(name, section, ids)
+        check_section(name, section, ids, modo)
 
     for chunk in d.get('chunks', []):
         ids[chunk['id']] += 1
@@ -370,12 +416,12 @@ def check_lesson(name: str, d: dict, ids: Counter) -> None:
         # Todo campo de prosa do exercício passa por prose() no render, então
         # todo campo de prosa é conferido aqui. A lista tem que ficar completa:
         # um campo esquecido aqui é um `<it>` que morre calado lá.
-        check_prose(name, f'{ex["id"]}.consegna', ex.get('consegna'))
-        check_prose(name, f'{ex["id"]}.aiuto', ex.get('aiuto'))
+        check_prose(name, f'{ex["id"]}.consegna', ex.get('consegna'), modo)
+        check_prose(name, f'{ex["id"]}.aiuto', ex.get('aiuto'), modo)
         for campo in ('domande', 'frasi', 'coppie', 'giri', 'righe'):
             for sub in ex.get(campo, []):
                 if isinstance(sub, dict):
-                    check_prose(name, f'{sub.get("id", ex["id"])}.nota', sub.get('nota'))
+                    check_prose(name, f'{sub.get("id", ex["id"])}.nota', sub.get('nota'), modo)
         if etype not in REGISTERED_TYPES:
             err(f'{name} {ex["id"]}: type «{etype}» não está no registry de js/exercises/index.js')
         if etype == 'gap-audio':
@@ -389,7 +435,7 @@ def check_lesson(name: str, d: dict, ids: Counter) -> None:
         elif etype == 'abbinamento':
             check_abbinamento(name, ex, ids)
         elif etype == 'slot-frame':
-            check_slot_frame(name, ex, ids)
+            check_slot_frame(name, ex, ids, modo)
 
     if d.get('dialogo'):
         check_dialogo(name, d['dialogo'], ids)
@@ -406,10 +452,10 @@ def check_lesson(name: str, d: dict, ids: Counter) -> None:
 
     for p in d.get('produzione', []):
         ids[p['id']] += 1
-        check_prose(name, f'{p["id"]}.consegna', p.get('consegna'))
+        check_prose(name, f'{p["id"]}.consegna', p.get('consegna'), modo)
 
     for i, b in enumerate(d.get('bilancio', [])):
-        check_prose(name, f'bilancio[{i}]', b)
+        check_prose(name, f'bilancio[{i}]', b, modo)
 
 
 # --- Léxico cumulativo ---------------------------------------------------
@@ -573,11 +619,20 @@ def count_items(lesson: dict) -> int:
     for p in (lesson.get('dialogo') or {}).get('passate', []):
         if p.get('focus') == 'detail':
             n += len(p.get('domande', []))
+
+    # O baralho de flashcards é DERIVADO dos chunks — não está em `esercizi`
+    # — mas cada carta grava progresso pelo id do chunk. ESPELHA
+    # flashcardDeck() em js/exercises/index.js.
+    n += sum(1 for c in lesson.get('chunks', []) if c.get('chunkType') in TIPI_CARTA)
+
     return n
 
 
 def check_manifest(data: dict, files: dict[str, dict]) -> None:
     seen_ids = set()
+    # O manifest é o único lugar que vê as aulas em ordem de `numero`, então é
+    # aqui que dá para conferir a PROGRESSÃO de língua.
+    modo_anterior = None
     for entry in data.get('lezioni', []):
         if entry['file'] not in files:
             err(f'manifest.json: aponta para «{entry["file"]}», que não existe em content/')
@@ -597,6 +652,16 @@ def check_manifest(data: dict, files: dict[str, dict]) -> None:
         if entry.get('conteggio') != esperado:
             err(f'manifest.json: «{entry["id"]}» tem conteggio {entry.get("conteggio")!r}, '
                 f'mas a aula tem {esperado} itens rastreáveis — rode «python tools/validate.py --fix»')
+
+        # O curso caminha do português para o italiano, nunca ao contrário.
+        # Aviso e não erro: uma aula deliberadamente mais leve é imaginável, e
+        # a convenção do projeto é que heurística avisa. Mas o caso comum de
+        # regressão é esquecer o campo numa aula nova.
+        modo = lesson.get('modo', 'pt')
+        if modo in MODI and modo_anterior in MODI and MODI.index(modo) < MODI.index(modo_anterior):
+            warn(f'manifest.json: aula «{entry["id"]}» volta de modo «{modo_anterior}» para '
+                 f'«{modo}» — a progressão de língua costuma só avançar; foi de propósito?')
+        modo_anterior = modo if modo in MODI else modo_anterior
 
     for fname in files:
         if fname in NAO_LEZIONE:

@@ -239,6 +239,34 @@ export function inNotebook(id) {
   return load().notebook.some((e) => e.id === id);
 }
 
+export function removeFromNotebook(id) {
+  const s = load();
+  const antes = s.notebook.length;
+  s.notebook = s.notebook.filter((e) => e.id !== id);
+  if (s.notebook.length === antes) return false;
+  persist();
+  return true;
+}
+
+/**
+ * Grava a frase que o ALUNO escreveu com aquele chunk.
+ *
+ * É o que separa um Lexical Notebook de uma lista de vocabulário: a entrada
+ * só vira memória quando ela passa por um contexto que é seu. Guardar a
+ * tradução de novo não acrescentaria nada — ela já está no `content/`.
+ *
+ * @returns {boolean} false se o id não está no caderno
+ */
+export function setMyExample(id, texto) {
+  const s = load();
+  const entry = s.notebook.find((e) => e.id === id);
+  if (!entry) return false;
+  entry.myExample = String(texto ?? '');
+  entry.updatedAt = new Date().toISOString();
+  persist();
+  return true;
+}
+
 /* --- Preferências -------------------------------------------------------- */
 
 export function settings() {

@@ -23,7 +23,7 @@ import * as speech from '../speech.js';
 export default {
   type: 'slot-frame',
 
-  countItems: (ex) => (ex.giri ?? []).length,
+  subItemIds: (ex) => (ex.giri ?? []).map((g) => g.id),
 
   render(item, ctx) {
     const root = el('div', { class: 'ex__body' });
@@ -95,7 +95,7 @@ export default {
     const feedback = el('div', { class: 'feedback', role: 'status', 'aria-live': 'polite', hidden: true });
     root.append(feedback);
 
-    root._parts = { rows, feedback, modello };
+    root._parts = { rows, feedback, modello, modo: ctx.modo ?? 'pt' };
     return root;
   },
 
@@ -133,7 +133,7 @@ export default {
         speakButton(r.giro.risposta),
         prose(r.correct
           ? (r.nota ?? `<b>${escapeHtml(r.giro.risposta)}</b>`)
-          : `Era <b>${escapeHtml(r.giro.risposta)}</b>`, 'span')
+          : `Era <b>${escapeHtml(r.giro.risposta)}</b>`, 'span', {}, root._parts.modo)
       );
     }
 

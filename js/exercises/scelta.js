@@ -17,7 +17,7 @@ import * as speech from '../speech.js';
 export default {
   type: 'scelta',
 
-  countItems: (ex) => (ex.domande ?? []).length,
+  subItemIds: (ex) => (ex.domande ?? []).map((q) => q.id),
 
   render(item, ctx) {
     const root = el('div', { class: 'ex__body' });
@@ -80,7 +80,7 @@ export default {
     const feedback = el('div', { class: 'feedback', role: 'status', 'aria-live': 'polite', hidden: true });
     root.append(feedback);
 
-    root._parts = { rows, feedback };
+    root._parts = { rows, feedback, modo: ctx.modo ?? 'pt' };
     return root;
   },
 
@@ -122,7 +122,7 @@ export default {
           ? (r.q.nota ?? 'Esatto.')
           : (r.dato
             ? `Você marcou <b>${escapeHtml(r.dato)}</b>. ${r.q.nota ?? ''}`
-            : `Em branco. ${r.q.nota ?? ''}`), 'span')
+            : `Em branco. ${r.q.nota ?? ''}`), 'span', {}, root._parts.modo)
       );
     }
 

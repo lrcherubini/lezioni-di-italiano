@@ -1,9 +1,9 @@
 /* Aula que usa um tipo de exercício que não está no registry.
 
-   Acontece de verdade no loop de autoria: o CLAUDE.md lista dictogloss,
-   minimal-pair e slot-frame como fase 2, e é fácil escrever um deles no
-   JSON antes de o módulo existir. O validate.py pega isso — mas se passar,
-   a página não pode morrer junto: os outros exercícios têm que renderizar. */
+   Acontece de verdade no loop de autoria: o PRD.md ainda lista minimal-pair
+   como não implementado, e é fácil escrevê-lo no JSON antes de o módulo
+   existir. O validate.py pega isso — mas se passar, a página não pode morrer
+   junto: os outros exercícios têm que renderizar. */
 
 import { test, describe, before } from 'node:test';
 import assert from 'node:assert/strict';
@@ -19,7 +19,7 @@ const AULA = {
   }],
   esercizi: [
     {
-      id: 'l99-e01', type: 'dictogloss', category: 'VERBO',
+      id: 'l99-e01', type: 'minimal-pair', category: 'VERBO',
       consegna: 'Tipo de fase 2, ainda sem módulo.',
     },
     {
@@ -55,7 +55,7 @@ before(async () => {
 describe('tipo não registrado', () => {
   test('vira um aviso que aponta para o registry', () => {
     const esercizi = dom.document.getElementById('esercizi');
-    assert.match(esercizi.textContent, /Tipo de exercício não registrado: «dictogloss»/);
+    assert.match(esercizi.textContent, /Tipo de exercício não registrado: «minimal-pair»/);
     assert.match(esercizi.textContent, /js\/exercises\/index\.js/);
   });
 

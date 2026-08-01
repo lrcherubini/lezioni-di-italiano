@@ -56,7 +56,7 @@ export default {
     const hintBtn = item.aiuto ? el('button', { class: 'btn', type: 'button' }, '💡 Dica') : null;
     root.append(el('div', { class: 'ex__actions' }, send, hintBtn));
 
-    const hint = prose(item.aiuto ?? '', 'div', { class: 'feedback', hidden: true });
+    const hint = prose(item.aiuto ?? '', 'div', { class: 'feedback', hidden: true }, ctx.modo ?? 'pt');
     if (hintBtn) {
       root.append(hint);
       hintBtn.addEventListener('click', () => { hint.hidden = !hint.hidden; });

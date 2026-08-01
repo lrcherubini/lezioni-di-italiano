@@ -32,13 +32,13 @@ function montar(item) {
 describe('registry', () => {
   test('conhece exatamente os tipos implementados', () => {
     assert.deepEqual(knownTypes().sort(), [
-      'abbinamento', 'dialogue', 'gap-audio', 'paradigm-fill',
-      'qa-transcribe', 'riordino', 'scelta', 'slot-frame',
+      'abbinamento', 'dialogue', 'dictogloss', 'flashcard', 'gap-audio',
+      'paradigm-fill', 'qa-transcribe', 'riordino', 'scelta', 'slot-frame',
     ]);
   });
 
   test('tipo desconhecido devolve null em vez de lançar', () => {
-    assert.equal(getExercise('dictogloss'), null);
+    assert.equal(getExercise('minimal-pair'), null);
     assert.equal(getExercise(undefined), null);
   });
 

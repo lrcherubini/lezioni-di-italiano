@@ -93,8 +93,8 @@ const SCELTA = {
 };
 
 describe('scelta', () => {
-  test('conta um sub-item por pergunta', () => {
-    assert.equal(getExercise('scelta').countItems(SCELTA), 2);
+  test('expõe o id de cada pergunta — é o que o Ripasso resolve', () => {
+    assert.deepEqual(getExercise('scelta').subItemIds(SCELTA), ['l02-e01-q1', 'l02-e01-q2']);
   });
 
   test('clicar numa alternativa desmarca as outras da mesma pergunta', () => {
@@ -206,8 +206,8 @@ function montarFrase(row, alvo) {
 }
 
 describe('riordino', () => {
-  test('conta um sub-item por frase', () => {
-    assert.equal(getExercise('riordino').countItems(RIORDINO), 1);
+  test('expõe o id de cada frase', () => {
+    assert.deepEqual(getExercise('riordino').subItemIds(RIORDINO), ['l02-e02-f1']);
   });
 
   test('as peças chegam embaralhadas, nunca na ordem do gabarito', () => {
@@ -313,8 +313,9 @@ const ABBINA = {
 };
 
 describe('abbinamento', () => {
-  test('conta um sub-item por par', () => {
-    assert.equal(getExercise('abbinamento').countItems(ABBINA), 3);
+  test('expõe o id de cada par', () => {
+    assert.deepEqual(getExercise('abbinamento').subItemIds(ABBINA),
+      ['l02-e04-p1', 'l02-e04-p2', 'l02-e04-p3']);
   });
 
   test('todo select oferece todas as respostas, mais a opção vazia', () => {
@@ -382,8 +383,9 @@ const SLOT = {
 };
 
 describe('slot-frame', () => {
-  test('conta um sub-item por giro', () => {
-    assert.equal(getExercise('slot-frame').countItems(SLOT), 3);
+  test('expõe o id de cada giro', () => {
+    assert.deepEqual(getExercise('slot-frame').subItemIds(SLOT),
+      ['l02-e05-g1', 'l02-e05-g2', 'l02-e05-g3']);
   });
 
   test('mostra o molde e o modelo audível de saída', () => {

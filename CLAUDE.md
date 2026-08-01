@@ -17,7 +17,7 @@ O objetivo principal deste projeto é um **loop de autoria repetível**: a cada 
 6. **`id` de item é imutável.** Ele é a chave do progresso no `localStorage`. Renomear um `id` apaga o histórico daquele item; reaproveitar um `id` mistura históricos de coisas diferentes.
 7. **Toda seção precisa de `spiegazione`.** É o que torna o site independente dos slides. O validador reprova se faltar.
 7.1. **Todo texto italiano exibido tem botão de áudio — sem exceção.** Isso vale para `titolo` de aula/seção, itens de `header` (comunicazione/lessico/grammatica), toda célula de `tabella` que não esteja marcada `pt: true`, cabeçalhos de coluna de `paradigma` e `paradigm-fill`, e o título+gloss do `dialogo`. Ao criar uma tabela nova, pergunte célula por célula: "isto é italiano ou é rótulo/descrição em português?" — no segundo caso, marque `{ "html": "…", "pt": true }`. Ver a seção *Tipos de bloco*.
-7.2. **Marque sempre a minoria.** É a regra única por trás dos dois mecanismos de "isto é italiano?", e a razão de eles terem polaridades opostas. Em **célula de tabela**, italiano é 76% do conteúdo → o padrão é italiano e você marca a exceção portuguesa com `pt: true`. Em **texto corrido**, italiano é ~13% → o padrão é português e você marca a exceção italiana com `<it>…</it>`. Os dois nomeiam o que é marcado, nunca o padrão. Ver *Os dois mecanismos de "isto é italiano?"*.
+7.2. **Marque sempre a minoria — e o `modo` da aula diz quem é a minoria.** É a regra única por trás dos mecanismos de "isto é italiano?". Em **célula de tabela** o italiano é sempre a maioria → marque a exceção portuguesa com `pt: true`. Em **texto corrido** depende do `modo`: em `pt` a prosa é portuguesa e você marca o italiano com `<it>`; em `misto`/`it` a prosa é italiana e você marca o português com `<pt>`. Todos nomeiam o que é marcado, nunca o padrão. Ver *Os dois mecanismos* e *Modo de língua*.
 8. **Nada de atividade em par ou grupo.** A aula é particular 1-a-1. Materiais A1 de referência estão cheios de *"in coppia"* e *"girate per la classe"* — tudo isso é inaplicável aqui.
 9. **`category` só entre os cinco valores permitidos** (abaixo). Acrescentar um valor exige editar `tools/validate.py`, `css/tokens.css` **e** este documento.
 
@@ -286,6 +286,8 @@ liberá-la no diálogo — e a checagem do i+1 perderia o sentido.
 
 Tipos registrados em `js/exercises/index.js`. Usar tipo não registrado é erro de validação.
 
+**`flashcard` é a exceção:** ele nunca se escreve em `esercizi`. O baralho é **derivado** dos `chunks` da aula por `flashcardDeck()`, e escrever um à mão duplicaria os ids e faria o `conteggio` contar duas vezes. Entram os chunks `word`, `collocation` e `fixed` — `semiFixed` fica de fora porque tem lacuna por definição (`Io sono ___`) e não tem verso; ele é matéria do `slot-frame`.
+
 ```jsonc
 // gap-audio — ouvir e completar a lacuna
 { "id": "l01-e01", "type": "gap-audio", "category": "VERBO",
@@ -325,8 +327,9 @@ Tipos registrados em `js/exercises/index.js`. Usar tipo não registrado é erro 
 
 São os tipos de **volume**: cada um leva vários sub-itens, e **cada sub-item
 tem id próprio e vira uma linha do progresso**. É por isso que eles precisam
-de `countItems` no módulo (ver `js/exercises/index.js`) — sem isso o
-`conteggio` do manifest conta 1 onde há 8, e a barra de progresso mente.
+de `subItemIds` no módulo (ver `js/exercises/index.js`) — sem isso o
+`conteggio` do manifest conta 1 onde há 8, a barra de progresso mente **e o
+Ripasso nunca traz aquele sub-item de volta**.
 
 ```jsonc
 // scelta — escolher a forma certa entre alternativas.
@@ -408,6 +411,38 @@ exercício. Renomear um apaga o histórico daquela pergunta específica.
 - Use **apenas vocabulário desta aula e das anteriores** (regra do i+1).
 - 6–10 turnos.
 
+
+### Modo de língua
+
+Aula nova declara em que língua está a prosa. Campo opcional no topo do JSON:
+
+```jsonc
+{ "id": "12", "numero": 12, "modo": "misto", … }   // "pt" | "misto" | "it"
+```
+
+Ausente = `"pt"`, então toda aula escrita antes deste mecanismo continua válida sem edição.
+
+| `modo` | Prosa é | Tag viva | Tag inerte | Áudio da prosa |
+|---|---|---|---|---|
+| `pt` | portuguesa | `<it>` | `<pt>` → **erro** | um 🔊 por forma citada, depois dela |
+| `misto` | italiana | `<pt>` | `<it>` → **erro** | um 🔊 por **parágrafo**, antes dele |
+| `it` | italiana | `<pt>` | `<it>` → **erro** | idem |
+
+`misto` e `it` **renderizam idêntico**. A diferença entre eles é editorial — quanto português você deixa — não mecânica. Ter os três valores serve ao seu mapa mental da progressão; inventar uma diferença de código para justificar o terceiro seria generalidade especulativa.
+
+O que **não** muda com o modo, em nenhuma hipótese:
+
+- **`spiegazione` continua obrigatória, com 2+ parágrafos.** O validador exige que exista uma *explicação*, não que ela seja portuguesa. Este é o erro mais provável de quem raciocina da premissa errada.
+- **Glossas de vocabulário ficam em português**: `lesson.gloss`, `section.gloss`, `lista.items[].pt`, `chunks[].pt`, `paradigma.righe[].pt`, células `pt: true`. São o ponto fixo da progressão, e não precisam de tag: são campos discretos, e **o campo já é a marcação**. Corolário: o cabeçalho `'Português'` do paradigma é rótulo de coluna de glossa — é conteúdo, não chrome, e nunca muda de língua.
+- **O léxico e a checagem do i+1.** Em modo `it` a spiegazione ganha 🔊 mas continua fora de `lessico.json`: se explicação toda-italiana autorizasse vocabulário, o aviso de escopo do diálogo perderia o sentido.
+- **A chrome da interface.** `Verificar`, `Mostrar resposta`, banners e a home ficam em português sempre.
+
+Só um campo relaxa: **`slot-frame.giri[].pt`**. Em modo `it`, o próprio `slot` serve de prompt (ver `italiano` e ter de escrever `Io parlo italiano.` continua sendo produzir o molde). Nos outros modos ele segue obrigatório.
+
+> **Glossa de vocabulário × tradução de frase inteira.** São coisas diferentes e vale não confundir. Glossa (`chunks[].pt`, `lista.items[].pt`, célula `pt: true`) fica para sempre. **Tradução de frase inteira** — `dialogo.battute[].pt`, `gap-audio.pt`, `qa-transcribe.*.pt`, `scelta.domande[].pt`, `riordino.frasi[].pt`, `abbinamento.coppie[].pt`, `slot-frame.frame.pt` — é candidata a ficar atrás de um `<details>` em modo `it`. **Isso ainda não está implementado**, de propósito: só a primeira aula real em `it` vai dizer quais incomodam. Quando for, esconda no render — nunca apague do JSON.
+
+**Como o modo chega ao render:** por parâmetro explícito, `prose(html, tag, attrs, modo)`, com default `'pt'` em toda a cadeia. **Nunca por estado de módulo** — `ripasso.html` monta itens de várias aulas na mesma página, e um `modo` global renderizaria uma delas errada, sem ordem de chamada que resolva.
+
 ---
 
 ## Como escrever `spiegazione`
@@ -461,6 +496,11 @@ js/exercises/         um módulo por tipo + index.js (registry)
                       shuffle.js: embaralhamento semeado pelo id — determinístico
                       para o aluno não perder a referência visual num F5, e para
                       a suíte afirmar posições sem stubar Math.random
+                      index.js também exporta flashcardDeck(), que DERIVA o
+                      baralho dos chunks da aula
+js/notebook.js        ponto de entrada do caderno léxico; reusa initChrome/fail
+js/record.js          ÚNICO lugar que toca em getUserMedia e MediaRecorder
+notebook.html         o caderno léxico
 content/              manifest.json + lezione-NN.json + lessico.json (derivado)
 tests/                suíte node:test; support/ tem DOM mínimo e dublês
 tools/validate.py     valida os invariantes deste documento; --fix grava derivados
@@ -526,7 +566,7 @@ export default {
 
 - O elemento devolvido por `render` carrega `_parts` com as referências de DOM que os outros métodos precisam. É o canal entre eles.
 - Se `check` devolver `results: [{id, correct}]`, o `app.js` registra **cada sub-item** separadamente. É assim que paradigma, diálogo e os quatro drills têm progresso por célula/pergunta.
-- Quem devolve `results` com vários sub-itens **precisa** implementar `countItems(item) → number`. `app.js` o consulta para montar o `conteggio` do manifest, e `count_items` em `tools/validate.py` espelha a conta. Sem o método o core assume 1 por exercício, e a barra de progresso passa a mentir sem avisar.
+- Quem devolve `results` com vários sub-itens **precisa** implementar `subItemIds(item) → string[]`. É a fonte **única** da verdade sobre esses ids: `countItems` em `app.js` mede a lista para o `conteggio`, e `indexById` em `ripasso.js` resolve cada id de volta para o card. Enquanto os dois enumeravam os tipos por conta própria, 140 dos 272 ids rastreáveis venciam no progresso e nunca apareciam na revisão, sem erro nenhum. `count_items`/`SUBITEM_FIELD` em `tools/validate.py` são o espelho em Python — mudou aqui, mude lá.
 - **Nada de arrastar.** Um drill que só funciona com drag-and-drop é inacessível por teclado, ruim no celular e impossível de testar sem navegador de verdade — que a suíte não tem. `riordino` e `abbinamento` são clique e `<select>` por isso.
 - **Nenhum módulo de exercício fala com `store.js`.** Quem grava é o `app.js`.
 - **Nenhum módulo chama `speechSynthesis` direto.** Use `speech.js`.

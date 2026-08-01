@@ -299,6 +299,117 @@ describe('prose — italiano dentro de texto corrido', () => {
   });
 });
 
+/* --- Matriz modo × marcação ---------------------------------------------
+
+   A regra é uma («marque a minoria»), mas ela tem duas polaridades e três
+   modos, então o que precisa de prova é a MATRIZ, não cada célula solta:
+   para cada modo, o que acontece com texto sem tag, com a tag viva e com a
+   tag inerte. Uma tabela evita o teste-por-teste que sempre esquece uma
+   combinação — e foi assim que apareceu o caso «parágrafo 100% <pt>». */
+
+describe('matriz modo × marcação', () => {
+  const MODOS = ['pt', 'misto', 'it'];
+  const italiano = (m) => m === 'misto' || m === 'it';
+
+  for (const modo of MODOS) {
+    describe(`modo «${modo}»`, () => {
+      test('texto sem marca nenhuma', () => {
+        const p = prose('Uma frase simples com <b>negrito</b>.', 'p', {}, modo);
+        // Em modo italiano a prosa INTEIRA é o insumo, então ganha um botão
+        // mesmo sem tag; em modo pt não há italiano a ouvir.
+        assert.equal(speakButtons(p).length, italiano(modo) ? 1 : 0);
+        assert.match(p.textContent, /Uma frase simples/);
+      });
+
+      test('a tag viva marca a minoria e é a única a virar botão', () => {
+        const p = italiano(modo)
+          ? prose('Io parlo <pt>eu falo</pt> italiano.', 'p', {}, modo)
+          : prose('a forma <it>parlo</it> é a primeira pessoa.', 'p', {}, modo);
+
+        assert.equal(speakButtons(p).length, 1);
+        assert.deepEqual(spokenLabels(p), italiano(modo)
+          ? ['Io parlo italiano.']   // a glosa PT sai do áudio, fica na tela
+          : ['parlo']);              // só a forma citada
+        assert.match(p.textContent, italiano(modo) ? /eu falo/ : /primeira pessoa/);
+      });
+
+      test('a tag inerte não vira botão nem vaza como texto cru', () => {
+        const p = italiano(modo)
+          ? prose('Io parlo <it>italiano</it> bene.', 'p', {}, modo)
+          : prose('a forma <pt>portuguesa</pt> aqui.', 'p', {}, modo);
+
+        // Em modo italiano o parágrafo inteiro é falado, incluindo o que
+        // está dentro da tag inerte — ela não subtrai nada.
+        assert.equal(speakButtons(p).length, italiano(modo) ? 1 : 0);
+        assert.ok(!p.innerHTML.includes('<it>&'), 'não escapa a tag');
+        assert.match(p.textContent, italiano(modo) ? /italiano/ : /portuguesa/);
+      });
+    });
+  }
+
+  test('«misto» e «it» renderizam idêntico — a diferença é editorial', () => {
+    const fonte = 'Il verbo <pt>o verbo</pt> è regolare.';
+    const a = prose(fonte, 'p', {}, 'misto');
+    const b = prose(fonte, 'p', {}, 'it');
+    assert.equal(a.innerHTML, b.innerHTML);
+    assert.deepEqual(spokenLabels(a), spokenLabels(b));
+  });
+
+  test('modo desconhecido cai para «pt» em vez de quebrar', () => {
+    const p = prose('cita <it>ciao</it> aqui', 'p', {}, 'xyz');
+    assert.deepEqual(spokenLabels(p), ['ciao']);
+  });
+
+  test('parágrafo 100% português em modo «it» não ganha botão mudo', () => {
+    const p = prose('<pt>Uma nota inteira de compreensão.</pt>', 'p', {}, 'it');
+    assert.equal(speakButtons(p).length, 0, 'não há italiano para ouvir');
+    assert.equal(p.querySelectorAll('.pt-inline').length, 1);
+  });
+
+  test('o botão de parágrafo vem ANTES do texto; o inline vem DEPOIS', () => {
+    const ita = prose('Ecco la casa.', 'p', {}, 'it');
+    assert.ok(ita.children[0].classList.contains('speak--para'));
+
+    const pt = prose('a palavra <it>casa</it> aqui', 'p', {}, 'pt');
+    const inline = pt.querySelector('.it-inline');
+    assert.ok(inline.children[0].classList.contains('it-inline__text'));
+    assert.ok(inline.children[1].classList.contains('speak--inline'));
+  });
+
+  test('parênteses saem do áudio nos dois modos', () => {
+    assert.deepEqual(
+      spokenLabels(prose('Ecco la casa (a casa).', 'p', {}, 'it')),
+      ['Ecco la casa.']
+    );
+    assert.deepEqual(
+      spokenLabels(prose('a forma <it>lieta (feminino)</it> concorda', 'p', {}, 'pt')),
+      ['lieta']
+    );
+  });
+
+  test('o botão de parágrafo fala em it-IT, nunca em português', async () => {
+    const p = prose('Io parlo <pt>eu falo</pt> italiano.', 'p', {}, 'it');
+    speakButtons(p)[0].dispatchEvent({ type: 'click' });
+    await flush();
+    assert.equal(synth.spoken.at(-1).text, 'Io parlo italiano.');
+    assert.equal(synth.spoken.at(-1).lang, 'it-IT');
+  });
+
+  test('o modo desce por renderSection, renderBlock e renderStage', () => {
+    const sec = renderSection({
+      id: 's1', category: 'VERBO', titolo: 'Parlare', gloss: 'falar',
+      spiegazione: ['Il verbo è regolare.', 'Le desinenze sono sei.'],
+      blocks: [{ type: 'nota', tono: 'info', testo: 'Attenzione alla desinenza.' }],
+    }, 'it');
+    // 2 parágrafos de spiegazione + 1 nota, cada um com seu botão de
+    // parágrafo — mais o botão do título, que não depende do modo.
+    assert.equal(sec.querySelectorAll('.speak--para').length, 3);
+
+    const stage = renderStage({ id: 'x', kicker: 'k', title: 't', intro: 'Ecco il testo.', modo: 'it' });
+    assert.equal(stage.querySelectorAll('.speak--para').length, 1);
+  });
+});
+
 describe('bloco desconhecido', () => {
   test('degrada para um aviso visível em vez de sumir', () => {
     const b = renderBlock({ type: 'inventado' });

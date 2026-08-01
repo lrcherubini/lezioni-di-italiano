@@ -14,7 +14,9 @@ export default {
   type: 'paradigm-fill',
 
   /** Cada célula OCULTA é um item de progresso; as dadas são só âncora. */
-  countItems: (ex) => (ex.righe ?? []).reduce((n, r) => n + (r.nascondi ?? []).length, 0),
+  subItemIds: (ex) => (ex.righe ?? []).flatMap(
+    (r) => (r.nascondi ?? []).map((i) => `${r.id}-c${i}`)
+  ),
 
   render(item, ctx) {
     const root = el('div', { class: 'ex__body' });
@@ -56,7 +58,7 @@ export default {
       });
 
       if (row.nota) {
-        tr.append(prose(row.nota, 'td', { class: 'item__nota' }));
+        tr.append(prose(row.nota, 'td', { class: 'item__nota' }, ctx.modo ?? 'pt'));
       }
       tbody.append(tr);
     }
@@ -79,7 +81,7 @@ export default {
     const feedback = el('div', { class: 'feedback', role: 'status', 'aria-live': 'polite', hidden: true });
     root.append(feedback);
 
-    root._parts = { cells, feedback };
+    root._parts = { cells, feedback, modo: ctx.modo ?? 'pt' };
     return root;
   },
 

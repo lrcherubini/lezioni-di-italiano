@@ -18,7 +18,7 @@ import { mescola } from './shuffle.js';
 export default {
   type: 'riordino',
 
-  countItems: (ex) => (ex.frasi ?? []).length,
+  subItemIds: (ex) => (ex.frasi ?? []).map((f) => f.id),
 
   render(item, ctx) {
     const root = el('div', { class: 'ex__body' });
@@ -88,7 +88,7 @@ export default {
     const feedback = el('div', { class: 'feedback', role: 'status', 'aria-live': 'polite', hidden: true });
     root.append(feedback);
 
-    root._parts = { rows, feedback };
+    root._parts = { rows, feedback, modo: ctx.modo ?? 'pt' };
     return root;
   },
 
@@ -126,7 +126,7 @@ export default {
           ? `<b>${escapeHtml(r.frase.risposta)}</b>${r.frase.nota ? ` — ${r.frase.nota}` : ''}`
           : (r.dato
             ? `Você montou «${escapeHtml(r.dato)}».`
-            : 'Nenhuma palavra escolhida.'), 'span')
+            : 'Nenhuma palavra escolhida.'), 'span', {}, root._parts.modo)
       );
     }
 

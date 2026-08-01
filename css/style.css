@@ -161,6 +161,34 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
 .speak--inline:hover { background: var(--info-bg); }
 .speak--inline[data-speaking="true"] { background: var(--navy); color: var(--text-on-dark); }
 
+/* Modo «misto»/«it»: a prosa É o insumo, então o botão vale o parágrafo
+   inteiro e vem ANTES dele — como já acontece nas linhas de lista, onde o
+   botão possui o italiano em vez de anotá-lo. */
+.speak--para {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--accent);
+  width: 1.9rem; height: 1.9rem; padding: 0;
+  margin-right: var(--sp-2);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: var(--fs-sm); line-height: 1;
+  vertical-align: text-bottom;
+  transition: background 120ms ease;
+}
+.speak--para:hover { background: var(--info-bg); }
+.speak--para[data-speaking="true"] { background: var(--navy); color: var(--text-on-dark); }
+
+/* Português dentro de prosa italiana: a glosa de compreensão. Mesmo
+   tratamento visual das outras traduções do site — menor, apagada, itálica
+   — e sem 🔊, porque não existe voz portuguesa aqui, por decisão. */
+.pt-inline {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
 /* --- Chips -------------------------------------------------------------- */
 
 .chip {
@@ -766,6 +794,56 @@ textarea { min-height: 5rem; resize: vertical; line-height: var(--lh-normal); }
 .giro__esito { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-sm); }
 .giro__esito--ok { color: var(--ok); }
 .giro__esito--err { color: var(--err); }
+
+/* --- Flashcard: o léxico da aula em cartas ----------------------------- */
+
+.carte { list-style: none; padding: 0; display: grid; gap: var(--sp-3); }
+
+.carta {
+  padding: var(--sp-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  display: grid; gap: var(--sp-2);
+}
+/* A frente é o português, e é grande: é o estímulo, não a glosa. */
+.carta__pt { font-size: var(--fs-lg); }
+.carta__it { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-lg); }
+
+.carta__voto[aria-pressed="true"] { font-weight: 700; }
+.carta__voto--on[data-voto="si"] { border-color: var(--ok-border); background: var(--ok-bg); color: var(--ok); }
+.carta__voto--on[data-voto="no"] { border-color: var(--err-border); background: var(--err-bg); color: var(--err); }
+
+/* --- Gravação de voz --------------------------------------------------- */
+
+.rec { margin-top: var(--sp-3); display: grid; gap: var(--sp-2); }
+.rec__player { width: 100%; max-width: 24rem; }
+.rec__stato { font-size: var(--fs-sm); color: var(--text-muted); align-self: center; }
+
+/* --- Dictogloss -------------------------------------------------------- */
+
+.dicto__conta {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  margin: var(--sp-2) 0;
+}
+.dicto__input { width: 100%; }
+
+/* --- Caderno léxico ---------------------------------------------------- */
+
+.nota-lex__gruppo { margin-bottom: var(--sp-6); display: grid; gap: var(--sp-3); }
+
+.nota-lex {
+  padding: var(--sp-4);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: var(--surface);
+  display: grid; gap: var(--sp-2);
+}
+.nota-lex__head { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+.nota-lex__mio { width: 100%; }
+.nota-lex__stato { font-size: var(--fs-sm); color: var(--ok); align-self: center; }
 
 /* --- Diálogo ----------------------------------------------------------- */
 

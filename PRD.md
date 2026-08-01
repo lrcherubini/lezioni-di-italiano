@@ -28,6 +28,7 @@ Um só. Não há multiusuário, conta, login ou perfil.
 3. **Loop de autoria mecânico.** A cada aula nova, acrescentar uma seção lendo os arquivos entregues e editando **apenas** `content/` — requisito de primeira classe, não conveniência.
 4. **Continuidade visual com a aula.** O site espelha a taxonomia de chips do próprio professor, para parecer continuação da aula e não um app paralelo.
 5. **Durabilidade.** Precisa funcionar em 2 anos sem manutenção. Daí zero dependências.
+6. **Imersão progressiva.** O conteúdo explicativo migra do português para o italiano ao longo do curso, aula a aula, e as duas pontas coexistem no mesmo site — a Aula 1 continua em português enquanto a Aula 30 já é toda em italiano. Ver §12.
 
 ## 4. Não-objetivos
 
@@ -107,17 +108,20 @@ Como aluno, quero ouvir uma pergunta e sua resposta e transcrever apenas a respo
 | `gap-audio` | Lacuna preenchida de ouvido | *Ascolta e completa* |
 | `qa-transcribe` | Transcrever a resposta ouvida | Ditado focado |
 | `paradigm-fill` | Completar tabela de formas | Drill de paradigma do professor |
-
-### Fase 2 (especificados, não implementados)
-
-| Tipo | O que faz | Origem |
-|---|---|---|
-| `dictogloss` | 4 etapas: pré-ensino → 3 escutas → reconstrução → análise contra o original | Dictogloss |
-| `minimal-pair` | Discriminação 2AFC de sons próximos, ciclando vozes | HVPT; ~9–15 sessões por contraste |
 | `slot-frame` | Drill de frase semifixa trocando o slot | Abordagem lexical |
-| `flashcard` | Revisão espaçada do Lexical Notebook | Lexical Notebook |
+| `scelta` | Escolher a forma certa entre alternativas | Compito «Scegli la parola corretta» |
+| `riordino` | Remontar a frase com as palavras fora de ordem | Compito «Riordina le parole» |
+| `abbinamento` | Associar pergunta e resposta | Compito «Abbina domande e risposte» |
+| `flashcard` | Léxico da aula em cartas, com autoavaliação | Lexical Notebook |
+| `dictogloss` | 4 etapas: pré-ensino → 3 escutas → reconstrução → análise contra o original | Dictogloss |
 
-Também na fase 2: UI própria do Lexical Notebook, card de "Ripasso" na home com roteamento adaptativo (`store.dueItems()` já existe).
+Também já entregues: **Ripasso** adaptativo atravessando aulas (`ripasso.html`), card de Ripasso na home, **Lexical Notebook** com UI própria (`notebook.html`) e **gravação de voz** na etapa de Produzione.
+
+### Ainda não implementado
+
+| Tipo | O que faz | Por que não |
+|---|---|---|
+| `minimal-pair` | Discriminação 2AFC de sons próximos, ciclando vozes | HVPT pede ciclagem de várias vozes; `voiceFor()` em `speech.js` só expõe **dois** slots — o eixo `speaker` A/B, já consumido pelo diálogo. Exige refazer a seleção de voz no arquivo mais delicado do projeto. |
 
 ## 8. Requisitos não-funcionais
 
@@ -151,9 +155,9 @@ Também na fase 2: UI própria do Lexical Notebook, card de "Ripasso" na home co
 
 **Fase 1 — feita.** Estrutura, docs, 4 tipos de exercício, Aulas 0 e 1 completas a partir das fontes reais, validador, progresso com SRS, degradação de áudio, tema claro/escuro.
 
-**Fase 2 — conteúdo acumulando.** `dictogloss`, `minimal-pair`, `slot-frame`, `flashcard`; UI do Lexical Notebook; "Ripasso" adaptativo na home.
+**Fase 2 — feita.** `slot-frame`, `scelta`, `riordino`, `abbinamento`, `flashcard`, `dictogloss`; UI do Lexical Notebook; Ripasso adaptativo na home; gravação de voz na Produzione; mecanismo de modo de língua (§12).
 
-**Fase 3 — se fizer falta.** Gravação de voz do próprio aluno para comparação; MP3 pré-gerados por item (o schema já tem `audio.src`) caso o TTS se mostre insuficiente; busca em todo o conteúdo.
+**Fase 3 — se fizer falta.** `minimal-pair` (exige refatorar a seleção de voz); persistir gravações em IndexedDB para comparar evolução ao longo das semanas; MP3 pré-gerados por item (o schema já tem `audio.src`) caso o TTS se mostre insuficiente; busca em todo o conteúdo.
 
 ## 11. Decisões de arquitetura e o motivo
 
@@ -166,3 +170,22 @@ Também na fase 2: UI própria do Lexical Notebook, card de "Ripasso" na home co
 | **`category` e `chunkType` separados** | Um campo só | Eixos diferentes: um governa cor e navegação, o outro governa elegibilidade de drill. Fundir quebraria a geração de exercício. |
 | **Teto de velocidade em 1.0** | Deixar 1.5× | Para A1, acelerar derruba a compreensão. Restrição pedagógica deliberada. |
 | **Acento vira "correto com nota"** | Reprovar | Quem escreve `perche` acertou a palavra. Reprovar ensina menos que apontar o acento. |
+
+
+## 12. Progressão de língua
+
+O conteúdo explicativo começa em português e migra para o italiano ao longo do curso. Como o número das aulas de virada não é conhecido de antemão, **cada aula declara o seu próprio modo** e os três coexistem no mesmo site.
+
+| `modo` | Prosa | Português aparece | Marca-se |
+|---|---|---|---|
+| `pt` (padrão) | portuguesa | em toda parte | o italiano citado, com `<it>` |
+| `misto` | italiana | em pontos-chave de compreensão | o português, com `<pt>` |
+| `it` | italiana | só nas glossas de vocabulário | o português, com `<pt>` |
+
+Três decisões que sustentam isto:
+
+- **É uma regra só, com a polaridade parametrizada.** «Marque a minoria» já era a regra do `pt: true` das tabelas. O `modo` apenas diz quem é a minoria naquela aula. `misto` e `it` renderizam idêntico — a diferença entre eles é editorial, não mecânica.
+- **As glossas de vocabulário ficam em português em TODOS os modos.** São o ponto fixo do desenho. E não precisam de mecanismo: são campos JSON discretos, e o campo já é a marcação. O `spiegazione` continua obrigatório em todos os modos — ele exige que exista uma *explicação*, não que ela seja portuguesa.
+- **A chrome da interface não acompanha o modo.** É texto funcional, não conteúdo de estudo; `index.html` e `ripasso.html` não têm modo (o Ripasso mistura aulas por construção); e a chrome já é deliberadamente bilíngue — rótulos pedagógicos em italiano (`Riscaldamento`, `Esatto!`, `Modello`), mecânicos em português.
+
+**Não-objetivo:** TTS em português. O português aqui é lido, nunca ouvido, e é a L1 do aluno. `<pt>` nunca ganha botão de áudio — uma voz italiana monolíngue leria português com fonologia italiana, e uma multilíngue trocaria de idioma por detecção de conteúdo.
