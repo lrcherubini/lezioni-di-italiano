@@ -90,8 +90,8 @@ export function flashcardDeck(lesson) {
     id: `l${lesson.id}-lex`,
     type: 'flashcard',
     category: 'VOCABOLARIO',
-    consegna: 'Lembre o italiano antes de virar a carta. Marque com honestidade — '
-            + 'o que você não lembrar volta antes na revisão.',
+    consegna: 'Tente lembrar o italiano antes de tocar em «Mostrar». Marque com '
+            + 'honestidade — o que você não lembrar volta antes na revisão.',
     carte,
   };
 }

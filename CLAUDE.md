@@ -145,7 +145,8 @@ Fonte da verdade. `tools/validate.py` verifica tudo abaixo.
     "pt": "Eu sou ___.",
     "category": "VERBO",
     "chunkType": "semiFixed",    // fixed | semiFixed | collocation | word
-    "slot": ["brasiliano", "…"]  // só em semiFixed
+    "slot": ["brasiliano", "…"], // só em semiFixed
+    "figura": "🚗"               // opcional; ver abaixo
   }],
 
   "dialogo": { /* ver abaixo */ },
@@ -158,11 +159,45 @@ Fonte da verdade. `tools/validate.py` verifica tudo abaixo.
 ### Os dois eixos são ortogonais
 
 - **`category`** — eixo de **domínio**. Vem do chip do deck. Governa cor, navegação e filtro.
-- **`chunkType`** — eixo de **forma lexical**. Governa para qual drill o item é elegível: só `semiFixed` alimenta slot-and-frame; só `word`/`collocation` entram em flashcard.
+- **`chunkType`** — eixo de **forma lexical**. Governa para qual drill o item é elegível: só `semiFixed` alimenta slot-and-frame; `word`, `collocation` e `fixed` entram em flashcard.
 
 *Buongiorno!* é legitimamente `ESPRESSIONE` + `fixed`. **Não funda os dois campos** — isso quebraria a elegibilidade automática de exercício.
 
 `PRONUNCIA` é uma extensão nossa: o deck não tinha chip para fonética, e rotular pronúncia como `GRAMMATICA` seria mentir na taxonomia.
+
+### `figura` — o estímulo visual da carta
+
+Campo **opcional** do chunk. Quando existe, ele substitui o português na
+frente do flashcard, e a recuperação deixa de ser tradução (PT → IT) para
+ser **conceito → IT**, que é o caminho que trava numa conversa. O português
+volta no verso, junto do italiano: 🚗 sozinho não distingue `la macchina` de
+`l'auto`, e o aluno precisa saber se acertou.
+
+**Emoji por padrão, SVG inline por exceção.** Arquivo de imagem está fora:
+binário em repositório público exige origem e licença rastreadas, e não há
+passo de build para otimizar nada.
+
+```jsonc
+{ "id": "l01-c29", "it": "il Brasile", "pt": "o Brasil",
+  "category": "VOCABOLARIO", "chunkType": "word", "figura": "🇧🇷" }
+```
+
+Regras, e o validador reprova quem as quebrar:
+
+- **Só ponha figura quando ela for inequívoca.** 🚗 para `la macchina` serve;
+  🚜 para `la fattoria` não — o aluno responderia *il trattore* e teria
+  errado por culpa da figura, não da memória. Na dúvida, deixe sem.
+- **Bandeira é país, nunca língua.** 🇩🇪 é `la Germania`. Se 🇩🇪 também fosse
+  `il tedesco`, duas cartas teriam a mesma frente e uma delas seria sempre
+  «errada».
+- **SVG inline** (`"<svg …>…</svg>"`) só quando não houver emoji que sirva.
+  Sem `<script>`, sem `on…=`, sem `<image>`, sem `<foreignObject>` e sem
+  `href` que não comece com `#` — é o único campo do conteúdo que vira
+  marcação crua, e referência externa quebraria o «zero CDN».
+- **`figura` não entra em `content/lessico.json`.** Emoji não é forma
+  italiana; o léxico continua colhendo o que a aula *exibe* em italiano.
+- A figura vai com `role="img"` e a glossa portuguesa como `aria-label`.
+  Com leitor de tela a carta degrada exatamente para a carta de texto.
 
 ### Tipos de bloco
 
@@ -287,6 +322,27 @@ liberá-la no diálogo — e a checagem do i+1 perderia o sentido.
 Tipos registrados em `js/exercises/index.js`. Usar tipo não registrado é erro de validação.
 
 **`flashcard` é a exceção:** ele nunca se escreve em `esercizi`. O baralho é **derivado** dos `chunks` da aula por `flashcardDeck()`, e escrever um à mão duplicaria os ids e faria o `conteggio` contar duas vezes. Entram os chunks `word`, `collocation` e `fixed` — `semiFixed` fica de fora porque tem lacuna por definição (`Io sono ___`) e não tem verso; ele é matéria do `slot-frame`.
+
+> **O baralho mostra uma carta por vez, e isso é requisito, não estilo.** A
+> primeira versão empilhava tudo numa `<ol>` e o olho lia a resposta da carta
+> de baixo enquanto tentava a de cima — não havia recuperação, só leitura.
+> Pelo mesmo motivo «Registrar revisão» só aparece na última carta: carta sem
+> voto conta como não lembrada, então enviar no meio reprovaria em bloco o que
+> o aluno ainda nem viu. E «✓ Lembrei» avança sozinho enquanto «✗ Não lembrei»
+> fica parado: errar é exatamente quando guardar no caderno vale a pena, e
+> avançar tiraria a chance no único momento em que ela aparece.
+
+> **No Ripasso, cada carta vira um baralho de uma carta só.** `indexById`
+> mapeia `carta.id` → `{...deck, carte: [carta]}`, e não para o baralho
+> inteiro. Motivo concreto: `check` grava **todas** as cartas do baralho que
+> recebeu, e carta sem voto conta como não lembrada — apontar para o baralho
+> inteiro faria uma revisão de três cartas reprovar as outras vinte e quatro,
+> que nem estavam vencidas. Na aula você revisa o baralho; no Ripasso, a carta.
+
+**O inventário lexical da aula são os `chunks` — e só eles.** Vocabulário que
+você quer ver virar carta tem que estar ali, com id próprio, mesmo que a
+palavra já apareça num bloco `lista`. Não existe colheita automática de
+`lista`: um item de lista não tem id, e id é a chave imutável do progresso.
 
 ```jsonc
 // gap-audio — ouvir e completar a lacuna
@@ -480,7 +536,7 @@ Só um campo relaxa: **`slot-frame.giri[].pt`**. Em modo `it`, o próprio `slot`
 ## Arquitetura, para quando você *precisar* mexer no código
 
 ```
-index.html            índice de aulas
+index.html            índice de aulas + o painel «Seus dados» (#dati)
 lezione.html          renderiza ?l=NN
 ripasso.html          revisão espaçada, atravessando aulas
 css/tokens.css        tokens; paleta derivada do deck; dark mode
@@ -512,6 +568,34 @@ tools/test.mjs        roda a suíte JS com cobertura, piso de 80%
 A razão é concreta: `ripasso.js` importa `mountExercise` e `initChrome` de
 `app.js`, e quando o import trazia junto um `DOMContentLoaded`, a página de
 revisão subia dois bootstraps e duplicava os listeners da toolbar.
+
+### Dados do aluno: por que não há banner de consentimento
+
+A pergunta reaparece, então fica escrita. **Não há aceite a pedir porque não
+há nada a consentir.** Não existe servidor, conta, terceiro nem rede: o
+`localStorage` guarda só o progresso do próprio aluno, e isso é
+*armazenamento estritamente necessário* para a função que ele pediu — a
+categoria dispensada de banner. Um banner que travasse o site até ser aceito
+degradaria o produto sem ganho nenhum.
+
+O que a promessa exige de verdade é **controle**, e ele mora em três lugares
+que precisam continuar existindo juntos: exportar (`store.download`),
+importar (`store.importJSON`) e **apagar** (`store.reset`). Os três aparecem
+por extenso no painel `#dati` da home, com a explicação do que fica salvo; a
+toolbar repete os dois primeiros como atalho — por isso o wiring em
+`initDataButtons` usa `querySelectorAll`, e não `querySelector`.
+
+Apagar confirma **inline**, não com `confirm()`: cabe a lista exata do que
+some, oferece baixar a cópia ali mesmo, e é alcançável por teclado e por
+teste — `confirm()` bloqueia a thread e não existe fora do navegador.
+
+**A linha que muda isso:** gravação de voz persistida. Hoje o áudio nunca
+toca o disco e o microfone já é guardado pela permissão do navegador, que é
+um aceite mais forte que qualquer caixa da página. No dia em que a voz ficar
+salva (IndexedDB, ver PRD), ela deixa de ser «necessária» e vira dado
+guardado por escolha — e escolha se pergunta. **Opt-in explícito entra na
+mesma mudança**, junto do botão de apagar as gravações. Está escrito também
+no cabeçalho de `js/record.js`.
 
 ### Dados derivados em `content/`
 
@@ -549,6 +633,28 @@ Duas regras ao mexer aqui:
 - **Os testes de página usam os JSONs reais de `content/`.** É de propósito: `validate.py`
   checa que o schema está certo, a suíte checa que o schema **vira página**. Uma aula nova
   que quebre a renderização falha aqui.
+
+### O ponto cego do DOM da suíte: CSS
+
+O shim guarda `hidden` como propriedade e **nunca interpreta CSS**. Isso deixa
+uma classe inteira de defeito invisível para os 599 testes de comportamento:
+uma regra de classe com `display` derrota o `[hidden]` do user-agent, que vale
+0-0-0 de especificidade.
+
+Foi assim que o verso do flashcard nasceu visível — `hidden: true` no JS,
+`.carta__it { display: flex }` no CSS, resposta na tela antes de o aluno
+tentar, e tudo verde. O remédio é uma regra global no topo de `style.css`:
+
+```css
+[hidden] { display: none !important; }
+```
+
+`tests/css.test.mjs` lê a folha como **texto** e trava três coisas: que a
+regra existe, que ela vem antes da primeira classe com `display`, e que
+ninguém tenta reexibir `[hidden]` sem `!important` (o `@media print` reexibe
+a transcrição do diálogo, e vence por especificidade). Afirmar CSS por texto
+é pouco — mas é o que cabe sem jsdom, e cobre o único invariante visual que
+não pode falhar em silêncio. **Não afirme estética ali.**
 
 ### Contrato de um tipo de exercício
 

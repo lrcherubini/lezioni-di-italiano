@@ -18,7 +18,7 @@ installStorage();
 const requisicoes = installFetch();
 
 const store = await import('../js/store.js');
-const { renderHome, countItems } = await import('../js/app.js');
+const { renderHome, countItems, initChrome } = await import('../js/app.js');
 await import('../js/main.js');   // registra o DOMContentLoaded
 
 const manifest = readContent('manifest.json');
@@ -50,9 +50,26 @@ describe('esqueleto x HTML real', () => {
   test('os ids e data-actions do teste existem em index.html', () => {
     const html = readText('index.html');
     for (const marca of ['id="lesson-grid"', 'id="home-topo"', 'id="audio-status"',
-      'data-action="theme"', 'data-action="export"', 'data-action="import"']) {
+      'data-action="theme"', 'data-action="export"', 'data-action="import"',
+      'id="dati"', 'id="dati-conferma"', 'data-action="reset"',
+      'data-action="reset-conferma"', 'data-action="reset-cancela"']) {
       assert.ok(html.includes(marca), `index.html perdeu ${marca}`);
     }
+  });
+
+  test('o painel «Seus dados» diz o que fica salvo, e onde', () => {
+    // A promessa de privacidade do projeto é escrita, não implícita: se
+    // alguém apagar o texto, some a única explicação que o aluno tem.
+    const html = readText('index.html');
+    assert.match(html, /localStorage/);
+    assert.match(html, /não existe servidor/i);
+    assert.match(html, /gravações de voz[\s\S]{0,120}não são salvas/i);
+  });
+
+  test('a confirmação de apagar nasce escondida', () => {
+    const html = readText('index.html');
+    assert.match(html, /id="dati-conferma"[^>]*hidden/,
+      'sem hidden, a caixa vermelha aparece de saída e assusta sem motivo');
   });
 });
 
@@ -253,5 +270,74 @@ describe('exportar e importar progresso', () => {
     dom.document.createElement = orig;
 
     assert.equal(dom.alerts.length, antes);
+  });
+
+  test('os botões repetidos no painel também estão ligados', () => {
+    // O painel «Seus dados» repete exportar/importar por extenso. Com
+    // `querySelector` (singular) só o da toolbar ficaria vivo, e o do painel
+    // seria um botão morto — sem erro nenhum que denunciasse.
+    const exports = dom.document.querySelectorAll('[data-action="export"]');
+    assert.ok(exports.length >= 2, 'o teste perdeu o sentido se não houver repetição');
+
+    let baixou = 0;
+    globalThis.Blob = class { constructor(p) { this.p = p; } };
+    globalThis.URL = { createObjectURL: () => { baixou += 1; return 'blob:x'; }, revokeObjectURL() {} };
+
+    for (const b of exports) b.dispatchEvent({ type: 'click' });
+    assert.equal(baixou, exports.length, 'algum botão de exportar ficou sem listener');
+  });
+});
+
+/* --- Apagar -------------------------------------------------------------
+
+   Fica por último de propósito: `store.reset()` zera o progresso, e os
+   testes acima dependem dele. */
+
+describe('apagar os dados', () => {
+  const $ = (sel) => dom.document.querySelector(sel);
+
+  test('o primeiro clique não apaga nada — só abre a confirmação', () => {
+    store.record('01', 'x1', { correct: true, score: 1 });
+    const antes = dom.location.reloaded;
+
+    $('[data-action="reset"]').dispatchEvent({ type: 'click' });
+
+    assert.equal($('#dati-conferma').hidden, false, 'a confirmação tem que aparecer');
+    assert.equal($('[data-action="reset"]').hidden, true, 'o gatilho sai de cena');
+    assert.equal(dom.location.reloaded, antes, 'não recarregou');
+    assert.ok(store.getItem('01', 'x1'), 'o progresso continua lá');
+  });
+
+  test('cancelar fecha a caixa e devolve o botão, sem tocar em nada', () => {
+    $('[data-action="reset-cancela"]').dispatchEvent({ type: 'click' });
+
+    assert.equal($('#dati-conferma').hidden, true);
+    assert.equal($('[data-action="reset"]').hidden, false);
+    assert.ok(store.getItem('01', 'x1'), 'cancelar não pode apagar');
+  });
+
+  test('a caixa oferece baixar uma cópia ANTES de apagar', () => {
+    // É o último momento em que ainda dá tempo, e não há backup em lugar
+    // nenhum: não existe servidor de onde restaurar.
+    const dentro = $('#dati-conferma').querySelectorAll('[data-action="export"]');
+    assert.equal(dentro.length, 1, 'sem saída de emergência dentro da confirmação');
+  });
+
+  test('confirmar apaga tudo e recarrega', () => {
+    store.addToNotebook({ id: 'n1', it: 'ciao', pt: 'oi' });
+    const antes = dom.location.reloaded;
+
+    $('[data-action="reset"]').dispatchEvent({ type: 'click' });
+    $('[data-action="reset-conferma"]').dispatchEvent({ type: 'click' });
+
+    assert.equal(store.getItem('01', 'x1'), null, 'o progresso tinha que sumir');
+    assert.deepEqual(store.notebook(), [], 'o caderno também some — a promessa é «tudo»');
+    assert.equal(store.dueCount(), 0, 'a agenda de revisão junto');
+    assert.equal(dom.location.reloaded, antes + 1);
+  });
+
+  test('sem os elementos na página, nada quebra', () => {
+    // O Ripasso e o Caderno chamam o mesmo initChrome e NÃO têm o painel.
+    assert.doesNotThrow(() => initChrome());
   });
 });

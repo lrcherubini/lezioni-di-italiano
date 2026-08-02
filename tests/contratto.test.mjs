@@ -86,7 +86,12 @@ const FIXTURES = {
   },
   flashcard: {
     id: 'x-lex', type: 'flashcard', category: 'VOCABOLARIO', consegna: 'Ricorda.',
-    carte: [{ id: 'x-c01', it: 'il cane', pt: 'o cachorro', chunkType: 'word' }],
+    // Duas cartas, e a segunda com `figura`: o caminho da figura tem que
+    // passar pela matriz inteira, não só pelos testes do próprio tipo.
+    carte: [
+      { id: 'x-c01', it: 'il cane', pt: 'o cachorro', chunkType: 'word' },
+      { id: 'x-c02', it: 'la macchina', pt: 'o carro', chunkType: 'word', figura: '🚗' },
+    ],
   },
   dictogloss: {
     id: 'x-e08', type: 'dictogloss', category: 'VERBO', consegna: 'Ricostruisci.',

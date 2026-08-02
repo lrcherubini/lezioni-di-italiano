@@ -183,6 +183,71 @@ def check_prose(name: str, ctx: str, testo, modo: str = 'pt') -> None:
                 f'{"portuguesa" if tag == "pt" else "italiana"}; a tag a usar é <{viva}>')
 
 
+# Marcação proibida dentro de um SVG de `figura`. O conteúdo é nosso, mas
+# a checagem custa dez linhas e fecha a porta para sempre — inclusive contra
+# o dia em que alguém colar um SVG "achado na internet" dentro do JSON.
+SVG_PROIBIDO = (
+    ('<script', 'script embutido'),
+    ('<foreignobject', '<foreignObject> carrega HTML arbitrário'),
+    ('<image', '<image> aponta para arquivo externo'),
+    ('javascript:', 'URL javascript:'),
+)
+SVG_HANDLER_RE = re.compile(r'\son[a-z]+\s*=', re.I)
+SVG_HREF_RE = re.compile(r'(?:xlink:)?href\s*=\s*["\']?([^"\'\s>]*)', re.I)
+
+# Junções que não contam como "mais um símbolo": ZWJ (👨‍🍳) e o seletor de
+# apresentação emoji (❤️). Sem elas, sequências legítimas pareceriam texto.
+EMOJI_JUNCAO = {0x200D, 0xFE0F}
+
+
+def check_figura(quem: str, fig) -> None:
+    """`chunks[].figura` — o estímulo visual da carta de flashcard.
+
+    Duas formas, e a primeira é o caso comum: um emoji, ou um SVG inline
+    (a exceção, quando não existe emoji que sirva). Arquivo de imagem está
+    fora por decisão: binário em repositório público exige origem e licença
+    rastreadas, e o site não tem passo de build para otimizar nada.
+
+    A parte do emoji é uma checagem de FORMA, não um parser de Unicode: ela
+    existe para pegar o engano provável — texto português enfiado em
+    `figura`, que apareceria gigante na carta e entregaria a resposta.
+    """
+    if not isinstance(fig, str) or not fig.strip():
+        err(f'{quem}: figura vazia — omita o campo em vez de deixá-lo em branco')
+        return
+
+    s = fig.strip()
+
+    if s.startswith('<svg'):
+        if not s.endswith('</svg>'):
+            err(f'{quem}: figura SVG não fecha em </svg>')
+        baixo = s.lower()
+        for marca, porque in SVG_PROIBIDO:
+            if marca in baixo:
+                err(f'{quem}: figura SVG contém «{marca}» — {porque}')
+        if SVG_HANDLER_RE.search(s):
+            err(f'{quem}: figura SVG tem handler inline (on…=)')
+        for alvo in SVG_HREF_RE.findall(s):
+            if not alvo.startswith('#'):
+                err(f'{quem}: figura SVG referencia «{alvo}» — só href interno (#id) é aceito')
+        if 'viewbox' not in baixo:
+            warn(f'{quem}: figura SVG sem viewBox — não escala junto com a carta')
+        return
+
+    if '<' in s:
+        err(f'{quem}: figura não é emoji nem SVG — comece com «<svg» ou use um emoji')
+        return
+
+    pontos = [ord(c) for c in s]
+    if len(pontos) > 10:
+        err(f'{quem}: figura com {len(pontos)} caracteres — parece texto, não emoji')
+        return
+    fora = [c for c in s if ord(c) < 0x2190 and ord(c) not in EMOJI_JUNCAO]
+    if fora or not any(ord(c) >= 0x2190 for c in s):
+        err(f'{quem}: figura «{s}» não parece um emoji — a frente da carta '
+            f'não pode virar texto, senão entrega a resposta')
+
+
 def check_section(name: str, section: dict, ids: Counter, modo: str = 'pt') -> None:
     sid = section.get('id', '?')
     ids[sid] += 1
@@ -406,6 +471,8 @@ def check_lesson(name: str, d: dict, ids: Counter) -> None:
             err(f'{name} {chunk["id"]}: category inválida «{chunk.get("category")}»')
         if chunk.get('chunkType') == 'semiFixed' and '___' not in chunk.get('it', ''):
             err(f'{name} {chunk["id"]}: semiFixed sem slot «___»')
+        if 'figura' in chunk:
+            check_figura(f'{name} {chunk["id"]}', chunk['figura'])
 
     types: Counter = Counter()
     for ex in d.get('esercizi', []):

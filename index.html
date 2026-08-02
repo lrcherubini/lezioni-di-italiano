@@ -48,12 +48,56 @@
     <div id="lesson-grid">
       <p class="loading">Carregando as aulas…</p>
     </div>
+
+    <!-- Seus dados. Fica fechado por padrão: é painel de controle, não
+         aviso de consentimento. Não há banner a pedir porque não há nada a
+         consentir — sem servidor, sem terceiro, sem rastreamento, e o que o
+         localStorage guarda é só o necessário para o site fazer o que você
+         pediu. O que falta a esse arranjo não é aceite, é poder apagar. -->
+    <details class="dati" id="dati">
+      <summary class="dati__head">Seus dados</summary>
+
+      <p>
+        Tudo o que este site sabe sobre você fica no <code>localStorage</code> deste
+        navegador, neste dispositivo: o progresso de cada item, a agenda de revisão do
+        Ripasso, o caderno léxico e as preferências de tema e velocidade do áudio.
+        Nada é enviado para lugar nenhum — não existe servidor, conta nem rastreamento.
+      </p>
+      <p>
+        As gravações de voz da etapa <em>Produzione</em> não são salvas: elas vivem só
+        na memória da aba e somem quando você sai da página. O microfone só liga com a
+        permissão que o próprio navegador pede.
+      </p>
+      <p>
+        Limpar os dados do site pelo navegador apaga tudo isto junto. Se for trocar de
+        dispositivo, exporte antes.
+      </p>
+
+      <div class="ex__row dati__acoes">
+        <button class="btn btn--sm" type="button" data-action="export">⬇ Baixar meu progresso</button>
+        <button class="btn btn--sm" type="button" data-action="import">⬆ Restaurar de um arquivo</button>
+        <button class="btn btn--sm btn--danger" type="button" data-action="reset">🗑 Apagar tudo</button>
+      </div>
+
+      <div class="dati__conferma" id="dati-conferma" role="group" aria-label="Confirmar apagar" hidden>
+        <p>
+          <strong>Apagar tudo?</strong> Somem o progresso de todas as aulas, a agenda de
+          revisão, o caderno léxico e as preferências. <strong>Não tem volta</strong> —
+          não há cópia em servidor nenhum.
+        </p>
+        <div class="ex__row">
+          <button class="btn btn--sm" type="button" data-action="export">⬇ Baixar uma cópia antes</button>
+          <button class="btn btn--sm btn--danger" type="button" data-action="reset-conferma">Apagar mesmo assim</button>
+          <button class="btn btn--sm btn--ghost" type="button" data-action="reset-cancela">Cancelar</button>
+        </div>
+      </div>
+    </details>
   </main>
 
   <footer class="site-footer">
     <div class="site-footer__inner">
       <p>Material de estudo pessoal, gerado a partir das anotações de aula. Sem fins comerciais.</p>
-      <p>Sem rastreamento, sem cookies, sem servidor. Progresso salvo no <code>localStorage</code> do navegador.</p>
+      <p>Sem rastreamento, sem cookies, sem servidor. Progresso salvo no <code>localStorage</code> do navegador — <a href="index.html#dati">veja e apague seus dados</a>.</p>
     </div>
   </footer>
 

@@ -162,7 +162,7 @@
     },
     "bagno": {
       "aula": "00",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "bari": {
       "aula": "00",
@@ -170,7 +170,7 @@
     },
     "bassi": {
       "aula": "01",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "belga": {
       "aula": "01",
@@ -186,7 +186,7 @@
     },
     "belgio": {
       "aula": "01",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "bene": {
       "aula": "02",
@@ -202,7 +202,7 @@
     },
     "brasile": {
       "aula": "01",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "brasiliana": {
       "aula": "01",
@@ -358,7 +358,7 @@
     },
     "cortesia": {
       "aula": "01",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "così": {
       "aula": "00",
@@ -514,11 +514,11 @@
     },
     "fabbrica": {
       "aula": "00",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "famiglia": {
       "aula": "00",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "fare": {
       "aula": "00",
@@ -526,7 +526,7 @@
     },
     "fattoria": {
       "aula": "00",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "favoloso": {
       "aula": "00",
@@ -546,7 +546,7 @@
     },
     "figlio": {
       "aula": "00",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "formale": {
       "aula": "02",
@@ -562,7 +562,7 @@
     },
     "francia": {
       "aula": "01",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "g": {
       "aula": "00",
@@ -602,7 +602,7 @@
     },
     "ghiaccio": {
       "aula": "00",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "gi": {
       "aula": "00",
@@ -630,7 +630,7 @@
     },
     "gonna": {
       "aula": "00",
-      "origine": "contrasto"
+      "origine": "chunk"
     },
     "grazie": {
       "aula": "01",
@@ -646,7 +646,7 @@
     },
     "guerra": {
       "aula": "00",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "gusto": {
       "aula": "00",
@@ -776,9 +776,13 @@
       "aula": "01",
       "origine": "chunk"
     },
+    "l'aquilone": {
+      "aula": "00",
+      "origine": "chunk"
+    },
     "l'argentina": {
       "aula": "01",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "l'argentino": {
       "aula": "01",
@@ -810,7 +814,7 @@
     },
     "l'italia": {
       "aula": "01",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "l'italiana": {
       "aula": "01",
@@ -822,7 +826,7 @@
     },
     "l'olanda": {
       "aula": "01",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "l'olandese": {
       "aula": "01",
@@ -836,9 +840,13 @@
       "aula": "02",
       "origine": "chunk"
     },
+    "l'uomo": {
+      "aula": "00",
+      "origine": "chunk"
+    },
     "lasagna": {
       "aula": "00",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "lentamente": {
       "aula": "00",
@@ -910,7 +918,7 @@
     },
     "lussemburgo": {
       "aula": "01",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "língua": {
       "aula": "01",
@@ -946,7 +954,7 @@
     },
     "mamma": {
       "aula": "00",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "mangiare": {
       "aula": "00",
@@ -1094,7 +1102,7 @@
     },
     "piacere": {
       "aula": "01",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "pizza": {
       "aula": "00",
@@ -1146,7 +1154,7 @@
     },
     "portogallo": {
       "aula": "01",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "portoghese": {
       "aula": "01",
@@ -1210,7 +1218,7 @@
     },
     "ragazzo": {
       "aula": "00",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "regno": {
       "aula": "00",
@@ -1398,7 +1406,7 @@
     },
     "spaghetti": {
       "aula": "00",
-      "origine": "tabella"
+      "origine": "chunk"
     },
     "spagna": {
       "aula": "01",
@@ -1474,7 +1482,7 @@
     },
     "tappo": {
       "aula": "00",
-      "origine": "lista"
+      "origine": "chunk"
     },
     "taxi": {
       "aula": "00",

@@ -478,7 +478,23 @@
     { "id": "l00-c02", "it": "Come si dice?", "pt": "Como se diz?", "category": "ESPRESSIONE", "chunkType": "fixed" },
     { "id": "l00-c03", "it": "Puoi ripetere, per favore?", "pt": "Pode repetir, por favor?", "category": "ESPRESSIONE", "chunkType": "fixed" },
     { "id": "l00-c04", "it": "Più lentamente, per favore.", "pt": "Mais devagar, por favor.", "category": "ESPRESSIONE", "chunkType": "fixed" },
-    { "id": "l00-c05", "it": "doppia ___", "pt": "dois ___ (letra dobrada)", "category": "ESPRESSIONE", "chunkType": "semiFixed", "slot": ["elle", "esse", "emme", "enne", "ti", "bi"] }
+    { "id": "l00-c05", "it": "doppia ___", "pt": "dois ___ (letra dobrada)", "category": "ESPRESSIONE", "chunkType": "semiFixed", "slot": ["elle", "esse", "emme", "enne", "ti", "bi"] },
+
+    { "id": "l00-c06", "it": "la mamma", "pt": "a mãe", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l00-c07", "it": "il ragazzo", "pt": "o rapaz, o garoto", "category": "VOCABOLARIO", "chunkType": "word", "figura": "👦" },
+    { "id": "l00-c08", "it": "la famiglia", "pt": "a família", "category": "VOCABOLARIO", "chunkType": "word", "figura": "👨‍👩‍👦" },
+    { "id": "l00-c09", "it": "il figlio", "pt": "o filho", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l00-c10", "it": "il bagno", "pt": "o banheiro", "category": "VOCABOLARIO", "chunkType": "word", "figura": "🛁" },
+    { "id": "l00-c11", "it": "la fabbrica", "pt": "a fábrica", "category": "VOCABOLARIO", "chunkType": "word", "figura": "🏭" },
+    { "id": "l00-c12", "it": "la fattoria", "pt": "a fazenda, o sítio", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l00-c13", "it": "la gonna", "pt": "a saia", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l00-c14", "it": "il ghiaccio", "pt": "o gelo", "category": "VOCABOLARIO", "chunkType": "word", "figura": "🧊" },
+    { "id": "l00-c15", "it": "gli spaghetti", "pt": "o espaguete", "category": "VOCABOLARIO", "chunkType": "word", "figura": "🍝" },
+    { "id": "l00-c16", "it": "la lasagna", "pt": "a lasanha", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l00-c17", "it": "l'aquilone", "pt": "a pipa", "category": "VOCABOLARIO", "chunkType": "word", "figura": "🪁" },
+    { "id": "l00-c18", "it": "l'uomo", "pt": "o homem", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l00-c19", "it": "la guerra", "pt": "a guerra", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l00-c20", "it": "il tappo", "pt": "a tampa, a rolha", "category": "VOCABOLARIO", "chunkType": "word" }
   ],
   "dialogo": {
     "id": "l00-d01",

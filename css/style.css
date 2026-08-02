@@ -7,6 +7,21 @@
 *::before,
 *::after { box-sizing: border-box; }
 
+/* O `[hidden]` do user-agent vale 0-0-0 de especificidade, então QUALQUER
+   regra de classe com `display` o derrota — em silêncio, e sem erro nenhum.
+   Foi assim que o verso do flashcard nasceu visível: `.carta__it` declarava
+   `display:flex` e a resposta aparecia antes de o aluno tentar lembrar.
+
+   Metade da UI esconde coisa por `hidden` (verso da carta, player de
+   gravação, transcrição do diálogo na 1ª passada) e o DOM da suíte guarda
+   `hidden` como propriedade sem interpretar CSS — ou seja, esta classe de
+   defeito é invisível para os testes de comportamento. Por isso a regra é
+   global e `!important`, e não um remendo por seletor.
+
+   Quem precisa reexibir algo marcado `hidden` (o `@media print` faz isso com
+   a transcrição) vence por especificidade, não removendo esta regra. */
+[hidden] { display: none !important; }
+
 html { -webkit-text-size-adjust: 100%; }
 
 body {
@@ -109,6 +124,10 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
 .btn--primary:hover:not(:disabled) { background: var(--navy-600); }
 .btn--ghost { border-color: transparent; background: transparent; }
 .btn--ghost:hover:not(:disabled) { background: var(--surface-alt); }
+/* Ação destrutiva. A cor não é decoração: é o aviso que a pessoa lê antes
+   de ler o rótulo. Usa os tokens de erro para acompanhar o dark mode. */
+.btn--danger { border-color: var(--err-border); color: var(--err); }
+.btn--danger:hover:not(:disabled) { background: var(--err-bg); }
 /* "Pequeno" é relativo: continua menor que .btn, mas com alvo de toque
    utilizável no celular — as passadas do diálogo e Lento/Normal são
    botões que se aperta muito, e 24px de altura era pouco. */
@@ -806,9 +825,35 @@ textarea { min-height: 5rem; resize: vertical; line-height: var(--lh-normal); }
   background: var(--surface);
   display: grid; gap: var(--sp-2);
 }
-/* A frente é o português, e é grande: é o estímulo, não a glosa. */
+
+/* O baralho mostra UMA carta; as outras ficam `hidden`. A altura mínima
+   evita que a página pule de tamanho a cada virada — o que faria o botão
+   escapar de baixo do dedo no celular. */
+.carte--mazzo .carta { min-height: 9rem; align-content: center; }
+
+.carta__conta {
+  font-size: var(--fs-sm); color: var(--text-muted);
+  margin-bottom: var(--sp-2);
+}
+.carta__nav { justify-content: space-between; margin-top: var(--sp-3); }
+
+/* A frente é o estímulo, e é grande — não é glosa. */
 .carta__pt { font-size: var(--fs-lg); }
-.carta__it { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-lg); }
+
+/* A figura é o mesmo papel do português, em outro canal: um emoji grande
+   ou um SVG inline. `line-height:1` porque emoji nesse corpo carrega uma
+   caixa alta e a carta ficaria com um buraco em cima. */
+.carta__figura {
+  font-size: 4.5rem; line-height: 1; text-align: center;
+  padding: var(--sp-2) 0;
+}
+.carta__figura svg { width: 5.5rem; height: 5.5rem; display: block; margin: 0 auto; }
+
+.carta__it { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-lg); flex-wrap: wrap; }
+/* Com figura, o verso confirma também o português: 🚗 sozinho não distingue
+   `la macchina` de `l'auto`. */
+.carta__gloss { font-size: var(--fs-sm); color: var(--text-muted); }
+.carta__dica { font-size: var(--fs-sm); color: var(--text-muted); }
 
 .carta__voto[aria-pressed="true"] { font-weight: 700; }
 .carta__voto--on[data-voto="si"] { border-color: var(--ok-border); background: var(--ok-bg); color: var(--ok); }
@@ -871,7 +916,8 @@ textarea { min-height: 5rem; resize: vertical; line-height: var(--lh-normal); }
   font-weight: 700; font-size: var(--fs-sm);
   min-width: 4.2rem; color: var(--accent);
 }
-.battute[hidden] { display: none; }
+/* (o `.battute[hidden] { display:none }` que morava aqui virou redundante:
+   a regra global do topo cobre todos os casos) */
 
 .domande { list-style: none; display: grid; gap: var(--sp-3); margin-top: var(--sp-3); }
 .domanda__label { display: block; font-weight: 600; margin-bottom: var(--sp-2); font-size: var(--fs-sm); }
@@ -908,6 +954,28 @@ textarea { min-height: 5rem; resize: vertical; line-height: var(--lh-normal); }
   display: flex; justify-content: space-between; gap: var(--sp-3);
   padding-top: var(--sp-5); border-top: 1px solid var(--border);
   flex-wrap: wrap;
+}
+
+/* --- Seus dados -------------------------------------------------------- */
+
+.dati {
+  margin-top: var(--sp-7);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: var(--sp-4);
+  font-size: var(--fs-sm); color: var(--text-muted);
+}
+.dati__head { cursor: pointer; font-weight: 600; color: var(--text); }
+.dati[open] .dati__head { margin-bottom: var(--sp-3); }
+.dati p + p { margin-top: var(--sp-2); }
+.dati__acoes { margin-top: var(--sp-4); }
+
+.dati__conferma {
+  margin-top: var(--sp-3); padding: var(--sp-3);
+  border: 1px solid var(--err-border); border-radius: var(--radius);
+  background: var(--err-bg); color: var(--text);
+  display: grid; gap: var(--sp-3);
 }
 
 /* --- Rodapé ----------------------------------------------------------- */
