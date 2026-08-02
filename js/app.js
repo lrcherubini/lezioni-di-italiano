@@ -606,27 +606,73 @@ function initRail() {
   }
 }
 
-/* --- Exportar / importar progresso -------------------------------------- */
+/* --- Exportar / importar / apagar progresso ------------------------------
 
+   Este site não tem servidor, conta nem terceiro: tudo o que existe sobre o
+   aluno mora no localStorage do navegador dele. Isso dispensa banner de
+   consentimento — é armazenamento estritamente necessário para a função que
+   o próprio aluno pediu — mas não dispensa CONTROLE. Poder levar embora
+   (exportar), poder trazer de volta (importar) e poder apagar são a mesma
+   promessa vista de três lados.                                          */
+
+/* Os três botões aparecem em mais de um lugar (atalho na toolbar e por
+   extenso no painel «Seus dados»), então é querySelectorAll: com
+   querySelector só o primeiro do documento ficaria ligado, e o outro seria
+   um botão morto — sem erro nenhum no console. */
 function initDataButtons() {
-  document.querySelector('[data-action="export"]')?.addEventListener('click', () => store.download());
+  for (const b of document.querySelectorAll('[data-action="export"]')) {
+    b.addEventListener('click', () => store.download());
+  }
+  for (const b of document.querySelectorAll('[data-action="import"]')) {
+    b.addEventListener('click', pedirArquivo);
+  }
+  initReset();
+}
 
-  const importBtn = document.querySelector('[data-action="import"]');
-  if (!importBtn) return;
+function pedirArquivo() {
+  const input = el('input', { type: 'file', accept: 'application/json,.json' });
+  input.addEventListener('change', async () => {
+    const file = input.files?.[0];
+    if (!file) return;
+    try {
+      store.importJSON(await file.text());
+      location.reload();
+    } catch (err) {
+      alert(`Não foi possível importar: ${err.message}`);
+    }
+  });
+  input.click();
+}
 
-  importBtn.addEventListener('click', () => {
-    const input = el('input', { type: 'file', accept: 'application/json,.json' });
-    input.addEventListener('change', async () => {
-      const file = input.files?.[0];
-      if (!file) return;
-      try {
-        store.importJSON(await file.text());
-        location.reload();
-      } catch (err) {
-        alert(`Não foi possível importar: ${err.message}`);
-      }
-    });
-    input.click();
+/* Apagar é irreversível e não há backup em lugar nenhum — nem no servidor,
+   que não existe. A confirmação é INLINE, não um `confirm()` do navegador,
+   por três motivos: cabe a lista exata do que vai sumir (um `confirm` vira
+   parede de texto), oferece baixar a cópia ali mesmo, no único momento em
+   que ainda dá tempo, e é alcançável por teclado e por teste — `confirm()`
+   bloqueia a thread e não existe fora do navegador. */
+function initReset() {
+  const btn = document.querySelector('[data-action="reset"]');
+  const caixa = document.getElementById('dati-conferma');
+  if (!btn || !caixa) return;
+
+  const confirmar = caixa.querySelector('[data-action="reset-conferma"]');
+  const cancelar = caixa.querySelector('[data-action="reset-cancela"]');
+
+  btn.addEventListener('click', () => {
+    caixa.hidden = false;
+    btn.hidden = true;
+    confirmar?.focus?.();
+  });
+
+  cancelar?.addEventListener('click', () => {
+    caixa.hidden = true;
+    btn.hidden = false;
+    btn.focus?.();
+  });
+
+  confirmar?.addEventListener('click', () => {
+    store.reset();
+    location.reload();
   });
 }
 

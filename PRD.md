@@ -112,7 +112,7 @@ Como aluno, quero ouvir uma pergunta e sua resposta e transcrever apenas a respo
 | `scelta` | Escolher a forma certa entre alternativas | Compito «Scegli la parola corretta» |
 | `riordino` | Remontar a frase com as palavras fora de ordem | Compito «Riordina le parole» |
 | `abbinamento` | Associar pergunta e resposta | Compito «Abbina domande e risposte» |
-| `flashcard` | Léxico da aula em cartas, com autoavaliação | Lexical Notebook |
+| `flashcard` | Baralho do léxico da aula, uma carta por vez, com autoavaliação; a frente pode ser um **emoji/SVG** em vez do português | Lexical Notebook; efeito de superioridade da imagem |
 | `dictogloss` | 4 etapas: pré-ensino → 3 escutas → reconstrução → análise contra o original | Dictogloss |
 
 Também já entregues: **Ripasso** adaptativo atravessando aulas (`ripasso.html`), card de Ripasso na home, **Lexical Notebook** com UI própria (`notebook.html`) e **gravação de voz** na etapa de Produzione.
@@ -136,6 +136,7 @@ Também já entregues: **Ripasso** adaptativo atravessando aulas (`ripasso.html`
 | NF7 | **Responsivo** | Mobile-first; tabelas rolam no próprio container; o corpo nunca rola na horizontal. |
 | NF8 | **Tema claro e escuro** | Segue o sistema, com toggle que vence nos dois sentidos. |
 | NF9 | **Integridade do progresso** | `localStorage` versionado com função de migração; `id` de item imutável. |
+| NF10 | **Controle sobre os próprios dados** | Painel «Seus dados» na home (`#dati`) explica o que fica salvo e onde, e traz exportar, importar e **apagar tudo** com confirmação inline. Sem banner de consentimento: o `localStorage` guarda só armazenamento estritamente necessário, e não há servidor nem terceiro. Persistir gravação de voz mudaria isso e exigiria opt-in. |
 
 ## 9. Critérios de aceite (verificáveis)
 
@@ -150,6 +151,8 @@ Também já entregues: **Ripasso** adaptativo atravessando aulas (`ripasso.html`
 9. Sem voz `it-IT`: banner aparece, página segue completa e interativa.
 10. Aula inexistente (`?l=99`) mostra erro explicativo, não tela branca.
 11. Nenhum nome de pessoa ou plataforma em arquivo versionado.
+12. O verso do flashcard **não** aparece antes de «Mostrar», e só uma carta fica visível por vez.
+13. «🗑 Apagar tudo» pede confirmação; cancelar preserva o progresso, confirmar zera progresso, agenda e caderno.
 
 ## 10. Roadmap
 
@@ -157,7 +160,7 @@ Também já entregues: **Ripasso** adaptativo atravessando aulas (`ripasso.html`
 
 **Fase 2 — feita.** `slot-frame`, `scelta`, `riordino`, `abbinamento`, `flashcard`, `dictogloss`; UI do Lexical Notebook; Ripasso adaptativo na home; gravação de voz na Produzione; mecanismo de modo de língua (§12).
 
-**Fase 3 — se fizer falta.** `minimal-pair` (exige refatorar a seleção de voz); persistir gravações em IndexedDB para comparar evolução ao longo das semanas; MP3 pré-gerados por item (o schema já tem `audio.src`) caso o TTS se mostre insuficiente; busca em todo o conteúdo.
+**Fase 3 — se fizer falta.** `minimal-pair` (exige refatorar a seleção de voz); persistir gravações em IndexedDB para comparar evolução ao longo das semanas — **e isso exige opt-in explícito na mesma mudança**, porque gravação salva deixa de ser armazenamento necessário e vira dado guardado por escolha (ver `js/record.js` e CLAUDE.md); MP3 pré-gerados por item (o schema já tem `audio.src`) caso o TTS se mostre insuficiente; busca em todo o conteúdo.
 
 ## 11. Decisões de arquitetura e o motivo
 

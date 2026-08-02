@@ -63,13 +63,29 @@ export function homeSkeleton(document) {
     for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
     return n;
   };
+  /* O painel «Seus dados» repete export/import por extenso, e o esqueleto
+     repete junto: é justamente essa duplicação que já quebrou uma vez o
+     wiring por `querySelector` (só o primeiro do documento ficava ligado). */
+  const conferma = mk('div', { id: 'dati-conferma', hidden: '' });
+  conferma.append(
+    // Saída de emergência dentro da própria confirmação: é o último momento
+    // em que ainda dá para levar uma cópia.
+    mk('button', { 'data-action': 'export' }),
+    mk('button', { 'data-action': 'reset-conferma' }),
+    mk('button', { 'data-action': 'reset-cancela' })
+  );
+
   document.body.append(
     mk('div', { id: 'audio-status' }),
     mk('button', { 'data-action': 'theme' }),
     mk('button', { 'data-action': 'export' }),
     mk('button', { 'data-action': 'import' }),
     mk('div', { id: 'home-topo' }),
-    mk('div', { id: 'lesson-grid' })
+    mk('div', { id: 'lesson-grid' }),
+    mk('button', { 'data-action': 'export' }),
+    mk('button', { 'data-action': 'import' }),
+    mk('button', { 'data-action': 'reset' }),
+    conferma
   );
 }
 

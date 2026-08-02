@@ -205,6 +205,122 @@ class TestCheckProse(unittest.TestCase):
         self.assertEqual(v.errors, [])
 
 
+class TestCheckFigura(unittest.TestCase):
+    """`chunks[].figura` — o estímulo visual da carta.
+
+    Duas famílias de risco, e elas são bem diferentes. A do emoji é
+    PEDAGÓGICA: texto português enfiado no campo apareceria gigante na
+    frente da carta e entregaria a resposta, matando o exercício sem
+    quebrar nada. A do SVG é de SEGURANÇA: `figura` é o único campo do
+    conteúdo que vira marcação crua via innerHTML.
+    """
+
+    def setUp(self):
+        v.errors.clear()
+        v.warnings.clear()
+
+    def fig(self, valor):
+        v.check_figura('x.json c1', valor)
+        return v.errors
+
+    # --- emoji ---
+
+    def test_emoji_simples_passa(self):
+        self.assertEqual(self.fig('🚗'), [])
+
+    def test_emoji_com_seletor_e_zwj_passa(self):
+        # ❤️ traz VS16; 👨‍🍳 é uma sequência com ZWJ. As duas são um símbolo
+        # só na tela e não podem ser lidas como "texto".
+        self.assertEqual(self.fig('❤️'), [])
+        self.assertEqual(self.fig('👨‍🍳'), [])
+
+    def test_texto_em_portugues_e_erro(self):
+        self.assertEqual(len(self.fig('carro')), 1)
+        self.assertIn('não parece um emoji', v.errors[0])
+
+    def test_letra_solta_e_erro(self):
+        # Uma letra passaria pelo teto de tamanho; o que a reprova é a faixa
+        # de codepoint, não o comprimento.
+        self.assertEqual(len(self.fig('A')), 1)
+
+    def test_frase_longa_e_erro_por_tamanho(self):
+        self.assertEqual(len(self.fig('um carro vermelho na rua')), 1)
+        self.assertIn('parece texto', v.errors[0])
+
+    def test_vazio_e_erro(self):
+        self.assertEqual(len(self.fig('   ')), 1)
+        self.assertIn('figura vazia', v.errors[0])
+
+    def test_nao_string_e_erro(self):
+        self.assertEqual(len(self.fig(42)), 1)
+
+    # --- SVG ---
+
+    def test_svg_bem_formado_passa(self):
+        self.assertEqual(self.fig('<svg viewBox="0 0 64 64"><path d="M8 56 L56 8"/></svg>'), [])
+
+    def test_svg_sem_fechamento_e_erro(self):
+        self.assertEqual(len(self.fig('<svg viewBox="0 0 8 8"><path/>')), 1)
+        self.assertIn('</svg>', v.errors[0])
+
+    def test_svg_com_script_e_erro(self):
+        self.assertIn('script', self.fig(
+            '<svg viewBox="0 0 8 8"><script>alert(1)</script></svg>')[0])
+
+    def test_svg_com_handler_inline_e_erro(self):
+        self.assertIn('handler', self.fig(
+            '<svg viewBox="0 0 8 8"><circle onclick="x()" r="1"/></svg>')[0])
+
+    def test_svg_com_href_externo_e_erro(self):
+        # Referência externa quebraria «zero CDN» e vazaria a visita.
+        self.assertIn('href interno', self.fig(
+            '<svg viewBox="0 0 8 8"><use href="https://cdn.exemplo/i.svg#a"/></svg>')[0])
+
+    def test_svg_com_href_interno_passa(self):
+        self.assertEqual(self.fig(
+            '<svg viewBox="0 0 8 8"><defs><path id="a" d="M0 0"/></defs>'
+            '<use href="#a"/></svg>'), [])
+
+    def test_svg_com_image_externa_e_erro(self):
+        self.assertEqual(len(self.fig(
+            '<svg viewBox="0 0 8 8"><image href="foto.png"/></svg>')), 2)
+
+    def test_svg_sem_viewbox_e_aviso_nao_erro(self):
+        # Não escala junto com a carta, mas renderiza — é aviso.
+        self.assertEqual(self.fig('<svg width="8"><path d="M0 0"/></svg>'), [])
+        self.assertEqual(len(v.warnings), 1)
+        self.assertIn('viewBox', v.warnings[0])
+
+    def test_html_que_nao_e_svg_e_erro(self):
+        self.assertIn('nem SVG', self.fig('<img src="carro.png">')[0])
+
+    # --- integração com a aula ---
+
+    def test_chunk_com_figura_ruim_reprova_a_aula(self):
+        v.check_lesson('x.json', aula(chunks=[{
+            'id': 'c1', 'it': 'la macchina', 'pt': 'o carro',
+            'chunkType': 'word', 'category': 'VOCABOLARIO', 'figura': 'carro',
+        }]), Counter())
+        self.assertTrue(any('figura' in e for e in v.errors))
+
+    def test_chunk_sem_figura_e_o_caso_normal(self):
+        v.check_lesson('x.json', aula(chunks=[{
+            'id': 'c1', 'it': 'la macchina', 'pt': 'o carro',
+            'chunkType': 'word', 'category': 'VOCABOLARIO',
+        }]), Counter())
+        self.assertEqual(v.errors, [])
+
+    def test_figura_nao_entra_no_lexico(self):
+        # O léxico é o italiano EXIBIDO; 🚗 não é forma italiana nenhuma.
+        files = {'lezione-05.json': aula(chunks=[{
+            'id': 'c1', 'it': 'la macchina', 'pt': 'o carro',
+            'chunkType': 'word', 'category': 'VOCABOLARIO', 'figura': '🚗',
+        }])}
+        formas = v.build_lessico(files)['forme']
+        self.assertIn('macchina', formas)
+        self.assertNotIn('🚗', formas)
+
+
 class TestProseMatriz(unittest.TestCase):
     """Matriz modo × tag. São 3 modos e 2 tags: o que precisa de prova é a
     tabela, não cada célula solta — é assim que não se esquece um par."""

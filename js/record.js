@@ -21,6 +21,16 @@
    O blob morre ao sair da página, e a UI diz isso antes de gravar. Persistir
    para comparar evolução ao longo das semanas é trabalho futuro consciente.
 
+   PRECONDIÇÃO PARA ESSE DIA, e ela não é negociável: **persistir gravação
+   exige opt-in explícito do aluno.** Hoje não há aceite a pedir porque não
+   há nada a consentir — o áudio nunca toca o disco, e o microfone já é
+   guardado pela permissão do próprio navegador, que é um aceite mais forte
+   e mais confiável do que qualquer caixa desenhada pela página. No momento
+   em que a voz passar a ficar salva, ela deixa de ser «estritamente
+   necessária» para a função pedida e vira dado pessoal guardado por escolha
+   — e escolha se pergunta. Quem implementar IndexedDB aqui implementa o
+   opt-in na mesma mudança, junto com o botão de apagar as gravações.
+
    Nada sai do navegador. Não há upload, não há rede.
    ========================================================================== */
 

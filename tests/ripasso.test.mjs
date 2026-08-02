@@ -99,6 +99,35 @@ describe('indexById', () => {
     assert.doesNotThrow(() => indexById({ esercizi: [{ id: 'x', type: 'gap-audio' }] }));
     assert.doesNotThrow(() => indexById({}));
   });
+
+  /* --- Flashcard: a carta é o átomo, e aqui isso é correção, não estilo --- */
+
+  test('carta vencida cai num baralho DE UMA CARTA', async () => {
+    // `check` do flashcard grava todas as cartas do baralho que recebeu, e
+    // carta sem voto conta como não lembrada. Se a carta apontasse para o
+    // baralho inteiro da aula, revisar três cartas reprovaria as outras
+    // vinte e quatro — que nem estavam vencidas.
+    const { flashcardDeck } = await import('../js/exercises/index.js');
+    const deck = flashcardDeck(aula01);
+    const carta = deck.carte[3];
+
+    const item = idx.get(carta.id);
+    assert.equal(item.type, 'flashcard');
+    assert.deepEqual(item.carte.map((c) => c.id), [carta.id]);
+    assert.ok(deck.carte.length > 1, 'o teste perde o sentido com baralho de uma carta');
+  });
+
+  test('cada carta tem um id de card distinto — senão a dedup come as outras', async () => {
+    const { flashcardDeck } = await import('../js/exercises/index.js');
+    const deck = flashcardDeck(aula01);
+    const ids = deck.carte.map((c) => idx.get(c.id).id);
+    assert.equal(new Set(ids).size, ids.length);
+  });
+
+  test('o baralho inteiro continua alcançável pelo id dele', () => {
+    const inteiro = idx.get('l01-lex');
+    assert.ok(inteiro && inteiro.carte.length > 1);
+  });
 });
 
 describe('collectDue', () => {

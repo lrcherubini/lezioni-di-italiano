@@ -53,12 +53,22 @@ export function indexById(lesson) {
     for (const id of subItemIds(ex)) mapa.set(id, ex);
   }
 
-  // O baralho de flashcards não está em `esercizi` — é derivado dos chunks.
-  // Sem isto, cada carta revisada venceria no progresso e nunca voltaria.
+  /* O baralho de flashcards não está em `esercizi` — é derivado dos chunks.
+     Sem isto, cada carta revisada venceria no progresso e nunca voltaria.
+
+     E cada carta aponta para um baralho DE UMA CARTA SÓ, não para o baralho
+     inteiro da aula. Não é preciosismo: `check` do flashcard grava TODAS as
+     cartas do baralho que recebeu, e carta sem voto conta como não lembrada.
+     Apontar para o baralho inteiro faria uma revisão de três cartas reprovar
+     as outras vinte e quatro, que nem estavam vencidas — corrompendo o
+     progresso exatamente onde ele deveria ser corrigido. A carta é o átomo
+     do flashcard; na aula você revisa o baralho, aqui você revisa a carta. */
   const deck = flashcardDeck(lesson);
   if (deck) {
     mapa.set(deck.id, deck);
-    for (const cid of subItemIds(deck)) mapa.set(cid, deck);
+    for (const carta of deck.carte) {
+      mapa.set(carta.id, { ...deck, id: `${deck.id}-${carta.id}`, carte: [carta] });
+    }
   }
 
   const d = lesson.dialogo;
