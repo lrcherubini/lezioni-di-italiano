@@ -43,19 +43,39 @@ Riscaldamento  Ativa conhecimento prévio. Pede uma tentativa ANTES de estudar
                ("escreva como você acha que se diz…"), e a etapa Produzione
                manda voltar aqui para o aluno se corrigir. Fecha o ciclo.
 
-Studio         Seções com os chips do deck. spiegazione → blocos.
-               🔊 em toda linha italiana.
+Lessico        Os blocos prontos: as Frasi utili agrupadas por intenção
+               comunicativa, e abaixo o baralho, que testa embaralhado o que
+               se acabou de ler organizado. Cada linha e cada carta oferecem
+               ＋ caderno.
 
 Ascolto        O diálogo, em 3 passadas. Coração do método.
 
-Esercizi       Cards inline: gap-audio, qa-transcribe, paradigm-fill.
+Studio         Seções com os chips do deck. spiegazione → blocos.
+               🔊 em toda linha italiana.
+
+Esercizi       Cards inline. A escuta (gap-audio, qa-transcribe, dictogloss),
+               os paradigmas e a escada de fixação.
 
 Produzione     Sem gabarito, de propósito.
 
 Bilancio       Autoavaliação. O desmarcado é o roteiro de revisão.
 ```
 
-Etapas que a aula não tem simplesmente não aparecem — nem no conteúdo nem na trilha.
+**A ordem é fixa no código, não configurável por aula** — quem manda é a sequência de `append` em `renderLesson()`, não a ordem das chaves no JSON.
+
+E ela é esta, e não a dos slides, por uma razão: **contexto antes da regra.** Os slides de origem agrupam por tópico gramatical, que é ordem de referência, não de aprendizado. Com *Studio* primeiro, o aluno lia a regra de `lo/gli` antes de jamais ter ouvido `lo spagnolo` — o contrário da abordagem comunicativa que o PRD §5 declara. Agora ele encontra o bloco pronto (*Lessico*), ouve o bloco em uso (*Ascolto*), e só então lê a estrutura que o explica (*Studio*). Explicar uma forma que o aluno já encontrou é ancorar; explicá-la antes é pedir para decorar.
+
+Etapas que a aula não tem simplesmente não aparecem — nem no conteúdo nem na trilha. Uma aula que parecesse pedir outra ordem seria conteúdo no bloco errado, e um campo de ordenação só esconderia isso.
+
+### Páginas fora da sequência de aulas
+
+Três, e todas existem pelo mesmo motivo: **o que atravessa todas as aulas não cabe dentro de nenhuma.**
+
+| Página | O que é | Grava progresso? |
+|---|---|---|
+| `ripasso.html` | Revisão espaçada, misturando aulas; o que se erra mais vem primeiro | sim |
+| `notebook.html` | O caderno léxico: a forma guardada mais **a sua frase** com ela | é o próprio dado |
+| `frasi.html` | As frases da aula: metade que se produz, metade que só se reconhece | não |
 
 ## 1.3 Anatomia de um card de exercício
 
@@ -75,6 +95,16 @@ O botão **Mostrar resposta** nasce `disabled` e só libera após uma submissão
 ### Regra: a transcrição completa é feedback, não enunciado
 
 Em `gap-audio`, a frase inteira com áudio e tradução aparece **só no feedback**. Se aparecesse antes, não haveria o que ouvir.
+
+### Regra: italiano errado nunca vira áudio
+
+Vale só para `correzione`, e é a única exceção ao princípio de que todo texto italiano exibido tem 🔊.
+
+O campo `sbagliata` é agramatical de propósito — é o que o aluno tem de encontrar. Ele é o único texto italiano do site que **não deve ser aprendido**, e por isso não recebe botão de áudio: ouvir a forma errada numa voz italiana nativa é o jeito mais rápido de gravá-la como se fosse boa. Só a `risposta` fala, e só depois de o aluno responder.
+
+Pelo mesmo motivo, o botão de ouvir tudo no feedback toca **apenas as formas certas**. Um par *errada → certa* seria tentador — deixaria audível o que mudou, como faz o `trasformazione` — mas metade do que o aluno ouviria seria italiano errado.
+
+Visualmente a frase errada é sublinhada em ondulado vermelho e em itálico. E ganha o chip **`✗ errata`**, textual: cor não é canal de informação, e quem usa leitor de tela precisa saber que aquela frase está errada antes de ouvi-la.
 
 ## 1.4 O diálogo em passadas — a decisão mais opinativa
 

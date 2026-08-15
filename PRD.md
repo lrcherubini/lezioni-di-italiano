@@ -126,12 +126,25 @@ Como aluno, quero ouvir uma pergunta e sua resposta e transcrever apenas a respo
 | `dictogloss` | 4 etapas: pré-ensino → 3 escutas → reconstrução → análise contra o original | Dictogloss |
 | `trasformazione` | Converter o modo da frase: afirmativa ⇄ negativa ⇄ interrogativa | Conversão de modo; tabela «afirmativa/negativa/interrogativa» dos materiais comunicativos |
 | `traduzione` | PT → IT, frase inteira, sem nenhum andaime; feedback por diff de palavra | Tradução bidirecional das *consolidation exercises* |
+| `correzione` | Ler uma frase errada e reescrevê-la certa | *Find the mistakes and rewrite* |
 
 **Os drills de volume formam uma escada, e ela foi desenhada como escada.** Cada degrau tira uma muleta da tela: `abbinamento` dá os dois lados · `scelta` dá as alternativas · `riordino` dá as palavras · `slot-frame` dá o molde · `trasformazione` dá a frase e pede uma operação · `traduzione` não dá nada além do sentido.
 
 Os dois últimos foram os que faltaram por mais tempo, e a falta tinha consequência: sem eles a aula terminava em reconhecimento, e produzir uma frase inteira do zero — o que a conversa exige — só acontecia na etapa de Produzione, que não tem correção.
 
-Também já entregues: **Ripasso** adaptativo atravessando aulas (`ripasso.html`), card de Ripasso na home, **Lexical Notebook** com UI própria (`notebook.html`), **gravação de voz** na etapa de Produzione e as **Frasi utili** (§7.1).
+**`correzione` não é um degrau da escada: é um eixo perpendicular a ela.** Os seis degraus partem todos de material correto e medem *produção*. Este parte de material errado e mede **monitoramento** — a atenção com que se relê o que se acabou de escrever. Quem produz `Lui legge il giornale` sem hesitar passa direto por `Lui legge i giornale` num texto seu, porque são duas habilidades e o site só treinava uma.
+
+Ele traz consigo a **única exceção** ao invariante «italiano exibido ⇒ 🔊 ⇒ entra no léxico»: o campo `sbagliata` não ganha áudio e não alimenta `lessico.json`. Ver DESIGN §1.3 e o cabeçalho de `js/exercises/correzione.js`.
+
+### Blocos de conteúdo
+
+Além dos exercícios, uma seção monta blocos de leitura: `lista`, `tabella`, `contrasto`, `paradigma`, `nota` e **`scambio`**.
+
+`scambio` é o microdiálogo de 2 a 4 turnos, e existe para o degrau que faltava: entre produzir *uma frase* (`traduzione`) e o diálogo de 8 turnos não havia nada, e o que falta ali é ver o bloco vivendo na menor conversa possível. É **leitura, não drill** — sem id, sem progresso, sem entrar no `conteggio` —, pela mesma distinção que separa `funzioni` do baralho.
+
+Ele **entra** em `lessico.json`, ao contrário do `dialogo`. A diferença não é o formato — os dois são turnos com falante — é o papel: o scambio é modelo que a aula exibe e ensina, como uma `lista`; o diálogo é o que a checagem de escopo confere, e entrando ele se autoautorizaria.
+
+Também já entregues: **Ripasso** adaptativo atravessando aulas (`ripasso.html`), card de Ripasso na home, **Lexical Notebook** com UI própria (`notebook.html`), **gravação de voz** na etapa de Produzione, as **Frasi utili** (§7.1) e a página **Frasi per la lezione** (§7.2).
 
 ### 7.1 Frasi utili — o chunk agrupado por intenção
 
@@ -143,6 +156,23 @@ Duas decisões sustentam isso:
 
 - **Agrupa por referência de id, nunca copiando texto.** `chunks` continua sendo o inventário lexical único: texto duplicado ficaria mentindo depois da primeira edição, e id duplicado misturaria dois históricos de progresso.
 - **Não grava progresso.** Função é leitura organizada; quem mede a recuperação é o baralho logo abaixo. Por isso `funzioni` não entra no `conteggio` — e por isso acrescentá-la a uma aula antiga não mexeu na barra de progresso de ninguém.
+
+### 7.2 Frasi per la lezione — o que atravessa todas as aulas
+
+`frasi.html` é a terceira página fora da sequência, depois de Ripasso e Caderno, e existe pelo mesmo motivo das outras duas: **o que atravessa todas as aulas não cabe dentro de nenhuma.** As frases de sobrevivência viviam na Aula 0 — e ninguém volta à Aula 0 no meio da Aula 12 para achar «pode repetir?».
+
+A divisão em dois grupos é o conteúdo inteiro:
+
+| Grupo | O aluno | Por que separado |
+|---|---|---|
+| **Tu dici** | **produz** | Decora e diz. Travar sem ter como pedir socorro é o que faz a conversa parar. |
+| **L'insegnante dice** | só **reconhece** | Chegam faladas, rápido e sem aviso, e é aí que travam. |
+
+A metade receptiva é a parte que **o site faz melhor que um livro**: um livro imprime `Ripeti dopo di me` e manda ouvir um CD; aqui o 🔊 já está em cada linha, a 0.7 e a 1.0. Reconhecer a instrução na velocidade real é habilidade separada de saber o que ela significa, e é a que decide se a aula anda ou para para explicar.
+
+Reusa `funzioni` + `chunks`, então `renderFunzioni()` a monta sem uma linha de mudança. **Não grava progresso e fica fora do Ripasso**, pela mesma decisão do §7.1. O que ela tem é o **＋ caderno** — leia organizado aqui, guarde o que travou, escreva a sua frase lá.
+
+Duas regras que o validador sustenta: frase que uma aula já ensina aparece com o **mesmo id** (id é a chave do caderno, e dois ids para a mesma frase a guardariam duas vezes), com o texto conferido contra a aula de origem; e `frasi.json` fica **fora de `lessico.json`**, senão um diálogo se autoautorizaria a usar as frases de sobrevivência.
 
 ### Ainda não implementado
 
@@ -189,7 +219,9 @@ Duas decisões sustentam isso:
 
 **Fase 2.1 — feita.** Reordenação das etapas para *contexto antes da regra* (§5); **Frasi utili** (§7.1); `trasformazione` e `traduzione`, que fecham a escada de produção; cabeçalho de objetivos virou **sumário navegável** — cada item com `sezione` rola até o ponto da aula.
 
-**Fase 3 — se fizer falta.** `minimal-pair` (exige refatorar a seleção de voz); persistir gravações em IndexedDB para comparar evolução ao longo das semanas — **e isso exige opt-in explícito na mesma mudança**, porque gravação salva deixa de ser armazenamento necessário e vira dado guardado por escolha (ver `js/record.js` e CLAUDE.md); MP3 pré-gerados por item (o schema já tem `audio.src`) caso o TTS se mostre insuficiente; busca em todo o conteúdo.
+**Fase 2.2 — feita.** O caderno léxico estava inteiro e passando nos testes, e mesmo assim invisível: era um laço fechado, porque só se chegava a ele pelo card da home — que só aparece com o caderno cheio — e o único botão capaz de enchê-lo nascia escondido atrás do «Mostrar» de uma carta. Ganhou **＋ caderno em toda linha das Frasi utili** e link na etapa Lessico. Junto vieram **`frasi.html`** (§7.2); o primeiro **`dictogloss`** autorado, que fez o tipo deixar de ser código morto e expôs que faltava sua checagem no validador; o bloco **`scambio`**; e o drill **`correzione`**.
+
+**Fase 3 — se fizer falta.** `minimal-pair` (exige refatorar a seleção de voz); persistir gravações em IndexedDB para comparar evolução ao longo das semanas — **e isso exige opt-in explícito na mesma mudança**, porque gravação salva deixa de ser armazenamento necessário e vira dado guardado por escolha (ver `js/record.js` e CLAUDE.md); MP3 pré-gerados por item (o schema já tem `audio.src`) caso o TTS se mostre insuficiente; busca em todo o conteúdo (com 4 aulas e ~500 formas, ainda resolve um problema que não existe); pôr `frasi.json` no manifest, se as frases de sobrevivência pedirem drill e revisão espaçada além da leitura.
 
 ## 11. Decisões de arquitetura e o motivo
 

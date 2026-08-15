@@ -30,9 +30,11 @@ Qualquer servidor estático serve: `npx serve`, `php -S localhost:8000`, extens�
 ## Estrutura
 
 ```
-index.html            índice de aulas
+index.html            índice de aulas + painel «Seus dados»
 lezione.html          página de aula (?l=01)
 ripasso.html          revisão espaçada, atravessando todas as aulas
+notebook.html         o caderno léxico: a forma guardada + a SUA frase com ela
+frasi.html            as frases da aula — as que você diz e as que só ouve
 css/
   tokens.css          tokens: paleta derivada dos slides, dark mode
   style.css           folha única, mobile-first
@@ -40,15 +42,19 @@ js/
   main.js             ponto de entrada da home e da aula
   app.js              rota, monta os exercícios, liga o ciclo de resposta
   ripasso.js          monta a revisão; reusa o mesmo card de exercício
+  notebook.js         monta o caderno; reusa initChrome/fail do app.js
+  frasi.js            monta as frases; reusa renderFunzioni do render.js
   speech.js           síntese de voz (único lugar que toca speechSynthesis)
-  store.js            progresso (único lugar que toca localStorage)
+  store.js            progresso e caderno (único lugar que toca localStorage)
   check.js            correção de resposta + diff palavra a palavra
-  render.js           seções, chips, tabelas, botão de áudio
+  render.js           seções, chips, tabelas, blocos, botão de áudio
+  record.js           gravação de voz (único lugar que toca getUserMedia)
   exercises/          um módulo por tipo + index.js (registry)
 content/
   manifest.json       índice das aulas (com o conteggio derivado)
   lezione-00.json     Aula 0 — alfabeto e sons
   lezione-01.json     Aula 1 — essere/avere, nacionalidade, idade
+  frasi.json          as frases de aula; não é aula, não entra no manifest
   lessico.json        derivado: forma italiana → aula que a ensinou
 tests/
   *.test.mjs          suíte (node:test), um arquivo por cenário

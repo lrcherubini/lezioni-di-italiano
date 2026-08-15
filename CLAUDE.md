@@ -16,7 +16,8 @@ O objetivo principal deste projeto é um **loop de autoria repetível**: a cada 
 5. **Ao adicionar uma aula, edite apenas `content/`.** Não toque em `js/`, `css/` nem nos JSONs de aulas anteriores. As duas exceções são geradas por ferramenta, nunca à mão: o `conteggio` do manifest e o `content/lessico.json`, que saem de `python tools/validate.py --fix`.
 6. **`id` de item é imutável.** Ele é a chave do progresso no `localStorage`. Renomear um `id` apaga o histórico daquele item; reaproveitar um `id` mistura históricos de coisas diferentes.
 7. **Toda seção precisa de `spiegazione`.** É o que torna o site independente dos slides. O validador reprova se faltar.
-7.1. **Todo texto italiano exibido tem botão de áudio — sem exceção.** Isso vale para `titolo` de aula/seção, itens de `header` (comunicazione/lessico/grammatica), toda célula de `tabella` que não esteja marcada `pt: true`, cabeçalhos de coluna de `paradigma` e `paradigm-fill`, e o título+gloss do `dialogo`. Ao criar uma tabela nova, pergunte célula por célula: "isto é italiano ou é rótulo/descrição em português?" — no segundo caso, marque `{ "html": "…", "pt": true }`. Ver a seção *Tipos de bloco*.
+7.1. **Todo texto italiano exibido tem botão de áudio — com uma exceção só, abaixo.** Isso vale para `titolo` de aula/seção, itens de `header` (comunicazione/lessico/grammatica), toda célula de `tabella` que não esteja marcada `pt: true`, cabeçalhos de coluna de `paradigma` e `paradigm-fill`, as battute do `scambio`, e o título+gloss do `dialogo`. Ao criar uma tabela nova, pergunte célula por célula: "isto é italiano ou é rótulo/descrição em português?" — no segundo caso, marque `{ "html": "…", "pt": true }`. Ver a seção *Tipos de bloco*.
+   **A exceção é o campo `sbagliata` do `correzione`**, e ela é a única. Aquele italiano é agramatical de propósito — é o que o aluno tem de achar — e por isso não ganha 🔊 **nem entra em `content/lessico.json`**: ouvir a forma errada em voz italiana nativa é o jeito mais rápido de gravá-la como se fosse boa, e admiti-la no léxico autorizaria um diálogo a usá-la. Só a `risposta` fala, e só depois de o aluno responder. Ver *Exercícios*.
 7.2. **Marque sempre a minoria — e o `modo` da aula diz quem é a minoria.** É a regra única por trás dos mecanismos de "isto é italiano?". Em **célula de tabela** o italiano é sempre a maioria → marque a exceção portuguesa com `pt: true`. Em **texto corrido** depende do `modo`: em `pt` a prosa é portuguesa e você marca o italiano com `<it>`; em `misto`/`it` a prosa é italiana e você marca o português com `<pt>`. Todos nomeiam o que é marcado, nunca o padrão. Ver *Os dois mecanismos* e *Modo de língua*.
 8. **Nada de atividade em par ou grupo.** A aula é particular 1-a-1. Materiais A1 de referência estão cheios de *"in coppia"* e *"girate per la classe"* — tudo isso é inaplicável aqui.
 9. **`category` só entre os cinco valores permitidos** (abaixo). Acrescentar um valor exige editar `tools/validate.py`, `css/tokens.css` **e** este documento.
@@ -239,6 +240,62 @@ embaralhado.
   `i Paesi Bassi`), não têm um «quando se usa» e ficam de fora da conta.
 - **`quando` entra em `content/lessico.json`.** Não é exceção nova: é o mesmo
   caso de `header.comunicazione`, rótulo funcional em italiano exibido com 🔊.
+- **Cada linha oferece «＋ caderno».** É a porta de entrada do caderno léxico
+  — visível de saída, ao contrário do botão irmão no verso do flashcard. Ver
+  abaixo.
+
+### `content/frasi.json` — as frases que atravessam todas as aulas
+
+Arquivo de conteúdo que **não é aula**: sem `numero`, sem `sections`, fora do
+manifest e fora de `lessico.json`. Reusa as chaves `funzioni` + `chunks`, e é
+por isso que `renderFunzioni()` monta `frasi.html` sem uma linha de mudança.
+
+```jsonc
+{ "id": "frasi", "titolo": "…", "gloss": "…", "intro": "…",
+  "gruppi": [ { "id": "tu-dici", "titolo": "Tu dici", "gloss": "…",
+                "spiegazione": ["…"], "funzioni": [ /* iguais aos da aula */ ] } ],
+  "chunks": [ /* iguais aos da aula */ ] }
+```
+
+Três regras, e o validador (`check_frasi`) sustenta as três:
+
+- **Frase que uma aula já ensina entra com o MESMO id** — `l00-c03`, não um
+  id novo. Id é a chave do caderno, e dois ids para a mesma frase a
+  guardariam duas vezes. O preço é o texto duplicado no arquivo, então o
+  texto é **conferido contra a aula de origem**: editar um lado só quebra o
+  build, em vez de deixar o site se contradizendo em silêncio.
+- **Id que não vem de aula nenhuma começa com `fr-`**, para nunca colidir com
+  o id de uma aula que ainda não foi escrita.
+- **Fica fora de `content/lessico.json`.** O léxico existe para a checagem do
+  i+1 dos diálogos; se as frases de sobrevivência o alimentassem, um diálogo
+  se autoautorizaria a usá-las. Elas são `fixed` decoradas inteiras, não
+  vocabulário ensinado. Corolário aceito: usar uma delas num diálogo **vai**
+  gerar aviso de escopo, e a decisão é caso a caso.
+
+Não grava progresso e não entra no Ripasso — é a mesma decisão de `funzioni`:
+leitura organizada. O que ela tem é o **＋ caderno**.
+
+### A porta do caderno léxico
+
+O caderno (`notebook.html`) já existia inteiro e passava nos testes, e mesmo
+assim era invisível: só se chegava a ele pelo card da home, que **só aparece
+com o caderno cheio**, e o único botão capaz de enchê-lo nascia `hidden`
+atrás do «Mostrar» de uma carta. Um laço fechado — só achava quem já tinha
+usado.
+
+Hoje há três entradas, e a diferença entre elas é deliberada:
+
+| Onde | Sempre visível? | Por quê |
+|---|---|---|
+| Linha de *Frasi utili* (`renderFunzioni`) | **sim** | é onde o aluno está olhando o léxico |
+| Página `frasi.html` | **sim** | idem, e a página nunca está vazia |
+| Verso da carta do flashcard | só depois do «Mostrar» | é quando o aluno **descobre que não lembrava** — o momento em que guardar vale a pena |
+| Card na home | só com o caderno cheio | call-out numérico vazio ensina a ignorar |
+
+**Quem grava é o `app.js`, sempre.** `notebookCtx(lessonId)` devolve
+`{has, toggle}` e é passado por parâmetro — para o `ctx` do exercício e para
+`renderFunzioni(lesson, modo, notebook)`. Nem `render.js` nem módulo de
+exercício fala com o `store.js`.
 
 ### Tipos de bloco
 
@@ -284,9 +341,24 @@ embaralhado.
               "forme": ["il brasiliano", "la brasiliana", "i brasiliani", "le brasiliane"],
               "eccezione": false }] }
 
+// scambio — o microdiálogo de 2 a 4 turnos. É LEITURA, não drill: sem id,
+// sem progresso, não entra no `conteggio`. Preenche o degrau que falta entre
+// produzir uma frase solta (`traduzione`) e o diálogo de 8 turnos.
+// Exatamente dois falantes, `A` e `B`, e ALTERNADOS — é o que o TTS sabe
+// diferenciar, e dois turnos na mesma voz leem como uma frase só.
+{ "type": "scambio", "titolo": "…",
+  "battute": [ { "speaker": "A", "it": "Qualcosa da bere?", "pt": "Algo pra beber?" },
+               { "speaker": "B", "it": "Un caffè, per favore.", "pt": "Um café, por favor." } ] }
+
 // nota — callout. tono: info | attenzione | eccezione
 { "type": "nota", "tono": "attenzione", "titolo": "…", "testo": "…" }
 ```
+
+> **`scambio` entra em `content/lessico.json`; `dialogo` não.** A diferença
+> não é o formato — os dois são turnos com falante — é o papel. O scambio é
+> **modelo que a aula exibe e ensina**, na mesma categoria de `lista` e
+> `tabella`; o diálogo é **o que a checagem de escopo confere**, e entrando
+> ele se autoautorizaria.
 
 Campos de texto aceitam HTML inline (`<b>`, `<em>`, `<code>`). O TTS remove tags antes de falar.
 
@@ -508,9 +580,50 @@ Ripasso nunca traz aquele sub-item de volta**.
 > nada. `pontuacaoBate` em `js/exercises/trasformazione.js` e a checagem em
 > `check_trasformazione` são espelhos — mudou uma, mude a outra.
 
+```jsonc
+// correzione — ler uma frase ERRADA e reescrevê-la certa. Não é degrau da
+// escada: é um eixo perpendicular a ela. Os seis degraus partem de material
+// correto e medem produção; este parte de material errado e mede
+// MONITORAMENTO — a atenção com que se relê o que se acabou de escrever.
+{ "id": "l03-e24", "type": "correzione", "category": "GRAMMATICA",
+  "consegna": "…",
+  "frasi": [{ "id": "l03-e24-f1",
+              "sbagliata": "Lui legge i giornale.",   // agramatical DE PROPÓSITO
+              "risposta": "Lui legge il giornale.",
+              "pt": "Ele lê o jornal.",               // obrigatório: o sentido pretendido
+              "nota": "…", "accettaAnche": [] }] }
+```
+
+> **⚠ A ARMADILHA DO `sbagliata`, e ela é única no projeto.**
+>
+> `sbagliata` é o **único texto italiano do site que não deve ser ensinado**.
+> Todo o resto assume a equivalência «italiano exibido ⇒ 🔊 ⇒ entra no
+> léxico» (invariante 7.1). Aqui ela quebra nas duas pontas, de propósito:
+>
+> - **Não ganha botão de áudio.** Ouvir a forma errada numa voz italiana
+>   nativa é o jeito mais rápido de gravá-la como se fosse boa. Só a
+>   `risposta` fala, e só depois de o aluno responder.
+> - **Não entra em `content/lessico.json`.** Se entrasse, a checagem do i+1
+>   passaria a autorizar um diálogo a usar a forma errada. (Sai de graça:
+>   `esercizi` já está inteiro fora da colheita — mas está travado por
+>   teste, porque é o tipo de coisa que uma refatoração desfaz sem avisar.)
+> - **O play do feedback toca só as formas certas.** O par errada→certa
+>   seria tentador, como no `trasformazione` — e metade do que o aluno
+>   ouviria seria italiano errado.
+>
+> A marcação é **textual** (`✗ errata`) além de visual: cor nunca é o único
+> canal, e quem usa leitor de tela precisa saber que a frase está errada.
+>
+> **Regra dura:** `sbagliata` normalizada não pode ser igual à `risposta` —
+> senão copiar vale ponto e o drill não exercita nada. É a mesma ideia da
+> regra de pontuação do `trasformazione`, e é mais insidiosa aqui, porque as
+> duas são frases inteiras e a diferença pode ser uma letra. O que o
+> validador **não** faz é julgar se a `sbagliata` é de fato agramatical:
+> isso continua com quem escreve a aula, pela hierarquia de fontes acima.
+
 > **`traduzione` não leva lacuna.** Um `___` ali é engano de tipo: quem quer
 > lacuna quer `slot-frame` (se o molde é o alvo) ou `gap-audio` (se é escuta).
-> O validador reprova.
+> O validador reprova. Vale igual para `correzione`.
 
 > **`slot` e `risposta` têm que casar.** O validador avisa quando
 > `frame.it` com o `slot` no lugar do `___` não reproduz a `risposta` — é o
@@ -607,8 +720,9 @@ Só um campo relaxa: **`slot-frame.giri[].pt`**. Em modo `it`, o próprio `slot`
 4. **Extraia o inventário de chunks** e classifique cada um em `chunkType`.
 5. **Valide formas duvidosas** contra Treccani/Crusca e aplique a classificação de 3 saídas.
 6. **Escreva o diálogo** (6–10 turnos), só com vocabulário em escopo.
-7. **Gere exercícios:** ≥2 `gap-audio`, ≥1 `qa-transcribe`, ≥1 `paradigm-fill` por paradigma, ≥1 `dialogo`. Para **volume de fixação**, use os seis drills, subindo a escada: `scelta` e `slot-frame` são os que mais rendem por linha escrita, `riordino`/`abbinamento` quebram a monotonia de digitar, e feche com `trasformazione` e `traduzione` — sem o topo da escada a aula só treina reconhecimento. Os *Compito* do professor são a melhor matéria-prima — cada exercício deles mapeia direto num tipo (`Scegli` → `scelta`, `Riordina` → `riordino`, `Abbina` → `abbinamento`, `Coniuga` → `paradigm-fill`, `Traduci` → `traduzione`, `Trasforma`/`Volgi al negativo` → `trasformazione`).
+7. **Gere exercícios:** ≥2 `gap-audio`, ≥1 `qa-transcribe`, ≥1 `paradigm-fill` por paradigma, ≥1 `dialogo`. Para **volume de fixação**, use os seis drills, subindo a escada: `scelta` e `slot-frame` são os que mais rendem por linha escrita, `riordino`/`abbinamento` quebram a monotonia de digitar, e feche com `trasformazione` e `traduzione` — sem o topo da escada a aula só treina reconhecimento. Os *Compito* do professor são a melhor matéria-prima — cada exercício deles mapeia direto num tipo (`Scegli` → `scelta`, `Riordina` → `riordino`, `Abbina` → `abbinamento`, `Coniuga` → `paradigm-fill`, `Traduci` → `traduzione`, `Trasforma`/`Volgi al negativo` → `trasformazione`, `Correggi`/`Trova l'errore` → `correzione`).
 7.1. **Agrupe as frases fixas em `funzioni`.** Toda frase pronta da aula tem um «quando se usa» — é isso que o aluno procura quando vai falar, e é o que o baralho embaralhado não mostra.
+7.2. **Considere um `scambio` e um `correzione`.** Nenhum dos dois é obrigatório, e os dois cobrem buracos que os seis drills deixam. O `scambio` é bloco de leitura: põe o que a seção acabou de ensinar na menor conversa possível, que é o degrau entre produzir uma frase e o diálogo de 8 turnos. O `correzione` mede **monitoramento**, não produção — escreva as frases erradas a partir dos erros que *aquela* aula torna prováveis (desinência trocada, artigo errado, plural onde não há). Releia a armadilha do `sbagliata` antes.
 8. **Acrescente a entrada em `content/manifest.json`** (`id`, `numero`, `file`, `titolo`, `gloss`, `categorie`, `temi`). **Não escreva `conteggio` à mão** — é derivado, sai do `--fix`.
 9. **Rode `python tools/validate.py --fix`** (grava os derivados) e depois **`python tools/validate.py`** até zerar os erros. Rode também **`node tools/test.mjs`**: os testes de página carregam os JSONs reais, então uma aula que não renderiza falha ali.
 9.1. **Leia os avisos de escopo.** O validador compara o italiano do seu diálogo com `content/lessico.json`, o léxico acumulado até aquela aula, e avisa sobre forma nunca ensinada. É **aviso, não erro**, porque a checagem é heurística e existe caso legítimo — o diálogo da Aula 0 soletra *Castelli* de propósito, e a palavra não é vocabulário a ensinar. Para cada aviso, decida: ou a palavra entra no conteúdo da aula (num `chunk`, `lista` ou `tabella`), ou ela sai do diálogo, ou é caso legítimo e fica. O que não vale é ignorar sem olhar.
@@ -639,9 +753,12 @@ js/exercises/         um módulo por tipo + index.js (registry)
                       index.js também exporta flashcardDeck(), que DERIVA o
                       baralho dos chunks da aula
 js/notebook.js        ponto de entrada do caderno léxico; reusa initChrome/fail
+js/frasi.js           ponto de entrada das frases de aula; reusa renderFunzioni
 js/record.js          ÚNICO lugar que toca em getUserMedia e MediaRecorder
 notebook.html         o caderno léxico
-content/              manifest.json + lezione-NN.json + lessico.json (derivado)
+frasi.html            as frases da aula — as que você diz e as que só ouve
+content/              manifest.json + lezione-NN.json + frasi.json
+                      + lessico.json (derivado)
 tests/                suíte node:test; support/ tem DOM mínimo e dublês
 tools/validate.py     valida os invariantes deste documento; --fix grava derivados
 tools/validate_test.py testes do validador (unittest da stdlib)
