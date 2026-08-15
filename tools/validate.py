@@ -446,6 +446,45 @@ def check_subitems(name: str, ex: dict, ids: Counter) -> list[dict]:
     return itens
 
 
+def check_dictogloss(name: str, ex: dict) -> None:
+    """Ouvir um texto curto e reconstruí-lo de memória.
+
+    Duas exigências, e as duas vêm do que o próprio módulo argumenta.
+
+    A do áudio é a mesma regra dura do `gap-audio`: o que se ouve tem que
+    ser o que se lê no fim. Divergir aqui é pior que num gap, porque o aluno
+    compara a reconstrução inteira contra o `testo` — um `tts` diferente
+    faria o diff acusar erro numa palavra que o áudio nunca disse.
+
+    A do pré-ensino é pedagógica. O aluno A1 falha em decodificação e
+    fronteira de palavra, não em vocabulário: travado numa forma que nunca
+    viu escrita, perde a frase inteira atrás dela, e o exercício passa a
+    medir sorte em vez de escuta.
+    """
+    testo = ex.get('testo', '')
+    if not testo:
+        err(f'{name} {ex["id"]}: dictogloss sem «testo» — não há o que reconstruir')
+        return
+
+    tts = (ex.get('audio') or {}).get('tts')
+    if tts and norm(tts) != norm(testo):
+        err(f'{name} {ex["id"]}: audio.tts não bate com «testo» — o aluno ouviria uma '
+            f'coisa e seria corrigido por outra')
+
+    if not ex.get('preinsegnamento'):
+        err(f'{name} {ex["id"]}: dictogloss sem «preinsegnamento» — sem as formas difíceis '
+            f'de antemão o exercício mede sorte, não escuta')
+    for p in ex.get('preinsegnamento', []):
+        if not p.get('it') or not p.get('pt'):
+            err(f'{name} {ex["id"]}: item de preinsegnamento precisa de «it» e «pt»')
+        elif norm(p['it']) not in norm(testo):
+            err(f'{name} {ex["id"]}: preinsegnamento «{p["it"]}» não aparece no texto — '
+                f'pré-ensinar o que não vai ser ouvido só gasta a atenção do aluno')
+
+    if not ex.get('pt'):
+        err(f'{name} {ex["id"]}: dictogloss sem «pt» — a análise final compara sem tradução')
+
+
 def check_scelta(name: str, ex: dict, ids: Counter) -> None:
     for q in check_subitems(name, ex, ids):
         qid = q.get('id', '?')
@@ -661,6 +700,8 @@ def check_lesson(name: str, d: dict, ids: Counter) -> None:
             err(f'{name} {ex["id"]}: type «{etype}» não está no registry de js/exercises/index.js')
         if etype == 'gap-audio':
             check_gap_audio(name, ex)
+        elif etype == 'dictogloss':
+            check_dictogloss(name, ex)
         elif etype == 'paradigm-fill':
             check_paradigm_fill(name, ex, ids)
         elif etype == 'scelta':

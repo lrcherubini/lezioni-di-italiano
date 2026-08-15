@@ -725,6 +725,25 @@
     },
 
     {
+      "id": "l03-e23",
+      "type": "dictogloss",
+      "category": "VERBO",
+      "consegna": "Ouça três vezes e reconstrua o texto de memória. Não é ditado: não se espera que você acerte as mesmas palavras, e sim que devolva a mesma mensagem. A primeira escuta é só escuta — o campo abre depois dela.",
+      "testo": "Io leggo un giornale ogni mattina. La sera scrivo un diario. Di solito leggo un libro in italiano.",
+      "audio": { "tts": "Io leggo un giornale ogni mattina. La sera scrivo un diario. Di solito leggo un libro in italiano.", "src": null },
+      "pt": "Eu leio um jornal toda manhã. À noite escrevo um diário. Normalmente leio um livro em italiano.",
+      "preinsegnamento": [
+        { "it": "ogni mattina", "pt": "toda manhã" },
+        { "it": "di solito", "pt": "normalmente" },
+        { "it": "un diario", "pt": "um diário" }
+      ],
+      "aiuto": "São três frases, e cada uma diz <b>quando</b>. Se você pegou os três momentos — de manhã, à noite, normalmente —, o resto vem atrás. O <it>gn</it> de <it>ogni</it> soa como o <em>nh</em> de «manhã».",
+      "accettaAnche": [
+        "Leggo un giornale ogni mattina. La sera scrivo un diario. Di solito leggo un libro in italiano."
+      ]
+    },
+
+    {
       "id": "l03-e20",
       "type": "trasformazione",
       "category": "GRAMMATICA",

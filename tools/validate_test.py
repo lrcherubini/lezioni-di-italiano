@@ -692,6 +692,68 @@ class TestCheckTraduzione(unittest.TestCase):
             {'pt': 'Eu sou ___.', 'risposta': 'Io sono ___.'})[0])
 
 
+class TestCheckDictogloss(unittest.TestCase):
+    """Ouvir um texto curto e reconstruí-lo de memória.
+
+    O tipo estava no registry desde sempre, com módulo e suíte próprios, e
+    passava batido pelo dispatch do validador porque nenhuma aula o usava.
+    Autorar o primeiro expôs o buraco.
+    """
+
+    def setUp(self):
+        v.errors.clear()
+        v.warnings.clear()
+
+    def base(self, **kw):
+        d = {
+            'id': 'e1',
+            'testo': 'Io leggo un giornale ogni mattina.',
+            'audio': {'tts': 'Io leggo un giornale ogni mattina.'},
+            'pt': 'Eu leio um jornal toda manhã.',
+            'preinsegnamento': [{'it': 'ogni mattina', 'pt': 'toda manhã'}],
+        }
+        d.update(kw)
+        return d
+
+    def check(self, **kw):
+        v.errors.clear()
+        v.check_dictogloss('t.json', self.base(**kw))
+        return v.errors
+
+    def test_exercicio_minimo_passa(self):
+        self.assertEqual(self.check(), [])
+
+    def test_tts_divergente_e_erro(self):
+        # Pior que num gap-audio: aqui o diff compara a reconstrução inteira
+        # contra o `testo`, então acusaria erro numa palavra nunca dita.
+        errs = self.check(audio={'tts': 'Io leggo una rivista ogni sera.'})
+        self.assertIn('não bate', errs[0])
+
+    def test_tts_ausente_passa(self):
+        # `audio.tts` é opcional: o módulo cai para o próprio `testo`.
+        self.assertEqual(self.check(audio={}), [])
+
+    def test_pontuacao_e_caixa_nao_contam(self):
+        self.assertEqual(self.check(audio={'tts': 'io leggo un giornale ogni mattina'}), [])
+
+    def test_sem_preinsegnamento_e_erro(self):
+        errs = self.check(preinsegnamento=[])
+        self.assertTrue(any('preinsegnamento' in e for e in errs))
+
+    def test_preinsegnamento_fora_do_texto_e_erro(self):
+        # Pré-ensinar o que não vai ser ouvido só gasta a atenção do aluno.
+        errs = self.check(preinsegnamento=[{'it': 'la tesi', 'pt': 'a tese'}])
+        self.assertTrue(any('não aparece no texto' in e for e in errs))
+
+    def test_sem_testo_e_erro(self):
+        errs = self.check(testo='')
+        self.assertTrue(any('testo' in e for e in errs))
+
+    def test_sem_pt_e_erro(self):
+        errs = self.check(pt='')
+        self.assertTrue(any('«pt»' in e for e in errs))
+
+
 class TestCheckFrasi(unittest.TestCase):
     """`content/frasi.json` — as frases que atravessam todas as aulas.
 
