@@ -146,6 +146,19 @@ class TestBuildLessico(unittest.TestCase):
         self.assertNotIn('palavrainventada', f)
         self.assertNotIn('outrainventada', f)
 
+    def test_sbagliata_do_correzione_nunca_entra(self):
+        # A `sbagliata` é o único texto italiano do site que não se deve
+        # ensinar. Se entrasse no léxico, a checagem do i+1 passaria a
+        # autorizar um diálogo a usar a forma errada.
+        f = self.formas(aula(esercizi=[{
+            'id': 'e', 'type': 'correzione',
+            'frasi': [{'id': 'f1', 'sbagliata': 'Noi leggiono',
+                       'risposta': 'Noi leggiamo', 'pt': 'Nós lemos'}],
+        }]))
+        self.assertNotIn('leggiono', f)
+        # E a certa também não entra por aqui: `esercizi` está fora inteiro.
+        self.assertNotIn('leggiamo', f)
+
     def test_scambio_entra_mas_dialogo_nao(self):
         # A diferença não é o formato — os dois são turnos com falante. É o
         # papel: o scambio é modelo que a aula EXIBE e ensina, como uma
@@ -703,6 +716,61 @@ class TestCheckTraduzione(unittest.TestCase):
     def test_lacuna_e_erro_de_tipo(self):
         self.assertIn('lacuna', self.check(
             {'pt': 'Eu sou ___.', 'risposta': 'Io sono ___.'})[0])
+
+
+class TestCheckCorrezione(unittest.TestCase):
+    """Ler uma frase errada e reescrevê-la certa.
+
+    A regra dura é a mesma ideia da pontuação em `trasformazione`: se as
+    duas frases forem iguais depois de normalizar, copiar vale ponto e o
+    drill não exercita nada. Aqui é mais insidioso, porque as duas são
+    frases inteiras e a diferença pode ser uma letra só.
+    """
+
+    def setUp(self):
+        v.errors.clear()
+        v.warnings.clear()
+
+    def check(self, **kw):
+        f = {'id': 'f1', 'sbagliata': 'Lui legge i giornale.',
+             'risposta': 'Lui legge il giornale.', 'pt': 'Ele lê o jornal.'}
+        f.update(kw)
+        v.errors.clear()
+        v.check_correzione('t.json', {'id': 'e1', 'type': 'correzione', 'frasi': [f]}, Counter())
+        return v.errors
+
+    def test_exercicio_minimo_passa(self):
+        self.assertEqual(self.check(), [])
+
+    def test_frases_iguais_e_erro(self):
+        errs = self.check(sbagliata='Lui legge il giornale.')
+        self.assertTrue(any('mesma frase' in e for e in errs))
+
+    def test_diferenca_so_de_pontuacao_tambem_e_erro(self):
+        # `norm` descarta pontuação final: se é só isso que separa as duas,
+        # o aluno acerta copiando.
+        errs = self.check(sbagliata='Lui legge il giornale')
+        self.assertTrue(any('mesma frase' in e for e in errs))
+
+    def test_sem_pt_e_erro(self):
+        # Sem o sentido pretendido o aluno não sabe qual leitura é a certa.
+        errs = self.check(pt='')
+        self.assertTrue(any('«pt»' in e for e in errs))
+
+    def test_sem_sbagliata_e_erro(self):
+        self.assertTrue(any('sbagliata' in e for e in self.check(sbagliata='')))
+
+    def test_lacuna_e_erro_de_tipo(self):
+        errs = self.check(sbagliata='Lui legge ___ giornale.')
+        self.assertTrue(any('lacuna' in e for e in errs))
+
+    def test_conta_um_id_por_frase(self):
+        # `SUBITEM_FIELD` é o espelho de `subItemIds` em correzione.js: sem
+        # ele o conteggio contaria 1 onde há 5, e o Ripasso nunca traria os
+        # sub-itens de volta.
+        self.assertEqual(v.SUBITEM_FIELD['correzione'], 'frasi')
+        ex = {'id': 'e', 'type': 'correzione', 'frasi': [{'id': 'a'}, {'id': 'b'}]}
+        self.assertEqual(v.count_items({'esercizi': [ex]}), 2)
 
 
 class TestCheckScambio(unittest.TestCase):

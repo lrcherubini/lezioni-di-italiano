@@ -32,9 +32,9 @@ function montar(item) {
 describe('registry', () => {
   test('conhece exatamente os tipos implementados', () => {
     assert.deepEqual(knownTypes().sort(), [
-      'abbinamento', 'dialogue', 'dictogloss', 'flashcard', 'gap-audio',
-      'paradigm-fill', 'qa-transcribe', 'riordino', 'scelta', 'slot-frame',
-      'traduzione', 'trasformazione',
+      'abbinamento', 'correzione', 'dialogue', 'dictogloss', 'flashcard',
+      'gap-audio', 'paradigm-fill', 'qa-transcribe', 'riordino', 'scelta',
+      'slot-frame', 'traduzione', 'trasformazione',
     ]);
   });
 

@@ -46,6 +46,7 @@ import flashcard, { TIPI_CARTA } from './flashcard.js';
 import dictogloss from './dictogloss.js';
 import traduzione from './traduzione.js';
 import trasformazione from './trasformazione.js';
+import correzione from './correzione.js';
 
 /* Ainda não implementado (ver PRD.md):
    import minimalPair from './minimal-pair.js';
@@ -65,6 +66,7 @@ const registry = new Map([
   [dictogloss.type, dictogloss],
   [traduzione.type, traduzione],
   [trasformazione.type, trasformazione],
+  [correzione.type, correzione],
 ]);
 
 export function getExercise(type) {

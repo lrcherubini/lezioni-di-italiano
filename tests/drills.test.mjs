@@ -500,3 +500,128 @@ describe('slot-frame', () => {
     assert.equal(fb.querySelectorAll('.btn--sm').length, 0);
   });
 });
+
+/* --- correzione ----------------------------------------------------------
+
+   O drill que quebra, de propósito, a equivalência «italiano exibido ⇒ 🔊 ⇒
+   entra no léxico» que vale em todo o resto do site. É onde este tipo pode
+   nascer com bug sem que nada mais reclame, então é o que estes testes
+   guardam antes de qualquer coisa. */
+
+const CORREZIONE = {
+  id: 'l03-e24',
+  type: 'correzione',
+  category: 'GRAMMATICA',
+  consegna: 'Trova l\'errore.',
+  frasi: [
+    { id: 'l03-e24-f1', sbagliata: 'Lui legge i giornale.',
+      risposta: 'Lui legge il giornale.', pt: 'Ele lê o jornal.',
+      nota: 'Com <it>giornale</it> no singular o artigo é <it>il</it>.' },
+    { id: 'l03-e24-f2', sbagliata: 'Noi leggiono un libro.',
+      risposta: 'Noi leggiamo un libro.', pt: 'Nós lemos um livro.' },
+  ],
+};
+
+describe('correzione', () => {
+  test('expõe o id de cada frase — é o que o conteggio e o Ripasso leem', () => {
+    assert.deepEqual(getExercise('correzione').subItemIds(CORREZIONE),
+      ['l03-e24-f1', 'l03-e24-f2']);
+  });
+
+  test('a frase ERRADA não ganha botão de áudio', () => {
+    // A regra que mais importa neste arquivo. Ouvir a forma errada em voz
+    // italiana é o jeito mais rápido de gravá-la como se fosse boa.
+    const { root } = montar(CORREZIONE);
+    assert.equal(root.querySelectorAll('.speak').length, 0,
+      'algum botão de áudio apareceu antes de responder');
+  });
+
+  test('a frase errada é marcada por TEXTO, não só por cor', () => {
+    const { root } = montar(CORREZIONE);
+    const primeira = root.querySelectorAll('.correzione__sbagliata')[0];
+    assert.match(primeira.textContent, /errata/i);
+    assert.match(primeira.textContent, /Lui legge i giornale\./);
+  });
+
+  test('o sentido pretendido aparece — senão não há como saber qual é a certa', () => {
+    const { root } = montar(CORREZIONE);
+    assert.match(root.textContent, /Ele lê o jornal\./);
+  });
+
+  test('corrigir certo acerta; copiar a errada não', () => {
+    const { mod, root } = montar(CORREZIONE);
+    const rows = [...root._parts.rows.values()];
+    rows[0].input.value = 'Lui legge il giornale.';
+    rows[1].input.value = 'Noi leggiono un libro.';   // copiou a errada
+
+    const r = mod.check(CORREZIONE, null, root);
+    assert.equal(r.results[0].correct, true);
+    assert.equal(r.results[1].correct, false);
+    assert.equal(r.score, 0.5);
+  });
+
+  test('copiar a errada recebe uma nota que diz o que fazer', () => {
+    const { mod, root } = montar(CORREZIONE);
+    const rows = [...root._parts.rows.values()];
+    rows[1].input.value = 'Noi leggiono un libro.';
+    const r = mod.check(CORREZIONE, null, root);
+    assert.equal(r.results[1].copiou, true);
+    assert.match(r.results[1].nota, /repetiu a frase/i);
+  });
+
+  test('só a forma CERTA vira áudio, e só depois de responder', () => {
+    const { mod, root } = montar(CORREZIONE);
+    const r = mod.check(CORREZIONE, null, root);
+    mod.feedback(CORREZIONE, r, root);
+
+    const falados = root.querySelectorAll('.speak')
+      .map((b) => b.getAttribute('aria-label').replace(/^Ouvir: /, ''));
+
+    // As duas respostas são audíveis. Junto delas aparecem as formas que a
+    // `nota` cita com <it>, e isso é o `prose()` fazendo o trabalho dele —
+    // são formas CERTAS, citadas para explicar o erro.
+    assert.ok(falados.includes('Lui legge il giornale.'));
+    assert.ok(falados.includes('Noi leggiamo un libro.'));
+
+    // O que não pode existir em botão nenhum é a forma errada.
+    for (const t of falados) {
+      assert.doesNotMatch(t, /leggiono|legge i giornale/, `virou áudio: «${t}»`);
+    }
+  });
+
+  test('«Ouvir as formas certas» não toca nenhuma frase errada', async () => {
+    const { mod, root } = montar(CORREZIONE);
+    const r = mod.check(CORREZIONE, null, root);
+    const fb = mod.feedback(CORREZIONE, r, root);
+
+    const antes = synth.spoken.length;
+    fb.querySelectorAll('.btn--sm')[0].dispatchEvent({ type: 'click' });
+    await ateFalar(2);
+
+    const ditos = synth.spoken.slice(antes).map((u) => u.text);
+    assert.deepEqual(ditos.slice(0, 2), ['Lui legge il giornale.', 'Noi leggiamo un libro.']);
+    assert.equal(synth.spoken.at(-1).lang, 'it-IT');
+  });
+
+  test('reveal preenche tudo e o resultado passa no próprio check', () => {
+    const { mod, root } = montar(CORREZIONE);
+    mod.reveal(CORREZIONE, root);
+    assert.equal(mod.check(CORREZIONE, null, root).correct, true);
+  });
+
+  test('Enter em qualquer campo envia o exercício inteiro', () => {
+    const { root, enviados } = montar(CORREZIONE);
+    [...root._parts.rows.values()][1].input.dispatchEvent({ type: 'keydown', key: 'Enter' });
+    assert.equal(enviados.length, 1);
+    [...root._parts.rows.values()][1].input.dispatchEvent({ type: 'keydown', key: 'a' });
+    assert.equal(enviados.length, 1);
+  });
+
+  test('sem frases, não quebra nem oferece o play', () => {
+    const vazio = { id: 'x-e99', type: 'correzione', frasi: [] };
+    const { mod, root } = montar(vazio);
+    const r = mod.check(vazio, null, root);
+    assert.equal(r.results.length, 0);
+    assert.equal(mod.feedback(vazio, r, root).querySelectorAll('.btn--sm').length, 0);
+  });
+});

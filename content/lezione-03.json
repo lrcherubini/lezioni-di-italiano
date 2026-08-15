@@ -777,6 +777,35 @@
       ]
     },
     {
+      "id": "l03-e24",
+      "type": "correzione",
+      "category": "GRAMMATICA",
+      "consegna": "Cada frase tem exatamente <b>um</b> erro. Ache e reescreva a frase inteira, certa. Ler procurando erro é uma atenção diferente de escrever — e é a que falta quando você relê o que acabou de produzir.",
+      "frasi": [
+        { "id": "l03-e24-f1", "sbagliata": "Lui legge i giornale.",
+          "risposta": "Lui legge il giornale.",
+          "pt": "Ele lê o jornal.",
+          "nota": "<it>i</it> é plural; com <it>giornale</it> no singular o artigo é <it>il</it>." },
+        { "id": "l03-e24-f2", "sbagliata": "Noi leggiono un libro ogni sera.",
+          "risposta": "Noi leggiamo un libro ogni sera.",
+          "pt": "Nós lemos um livro toda noite.",
+          "nota": "<it>-ono</it> é de <em>loro</em>. <em>Noi</em> pede <it>-iamo</it>, igual em -ARE e em -ERE." },
+        { "id": "l03-e24-f3", "sbagliata": "Voi scrivono una mail la mattina.",
+          "risposta": "Voi scrivete una mail la mattina.",
+          "pt": "Vocês escrevem um e-mail de manhã.",
+          "nota": "Trocar <em>voi</em> por <em>loro</em> é o deslize mais comum do -ERE: <it>-ete</it> contra <it>-ono</it>." },
+        { "id": "l03-e24-f4", "sbagliata": "Io leggo ogni sere.",
+          "risposta": "Io leggo ogni sera.",
+          "pt": "Eu leio toda noite.",
+          "nota": "<it>ogni</it> nunca vai para o plural — é sempre <it>ogni sera</it>, uma a uma." },
+        { "id": "l03-e24-f5", "sbagliata": "Lei scrive le mails.",
+          "risposta": "Lei scrive le mail.",
+          "pt": "Ela escreve os e-mails.",
+          "nota": "Estrangeirismo não recebe o <em>-s</em> do plural em italiano: <it>le mail</it>." }
+      ]
+    },
+
+    {
       "id": "l03-e21",
       "type": "traduzione",
       "category": "VERBO",

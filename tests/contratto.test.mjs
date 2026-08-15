@@ -111,6 +111,16 @@ const FIXTURES = {
     frasi: [{ id: 'x-e10-f1', partenza: 'Tu sei italiano.', verso: 'interrogativa',
       risposta: 'Tu sei italiano?', nota: 'Só o <it>?</it> muda.' }],
   },
+  correzione: {
+    id: 'x-e11', type: 'correzione', category: 'GRAMMATICA', consegna: 'Trova l\'errore.',
+    // A `sbagliata` é o único italiano do site que não deve virar áudio nem
+    // léxico. A matriz cobre isso de graça: o contrato «todo áudio que ele
+    // produz é it-IT» só vê o que os botões falam, e aqui nenhum botão fala
+    // a forma errada.
+    frasi: [{ id: 'x-e11-f1', sbagliata: 'Lui legge i giornale.',
+      risposta: 'Lui legge il giornale.', pt: 'Ele lê o jornal.',
+      nota: 'Com <it>giornale</it> no singular o artigo é <it>il</it>.' }],
+  },
 };
 
 const TIPOS = knownTypes().sort();

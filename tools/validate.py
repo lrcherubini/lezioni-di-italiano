@@ -68,7 +68,7 @@ MODI = ('pt', 'misto', 'it')
 REGISTERED_TYPES = {
     'gap-audio', 'qa-transcribe', 'dialogue', 'paradigm-fill',
     'scelta', 'riordino', 'abbinamento', 'slot-frame', 'dictogloss',
-    'traduzione', 'trasformazione',
+    'traduzione', 'trasformazione', 'correzione',
 }
 # Alvos de `trasformazione`. ESPELHA o Map `VERSI` em
 # js/exercises/trasformazione.js — valor fora daqui renderiza sem glosa.
@@ -88,6 +88,7 @@ SUBITEM_FIELD = {
     'slot-frame': 'giri',
     'traduzione': 'frasi',
     'trasformazione': 'frasi',
+    'correzione': 'frasi',
 }
 
 # Mínimos por aula, conforme o passo 7 da checklist.
@@ -606,6 +607,45 @@ def check_trasformazione(name: str, ex: dict, ids: Counter) -> None:
             err(f'{name} {fid}: partenza e risposta são a mesma frase — nada a transformar')
 
 
+def check_correzione(name: str, ex: dict, ids: Counter) -> None:
+    """Ler uma frase errada e reescrevê-la certa.
+
+    Treina MONITORAMENTO, que não é produção: quem escreve certo pode passar
+    direto por um erro num texto seu. Nenhum outro drill cobre isso — todos
+    partem de material correto.
+
+    A regra dura é a mesma ideia da pontuação em `trasformazione`: se
+    `sbagliata` e `risposta` forem iguais depois de normalizar, copiar a
+    frase vale ponto e o drill não exercita nada. Aqui é mais insidioso que
+    lá, porque as duas são frases inteiras e a diferença pode ser uma letra.
+
+    O que este checador NÃO consegue fazer, e vale saber: ele não julga se
+    `sbagliata` é de fato agramatical. Isso continua sendo responsabilidade
+    de quem escreve a aula, com a hierarquia de fontes do CLAUDE.md.
+    """
+    for f in check_subitems(name, ex, ids):
+        fid = f.get('id', '?')
+        sbagliata, risposta = f.get('sbagliata'), f.get('risposta')
+
+        if not sbagliata:
+            err(f'{name} {fid}: correzione sem «sbagliata» — não há o que corrigir')
+        if not risposta:
+            err(f'{name} {fid}: correzione sem «risposta»')
+        if not f.get('pt'):
+            err(f'{name} {fid}: correzione sem «pt» — sem o sentido pretendido o aluno '
+                f'não tem como saber qual das leituras possíveis é a certa')
+
+        if sbagliata and risposta and norm(sbagliata) == norm(risposta):
+            err(f'{name} {fid}: «sbagliata» e «risposta» são a mesma frase — copiar valeria '
+                f'ponto e o drill não exercitaria nada')
+
+        # Lacuna aqui é engano de tipo, como em `traduzione`: quem quer
+        # lacuna quer gap-audio ou slot-frame.
+        for campo in ('sbagliata', 'risposta'):
+            if '___' in str(f.get(campo) or ''):
+                err(f'{name} {fid}: «{campo}» com lacuna — correzione mostra a frase inteira')
+
+
 def check_abbinamento(name: str, ex: dict, ids: Counter) -> None:
     coppie = check_subitems(name, ex, ids)
     if len(coppie) < 2:
@@ -753,6 +793,8 @@ def check_lesson(name: str, d: dict, ids: Counter) -> None:
             check_traduzione(name, ex, ids)
         elif etype == 'trasformazione':
             check_trasformazione(name, ex, ids)
+        elif etype == 'correzione':
+            check_correzione(name, ex, ids)
 
     if d.get('dialogo'):
         check_dialogo(name, d['dialogo'], ids)

@@ -856,6 +856,28 @@ textarea { min-height: 5rem; resize: vertical; line-height: var(--lh-normal); }
 .trasformazione__esito--ok { color: var(--ok); }
 .trasformazione__esito--err { color: var(--err); }
 
+/* --- correzione: a única frase italiana do site que não se deve aprender ---
+   A `sbagliata` é marcada como errada VISUALMENTE (cor + itálico) e
+   TEXTUALMENTE (o chip «✗ errata»), porque cor nunca é o único canal. Ela
+   não tem 🔊 — ouvir a forma errada em voz italiana é o jeito mais rápido
+   de gravá-la como se fosse boa.                                          */
+
+.correzione { list-style: none; padding: 0; display: grid; gap: var(--sp-4); }
+.correzione__frase { display: grid; gap: var(--sp-2); }
+.correzione__sbagliata {
+  display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap;
+}
+.correzione__testo { font-style: italic; color: var(--err); text-decoration: underline wavy var(--err); text-underline-offset: 4px; }
+.correzione__gloss { font-size: var(--fs-sm); color: var(--text-muted); }
+.correzione__input { width: 100%; }
+.correzione__input--ok { border-color: var(--ok); background: var(--ok-bg); }
+.correzione__input--err { border-color: var(--err); background: var(--err-bg); }
+.correzione__input--warn { border-color: var(--warn); background: var(--warn-bg); }
+
+.correzione__esito { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-sm); flex-wrap: wrap; }
+.correzione__esito--ok { color: var(--ok); }
+.correzione__esito--err { color: var(--err); }
+
 /* --- Frasi utili: chunks agrupados por intenção comunicativa ------------ */
 
 .funzioni {
