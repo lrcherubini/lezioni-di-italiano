@@ -114,6 +114,54 @@ export function resetExerciseCounter() {
  * opts.modo é a língua da prosa da aula deste item — por item, e não por
  * página, porque o Ripasso mistura aulas de modos diferentes.
  */
+/**
+ * Ponte para o caderno léxico: quem exibe uma forma pede, o app.js grava.
+ *
+ * Existe como função de módulo, e não inline no `ctx` do exercício, porque
+ * tem DOIS consumidores — o flashcard (via `ctx.notebook`) e a lista de
+ * *Frasi utili* (via `renderFunzioni`). Enquanto só o flashcard tinha o
+ * botão, o caderno era um laço fechado: para achá-lo era preciso já tê-lo
+ * usado, porque o único botão nascia escondido atrás do «Mostrar» da carta.
+ *
+ * @param {string|null} lessonId aula de origem, gravada na entrada
+ * @returns {{has: (id: string) => boolean, toggle: (item: object) => boolean}}
+ */
+export function notebookCtx(lessonId) {
+  return {
+    has: (id) => store.inNotebook(id),
+    toggle(item) {
+      if (store.inNotebook(item.id)) {
+        store.removeFromNotebook(item.id);
+        return false;
+      }
+      store.addToNotebook({ ...item, lesson: lessonId });
+      return true;
+    },
+  };
+}
+
+/**
+ * Link para o caderno, no rodapé da etapa Lessico.
+ *
+ * Sempre presente, e isso não contradiz a decisão de manter o card da home
+ * condicional: lá é um call-out numérico competindo com as aulas, e um
+ * caderno vazio ali só ensinaria a ignorá-lo. Aqui é local ao único lugar de
+ * que ele trata — o aluno está olhando o léxico, e o caderno é onde as formas
+ * que ele guardou viram frase própria. Vazio, é convite; não é ruído.
+ */
+function linkCaderno() {
+  const n = store.notebook().length;
+  return el('p', { class: 'lessico__caderno' },
+    el('a', { href: 'notebook.html' },
+      n > 0
+        ? `📓 Il mio quaderno — ${n} ${n === 1 ? 'forma guardada' : 'formas guardadas'}`
+        : '📓 Il mio quaderno'),
+    el('span', { class: 'section__gloss' }, n > 0
+      ? ' — escreva uma frase sua com cada uma'
+      : ' — guarde uma forma com «＋ caderno» e escreva uma frase sua com ela')
+  );
+}
+
 export function mountExercise(item, lessonId, opts = {}) {
   const mod = getExercise(item.type);
   if (opts.countInIndex !== false) exCounter += 1;
@@ -169,17 +217,7 @@ export function mountExercise(item, lessonId, opts = {}) {
     /* Caderno léxico. Vai pelo ctx e não por import direto porque a regra
        «nenhum módulo de exercício fala com o store» continua valendo — o
        módulo pede, o app.js grava. */
-    notebook: {
-      has: (id) => store.inNotebook(id),
-      toggle(carta) {
-        if (store.inNotebook(carta.id)) {
-          store.removeFromNotebook(carta.id);
-          return false;
-        }
-        store.addToNotebook({ ...carta, lesson: lessonId });
-        return true;
-      },
-    },
+    notebook: notebookCtx(lessonId),
   };
 
   const body = mod.render(item, ctx);
@@ -480,8 +518,9 @@ async function renderLesson() {
              + 'ouça cada um — depois tente lembrar nas cartas, embaralhado.',
         modo,
       },
-      renderFunzioni(lesson, modo),
-      deck ? mountExercise(deck, id, { headLabel: 'Lessico', countInIndex: false, modo }) : null
+      renderFunzioni(lesson, modo, notebookCtx(id)),
+      deck ? mountExercise(deck, id, { headLabel: 'Lessico', countInIndex: false, modo }) : null,
+      linkCaderno()
     ));
   }
 

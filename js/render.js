@@ -394,7 +394,7 @@ export function renderObiettivi(header) {
  *
  *  Nada aqui grava progresso: `funzioni` é leitura organizada, e é o baralho
  *  logo abaixo que testa a recuperação. */
-export function renderFunzioni(lesson, modo = 'pt') {
+export function renderFunzioni(lesson, modo = 'pt', notebook = null) {
   if (!lesson?.funzioni?.length) return null;
 
   const perId = new Map((lesson.chunks ?? []).map((c) => [c.id, c]));
@@ -406,7 +406,8 @@ export function renderFunzioni(lesson, modo = 'pt') {
       .map((c) => el('li', { class: 'funzione__riga' },
         speakButton(c.it),
         el('span', { class: 'funzione__it', html: `<b>${escapeHtml(c.it)}</b>` }),
-        el('span', { class: 'funzione__pt', html: c.pt ?? '' })
+        el('span', { class: 'funzione__pt', html: c.pt ?? '' }),
+        notebook ? notebookToggle(c, notebook) : null
       ));
 
     return el('section', { class: 'funzione', id: f.id },
@@ -423,6 +424,36 @@ export function renderFunzioni(lesson, modo = 'pt') {
   });
 
   return el('div', { class: 'funzioni' }, ...cards);
+}
+
+/**
+ * Botão de guardar no caderno, idêntico ao do verso do flashcard.
+ *
+ * Aqui ele é visível de saída — não atrás de um «Mostrar». É a porta de
+ * entrada do caderno: era o único ponto do site que sabia guardar uma forma,
+ * e nascia escondido, o que fazia o caderno parecer não existir.
+ *
+ * O `notebook` vem por parâmetro, como no `ctx` dos exercícios: render.js
+ * não fala com o store — quem grava é o app.js.
+ */
+function notebookToggle(chunk, notebook) {
+  const dentro = () => Boolean(notebook.has?.(chunk.id));
+  const rotulo = (on) => (on ? '✓ no caderno' : '＋ caderno');
+
+  const btn = el('button', {
+    class: 'btn btn--sm btn--ghost funzione__caderno',
+    type: 'button',
+    'aria-pressed': dentro() ? 'true' : 'false',
+    title: `Guardar «${chunk.it}» para escrever uma frase sua`,
+  }, rotulo(dentro()));
+
+  btn.addEventListener('click', () => {
+    const on = Boolean(notebook.toggle?.(chunk));
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.textContent = rotulo(on);
+  });
+
+  return btn;
 }
 
 /** Mesma regra do flashcard: emoji por padrão, SVG inline por exceção, e

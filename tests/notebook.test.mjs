@@ -145,4 +145,16 @@ describe('página do caderno', () => {
     assert.ok(main.querySelector('.ripasso-vuoto'));
     assert.match(main.textContent, /Lessico/, 'diz onde guardar');
   });
+
+  test('o estado vazio cita os DOIS caminhos que existem', () => {
+    // Enquanto ele só citava a etapa, mentia: na Lessico o único botão vivia
+    // escondido atrás do «Mostrar» de uma carta. Agora há botão na linha da
+    // Frase utile também, e o texto tem que descrever o que existe de fato —
+    // é a instrução que o aluno segue quando o caderno está vazio.
+    renderNotebook();
+    const t = main.textContent;
+    assert.match(t, /＋ caderno/, 'nomeia o botão como ele aparece na tela');
+    assert.match(t, /Frase utile/i, 'o caminho novo: a linha das Frasi utili');
+    assert.match(t, /carta/i, 'o caminho antigo: o verso da carta');
+  });
 });

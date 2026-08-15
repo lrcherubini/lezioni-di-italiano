@@ -567,6 +567,64 @@ describe('renderFunzioni', () => {
     });
     assert.equal(f.querySelectorAll('.funzione__riga').length, 0);
   });
+
+  /* --- A porta do caderno ------------------------------------------------
+     O botão nasce VISÍVEL aqui, ao contrário do irmão no verso do flashcard.
+     Era o laço fechado: o único jeito de guardar uma forma estava escondido
+     atrás do «Mostrar» de uma carta, então só achava o caderno quem já o
+     tinha usado. */
+
+  test('sem `notebook`, nenhuma linha ganha botão — compatível para trás', () => {
+    const f = renderFunzioni(AULA);
+    assert.equal(f.querySelectorAll('.funzione__caderno').length, 0);
+  });
+
+  test('com `notebook`, cada linha ganha um ＋ caderno já visível', () => {
+    const f = renderFunzioni(AULA, 'pt', { has: () => false, toggle: () => true });
+    const bts = f.querySelectorAll('.funzione__caderno');
+    assert.equal(bts.length, 3, 'um por linha, inclusive o chunk repetido');
+    assert.equal(bts[0].hasAttribute('hidden'), false, 'visível de saída, sem virar carta');
+    assert.equal(bts[0].textContent, '＋ caderno');
+    assert.equal(bts[0].getAttribute('aria-pressed'), 'false');
+  });
+
+  test('o que já está no caderno nasce marcado', () => {
+    const f = renderFunzioni(AULA, 'pt', { has: (id) => id === 'c1', toggle: () => true });
+    const bts = f.querySelectorAll('.funzione__caderno');
+    assert.equal(bts[0].getAttribute('aria-pressed'), 'true');
+    assert.equal(bts[0].textContent, '✓ no caderno');
+    assert.equal(bts[1].getAttribute('aria-pressed'), 'false', 'c2 não está');
+  });
+
+  test('clicar entrega o chunk inteiro e alterna rótulo e aria-pressed', () => {
+    const guardados = [];
+    let dentro = false;
+    const f = renderFunzioni(AULA, 'pt', {
+      has: () => dentro,
+      toggle(chunk) { guardados.push(chunk); dentro = !dentro; return dentro; },
+    });
+    const btn = f.querySelector('.funzione__caderno');
+
+    btn.click();
+    assert.deepEqual(guardados[0], { id: 'c1', it: 'Buongiorno', pt: 'Bom dia' },
+      'o chunk vai inteiro — o caderno precisa do `it` e do `pt`');
+    assert.equal(btn.textContent, '✓ no caderno');
+    assert.equal(btn.getAttribute('aria-pressed'), 'true');
+
+    btn.click();
+    assert.equal(btn.textContent, '＋ caderno');
+    assert.equal(btn.getAttribute('aria-pressed'), 'false');
+  });
+
+  test('render.js não fala com o store: só usa o que recebe por parâmetro', () => {
+    // `notebook` sem os métodos não pode explodir — é a mesma tolerância que
+    // o flashcard tem com `ctx.notebook?.toggle?.()`.
+    const f = renderFunzioni(AULA, 'pt', {});
+    const btn = f.querySelector('.funzione__caderno');
+    assert.equal(btn.getAttribute('aria-pressed'), 'false');
+    btn.click();
+    assert.equal(btn.getAttribute('aria-pressed'), 'false');
+  });
 });
 
 describe('renderStage', () => {

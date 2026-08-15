@@ -890,6 +890,16 @@ textarea { min-height: 5rem; resize: vertical; line-height: var(--lh-normal); }
 .funzione__riga:last-child { border-bottom: 0; padding-bottom: 0; }
 .funzione__pt { color: var(--text-muted); font-size: var(--fs-sm); }
 
+/* O «＋ caderno» empurra-se para a direita e não compete com a forma
+   italiana, que é o conteúdo da linha. Marcado, ganha a cor de acerto —
+   mesmo vocabulário visual do voto da carta. */
+.funzione__caderno { margin-left: auto; flex-shrink: 0; }
+.funzione__caderno[aria-pressed='true'] { color: var(--ok); border-color: var(--ok); }
+
+/* Rodapé da etapa Lessico: a ponte para o caderno. */
+.lessico__caderno { margin-top: var(--sp-4); font-size: var(--fs-sm); }
+.lessico__caderno a { font-weight: 600; }
+
 /* --- Flashcard: o léxico da aula em cartas ----------------------------- */
 
 .carte { list-style: none; padding: 0; display: grid; gap: var(--sp-3); }

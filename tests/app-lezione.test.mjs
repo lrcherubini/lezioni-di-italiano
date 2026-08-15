@@ -148,6 +148,37 @@ describe('etapas', () => {
     }
   });
 
+  /* --- A porta do caderno, montada de verdade --------------------------- */
+
+  test('a etapa Lessico leva ao caderno mesmo com ele vazio', () => {
+    // O card da home é condicional de propósito (um call-out numérico vazio
+    // só ensina a ignorá-lo). Este link não: é local ao único lugar de que
+    // ele trata, e sem ele o caderno era inalcançável para quem nunca o usou.
+    const lessico = dom.document.getElementById('lessico');
+    const link = lessico.querySelector('.lessico__caderno a');
+    assert.ok(link, 'a etapa Lessico não oferece caminho para o caderno');
+    assert.equal(link.getAttribute('href'), 'notebook.html');
+  });
+
+  test('as linhas das Frasi utili guardam no caderno sem virar carta nenhuma', () => {
+    const lessico = dom.document.getElementById('lessico');
+    const btn = lessico.querySelector('.funzione__caderno');
+    assert.ok(btn, 'nenhuma linha de funzione oferece ＋ caderno');
+    assert.equal(btn.hasAttribute('hidden'), false);
+
+    const antes = store.notebook().length;
+    btn.click();
+    assert.equal(store.notebook().length, antes + 1, 'o clique não gravou');
+    assert.equal(btn.getAttribute('aria-pressed'), 'true');
+
+    const guardada = store.notebook().at(-1);
+    assert.equal(guardada.lesson, '01', 'a aula de origem tem que ir junto');
+    assert.ok(guardada.it, 'a forma italiana tem que ir junto');
+
+    btn.click();
+    assert.equal(store.notebook().length, antes, 'o clique de volta não removeu');
+  });
+
   test('Studio renderiza uma seção por section do JSON', () => {
     const secoes = dom.document.getElementById('studio').querySelectorAll('.section');
     assert.equal(secoes.length, aula.sections.length);

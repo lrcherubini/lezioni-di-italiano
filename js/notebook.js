@@ -34,8 +34,9 @@ function vazio() {
   return el('div', { class: 'ripasso-vuoto' },
     el('p', {}, 'O caderno está vazio.'),
     el('p', { html:
-      'Na etapa <b>Lessico</b> de cada aula, use <b>＋ caderno</b> nas formas que você '
-      + 'quer fixar. Depois volte aqui e escreva uma frase sua com cada uma — '
+      'Na etapa <b>Lessico</b> de cada aula, use <b>＋ caderno</b> — na linha de uma '
+      + '<i>Frase utile</i>, ou no verso de uma carta que você não lembrou. '
+      + 'Depois volte aqui e escreva uma frase sua com cada forma: '
       + 'é a frase própria que fixa, não a tradução.' })
   );
 }
