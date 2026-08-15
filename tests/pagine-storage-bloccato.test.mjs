@@ -26,6 +26,7 @@ installFetch();
 const store = await import('../js/store.js');
 const { renderRipasso } = await import('../js/ripasso.js');
 const { renderNotebook } = await import('../js/notebook.js');
+const { renderFrasi } = await import('../js/frasi.js');
 const { renderHome } = await import('../js/app.js');
 
 before(() => {
@@ -38,7 +39,8 @@ before(() => {
     mk('div', { id: 'audio-status' }),
     mk('button', { 'data-action': 'theme' }),
     mk('div', { id: 'ripasso' }),
-    mk('div', { id: 'notebook' })
+    mk('div', { id: 'notebook' }),
+    mk('div', { id: 'frasi' })
   );
 });
 
@@ -95,6 +97,27 @@ describe('Caderno com storage bloqueado', () => {
     campo.value = 'Ciao, come stai?';
     assert.doesNotThrow(() => campo.dispatchEvent({ type: 'blur' }));
     assert.equal(store.notebook()[0].myExample, 'Ciao, come stai?');
+  });
+});
+
+describe('Frasi com storage bloqueado', () => {
+  before(async () => {
+    await renderFrasi();
+    await flush();
+  });
+
+  test('abre inteira — o conteúdo vem do JSON, não do progresso', () => {
+    // Ao contrário de Ripasso e Caderno, esta página não depende do storage
+    // para ter o que mostrar. Sem ele, ela tem que ficar exatamente igual.
+    const main = dom.document.getElementById('frasi');
+    assert.ok(main.querySelectorAll('.funzione').length >= 2);
+    assert.match(main.textContent, /Ripeti dopo di me/);
+  });
+
+  test('guardar no caderno não lança, mesmo sem onde salvar', () => {
+    const btn = dom.document.getElementById('frasi').querySelector('.funzione__caderno');
+    assert.doesNotThrow(() => btn.click());
+    assert.equal(btn.getAttribute('aria-pressed'), 'true', 'a sessão segue utilizável');
   });
 });
 

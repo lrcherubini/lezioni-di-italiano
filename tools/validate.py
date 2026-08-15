@@ -39,7 +39,17 @@ CONTENT = ROOT / 'content'
 
 # Arquivos de content/ que NÃO são aula. Ficam de fora das checagens de
 # schema de aula e da conferência contra o manifest.
-NAO_LEZIONE = {'manifest.json', 'lessico.json'}
+# Arquivos de content/ que NÃO são aula. O conjunto governa cinco coisas de
+# uma vez: pular `check_lesson`, ficar fora da colheita do léxico, ficar fora
+# da checagem de escopo, não exigir entrada no manifest, e não entrar na
+# contagem de aulas.
+#
+# `frasi.json` está aqui de propósito, e a razão do léxico é a que importa:
+# ele existe para a checagem do i+1 dos diálogos, e as frases de sobrevivência
+# são `fixed` decoradas inteiras, não vocabulário ensinado. Se entrassem, um
+# diálogo poderia se autoautorizar a usá-las. Ele tem checagem própria em
+# `check_frasi`.
+NAO_LEZIONE = {'manifest.json', 'lessico.json', 'frasi.json'}
 
 # Espelham o que está documentado no CLAUDE.md. Acrescentar valor aqui
 # exige acrescentar no CLAUDE.md também — é de propósito que dê trabalho.
@@ -866,6 +876,107 @@ def count_items(lesson: dict) -> int:
     return n
 
 
+def check_frasi(data: dict, files: dict[str, dict]) -> None:
+    """`content/frasi.json` — as frases que atravessam todas as aulas.
+
+    Não é aula: não tem `numero`, não entra no manifest, não grava progresso
+    e não alimenta o léxico. O que ela tem em comum com uma aula é a dupla
+    `funzioni` + `chunks`, e é por isso que `renderFunzioni()` a monta sem
+    uma linha de mudança.
+
+    A checagem que justifica este arquivo existir é a do id reusado. Uma
+    frase que a Aula 0 já ensina aparece aqui com o MESMO id (`l00-c03`), e
+    não com um id novo: id é a chave do caderno, e dois ids para a mesma
+    frase fariam o aluno guardá-la duas vezes. O preço é o texto duplicado
+    no arquivo — então o texto é conferido contra a aula de origem, e o
+    build quebra se um dos dois for editado sozinho.
+    """
+    name = 'frasi.json'
+
+    for campo in ('titolo', 'gruppi', 'chunks'):
+        if not data.get(campo):
+            err(f'{name}: falta «{campo}»')
+    check_prose(name, 'intro', data.get('intro', ''))
+
+    # Índice das formas que as aulas já ensinam, para casar id reusado.
+    das_aule: dict[str, dict] = {}
+    for fname, lesson in files.items():
+        if fname in NAO_LEZIONE:
+            continue
+        for c in lesson.get('chunks', []):
+            das_aule[c['id']] = {'it': c.get('it'), 'pt': c.get('pt'), 'file': fname}
+
+    vistos: set[str] = set()
+    disponiveis: set[str] = set()
+    for c in data.get('chunks', []):
+        cid = c.get('id')
+        if not cid:
+            err(f'{name}: chunk sem id')
+            continue
+        if cid in vistos:
+            err(f'{name}: chunk «{cid}» duplicado dentro do arquivo')
+        vistos.add(cid)
+        disponiveis.add(cid)
+
+        if not c.get('it') or not c.get('pt'):
+            err(f'{name} {cid}: chunk precisa de «it» e «pt»')
+        if c.get('category') not in VALID_CATEGORY:
+            err(f'{name} {cid}: category «{c.get("category")}» fora dos valores permitidos')
+        if c.get('chunkType') not in VALID_CHUNK_TYPE:
+            err(f'{name} {cid}: chunkType «{c.get("chunkType")}» fora dos valores permitidos')
+        if 'figura' in c:
+            check_figura(f'{name} {cid}', c['figura'])
+
+        origem = das_aule.get(cid)
+        if origem:
+            # Id reusado: o texto TEM que ser o mesmo, senão a mesma frase
+            # apareceria diferente em dois lugares do site.
+            for campo in ('it', 'pt'):
+                if c.get(campo) != origem[campo]:
+                    err(f'{name} {cid}: «{campo}» diverge de {origem["file"]} — '
+                        f'{c.get(campo)!r} contra {origem[campo]!r}. Id reusado tem que '
+                        f'carregar o mesmo texto; edite os dois ou use um id novo.')
+        elif not cid.startswith('fr-'):
+            err(f'{name} {cid}: id que não vem de aula nenhuma deve começar com «fr-», '
+                f'para não colidir com um id de aula futura')
+
+    for g in data.get('gruppi', []):
+        gid = g.get('id', '?')
+        if not g.get('titolo'):
+            err(f'{name} {gid}: grupo sem «titolo»')
+        if not g.get('funzioni'):
+            err(f'{name} {gid}: grupo sem «funzioni» — não mostraria nada')
+        # Mesma exigência de uma seção de aula: sem o porquê, é lista de frases.
+        if len(g.get('spiegazione') or []) < 1:
+            err(f'{name} {gid}: grupo sem «spiegazione»')
+        for i, p in enumerate(g.get('spiegazione') or []):
+            check_prose(name, f'{gid}.spiegazione[{i}]', p)
+
+        for f in g.get('funzioni', []):
+            fid = f.get('id', '?')
+            if fid in vistos:
+                err(f'{name}: id «{fid}» duplicado')
+            vistos.add(fid)
+            if not f.get('quando'):
+                err(f'{name} {fid}: funzione sem «quando»')
+            if not f.get('gloss'):
+                err(f'{name} {fid}: funzione sem «gloss»')
+            if 'figura' in f:
+                check_figura(f'{name} {fid}', f['figura'])
+            if not f.get('chunks'):
+                err(f'{name} {fid}: funzione sem chunks — não mostraria nada')
+            for cid in f.get('chunks', []):
+                if cid not in disponiveis:
+                    err(f'{name} {fid}: referencia chunk «{cid}», que não existe em frasi.json')
+
+    # Chunk declarado e nunca agrupado é chunk invisível: a página só desenha
+    # o que alguma funzione referencia.
+    agrupados = {cid for g in data.get('gruppi', []) for f in g.get('funzioni', [])
+                 for cid in f.get('chunks', [])}
+    for cid in sorted(disponiveis - agrupados):
+        err(f'{name} {cid}: chunk fora de toda funzione — não apareceria na página')
+
+
 def check_manifest(data: dict, files: dict[str, dict]) -> None:
     seen_ids = set()
     # O manifest é o único lugar que vê as aulas em ordem de `numero`, então é
@@ -969,6 +1080,9 @@ def main(argv: list[str] | None = None) -> int:
         check_lesson(name, data, ids)
 
     check_manifest(files['manifest.json'], files)
+
+    if 'frasi.json' in files:
+        check_frasi(files['frasi.json'], files)
 
     # Léxico cumulativo: dado derivado, conferido como invariante.
     lessico = build_lessico(files)

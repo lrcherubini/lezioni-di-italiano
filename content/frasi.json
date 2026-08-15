@@ -1,0 +1,80 @@
+{
+  "id": "frasi",
+  "titolo": "Frasi per la lezione",
+  "gloss": "As frases que fazem a aula andar",
+  "intro": "Estas não pertencem a nenhuma aula: são as frases de que você precisa <b>durante</b> qualquer uma delas. Ficam aqui, fora da sequência, porque é na Aula 12 que você vai querer <it>Puoi ripetere, per favore?</it> — e ninguém volta à Aula 0 para procurá-la.",
+
+  "gruppi": [
+    {
+      "id": "tu-dici",
+      "titolo": "Tu dici",
+      "gloss": "O que você diz",
+      "spiegazione": [
+        "Estas você <b>produz</b>: decore inteiras e diga sem montar. Travar no meio de uma frase e não ter como pedir socorro é o que faz a conversa parar — e o custo de aprender estas dez é baixíssimo perto do que elas destravam.",
+        "Todas estão no <b>tu</b>, o tratamento de quem já se conhece. Se um dia precisar da versão formal, o corte é o mesmo da Aula 2: <it>Puoi ripetere?</it> vira <it>Può ripetere?</it>, e <it>Scusa</it> vira <it>Scusi</it> — muda a desinência do verbo, não a frase."
+      ],
+      "funzioni": [
+        { "id": "fr-f01", "quando": "Quando non capisci", "gloss": "Quando você não entende", "figura": "🤔",
+          "chunks": ["fr-c01", "l00-c03", "l00-c04", "fr-c02"] },
+        { "id": "fr-f02", "quando": "Quando chiedi una parola", "gloss": "Quando você pergunta uma palavra", "figura": "✏️",
+          "chunks": ["l00-c02", "l00-c01", "fr-c03", "fr-c04"] },
+        { "id": "fr-f03", "quando": "Quando chiedi il permesso", "gloss": "Quando você pede licença", "figura": "✋",
+          "chunks": ["fr-c05", "fr-c06", "l02-c17"] },
+        { "id": "fr-f04", "quando": "Quando non sai", "gloss": "Quando você não sabe", "figura": "🤷",
+          "chunks": ["fr-c07", "fr-c08", "fr-c09"] },
+        { "id": "fr-f05", "quando": "Quando controlli se hai detto bene", "gloss": "Quando você confere se falou certo", "figura": "✅",
+          "chunks": ["fr-c10", "fr-c11"] }
+      ]
+    },
+    {
+      "id": "insegnante-dice",
+      "titolo": "L'insegnante dice",
+      "gloss": "O que você só precisa reconhecer",
+      "spiegazione": [
+        "Estas são diferentes: você <b>não vai dizê-las</b>. Vai <b>ouvi-las</b> — e ouvir é justamente onde elas travam, porque chegam faladas, rápido e sem aviso. Tocar o 🔊 aqui algumas vezes vale mais do que ler a lista dez.",
+        "Ouça cada uma em <b>Normal</b> antes de olhar a tradução. Reconhecer <it>Ancora una volta</it> na velocidade real é uma habilidade separada de saber o que a frase significa, e é a que decide se a aula anda ou para para explicar."
+      ],
+      "funzioni": [
+        { "id": "fr-f06", "quando": "Quando ti dà un'istruzione", "gloss": "Quando te dá uma instrução", "figura": "👉",
+          "chunks": ["fr-c12", "fr-c13", "fr-c14", "fr-c15", "l03-c10"] },
+        { "id": "fr-f07", "quando": "Quando ti risponde", "gloss": "Quando te responde", "figura": "👏",
+          "chunks": ["fr-c16", "fr-c17", "fr-c18", "fr-c19", "fr-c20"] }
+      ]
+    }
+  ],
+
+  "chunks": [
+    { "id": "fr-c01", "it": "Non ho capito.", "pt": "Não entendi.", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l00-c03", "it": "Puoi ripetere, per favore?", "pt": "Pode repetir, por favor?", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l00-c04", "it": "Più lentamente, per favore.", "pt": "Mais devagar, por favor.", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "fr-c02", "it": "Puoi parlare più lentamente?", "pt": "Você pode falar mais devagar?", "category": "ESPRESSIONE", "chunkType": "fixed" },
+
+    { "id": "l00-c02", "it": "Come si dice?", "pt": "Como se diz?", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l00-c01", "it": "Come si scrive?", "pt": "Como se escreve?", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "fr-c03", "it": "Come si pronuncia?", "pt": "Como se pronuncia?", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "fr-c04", "it": "Che cosa significa?", "pt": "O que significa?", "category": "ESPRESSIONE", "chunkType": "fixed" },
+
+    { "id": "fr-c05", "it": "Posso fare una domanda?", "pt": "Posso fazer uma pergunta?", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "fr-c06", "it": "Un attimo, per favore.", "pt": "Um instante, por favor.", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l02-c17", "it": "Scusa.", "pt": "Desculpa. / Com licença. (informal)", "category": "ESPRESSIONE", "chunkType": "fixed" },
+
+    { "id": "fr-c07", "it": "Non lo so.", "pt": "Não sei.", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "fr-c08", "it": "Non mi ricordo.", "pt": "Não me lembro.", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "fr-c09", "it": "Non sono sicuro.", "pt": "Não tenho certeza. (mulher: sicura)", "category": "ESPRESSIONE", "chunkType": "fixed" },
+
+    { "id": "fr-c10", "it": "Ho detto bene?", "pt": "Falei certo?", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "fr-c11", "it": "Va bene così?", "pt": "Está bom assim?", "category": "ESPRESSIONE", "chunkType": "fixed" },
+
+    { "id": "fr-c12", "it": "Ripeti dopo di me.", "pt": "Repita depois de mim.", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "fr-c13", "it": "Ancora una volta.", "pt": "Mais uma vez.", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "fr-c14", "it": "Ascolta bene.", "pt": "Escute bem.", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "fr-c15", "it": "Leggi ad alta voce.", "pt": "Leia em voz alta.", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l03-c10", "it": "Adesso tocca a te.", "pt": "Agora é a sua vez.", "category": "ESPRESSIONE", "chunkType": "fixed" },
+
+    { "id": "fr-c16", "it": "Esatto!", "pt": "Exato!", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "fr-c17", "it": "Bravo!", "pt": "Muito bem! (a uma mulher: Brava!)", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "fr-c18", "it": "Quasi.", "pt": "Quase.", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "fr-c19", "it": "Non proprio.", "pt": "Não exatamente.", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "fr-c20", "it": "Prova di nuovo.", "pt": "Tente de novo.", "category": "ESPRESSIONE", "chunkType": "fixed" }
+  ]
+}

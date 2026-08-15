@@ -900,6 +900,12 @@ textarea { min-height: 5rem; resize: vertical; line-height: var(--lh-normal); }
 .lessico__caderno { margin-top: var(--sp-4); font-size: var(--fs-sm); }
 .lessico__caderno a { font-weight: 600; }
 
+/* Cabeçalho da página das frases de aula. Não tem trilha nem etapas: são
+   dois grupos e acabou, então o título carrega sozinho. */
+.frasi__head { margin: var(--sp-6) 0 var(--sp-5); }
+.frasi__head .section__gloss { display: block; margin-top: var(--sp-1); }
+.frasi__head .spiegazione { margin-top: var(--sp-3); }
+
 /* --- Flashcard: o léxico da aula em cartas ----------------------------- */
 
 .carte { list-style: none; padding: 0; display: grid; gap: var(--sp-3); }

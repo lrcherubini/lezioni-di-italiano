@@ -692,6 +692,104 @@ class TestCheckTraduzione(unittest.TestCase):
             {'pt': 'Eu sou ___.', 'risposta': 'Io sono ___.'})[0])
 
 
+class TestCheckFrasi(unittest.TestCase):
+    """`content/frasi.json` — as frases que atravessam todas as aulas.
+
+    A checagem que justifica o arquivo é a do id reusado. Uma frase que a
+    Aula 0 já ensina aparece lá com o MESMO id, porque id é a chave do
+    caderno e dois ids para a mesma frase a guardariam duas vezes. O preço
+    é o texto duplicado — então o texto é conferido, e editar um lado só
+    quebra o build em vez de deixar o site se contradizendo em silêncio.
+    """
+
+    def setUp(self):
+        v.errors.clear()
+        v.warnings.clear()
+
+    AULAS = {
+        'lezione-00.json': {
+            'id': '00',
+            'chunks': [{'id': 'l00-c03', 'it': 'Puoi ripetere?', 'pt': 'Pode repetir?'}],
+        },
+    }
+
+    def base(self, **kw):
+        d = {
+            'titolo': 'T',
+            'chunks': [
+                {'id': 'fr-c01', 'it': 'Non ho capito.', 'pt': 'Não entendi.',
+                 'category': 'ESPRESSIONE', 'chunkType': 'fixed'},
+            ],
+            'gruppi': [
+                {'id': 'g1', 'titolo': 'G', 'spiegazione': ['por quê'],
+                 'funzioni': [{'id': 'fr-f01', 'quando': 'Q', 'gloss': 'g',
+                               'chunks': ['fr-c01']}]},
+            ],
+        }
+        d.update(kw)
+        return d
+
+    def check(self, d):
+        v.errors.clear()
+        v.check_frasi(d, self.AULAS)
+        return v.errors
+
+    def test_arquivo_minimo_passa(self):
+        self.assertEqual(self.check(self.base()), [])
+
+    def test_id_reusado_com_texto_identico_passa(self):
+        d = self.base()
+        d['chunks'].append({'id': 'l00-c03', 'it': 'Puoi ripetere?', 'pt': 'Pode repetir?',
+                            'category': 'ESPRESSIONE', 'chunkType': 'fixed'})
+        d['gruppi'][0]['funzioni'][0]['chunks'].append('l00-c03')
+        self.assertEqual(self.check(d), [])
+
+    def test_id_reusado_com_texto_divergente_e_erro(self):
+        # É o cenário que o arquivo existe para impedir: alguém edita a
+        # frase na Aula 0 e o frasi.json passa a mostrar outra coisa.
+        d = self.base()
+        d['chunks'].append({'id': 'l00-c03', 'it': 'Puoi ripetere, per favore?',
+                            'pt': 'Pode repetir?', 'category': 'ESPRESSIONE',
+                            'chunkType': 'fixed'})
+        d['gruppi'][0]['funzioni'][0]['chunks'].append('l00-c03')
+        self.assertIn('diverge', self.check(d)[0])
+
+    def test_id_novo_fora_do_prefixo_e_erro(self):
+        # Sem o prefixo, um id inventado aqui pode colidir com o de uma
+        # aula que ainda nem foi escrita — e id colidido mistura progresso.
+        d = self.base()
+        d['chunks'][0]['id'] = 'l09-c01'
+        d['gruppi'][0]['funzioni'][0]['chunks'] = ['l09-c01']
+        self.assertIn('fr-', self.check(d)[0])
+
+    def test_funzione_apontando_para_chunk_inexistente(self):
+        d = self.base()
+        d['gruppi'][0]['funzioni'][0]['chunks'] = ['fantasma']
+        self.assertTrue(any('fantasma' in e for e in self.check(d)))
+
+    def test_chunk_fora_de_toda_funzione_e_erro(self):
+        # A página só desenha o que alguma funzione referencia.
+        d = self.base()
+        d['chunks'].append({'id': 'fr-c99', 'it': 'Ciao.', 'pt': 'Oi.',
+                            'category': 'ESPRESSIONE', 'chunkType': 'fixed'})
+        self.assertTrue(any('fr-c99' in e for e in self.check(d)))
+
+    def test_grupo_sem_spiegazione_e_erro(self):
+        d = self.base()
+        d['gruppi'][0]['spiegazione'] = []
+        self.assertTrue(any('spiegazione' in e for e in self.check(d)))
+
+    def test_it_desbalanceada_na_spiegazione_e_erro(self):
+        d = self.base()
+        d['gruppi'][0]['spiegazione'] = ['diga <it>ciao']
+        self.assertTrue(any('desbalanceada' in e for e in self.check(d)))
+
+    def test_fora_do_lexico_cumulativo(self):
+        # Se as frases de sobrevivência alimentassem o léxico, um diálogo
+        # poderia usá-las sem disparar o aviso de escopo do i+1.
+        self.assertIn('frasi.json', v.NAO_LEZIONE)
+
+
 class TestConteudoReal(unittest.TestCase):
     """O conteúdo versionado passa no próprio validador."""
 
