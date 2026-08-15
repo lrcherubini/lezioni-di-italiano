@@ -1,0 +1,832 @@
+{
+  "id": "03",
+  "numero": 3,
+  "titolo": "Io leggo, io scrivo",
+  "gloss": "Verbos regulares em -ERE, materiais de leitura e quando se faz cada coisa",
+
+  "header": {
+    "comunicazione": [
+      { "it": "Dire cosa leggi e cosa scrivi", "sezione": "ascolto" },
+      { "it": "Dire quando fai una cosa", "sezione": "l03-s06" },
+      { "it": "Chiedere conferma con «Vero?»", "sezione": "l03-s05" },
+      { "it": "Passare la parola", "sezione": "l03-s05" }
+    ],
+    "lessico": [
+      { "it": "I materiali di lettura", "sezione": "l03-s03" },
+      { "it": "La mattina · il pomeriggio · la sera · la notte", "sezione": "l03-s06" },
+      { "it": "Sicuramente! · Adesso tocca a te", "sezione": "l03-s05" }
+    ],
+    "grammatica": [
+      { "it": "Presente dei verbi regolari in -ERE", "sezione": "l03-s01" },
+      { "it": "Le desinenze -o -i -e -iamo -ete -ono", "sezione": "l03-s01" },
+      { "it": "La G dura e la G dolce di «leggere»", "sezione": "l03-s02" },
+      { "it": "Plurali particolari: il tema, la tesi, la mail", "sezione": "l03-s04" }
+    ]
+  },
+
+  "riscaldamento": {
+    "prompt": "Na Aula 2 você aprendeu seis desinências e ganhou centenas de verbos com elas. Agora vem a segunda família, a dos verbos em <em>-ere</em> — e a pergunta antes de começar é esta: olhe as duas séries lado a lado e conte <b>quantas</b> desinências realmente mudam.<br><br><em>parlo, parli, parla, parliamo, parlate, parlano</em><br><em>leggo, leggi, legge, leggiamo, leggete, leggono</em>",
+    "spiegazione": [
+      "Mudam <b>três</b>, não seis. <em>io</em>, <em>tu</em> e <em>noi</em> são idênticas nas duas famílias: <em>-o</em>, <em>-i</em>, <em>-iamo</em>. A diferença mora só em <em>lui</em> (<em>-a</em> contra <em>-e</em>), <em>voi</em> (<em>-ate</em> contra <em>-ete</em>) e <em>loro</em> (<em>-ano</em> contra <em>-ono</em>). Metade do trabalho já estava feito quando você abriu esta aula.",
+      "Isso não é coincidência nem sorte: as duas famílias vêm da mesma origem latina e só se separaram no meio da conjugação. Guarde as três que mudam e você conjuga qualquer verbo em <em>-ere</em> regular. E não caia na armadilha de achar que <em>-ere</em> é raro — <em>leggere</em>, <em>scrivere</em>, <em>vedere</em>, <em>prendere</em>, <em>chiedere</em> estão entre os verbos mais usados da língua."
+    ]
+  },
+
+  "sections": [
+    {
+      "id": "l03-s01",
+      "category": "VERBO",
+      "sottotitolo": "Presente Indicativo",
+      "titolo": "Scrivere · Leggere",
+      "gloss": "escrever · ler — verbos regulares em -ERE",
+      "spiegazione": [
+        "O procedimento é exatamente o da Aula 2, trocando só a tabela de terminações. Primeiro você <b>tira o <em>-ere</em></b> do infinitivo: <em>scrivere</em> → <em>scriv-</em>, <em>leggere</em> → <em>legg-</em>. O que sobra é a raiz. Depois você <b>cola a desinência</b>: <em>-o</em> para <em>io</em>, <em>-i</em> para <em>tu</em>, <em>-e</em> para <em>lui/lei</em>, <em>-iamo</em> para <em>noi</em>, <em>-ete</em> para <em>voi</em>, <em>-ono</em> para <em>loro</em>.",
+        "Vale insistir na economia que você já descobriu no aquecimento, porque ela é o que faz esta aula custar menos que a anterior: <b>só três das seis desinências são novas</b>. <it>Io scrivo</it> e <it>io parlo</it> terminam igual; <it>tu scrivi</it> e <it>tu parli</it> também; <it>noi scriviamo</it> e <it>noi parliamo</it> idem. Concentre o esforço em <it>lui legge</it>, <it>voi leggete</it> e <it>loro leggono</it> — o resto você já sabia.",
+        "Duas coisas de som que só se pegam ouvindo. A tônica de <it>leggono</it> e <it>scrivono</it> cai na <b>primeira</b> sílaba, exatamente como em <em>parlano</em> e <em>abitano</em> da Aula 2: LEG-go-no, SCRI-vo-no. E o próprio <b>infinitivo</b> é esdrúxulo — LEG-ge-re, SCRI-ve-re —, ao contrário de <em>par-LA-re</em> e <em>a-bi-TA-re</em>, que são oxítonos. Use o 🔊 de cada linha da tabela; o italiano não escreve esses acentos."
+      ],
+      "blocks": [
+        {
+          "type": "tabella",
+          "titolo": "Presente indicativo",
+          "intestazioni": [
+            { "html": "Pessoa", "pt": true },
+            "Scrivere",
+            "Leggere"
+          ],
+          "righe": [
+            ["io", "scrivo", "leggo"],
+            ["tu", "scrivi", "leggi"],
+            ["lui / lei / Lei", "scrive", "legge"],
+            ["noi", "scriviamo", "leggiamo"],
+            ["voi", "scrivete", "leggete"],
+            ["loro", "scrivono", "leggono"]
+          ]
+        },
+        {
+          "type": "tabella",
+          "titolo": "-ARE × -ERE, lado a lado",
+          "intestazioni": [
+            { "html": "Pessoa", "pt": true },
+            "Parlare",
+            "Leggere",
+            { "html": "Muda?", "pt": true }
+          ],
+          "righe": [
+            ["io", "parlo", "leggo", { "html": "não — <b>-o</b> nos dois", "pt": true }],
+            ["tu", "parli", "leggi", { "html": "não — <b>-i</b> nos dois", "pt": true }],
+            ["lui / lei / Lei", "parla", "legge", { "html": "<b>sim</b>: -a → <b>-e</b>", "pt": true }],
+            ["noi", "parliamo", "leggiamo", { "html": "não — <b>-iamo</b> nos dois", "pt": true }],
+            ["voi", "parlate", "leggete", { "html": "<b>sim</b>: -ate → <b>-ete</b>", "pt": true }],
+            ["loro", "parlano", "leggono", { "html": "<b>sim</b>: -ano → <b>-ono</b>", "pt": true }]
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "attenzione",
+          "titolo": "As três que você precisa guardar",
+          "testo": "<it>lui legge</it> · <it>voi leggete</it> · <it>loro leggono</it>. Se decorar só estas três, o resto sai da Aula 2 sem esforço. O erro típico é levar o <em>-ate</em> de <em>parlate</em> para o verbo errado e produzir <em>leggate</em>, que não existe."
+        },
+        {
+          "type": "nota",
+          "tono": "info",
+          "titolo": "O infinitivo não diz onde cai a tônica",
+          "testo": "<it>leggere</it> e <it>scrivere</it> têm a tônica na antepenúltima sílaba, mas <it>parlare</it> e <it>abitare</it> têm na penúltima. Não há regra de escrita que avise: o italiano só marca acento em oxítona (<em>città</em>, <em>perché</em>). É informação que se guarda ouvindo, não lendo."
+        }
+      ]
+    },
+
+    {
+      "id": "l03-s02",
+      "category": "PRONUNCIA",
+      "titolo": "La G di «leggere»",
+      "gloss": "o mesmo verbo, dois sons de G",
+      "spiegazione": [
+        "Ouça o paradigma inteiro de <em>leggere</em> e algo estranho acontece: o <b>G muda de som no meio da conjugação</b>. <it>leggo</it> e <it>leggono</it> soam com <b>G dura /g/</b>, como o G de <em>gato</em>. Já <it>leggi</it>, <it>legge</it>, <it>leggiamo</it> e <it>leggete</it> soam com <b>G dolce /dʒ/</b>, o mesmo som de <em>gelato</em>. Muita gente conclui daí que <em>leggere</em> é irregular. Não é.",
+        "É a regra da Aula 0 fazendo trabalho gramatical. Lá você viu que <b>G antes de A, O, U é dura</b> e <b>G antes de E, I é dolce</b> — e a raiz aqui é sempre a mesma, <em>legg-</em>. Quem decide o som é a <b>desinência que vem depois</b>: <em>-o</em> e <em>-ono</em> começam por O, então o G endurece; <em>-i</em>, <em>-e</em>, <em>-ete</em> começam por I e E, então o G amolece. A escrita não muda nada porque não precisa: ela já diz tudo. É o mesmo mecanismo que explicou <em>ceco → cechi</em> na Aula 2, só que ali fazia falta um <b>h</b> e aqui não.",
+        "Sobra um detalhe elegante em <it>leggiamo</it>. A desinência de <em>noi</em> é <em>-iamo</em>, com i — você já sabe disso desde <em>parliamo</em>. Mas repare no que esse i faz aqui de graça: se fosse <em>leggamo</em>, o G viria antes de A e endureceria. O <b>i</b> de <em>-iamo</em> é ao mesmo tempo a desinência e o que segura o som dolce. Em <em>scrivere</em> nada disso acontece — o V soa igual antes de qualquer vogal —, e é por isso que só um dos dois verbos desta aula pede atenção de ouvido."
+      ],
+      "blocks": [
+        {
+          "type": "contrasto",
+          "titolo": "Lo stesso verbo, due suoni",
+          "gruppi": [
+            {
+              "etichetta": "G dura /g/ — davanti a O",
+              "gloss": "o G de «gatto»",
+              "esempi": [
+                { "it": "io leggo", "pt": "eu leio" },
+                { "it": "loro leggono", "pt": "eles leem", "nota": "Tônica em LEG-go-no." }
+              ]
+            },
+            {
+              "etichetta": "G dolce /dʒ/ — davanti a E, I",
+              "gloss": "o G de «gelato»",
+              "esempi": [
+                { "it": "tu leggi", "pt": "você lê" },
+                { "it": "lui legge", "pt": "ele lê" },
+                { "it": "noi leggiamo", "pt": "nós lemos", "nota": "O <b>i</b> é a desinência e o que mantém o som dolce." },
+                { "it": "voi leggete", "pt": "vocês leem" }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "contrasto",
+          "titolo": "E in «scrivere» non succede niente",
+          "gruppi": [
+            {
+              "etichetta": "Scrivere — V sempre uguale",
+              "gloss": "o V não muda de som diante de nenhuma vogal",
+              "esempi": [
+                { "it": "io scrivo", "pt": "eu escrevo" },
+                { "it": "tu scrivi", "pt": "você escreve" },
+                { "it": "noi scriviamo", "pt": "nós escrevemos" },
+                { "it": "loro scrivono", "pt": "eles escrevem" }
+              ]
+            },
+            {
+              "etichetta": "Leggere — G che cambia",
+              "gloss": "o G alterna duro e dolce dentro do mesmo verbo",
+              "esempi": [
+                { "it": "io leggo", "pt": "eu leio" },
+                { "it": "tu leggi", "pt": "você lê" },
+                { "it": "noi leggiamo", "pt": "nós lemos" },
+                { "it": "loro leggono", "pt": "eles leem" }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "info",
+          "titolo": "A escrita não muda; o som, sim",
+          "testo": "Vale dizer explicitamente porque é contraintuitivo para quem escreve português: aqui <b>não há nenhuma letra a acrescentar</b>. Em <em>ceco → cechi</em> foi preciso um <b>h</b> para <em>manter</em> o som duro; em <em>leggere</em> ninguém quer manter som nenhum — a alternância é esperada, e a grafia simplesmente a reflete."
+        }
+      ]
+    },
+
+    {
+      "id": "l03-s03",
+      "category": "VOCABOLARIO",
+      "titolo": "Materiali di lettura",
+      "gloss": "materiais de leitura — sempre com artigo e plural",
+      "spiegazione": [
+        "Uma regra de estudo antes das palavras: <b>nunca decore um substantivo italiano sozinho</b>. Decore <em>il libro</em>, não <em>libro</em>. O artigo carrega o gênero, e o gênero decide o plural, a concordância do adjetivo e metade do que você vai dizer depois. Palavra sem artigo é informação pela metade.",
+        "Repare num par desta lista que prova o ponto: <it>lo studio</it> e <it>la storia</it> começam as duas com <b>s + consoante</b>, e mesmo assim levam artigos diferentes. Não há contradição — <em>lo</em>/<em>gli</em> é regra <b>masculina</b>. O feminino não tem essa complicação: é <em>la</em> no singular e <em>le</em> no plural, aconteça o que acontecer com o som seguinte. Outro par: <it>il giornale</it> e <it>la frase</it> terminam ambos em <em>-e</em> no singular, e só o artigo diz qual é masculino.",
+        "O plural segue os três moldes da Aula 1: <em>-o</em> → <em>-i</em> (<it>il libro</it> → <it>i libri</it>), <em>-a</em> → <em>-e</em> (<it>la storia</it> → <it>le storie</it>) e <em>-e</em> → <em>-i</em> para os dois gêneros (<it>il giornale</it> → <it>i giornali</it>, <it>la frase</it> → <it>le frasi</it>). Nos artigos plurais, <em>gli</em> cobre vogal e s + consoante (<it>gli articoli</it>, <it>gli studi</it>), <em>i</em> cobre o resto do masculino, e <em>le</em> cobre todo o feminino — inclusive antes de vogal, onde <b>não elide</b>: é <it>le enciclopedie</it>, nunca <em>l'enciclopedie</em>."
+      ],
+      "blocks": [
+        {
+          "type": "tabella",
+          "titolo": "Singolare → plurale",
+          "intestazioni": ["Singolare", "Plurale", { "html": "Português", "pt": true }],
+          "righe": [
+            ["l'articolo", "gli articoli", { "html": "o artigo", "pt": true }],
+            ["il diario", "i diari", { "html": "o diário", "pt": true }],
+            ["il giornale", "i giornali", { "html": "o jornal", "pt": true }],
+            ["il libro", "i libri", { "html": "o livro", "pt": true }],
+            ["il racconto", "i racconti", { "html": "o conto", "pt": true }],
+            ["la storia", "le storie", { "html": "a história", "pt": true }],
+            ["lo studio", "gli studi", { "html": "o estudo", "pt": true }],
+            ["la ricerca", "le ricerche", { "html": "a pesquisa", "pt": true }],
+            ["il paragrafo", "i paragrafi", { "html": "o parágrafo", "pt": true }],
+            ["il testo", "i testi", { "html": "o texto", "pt": true }],
+            ["la lettera", "le lettere", { "html": "a carta", "pt": true }],
+            ["il tema", "i temi", { "html": "o tema, a redação", "pt": true }],
+            ["la tesi", "le tesi", { "html": "a tese", "pt": true }],
+            ["la rivista", "le riviste", { "html": "a revista", "pt": true }],
+            ["la frase", "le frasi", { "html": "a frase", "pt": true }],
+            ["l'enciclopedia", "le enciclopedie", { "html": "a enciclopédia", "pt": true }],
+            ["il riassunto", "i riassunti", { "html": "o resumo", "pt": true }],
+            ["la cartolina", "le cartoline", { "html": "o cartão-postal", "pt": true }],
+            ["la mail", "le mail", { "html": "o e-mail", "pt": true }]
+          ]
+        },
+        {
+          "type": "lista",
+          "titolo": "Em uso",
+          "items": [
+            { "it": "Io leggo un libro ogni sera.", "pt": "Eu leio um livro toda noite." },
+            { "it": "Noi scriviamo una mail la mattina.", "pt": "Nós escrevemos um e-mail de manhã." },
+            { "it": "Marco e Anna scrivono uno studio.", "pt": "Marco e Anna escrevem um estudo.", "nota": "<em>uno</em> pela mesma razão que <em>lo</em>: s + consoante." },
+            { "it": "Loro scrivono sette ricerche.", "pt": "Eles escrevem sete pesquisas." },
+            { "it": "Quante cartoline hai?", "pt": "Quantos cartões-postais você tem?", "nota": "<it>quante</it> concorda com o feminino plural; para <em>anni</em> seria <it>quanti</it>." },
+            { "it": "Lei legge una rivista in inglese.", "pt": "Ela lê uma revista em inglês." }
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "attenzione",
+          "titolo": "Decore com o artigo, sempre",
+          "testo": "Se você guardar <em>studio</em> sem o <em>lo</em>, na hora de falar vai ter de reconstruir o gênero de memória e vai errar metade das vezes. Guardar <it>lo studio</it> custa a mesma sílaba e resolve o plural (<it>gli studi</it>) de brinde."
+        }
+      ]
+    },
+
+    {
+      "id": "l03-s04",
+      "category": "GRAMMATICA",
+      "titolo": "Plurali particolari",
+      "gloss": "os que não seguem o molde — e por quê",
+      "spiegazione": [
+        "Quatro palavras desta lista se recusam a seguir os três moldes, e cada uma tem um motivo diferente. O primeiro é <it>il tema</it> → <it>i temi</it>: é <b>masculino terminado em <em>-a</em></b>, o que parece impossível depois de tudo que você viu. A explicação é etimológica — palavras vindas do grego em <em>-ma</em> (<em>tema</em>, <em>problema</em>, <em>sistema</em>, <em>programma</em>) entraram no italiano mantendo o gênero masculino do original. Por serem masculinas, fazem o plural em <em>-i</em>, não em <em>-e</em>. O português herdou as mesmas palavras com o mesmo gênero, então aqui você tem sorte: <em>o tema</em>, <em>o problema</em>.",
+        "O segundo é <it>la tesi</it> → <it>le tesi</it>: <b>invariável</b>. Substantivo que já termina em <em>-i</em> no singular não tem para onde ir no plural, e a família inteira se comporta assim (<em>la crisi</em>, <em>l'analisi</em>, <em>la sintesi</em>). Só o artigo muda, e é ele que carrega sozinho a informação de número — mais uma razão para nunca decorar a palavra sem ele. O terceiro é <it>la mail</it> → <it>le mail</it>, invariável por outro motivo: <b>estrangeirismo não flexiona em italiano</b>. Vale para <em>il computer</em>, <em>lo sport</em>, <em>il film</em>. Escrever <em>le mails</em> é erro — e é exatamente o que o português puxa você a fazer, porque em português dizemos «os e-mails».",
+        "Sobram dois que não são exceção, mas parecem. <it>lo studio</it> → <it>gli studi</it> e <it>il diario</it> → <it>i diari</it> terminam em <em>-io</em> com o <b>i átono</b>; nesse caso o plural tem <b>um i só</b>, nunca <em>studii</em>. E <it>la ricerca</it> → <it>le ricerche</it> é a regra do <b>h</b> da Aula 0 outra vez: sem ele, <em>-ce</em> soaria <em>tche</em> e a palavra mudaria de som — é o mesmo trabalho que o <b>h</b> fez em <em>ceco → cechi</em> na Aula 2."
+      ],
+      "blocks": [
+        {
+          "type": "tabella",
+          "titolo": "Os que se destacam",
+          "intestazioni": ["Singolare", "Plurale", { "html": "Por quê", "pt": true }],
+          "righe": [
+            ["il tema", "i temi", { "html": "masculino em <b>-a</b>, de origem grega → plural em <b>-i</b>", "pt": true }],
+            ["la tesi", "le tesi", { "html": "já termina em <b>-i</b>: invariável, só o artigo muda", "pt": true }],
+            ["la mail", "le mail", { "html": "estrangeirismo: nunca flexiona", "pt": true }],
+            ["lo studio", "gli studi", { "html": "<b>-io</b> átono → um <b>i</b> só", "pt": true }],
+            ["il diario", "i diari", { "html": "idem", "pt": true }],
+            ["la ricerca", "le ricerche", { "html": "o <b>h</b> segura o som de K", "pt": true }],
+            ["l'enciclopedia", "le enciclopedie", { "html": "no plural o <b>le</b> não elide", "pt": true }]
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "eccezione",
+          "titolo": "Nunca «le mails»",
+          "testo": "Palavra estrangeira em italiano fica congelada no singular e quem marca o plural é o artigo: <it>la mail</it> → <it>le mail</it>, <it>il computer</it> → <it>i computer</it>. O português faz o contrário e acrescenta o -s, então este é um dos deslizes mais previsíveis de lusófono."
+        },
+        {
+          "type": "nota",
+          "tono": "info",
+          "titolo": "Como saber se é masculino em -a",
+          "testo": "Não há como adivinhar pelo som — é caso a caso. Mas há um atalho barato: quase todas são palavras <b>cultas terminadas em -ma</b> e quase todas existem em português com o mesmo gênero. Se em português você diz «o tema», «o problema», «o sistema», o italiano concorda com você."
+        }
+      ]
+    },
+
+    {
+      "id": "l03-s05",
+      "category": "ESPRESSIONE",
+      "titolo": "Espressioni utili",
+      "gloss": "confirmar, concordar e passar a vez",
+      "spiegazione": [
+        "<it>Vero?</it> no fim da frase é o «né?» do português, e funciona igualzinho: você afirma alguma coisa e pede confirmação sem reformular nada. <it>Tu leggi sempre il giornale la mattina, vero?</it> A palavra é o adjetivo <em>vero</em> («verdadeiro»), congelada nessa posição — não concorda com nada, não muda de forma. É uma das construções que mais rápido fazem sua fala soar natural, porque devolve o turno ao outro sem precisar montar uma pergunta.",
+        "<it>Sicuramente!</it> é «com certeza», e é mais forte que um <em>Sì</em> seco: confirma com entusiasmo, e frequentemente vem antes de uma frase inteira que reforça o que se está confirmando — <it>Sicuramente! Noi scriviamo un tema in italiano.</it> Ao lado dele mora <it>di solito</it>, «normalmente, de costume», que faz o oposto: suaviza, indica hábito e não regra.",
+        "<it>Adesso tocca a te</it> / <it>Adesso tocca a me</it> é a fórmula de passar (ou tomar) a vez. Literalmente é «agora toca a você», do verbo <em>toccare</em>. Repare no que <b>não</b> muda: o verbo fica sempre em <em>tocca</em>, terceira pessoa do singular, porque o sujeito gramatical é a vez, não a pessoa. O que troca é só o <em>a te</em> / <em>a me</em>. Dizer <em>tocchi a te</em> é o erro esperado de quem tenta concordar o verbo com quem vai falar."
+      ],
+      "blocks": [
+        {
+          "type": "lista",
+          "titolo": "Em uso",
+          "items": [
+            { "it": "Tu leggi sempre il giornale la mattina, vero?", "pt": "Você lê sempre o jornal de manhã, né?" },
+            { "it": "Lei legge sempre una rivista la mattina, vero?", "pt": "Ela lê sempre uma revista de manhã, né?" },
+            { "it": "Sicuramente! Noi scriviamo un tema in italiano.", "pt": "Com certeza! Nós escrevemos uma redação em italiano." },
+            { "it": "Sicuramente! Scrivo una cartolina in ceco.", "pt": "Com certeza! Escrevo um cartão-postal em tcheco." },
+            { "it": "Cosa leggi di solito?", "pt": "O que você lê normalmente?" },
+            { "it": "Adesso tocca a te, leggi un racconto in polacco.", "pt": "Agora é a sua vez, leia um conto em polonês." },
+            { "it": "Adesso tocca a me leggere il paragrafo.", "pt": "Agora é a minha vez de ler o parágrafo.", "nota": "Depois de <it>tocca a me</it> o verbo vem no infinitivo, sem preposição." }
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "attenzione",
+          "titolo": "«tocca» não concorda com ninguém",
+          "testo": "É <it>tocca a me</it>, <it>tocca a te</it>, <it>tocca a Marco</it> — o verbo fica parado na terceira pessoa do singular em todos os casos. Quem muda é só o que vem depois do <em>a</em>."
+        },
+        {
+          "type": "nota",
+          "tono": "info",
+          "titolo": "«Vero?» pede resposta, «Sicuramente!» dá uma",
+          "testo": "As duas expressões costumam vir em par numa conversa: um lado fecha a frase com <it>vero?</it> e o outro abre a resposta com <it>Sicuramente!</it>. Vale praticar as duas juntas — é assim que elas aparecem."
+        }
+      ]
+    },
+
+    {
+      "id": "l03-s06",
+      "category": "GRAMMATICA",
+      "titolo": "Quando? — la mattina, ogni sera",
+      "gloss": "as duas maneiras de dizer quando algo acontece",
+      "spiegazione": [
+        "Há dois jeitos de situar um hábito no tempo, e os dois aparecem o tempo todo. O primeiro é <b>artigo definido + momento do dia</b>: <it>la mattina</it>, <it>il pomeriggio</it>, <it>la sera</it>, <it>la notte</it>. Traduz-se por «de manhã», «à tarde» — trata o momento como uma parte fixa do dia. O segundo é <b><em>ogni</em> + singular</b>: <it>ogni mattina</it>, <it>ogni giorno</it>, <it>ogni sera</it>, que é «toda manhã», «todo dia», contando as ocorrências uma a uma. Na prática, <it>Leggo un libro la sera</it> e <it>Leggo un libro ogni sera</it> dizem quase a mesma coisa; a segunda insiste um pouco mais na repetição.",
+        "A armadilha está no <em>ogni</em>, e ela é lusófona pura: <b><em>ogni</em> nunca vai para o plural e nunca leva artigo</b>. É <it>ogni sera</it>, jamais <em>ogni sere</em>; é <it>ogni giorno</it>, jamais <em>ogni i giorni</em>. Como em português dizemos «todas as noites», no plural e com artigo, a tradução literal sai errada nos dois pontos ao mesmo tempo. Vale repetir em voz alta até soar: <em>ogni sera, ogni giorno, ogni mattina</em>.",
+        "Duas palavras de posição fecham o assunto. <it>sempre</it> vai <b>depois do verbo</b>, colado nele: <it>Io leggo sempre un libro</it>, e não <em>Io sempre leggo</em> — o português aceita as duas ordens e o italiano prefere firmemente esta. Já <it>di solito</it> é mais livre e costuma abrir a frase: <it>Di solito scriviamo in portoghese</it>. E cuidado com o gênero: <it>il pomeriggio</it> é o único masculino do grupo; <em>mattina</em>, <em>sera</em> e <em>notte</em> são femininos."
+      ],
+      "blocks": [
+        {
+          "type": "contrasto",
+          "titolo": "L'articolo o «ogni»?",
+          "gruppi": [
+            {
+              "etichetta": "Articolo + momento della giornata",
+              "gloss": "de manhã, à tarde — o momento como parte do dia",
+              "esempi": [
+                { "it": "Noi scriviamo una mail la mattina.", "pt": "Nós escrevemos um e-mail de manhã." },
+                { "it": "Loro leggono il giornale il pomeriggio.", "pt": "Eles leem o jornal à tarde.", "nota": "<it>pomeriggio</it> é masculino: <b>il</b>." },
+                { "it": "Io leggo un libro la sera.", "pt": "Eu leio um livro à noite." },
+                { "it": "Lui scrive un riassunto la notte.", "pt": "Ele escreve um resumo de madrugada." }
+              ]
+            },
+            {
+              "etichetta": "Ogni + singolare",
+              "gloss": "toda manhã, todo dia — contando as ocorrências",
+              "esempi": [
+                { "it": "Noi scriviamo una mail ogni mattina.", "pt": "Nós escrevemos um e-mail toda manhã." },
+                { "it": "Parlo e leggo in inglese ogni giorno.", "pt": "Falo e leio em inglês todo dia." },
+                { "it": "Io leggo un libro ogni sera.", "pt": "Eu leio um livro toda noite.", "nota": "Nunca <em>ogni sere</em>: <it>ogni</it> não vai ao plural." },
+                { "it": "Scriviamo un riassunto ogni notte.", "pt": "Escrevemos um resumo toda madrugada." }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "tabella",
+          "titolo": "I momenti della giornata",
+          "intestazioni": ["Italiano", { "html": "Gênero", "pt": true }, { "html": "Português", "pt": true }],
+          "righe": [
+            ["la mattina", { "html": "feminino", "pt": true }, { "html": "a manhã · de manhã", "pt": true }],
+            ["il pomeriggio", { "html": "masculino", "pt": true }, { "html": "a tarde · à tarde", "pt": true }],
+            ["la sera", { "html": "feminino", "pt": true }, { "html": "o início da noite", "pt": true }],
+            ["la notte", { "html": "feminino", "pt": true }, { "html": "a noite alta, a madrugada", "pt": true }],
+            ["il giorno", { "html": "masculino", "pt": true }, { "html": "o dia", "pt": true }]
+          ]
+        },
+        {
+          "type": "nota",
+          "tono": "attenzione",
+          "titolo": "«ogni» é sempre singular",
+          "testo": "O português empurra para o plural («todas as noites») e o italiano não aceita: <it>ogni sera</it>, <it>ogni notte</it>, <it>ogni giorno</it>. Se você escreveu um <em>-e</em> ou um <em>-i</em> depois de <em>ogni</em>, está errado."
+        },
+        {
+          "type": "nota",
+          "tono": "info",
+          "titolo": "«sera» e «notte» não são a mesma coisa",
+          "testo": "<it>la sera</it> é o começo da noite, quando ainda se janta e se sai; <it>la notte</it> é a noite alta, a madrugada. O português usa «noite» para as duas, então este é um corte que só existe do lado italiano — e ele reaparece nas saudações: <em>Buonasera</em> se diz cedo, <em>Buonanotte</em> só ao ir dormir."
+        }
+      ]
+    }
+  ],
+
+  "chunks": [
+    { "id": "l03-c01", "it": "Io leggo ___.", "pt": "Eu leio ___.", "category": "VERBO", "chunkType": "semiFixed", "slot": ["un libro", "un giornale", "una rivista", "un racconto", "l'articolo", "una storia"] },
+    { "id": "l03-c02", "it": "Tu leggi sempre ___, vero?", "pt": "Você lê sempre ___, né?", "category": "VERBO", "chunkType": "semiFixed", "slot": ["il giornale", "la rivista", "l'articolo", "il testo", "il diario"] },
+    { "id": "l03-c03", "it": "Lui legge ___ in inglese.", "pt": "Ele lê ___ em inglês.", "category": "VERBO", "chunkType": "semiFixed", "slot": ["una rivista", "un riassunto", "un libro", "un giornale", "un racconto"] },
+    { "id": "l03-c04", "it": "Noi scriviamo ___ la mattina.", "pt": "Nós escrevemos ___ de manhã.", "category": "VERBO", "chunkType": "semiFixed", "slot": ["una mail", "un articolo", "un tema", "una lettera", "un riassunto"] },
+    { "id": "l03-c05", "it": "Voi scrivete ___ in portoghese?", "pt": "Vocês escrevem ___ em português?", "category": "VERBO", "chunkType": "semiFixed", "slot": ["una cartolina", "un paragrafo", "una tesi", "uno studio", "un diario"] },
+    { "id": "l03-c06", "it": "Loro scrivono ___ ogni sera.", "pt": "Eles escrevem ___ toda noite.", "category": "VERBO", "chunkType": "semiFixed", "slot": ["dieci frasi", "sei libri", "otto paragrafi", "tre riassunti", "sette ricerche"] },
+
+    { "id": "l03-c07", "it": "Cosa leggi di solito?", "pt": "O que você lê normalmente?", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l03-c08", "it": "Vero?", "pt": "É mesmo? / Né?", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l03-c09", "it": "Sicuramente!", "pt": "Com certeza! / Claro!", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l03-c10", "it": "Adesso tocca a te.", "pt": "Agora é a sua vez.", "category": "ESPRESSIONE", "chunkType": "fixed" },
+    { "id": "l03-c11", "it": "Adesso tocca a me.", "pt": "Agora é a minha vez.", "category": "ESPRESSIONE", "chunkType": "fixed" },
+
+    { "id": "l03-c12", "it": "di solito", "pt": "normalmente, de costume", "category": "ESPRESSIONE", "chunkType": "collocation" },
+    { "id": "l03-c13", "it": "la mattina", "pt": "de manhã", "category": "GRAMMATICA", "chunkType": "collocation" },
+    { "id": "l03-c14", "it": "il pomeriggio", "pt": "à tarde", "category": "GRAMMATICA", "chunkType": "collocation" },
+    { "id": "l03-c15", "it": "la sera", "pt": "à noite (início)", "category": "GRAMMATICA", "chunkType": "collocation" },
+    { "id": "l03-c16", "it": "la notte", "pt": "de madrugada", "category": "GRAMMATICA", "chunkType": "collocation" },
+    { "id": "l03-c17", "it": "ogni giorno", "pt": "todo dia", "category": "GRAMMATICA", "chunkType": "collocation" },
+    { "id": "l03-c18", "it": "ogni sera", "pt": "toda noite", "category": "GRAMMATICA", "chunkType": "collocation" },
+    { "id": "l03-c19", "it": "sempre", "pt": "sempre", "category": "GRAMMATICA", "chunkType": "word" },
+    { "id": "l03-c20", "it": "sul computer", "pt": "no computador", "category": "ESPRESSIONE", "chunkType": "collocation" },
+
+    { "id": "l03-c21", "it": "leggere", "pt": "ler", "category": "VERBO", "chunkType": "word" },
+    { "id": "l03-c22", "it": "scrivere", "pt": "escrever", "category": "VERBO", "chunkType": "word" },
+
+    { "id": "l03-c23", "it": "l'articolo", "pt": "o artigo", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l03-c24", "it": "il diario", "pt": "o diário", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l03-c25", "it": "il giornale", "pt": "o jornal", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l03-c26", "it": "il libro", "pt": "o livro", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l03-c27", "it": "il racconto", "pt": "o conto", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l03-c28", "it": "la storia", "pt": "a história", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l03-c29", "it": "lo studio", "pt": "o estudo", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l03-c30", "it": "la ricerca", "pt": "a pesquisa", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l03-c31", "it": "il paragrafo", "pt": "o parágrafo", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l03-c32", "it": "il testo", "pt": "o texto", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l03-c33", "it": "la lettera", "pt": "a carta", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l03-c34", "it": "il tema", "pt": "o tema, a redação", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l03-c35", "it": "la tesi", "pt": "a tese", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l03-c36", "it": "la rivista", "pt": "a revista", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l03-c37", "it": "la frase", "pt": "a frase", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l03-c38", "it": "l'enciclopedia", "pt": "a enciclopédia", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l03-c39", "it": "il riassunto", "pt": "o resumo", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l03-c40", "it": "la cartolina", "pt": "o cartão-postal", "category": "VOCABOLARIO", "chunkType": "word" },
+    { "id": "l03-c41", "it": "la mail", "pt": "o e-mail", "category": "VOCABOLARIO", "chunkType": "word", "figura": "📧" }
+  ],
+
+  "funzioni": [
+    { "id": "l03-f01", "quando": "Quando dici cosa leggi", "gloss": "Quando você diz o que lê", "figura": "📚",
+      "chunks": ["l03-c07", "l03-c01", "l03-c02", "l03-c03", "l03-c21"] },
+    { "id": "l03-f02", "quando": "Quando dici quando fai una cosa", "gloss": "Quando você diz quando faz uma coisa", "figura": "🕗",
+      "chunks": ["l03-c12", "l03-c13", "l03-c14", "l03-c15", "l03-c16", "l03-c17", "l03-c18", "l03-c19"] },
+    { "id": "l03-f03", "quando": "Quando confermi", "gloss": "Quando você confirma o que o outro disse", "figura": "👍",
+      "chunks": ["l03-c08", "l03-c09"] },
+    { "id": "l03-f04", "quando": "Quando passi la parola", "gloss": "Quando você passa ou toma a vez", "figura": "🙋",
+      "chunks": ["l03-c10", "l03-c11"] }
+  ],
+
+  "dialogo": {
+    "id": "l03-d01",
+    "titolo": "Cosa leggi di solito?",
+    "gloss": "O que você lê normalmente?",
+    "consegna": "Giulia e Marco falam do que cada um lê e escreve. Três passadas no mesmo áudio, com tarefa diferente em cada uma.",
+    "battute": [
+      { "speaker": "A", "nome": "Giulia", "it": "Ciao Marco! Cosa leggi di solito?", "pt": "Oi, Marco! O que você lê normalmente?" },
+      { "speaker": "B", "nome": "Marco", "it": "Io leggo un giornale ogni mattina. E tu?", "pt": "Eu leio um jornal toda manhã. E você?" },
+      { "speaker": "A", "nome": "Giulia", "it": "Io leggo sempre un libro la sera, e scrivo un diario ogni notte.", "pt": "Eu leio sempre um livro à noite, e escrevo um diário toda madrugada." },
+      { "speaker": "B", "nome": "Marco", "it": "Scrivi un diario? Anche io scrivo, ma scrivo una mail la mattina.", "pt": "Você escreve um diário? Eu também escrevo, mas escrevo um e-mail de manhã." },
+      { "speaker": "A", "nome": "Giulia", "it": "Voi scrivete articoli in polacco, vero?", "pt": "Vocês escrevem artigos em polonês, né?" },
+      { "speaker": "B", "nome": "Marco", "it": "Sicuramente! Ma di solito scriviamo in portoghese.", "pt": "Com certeza! Mas normalmente escrevemos em português." },
+      { "speaker": "A", "nome": "Giulia", "it": "Quante cartoline hai?", "pt": "Quantos cartões-postais você tem?" },
+      { "speaker": "B", "nome": "Marco", "it": "Ho tre cartoline. Adesso tocca a te: leggi un racconto in italiano!", "pt": "Tenho três cartões-postais. Agora é a sua vez: leia um conto em italiano!" }
+    ],
+    "passate": [
+      {
+        "focus": "gist",
+        "istruzione": "Só ouça. Não escreva nada e não leia a transcrição. Sua única tarefa: descobrir o que cada um dos dois lê.",
+        "inputBloccato": true
+      },
+      {
+        "focus": "note",
+        "istruzione": "Ouça de novo e anote todos os momentos do dia que aparecem. Quantos você consegue pegar?",
+        "inputBloccato": false
+      },
+      {
+        "focus": "detail",
+        "istruzione": "Última passada. Agora responda às perguntas — pode ouvir quantas vezes quiser.",
+        "inputBloccato": false,
+        "domande": [
+          { "id": "l03-d01-q1", "domanda": "Cosa legge Marco ogni mattina?", "risposta": "un giornale", "accettaAnche": ["il giornale", "giornale"] },
+          { "id": "l03-d01-q2", "domanda": "Quando legge un libro Giulia?", "risposta": "la sera", "accettaAnche": ["sera", "di sera"] },
+          { "id": "l03-d01-q3", "domanda": "In quale lingua scrivono di solito?", "risposta": "portoghese", "accettaAnche": ["in portoghese", "il portoghese"] },
+          { "id": "l03-d01-q4", "domanda": "Quante cartoline ha Marco? (in lettere)", "risposta": "tre", "accettaAnche": ["3", "ho tre cartoline", "tre cartoline"] }
+        ]
+      }
+    ]
+  },
+
+  "esercizi": [
+    {
+      "id": "l03-e01",
+      "type": "paradigm-fill",
+      "category": "VERBO",
+      "consegna": "Coniuga i verbi regolari in -ERE. Completa le celle vuote.",
+      "colonne": ["io", "tu", "lui / lei", "noi", "voi", "loro"],
+      "righe": [
+        { "id": "l03-e01-r1", "pt": "scrivere — escrever", "forme": ["scrivo", "scrivi", "scrive", "scriviamo", "scrivete", "scrivono"], "nascondi": [1, 3, 5], "eccezione": false },
+        { "id": "l03-e01-r2", "pt": "leggere — ler", "forme": ["leggo", "leggi", "legge", "leggiamo", "leggete", "leggono"], "nascondi": [0, 2, 4], "eccezione": false }
+      ]
+    },
+    {
+      "id": "l03-e02",
+      "type": "paradigm-fill",
+      "category": "VERBO",
+      "consegna": "Agora do zero — e com um verbo em -ARE no meio, que é onde se descobre se a distinção já pegou.",
+      "colonne": ["io", "tu", "lui / lei", "noi", "voi", "loro"],
+      "righe": [
+        { "id": "l03-e02-r1", "pt": "leggere", "forme": ["leggo", "leggi", "legge", "leggiamo", "leggete", "leggono"], "nascondi": [0, 1, 2, 3, 4, 5], "eccezione": false },
+        { "id": "l03-e02-r2", "pt": "scrivere", "forme": ["scrivo", "scrivi", "scrive", "scriviamo", "scrivete", "scrivono"], "nascondi": [0, 1, 2, 3, 4, 5], "eccezione": false },
+        { "id": "l03-e02-r3", "pt": "parlare (-ARE, da Aula 2)", "forme": ["parlo", "parli", "parla", "parliamo", "parlate", "parlano"], "nascondi": [0, 1, 2, 3, 4, 5], "eccezione": false, "nota": "Compare com a linha de cima: só <em>lui</em>, <em>voi</em> e <em>loro</em> diferem." },
+        { "id": "l03-e02-r4", "pt": "essere (irregular — da Aula 1)", "forme": ["sono", "sei", "è", "siamo", "siete", "sono"], "nascondi": [0, 1, 2, 3, 4, 5], "eccezione": true, "nota": "Irregular: não tem raiz fixa." }
+      ]
+    },
+    {
+      "id": "l03-e03",
+      "type": "paradigm-fill",
+      "category": "VOCABOLARIO",
+      "consegna": "Do singular ao plural, com o artigo certo. Os quatro últimos não seguem o molde.",
+      "colonne": ["Singolare", "Plurale"],
+      "righe": [
+        { "id": "l03-e03-r1", "pt": "artigo", "forme": ["l'articolo", "gli articoli"], "nascondi": [1], "eccezione": false, "nota": "Vogal no masculino plural → <b>gli</b>." },
+        { "id": "l03-e03-r2", "pt": "jornal", "forme": ["il giornale", "i giornali"], "nascondi": [1], "eccezione": false },
+        { "id": "l03-e03-r3", "pt": "história", "forme": ["la storia", "le storie"], "nascondi": [1], "eccezione": false },
+        { "id": "l03-e03-r4", "pt": "frase", "forme": ["la frase", "le frasi"], "nascondi": [1], "eccezione": false, "nota": "Feminino em <b>-e</b> faz plural em <b>-i</b>." },
+        { "id": "l03-e03-r5", "pt": "pesquisa", "forme": ["la ricerca", "le ricerche"], "nascondi": [1], "eccezione": false, "nota": "O <b>h</b> segura o som de K." },
+        { "id": "l03-e03-r6", "pt": "enciclopédia", "forme": ["l'enciclopedia", "le enciclopedie"], "nascondi": [0, 1], "eccezione": false, "nota": "No plural o <b>le</b> não elide." },
+        { "id": "l03-e03-r7", "pt": "tema, redação", "forme": ["il tema", "i temi"], "nascondi": [1], "eccezione": true, "nota": "Masculino em <b>-a</b>: plural em <b>-i</b>." },
+        { "id": "l03-e03-r8", "pt": "tese", "forme": ["la tesi", "le tesi"], "nascondi": [1], "eccezione": true, "nota": "Invariável — só o artigo muda." },
+        { "id": "l03-e03-r9", "pt": "e-mail", "forme": ["la mail", "le mail"], "nascondi": [1], "eccezione": true, "nota": "Estrangeirismo não flexiona. Nunca <em>le mails</em>." },
+        { "id": "l03-e03-r10", "pt": "estudo", "forme": ["lo studio", "gli studi"], "nascondi": [0, 1], "eccezione": true, "nota": "<b>-io</b> átono → um <b>i</b> só." }
+      ]
+    },
+
+    {
+      "id": "l03-e04",
+      "type": "slot-frame",
+      "category": "VERBO",
+      "consegna": "Drill de substituição. Escreva a frase INTEIRA a cada volta — o que se automatiza é o molde.",
+      "frame": { "it": "Io leggo ___.", "pt": "Eu leio ___." },
+      "modello": "Io leggo un libro.",
+      "giri": [
+        { "id": "l03-e04-g1", "slot": "un libro", "pt": "um livro", "risposta": "Io leggo un libro." },
+        { "id": "l03-e04-g2", "slot": "un giornale", "pt": "um jornal", "risposta": "Io leggo un giornale." },
+        { "id": "l03-e04-g3", "slot": "una rivista", "pt": "uma revista", "risposta": "Io leggo una rivista." },
+        { "id": "l03-e04-g4", "slot": "un racconto", "pt": "um conto", "risposta": "Io leggo un racconto." },
+        { "id": "l03-e04-g5", "slot": "l'articolo", "pt": "o artigo", "risposta": "Io leggo l'articolo." },
+        { "id": "l03-e04-g6", "slot": "una storia", "pt": "uma história", "risposta": "Io leggo una storia." }
+      ]
+    },
+    {
+      "id": "l03-e05",
+      "type": "slot-frame",
+      "category": "VERBO",
+      "consegna": "Agora o sujeito é que muda. Só a desinência se mexe — e ela é a mesma de -ARE em três das seis.",
+      "frame": { "it": "___ un riassunto ogni sera.", "pt": "___ um resumo toda noite." },
+      "modello": "Io scrivo un riassunto ogni sera.",
+      "giri": [
+        { "id": "l03-e05-g1", "slot": "Io scrivo", "pt": "Eu escrevo…", "risposta": "Io scrivo un riassunto ogni sera." },
+        { "id": "l03-e05-g2", "slot": "Tu scrivi", "pt": "Você escreve…", "risposta": "Tu scrivi un riassunto ogni sera." },
+        { "id": "l03-e05-g3", "slot": "Lui scrive", "pt": "Ele escreve…", "risposta": "Lui scrive un riassunto ogni sera." },
+        { "id": "l03-e05-g4", "slot": "Noi scriviamo", "pt": "Nós escrevemos…", "risposta": "Noi scriviamo un riassunto ogni sera." },
+        { "id": "l03-e05-g5", "slot": "Voi scrivete", "pt": "Vocês escrevem…", "risposta": "Voi scrivete un riassunto ogni sera." },
+        { "id": "l03-e05-g6", "slot": "Loro scrivono", "pt": "Eles escrevem…", "risposta": "Loro scrivono un riassunto ogni sera." }
+      ]
+    },
+    {
+      "id": "l03-e06",
+      "type": "slot-frame",
+      "category": "PRONUNCIA",
+      "consegna": "O mesmo com «leggere» — e diga cada frase em voz alta, porque o G muda de som duas vezes ao longo do drill.",
+      "frame": { "it": "___ un testo in italiano.", "pt": "___ um texto em italiano." },
+      "modello": "Io leggo un testo in italiano.",
+      "giri": [
+        { "id": "l03-e06-g1", "slot": "Io leggo", "pt": "Eu leio… (G dura)", "risposta": "Io leggo un testo in italiano." },
+        { "id": "l03-e06-g2", "slot": "Tu leggi", "pt": "Você lê… (G dolce)", "risposta": "Tu leggi un testo in italiano." },
+        { "id": "l03-e06-g3", "slot": "Lui legge", "pt": "Ele lê… (G dolce)", "risposta": "Lui legge un testo in italiano." },
+        { "id": "l03-e06-g4", "slot": "Noi leggiamo", "pt": "Nós lemos… (G dolce)", "risposta": "Noi leggiamo un testo in italiano." },
+        { "id": "l03-e06-g5", "slot": "Voi leggete", "pt": "Vocês leem… (G dolce)", "risposta": "Voi leggete un testo in italiano." },
+        { "id": "l03-e06-g6", "slot": "Loro leggono", "pt": "Eles leem… (G dura)", "risposta": "Loro leggono un testo in italiano." }
+      ]
+    },
+
+    {
+      "id": "l03-e07",
+      "type": "scelta",
+      "category": "VERBO",
+      "consegna": "Qual é a forma certa? Cuidado em não levar a desinência de -ARE para um verbo em -ERE.",
+      "domande": [
+        { "id": "l03-e07-q1", "testo": "Noi ___ un tema in italiano.", "opzioni": ["scriviamo", "scrivamo", "scrivete", "scrivono"], "risposta": "scriviamo", "pt": "Nós escrevemos uma redação em italiano.", "nota": "<em>noi</em> é <b>-iamo</b> nas duas famílias." },
+        { "id": "l03-e07-q2", "testo": "Loro ___ sempre il giornale.", "opzioni": ["leggano", "leggono", "leggiono", "leggete"], "risposta": "leggono", "pt": "Eles leem sempre o jornal.", "nota": "<em>loro</em> em -ERE é <b>-ono</b>, não <b>-ano</b>." },
+        { "id": "l03-e07-q3", "testo": "Voi ___ una mail la mattina.", "opzioni": ["scrivate", "scrivete", "scrivite", "scrivono"], "risposta": "scrivete", "pt": "Vocês escrevem um e-mail de manhã.", "nota": "<em>voi</em> em -ERE é <b>-ete</b>; <em>-ate</em> é de <em>parlare</em>." },
+        { "id": "l03-e07-q4", "testo": "Lui ___ un racconto ogni sera.", "opzioni": ["legge", "lege", "legga", "leggi"], "risposta": "legge", "pt": "Ele lê um conto toda noite." },
+        { "id": "l03-e07-q5", "testo": "Voi parlate italiano molto bene, ma ___ poco.", "opzioni": ["leggete", "leggate", "leggite", "leggono"], "risposta": "leggete", "pt": "Vocês falam italiano muito bem, mas leem pouco.", "nota": "As duas formas de <em>voi</em> na mesma frase: <em>parl<b>ate</b></em> e <em>legg<b>ete</b></em>." },
+        { "id": "l03-e07-q6", "testo": "Tu ___ a Roma, ma ___ in inglese.", "opzioni": ["abiti … scrivi", "abita … scrive", "abito … scrivo", "abitate … scrivete"], "risposta": "abiti … scrivi", "pt": "Você mora em Roma, mas escreve em inglês.", "nota": "<em>tu</em> é <b>-i</b> nas duas famílias." }
+      ]
+    },
+    {
+      "id": "l03-e08",
+      "type": "scelta",
+      "category": "VOCABOLARIO",
+      "consegna": "Artigo e plural. Pense no gênero primeiro e no som depois.",
+      "domande": [
+        { "id": "l03-e08-q1", "testo": "___ studio è in italiano.", "opzioni": ["Il", "Lo", "L'", "La"], "risposta": "Lo", "pt": "O estudo é em italiano.", "nota": "Masculino com <em>s + consoante</em> → <b>lo</b>." },
+        { "id": "l03-e08-q2", "testo": "___ storia è in francese.", "opzioni": ["Lo", "La", "Il", "L'"], "risposta": "La", "pt": "A história é em francês.", "nota": "É feminino: <em>s + consoante</em> não muda nada, é <b>la</b>." },
+        { "id": "l03-e08-q3", "testo": "___ enciclopedia è in tedesco.", "opzioni": ["La", "L'", "Le", "Lo"], "risposta": "L'", "pt": "A enciclopédia é em alemão." },
+        { "id": "l03-e08-q4", "testo": "___ articoli sono in polacco.", "opzioni": ["I", "Gli", "Le", "Lo"], "risposta": "Gli", "pt": "Os artigos são em polonês.", "nota": "Vogal no masculino plural → <b>gli</b>." },
+        { "id": "l03-e08-q5", "testo": "Io leggo tre ___.", "opzioni": ["riviste", "rivisti", "rivista", "rivistas"], "risposta": "riviste", "pt": "Eu leio três revistas." },
+        { "id": "l03-e08-q6", "testo": "Loro scrivono due ___.", "opzioni": ["tesi", "tesie", "tesis", "tese"], "risposta": "tesi", "pt": "Eles escrevem duas teses.", "nota": "Invariável: <it>la tesi</it> → <it>le tesi</it>." }
+      ]
+    },
+    {
+      "id": "l03-e09",
+      "type": "scelta",
+      "category": "GRAMMATICA",
+      "consegna": "Do informal ao formal. A mesma frase, agora dirigida a alguém que você trata por «Lei» — e o verbo vai para a terceira pessoa do singular.",
+      "domande": [
+        { "id": "l03-e09-q1", "testo": "Lei ___ brasiliano.", "opzioni": ["è", "sei", "sono", "siete"], "risposta": "è", "pt": "O senhor é brasileiro.", "nota": "Informal: <it>Tu sei brasiliano.</it>" },
+        { "id": "l03-e09-q2", "testo": "Lei ___ in inglese.", "opzioni": ["scrivi", "scrive", "scrivete", "scrivo"], "risposta": "scrive", "pt": "O senhor escreve em inglês.", "nota": "Informal: <it>Tu scrivi in inglese.</it>" },
+        { "id": "l03-e09-q3", "testo": "Lei ___ un libro in italiano.", "opzioni": ["leggi", "legge", "leggete", "leggo"], "risposta": "legge", "pt": "O senhor lê um livro em italiano.", "nota": "Informal: <it>Tu leggi un libro in italiano.</it>" },
+        { "id": "l03-e09-q4", "testo": "Lei ___ tredici anni.", "opzioni": ["hai", "ha", "avete", "ho"], "risposta": "ha", "pt": "O senhor tem treze anos.", "nota": "Informal: <it>Tu hai tredici anni.</it>" },
+        { "id": "l03-e09-q5", "testo": "Lei ___ polacco e legge libri in italiano.", "opzioni": ["parli", "parla", "parlate", "parlo"], "risposta": "parla", "pt": "O senhor fala polonês e lê livros em italiano.", "nota": "Informal: <it>Tu parli polacco e leggi libri in italiano.</it>" },
+        { "id": "l03-e09-q6", "testo": "Lei è svizzero e ___ in tedesco.", "opzioni": ["scrivi", "scrive", "scriviamo", "scrivete"], "risposta": "scrive", "pt": "O senhor é suíço e escreve em alemão.", "nota": "Informal: <it>Tu sei svizzero e scrivi in tedesco.</it>" }
+      ]
+    },
+    {
+      "id": "l03-e10",
+      "type": "scelta",
+      "category": "GRAMMATICA",
+      "consegna": "Expressões de tempo. Uma das opções é sempre a que o português puxa você a escrever.",
+      "domande": [
+        { "id": "l03-e10-q1", "testo": "Loro scrivono un tema ___ giorno.", "opzioni": ["ogni", "ogne", "ognuno", "tutti"], "risposta": "ogni", "pt": "Eles escrevem uma redação todo dia." },
+        { "id": "l03-e10-q2", "testo": "Io leggo un giornale ogni ___.", "opzioni": ["sera", "sere", "le sere", "una sera"], "risposta": "sera", "pt": "Eu leio um jornal toda noite.", "nota": "<it>ogni</it> nunca vai para o plural." },
+        { "id": "l03-e10-q3", "testo": "Lei legge una rivista ___ mattina.", "opzioni": ["la", "il", "lo", "l'"], "risposta": "la", "pt": "Ela lê uma revista de manhã." },
+        { "id": "l03-e10-q4", "testo": "Noi scriviamo uno studio ___ pomeriggio.", "opzioni": ["la", "il", "le", "l'"], "risposta": "il", "pt": "Nós escrevemos um estudo à tarde.", "nota": "<it>pomeriggio</it> é o único masculino do grupo." },
+        { "id": "l03-e10-q5", "testo": "___ scriviamo in portoghese.", "opzioni": ["Di solito", "Di solita", "Del solito", "Da solito"], "risposta": "Di solito", "pt": "Normalmente escrevemos em português." },
+        { "id": "l03-e10-q6", "testo": "Io leggo ___ un libro la sera.", "opzioni": ["sempre", "sempro", "semper", "tutto"], "risposta": "sempre", "pt": "Eu leio sempre um livro à noite.", "nota": "<it>sempre</it> vem logo depois do verbo, não antes." }
+      ]
+    },
+
+    {
+      "id": "l03-e11",
+      "type": "riordino",
+      "category": "VERBO",
+      "consegna": "Riordina le parole.",
+      "frasi": [
+        { "id": "l03-e11-f1", "parole": ["Tu", "leggi", "sempre", "il", "giornale", "la", "mattina", "vero"], "risposta": "Tu leggi sempre il giornale la mattina, vero?", "pt": "Você lê sempre o jornal de manhã, né?" },
+        { "id": "l03-e11-f2", "parole": ["Noi", "scriviamo", "una", "mail", "ogni", "mattina"], "risposta": "Noi scriviamo una mail ogni mattina.", "pt": "Nós escrevemos um e-mail toda manhã." },
+        { "id": "l03-e11-f3", "parole": ["Marco", "e", "Anna", "scrivono", "uno", "studio"], "risposta": "Marco e Anna scrivono uno studio.", "pt": "Marco e Anna escrevem um estudo." },
+        { "id": "l03-e11-f4", "parole": ["Adesso", "tocca", "a", "te", "leggi", "un", "racconto", "in", "polacco"], "risposta": "Adesso tocca a te, leggi un racconto in polacco.", "pt": "Agora é a sua vez, leia um conto em polonês." },
+        { "id": "l03-e11-f5", "parole": ["Loro", "scrivono", "dieci", "frasi", "in", "italiano"], "risposta": "Loro scrivono dieci frasi in italiano.", "pt": "Eles escrevem dez frases em italiano." }
+      ]
+    },
+
+    {
+      "id": "l03-e12",
+      "type": "abbinamento",
+      "category": "ESPRESSIONE",
+      "consegna": "Abbina domande e risposte.",
+      "coppie": [
+        { "id": "l03-e12-p1", "sinistra": "Cosa leggi di solito?", "destra": "Io leggo un libro.", "pt": "Eu leio um livro." },
+        { "id": "l03-e12-p2", "sinistra": "Voi scrivete articoli in polacco, vero?", "destra": "Sì, ma di solito scriviamo in portoghese.", "pt": "Sim, mas normalmente escrevemos em português." },
+        { "id": "l03-e12-p3", "sinistra": "Loro sono spagnoli, ma scrivono in tedesco?", "destra": "Sicuramente! Loro scrivono anche in olandese.", "pt": "Com certeza! Eles escrevem também em holandês." },
+        { "id": "l03-e12-p4", "sinistra": "Quante cartoline hai?", "destra": "Io ho tre cartoline.", "pt": "Eu tenho três cartões-postais." },
+        { "id": "l03-e12-p5", "sinistra": "Leggiamo sempre un tema, e voi?", "destra": "Anche noi leggiamo un tema ogni giorno.", "pt": "Nós também lemos uma redação todo dia." }
+      ]
+    },
+    {
+      "id": "l03-e13",
+      "type": "abbinamento",
+      "category": "VOCABOLARIO",
+      "consegna": "Abbina il singolare al plurale. Estes seis são os que não seguem o molde.",
+      "coppie": [
+        { "id": "l03-e13-p1", "sinistra": "il tema", "destra": "i temi", "pt": "os temas" },
+        { "id": "l03-e13-p2", "sinistra": "la tesi", "destra": "le tesi", "pt": "as teses" },
+        { "id": "l03-e13-p3", "sinistra": "lo studio", "destra": "gli studi", "pt": "os estudos" },
+        { "id": "l03-e13-p4", "sinistra": "la mail", "destra": "le mail", "pt": "os e-mails" },
+        { "id": "l03-e13-p5", "sinistra": "l'enciclopedia", "destra": "le enciclopedie", "pt": "as enciclopédias" },
+        { "id": "l03-e13-p6", "sinistra": "la ricerca", "destra": "le ricerche", "pt": "as pesquisas" }
+      ]
+    },
+
+    {
+      "id": "l03-e14",
+      "type": "gap-audio",
+      "category": "VERBO",
+      "consegna": "Ascolta e completa.",
+      "audio": { "tts": "Noi leggiamo un diario in polacco.", "src": null },
+      "testo": "Noi ___ un diario in polacco.",
+      "risposta": "leggiamo",
+      "pt": "Nós lemos um diário em polonês.",
+      "aiuto": "<em>noi</em> → <b>-iamo</b>. E repare que o <b>i</b> faz dois trabalhos aqui: é a desinência e é o que mantém o G dolce."
+    },
+    {
+      "id": "l03-e15",
+      "type": "gap-audio",
+      "category": "PRONUNCIA",
+      "consegna": "Ascolta e completa. Ouça bem o som do G.",
+      "audio": { "tts": "Loro leggono sempre il giornale la mattina.", "src": null },
+      "testo": "Loro ___ sempre il giornale la mattina.",
+      "risposta": "leggono",
+      "pt": "Eles leem sempre o jornal de manhã.",
+      "aiuto": "Tônica na primeira sílaba — LEG-go-no — e aqui o G é <b>duro</b>, porque vem antes de O."
+    },
+    {
+      "id": "l03-e16",
+      "type": "gap-audio",
+      "category": "VOCABOLARIO",
+      "consegna": "Ascolta e completa con l'articolo e il sostantivo al plurale.",
+      "audio": { "tts": "Gli studi sono in ungherese.", "src": null },
+      "testo": "___ sono in ungherese.",
+      "risposta": "Gli studi",
+      "pt": "Os estudos são em húngaro.",
+      "aiuto": "<it>studio</it> é masculino e começa por s + consoante — no plural, <b>gli</b>. E o <b>-io</b> átono dá um <b>i</b> só.",
+      "tolleranzaElisione": false
+    },
+    {
+      "id": "l03-e17",
+      "type": "gap-audio",
+      "category": "GRAMMATICA",
+      "consegna": "Ascolta e completa.",
+      "audio": { "tts": "Lui scrive un riassunto ogni notte.", "src": null },
+      "testo": "Lui scrive un riassunto ___ notte.",
+      "risposta": "ogni",
+      "pt": "Ele escreve um resumo toda madrugada.",
+      "aiuto": "«toda noite», contando uma a uma — e sempre no singular."
+    },
+
+    {
+      "id": "l03-e18",
+      "type": "qa-transcribe",
+      "category": "VERBO",
+      "consegna": "Ouça a pergunta e a resposta, e transcreva a RESPOSTA.",
+      "domanda": { "tts": "Cosa leggi di solito?", "testo": "Cosa leggi di solito?", "pt": "O que você lê normalmente?" },
+      "risposta": { "tts": "Io leggo un giornale ogni mattina.", "testo": "Io leggo un giornale ogni mattina.", "pt": "Eu leio um jornal toda manhã." },
+      "aiuto": "<it>ogni</it> + singular, sem artigo entre os dois."
+    },
+    {
+      "id": "l03-e19",
+      "type": "qa-transcribe",
+      "category": "ESPRESSIONE",
+      "consegna": "Ouça e transcreva a RESPOSTA. Repare em como ela abre.",
+      "domanda": { "tts": "Voi scrivete articoli in polacco, vero?", "testo": "Voi scrivete articoli in polacco, vero?", "pt": "Vocês escrevem artigos em polonês, né?" },
+      "risposta": { "tts": "Sicuramente! Ma di solito scriviamo in portoghese.", "testo": "Sicuramente! Ma di solito scriviamo in portoghese.", "pt": "Com certeza! Mas normalmente escrevemos em português." },
+      "aiuto": "<it>Sicuramente!</it> confirma com mais força que um <em>Sì</em> seco."
+    },
+
+    {
+      "id": "l03-e20",
+      "type": "trasformazione",
+      "category": "GRAMMATICA",
+      "consegna": "Transforme cada frase na forma pedida. Ouça a partida antes — a interrogativa em italiano não mexe em nada, só sobe no fim.",
+      "frasi": [
+        { "id": "l03-e20-f1", "partenza": "Io leggo un libro ogni sera.", "verso": "negativa",
+          "risposta": "Io non leggo un libro ogni sera.", "accettaAnche": ["Non leggo un libro ogni sera."],
+          "nota": "O <it>non</it> vem antes do verbo — sempre." },
+        { "id": "l03-e20-f2", "partenza": "Tu scrivi una mail la mattina.", "verso": "interrogativa",
+          "risposta": "Tu scrivi una mail la mattina?", "accettaAnche": ["Scrivi una mail la mattina?"],
+          "nota": "Nenhuma palavra muda de lugar; o <em>?</em> é a transformação inteira." },
+        { "id": "l03-e20-f3", "partenza": "Loro non leggono il giornale.", "verso": "affermativa",
+          "risposta": "Loro leggono il giornale.", "accettaAnche": ["Leggono il giornale."],
+          "nota": "Só o <it>non</it> sai — e ouça o G duro de <it>leggono</it>." },
+        { "id": "l03-e20-f4", "partenza": "Noi scriviamo un tema in italiano.", "verso": "interrogativa",
+          "risposta": "Noi scriviamo un tema in italiano?", "accettaAnche": ["Scriviamo un tema in italiano?"],
+          "nota": "Compare com a afirmativa: só a entonação e o ponto mudam." },
+        { "id": "l03-e20-f5", "partenza": "Voi leggete una rivista ogni giorno.", "verso": "negativa",
+          "risposta": "Voi non leggete una rivista ogni giorno.", "accettaAnche": ["Non leggete una rivista ogni giorno."],
+          "nota": "<it>leggete</it> com G dolce, porque vem um E depois." }
+      ]
+    },
+    {
+      "id": "l03-e21",
+      "type": "traduzione",
+      "category": "VERBO",
+      "consegna": "Traduza para o italiano. Diga em voz alta antes de escrever — e não volte às tabelas.",
+      "frasi": [
+        { "id": "l03-e21-f1", "pt": "Eu sou italiano e falo português.",
+          "risposta": "Io sono italiano e parlo portoghese.",
+          "accettaAnche": ["Sono italiano e parlo portoghese."],
+          "nota": "Aquecimento com o que já era seu: <it>essere</it> da Aula 1, <it>parlare</it> da Aula 2." },
+        { "id": "l03-e21-f2", "pt": "Eu escrevo uma carta em inglês.",
+          "risposta": "Io scrivo una lettera in inglese.",
+          "accettaAnche": ["Scrivo una lettera in inglese."],
+          "nota": "<it>la lettera</it> é feminino: <em>una</em>." },
+        { "id": "l03-e21-f3", "pt": "Ele lê uma história e escreve um resumo.",
+          "risposta": "Lui legge una storia e scrive un riassunto.",
+          "accettaAnche": ["Legge una storia e scrive un riassunto."],
+          "nota": "As duas terceiras pessoas em -ERE na mesma frase: <it>legge</it>, <it>scrive</it>." },
+        { "id": "l03-e21-f4", "pt": "Vocês leem uma enciclopédia e escrevem uma frase?",
+          "risposta": "Voi leggete un'enciclopedia e scrivete una frase?",
+          "accettaAnche": ["Leggete un'enciclopedia e scrivete una frase?"],
+          "nota": "<it>un'enciclopedia</it> com apóstrofo porque é feminino começando por vogal — <em>un enciclopedia</em> seria masculino." },
+        { "id": "l03-e21-f5", "pt": "Nós escrevemos um cartão-postal e lemos uma revista.",
+          "risposta": "Noi scriviamo una cartolina e leggiamo una rivista.",
+          "accettaAnche": ["Scriviamo una cartolina e leggiamo una rivista."],
+          "nota": "As duas em <em>-iamo</em>: a desinência de <em>noi</em> não muda de família para família." }
+      ]
+    },
+    {
+      "id": "l03-e22",
+      "type": "traduzione",
+      "category": "ESPRESSIONE",
+      "consegna": "Agora o registro formal, em produção. As cinco primeiras são dirigidas a alguém que você trata por «Lei» — e nada na frase avisa isso além do próprio verbo. A última volta ao informal de propósito: repare no que muda.",
+      "frasi": [
+        { "id": "l03-e22-f1", "pt": "O senhor é brasileiro.",
+          "risposta": "Lei è brasiliano.",
+          "nota": "<it>Lei</it> pede terceira pessoa: <it>è</it>, nunca <it>sei</it>." },
+        { "id": "l03-e22-f2", "pt": "O senhor é suíço e escreve em inglês.",
+          "risposta": "Lei è svizzero e scrive in inglese.",
+          "nota": "Os dois verbos vão para a terceira pessoa, não só o primeiro." },
+        { "id": "l03-e22-f3", "pt": "O senhor é húngaro e escreve em alemão.",
+          "risposta": "Lei è ungherese e scrive in tedesco.",
+          "nota": "<it>ungherese</it> termina em <b>-e</b>: serve para homem e mulher." },
+        { "id": "l03-e22-f4", "pt": "O senhor escreve uma redação em tcheco e um resumo em português.",
+          "risposta": "Lei scrive un tema in ceco e un riassunto in portoghese.",
+          "accettaAnche": ["Lei scrive un tema in ceco e scrive un riassunto in portoghese."],
+          "nota": "<it>il tema</it> é masculino apesar do <b>-a</b>: <em>un tema</em>." },
+        { "id": "l03-e22-f5", "pt": "O senhor tem treze anos, fala polonês e lê livros em italiano.",
+          "risposta": "Lei ha tredici anni, parla polacco e legge libri in italiano.",
+          "nota": "Três verbos, três terceiras pessoas: <it>ha</it>, <it>parla</it>, <it>legge</it>." },
+        { "id": "l03-e22-f6", "pt": "Agora é a sua vez: leia um conto em italiano.",
+          "risposta": "Adesso tocca a te: leggi un racconto in italiano.",
+          "accettaAnche": ["Adesso tocca a te, leggi un racconto in italiano."],
+          "nota": "Esta volta ao informal é de propósito: <it>tocca a te</it> não tem versão com <it>Lei</it> sem mudar de fórmula." }
+      ]
+    }
+  ],
+
+  "produzione": [
+    { "id": "l03-p01", "consegna": "Grave-se dizendo, em italiano, o que você lê e o que você escreve — e <b>quando</b>. Use pelo menos um <em>ogni</em> e um artigo + momento do dia (<em>la mattina</em>, <em>la sera</em>). Quatro frases bastam." },
+    { "id": "l03-p02", "consegna": "Escreva seis frases com <em>leggere</em>, uma para cada pessoa (io, tu, lui, noi, voi, loro), variando o material de leitura. Depois leia todas em voz alta e confira se o G mudou de som onde devia." },
+    { "id": "l03-p03", "consegna": "Escreva a mesma frase duas vezes: uma dirigida a um amigo (<em>tu</em>) e outra a alguém que você trata por <em>Lei</em>. Sublinhe o que mudou — deve ser só o verbo." },
+    { "id": "l03-p04", "consegna": "Conjugue de cabeça, em voz alta e sem olhar a tabela: <em>leggere</em>, depois <em>scrivere</em>, depois <em>parlare</em>. Cronometre. Repita até sair abaixo de dez segundos cada um — e até você acertar de primeira quais três formas mudam de uma família para a outra." }
+  ],
+
+  "bilancio": [
+    "Sei tirar o <em>-ere</em> e colar as seis desinências, sem consultar a tabela.",
+    "Sei dizer de cor quais <b>três</b> desinências diferem de <em>-are</em>: <em>lui</em>, <em>voi</em> e <em>loro</em>.",
+    "Não escrevo mais <em>leggate</em> nem <em>leggano</em>: é <em>leggete</em> e <em>leggono</em>.",
+    "Sei que a tônica de <em>leggono</em> e <em>scrivono</em> cai na primeira sílaba.",
+    "Ouço a diferença entre o G duro de <em>leggo</em> e o G dolce de <em>leggi</em> — e sei explicar por quê.",
+    "Sei por que <em>leggiamo</em> tem <b>i</b>, e que ele faz dois trabalhos ali.",
+    "Decoro todo substantivo novo com o artigo, não sozinho.",
+    "Sei que <em>lo studio</em> leva <em>lo</em> e <em>la storia</em> leva <em>la</em>, mesmo começando as duas com s + consoante.",
+    "Sei os plurais de <em>il tema</em>, <em>la tesi</em>, <em>la mail</em> e <em>lo studio</em> — e por que cada um é assim.",
+    "Não escrevo <em>le mails</em>: estrangeirismo não flexiona em italiano.",
+    "Sei que <em>ogni</em> é sempre singular e nunca leva artigo.",
+    "Sei que <em>il pomeriggio</em> é masculino e <em>la mattina</em>, <em>la sera</em> e <em>la notte</em> são femininos.",
+    "Sei fechar uma frase com <em>vero?</em> e responder com <em>Sicuramente!</em>.",
+    "Sei que em <em>tocca a me</em> o verbo nunca muda — o que muda é o <em>a me</em> / <em>a te</em>.",
+    "Sei passar uma frase do <em>tu</em> para o <em>Lei</em> mudando só o verbo."
+  ]
+}
