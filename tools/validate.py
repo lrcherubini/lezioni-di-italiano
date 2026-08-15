@@ -59,7 +59,7 @@ VALID_CHUNK_TYPE = {'fixed', 'semiFixed', 'collocation', 'word'}
 # js/exercises/flashcard.js. `semiFixed` fica de fora: tem lacuna por
 # definição («Io sono ___») e não tem verso — é matéria do slot-frame.
 TIPI_CARTA = {'word', 'collocation', 'fixed'}
-VALID_BLOCK = {'lista', 'tabella', 'contrasto', 'paradigma', 'nota'}
+VALID_BLOCK = {'lista', 'tabella', 'contrasto', 'paradigma', 'scambio', 'nota'}
 VALID_TONO = {'info', 'attenzione', 'eccezione'}
 # Língua da prosa da aula. O curso caminha de 'pt' para 'it' — ver CLAUDE.md.
 # Ausente = 'pt', para que toda aula escrita antes do mecanismo continue válida.
@@ -359,6 +359,41 @@ def check_funzioni(name: str, d: dict, ids: Counter, modo: str = 'pt') -> None:
              f'{amostra}{extra}. Ou entram num grupo, ou é caso legítimo.')
 
 
+def check_scambio(name: str, sid: str, block: dict) -> None:
+    """`scambio` — o microdiálogo de 2 a 4 linhas.
+
+    É leitura, não drill: bloco de seção, sem id, sem progresso, sem entrar
+    no `conteggio`. Preenche o degrau que faltava entre produzir uma frase
+    solta (`traduzione`) e o diálogo de 8 turnos.
+
+    Duas regras, e as duas herdadas do diálogo pelo mesmo motivo:
+    exatamente dois falantes, `A` e `B`, porque é o que `voiceFor()` sabe
+    diferenciar; e turnos alternados, porque dois turnos seguidos na mesma
+    voz leem como uma frase só e a troca deixa de ser troca.
+    """
+    battute = block.get('battute') or []
+
+    if not 2 <= len(battute) <= 4:
+        err(f'{name} {sid}: scambio com {len(battute)} turno(s) — o formato é de 2 a 4. '
+            f'Mais que isso é diálogo, e diálogo tem passadas.')
+
+    anterior = None
+    for i, b in enumerate(battute):
+        if not b.get('it'):
+            err(f'{name} {sid}: battuta[{i}] do scambio sem «it»')
+        if not b.get('pt'):
+            err(f'{name} {sid}: battuta[{i}] do scambio sem «pt» — é modelo para ler, '
+                f'não exercício de compreensão')
+        sp = b.get('speaker')
+        if sp not in {'A', 'B'}:
+            err(f'{name} {sid}: battuta[{i}] do scambio com speaker «{sp}» — só A e B, '
+                f'que é o que o TTS sabe diferenciar')
+        elif sp == anterior:
+            err(f'{name} {sid}: battuta[{i}] do scambio repete o falante «{sp}» — '
+                f'dois turnos na mesma voz leem como uma frase só')
+        anterior = sp
+
+
 def check_section(name: str, section: dict, ids: Counter, modo: str = 'pt') -> None:
     sid = section.get('id', '?')
     ids[sid] += 1
@@ -389,6 +424,8 @@ def check_section(name: str, section: dict, ids: Counter, modo: str = 'pt') -> N
             check_prose(name, f'{sid}.nota', block.get('testo'), modo)
         elif btype == 'contrasto' and len(block.get('gruppi', [])) < 2:
             err(f'{name} {sid}: contrasto precisa de 2+ grupos')
+        elif btype == 'scambio':
+            check_scambio(name, sid, block)
 
         # Toda nota de item é prosa e passa por prose() no render.
         for it in block.get('items', []):
@@ -855,6 +892,15 @@ def build_lessico(files: dict[str, dict]) -> dict:
                     for row in block.get('righe', []):
                         for forma in row.get('forme', []):
                             registra(forma, aula, 'paradigma')
+
+                # `scambio` ENTRA na colheita, ao contrário de `dialogo`, e a
+                # diferença não é o formato — é o papel. O scambio é modelo
+                # que a aula exibe e ensina, como uma `lista`; o diálogo é o
+                # que a checagem de escopo confere. Se o diálogo entrasse,
+                # ele se autoautorizaria.
+                elif tipo == 'scambio':
+                    for b in block.get('battute', []):
+                        registra(b.get('it', ''), aula, 'scambio')
 
     return {'forme': dict(sorted(formas.items()))}
 

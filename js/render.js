@@ -256,6 +256,42 @@ function renderContrasto(block, modo = 'pt') {
   return wrap;
 }
 
+/**
+ * `scambio` — o microdiálogo de 2 a 4 linhas.
+ *
+ * É LEITURA, não drill: não tem input, não corrige nada e não grava
+ * progresso. Por isso é bloco de seção e não tipo de exercício — a
+ * distinção é a mesma que separa `funzioni` do baralho.
+ *
+ * Existe para preencher o degrau que faltava na escada: entre produzir uma
+ * frase solta (`traduzione`) e o diálogo de 8 turnos não havia nada, e o
+ * que falta ali é ver o bloco vivendo na menor conversa possível.
+ *
+ * Usa o eixo `speaker` A/B do TTS, o mesmo do diálogo, para as duas vozes
+ * saírem diferentes — dois turnos na mesma voz leem como uma frase só.
+ */
+function renderScambio(block, modo = 'pt') {
+  const battute = block.battute ?? [];
+
+  const ol = el('ol', { class: 'scambio' });
+  for (const b of battute) {
+    ol.append(el('li', { class: 'battuta', 'data-speaker': b.speaker },
+      speakButton(b.it, { speaker: b.speaker }),
+      el('span', { class: 'battuta__testo' },
+        el('span', { class: 'item__it', html: `<b>${escapeHtml(b.it)}</b>` }),
+        b.pt ? el('span', { class: 'item__pt', html: b.pt }) : null
+      )
+    ));
+  }
+
+  // `speakSequence` já consome {it, speaker} — a mesma forma das battute do
+  // diálogo, então não há o que mapear.
+  const tutto = el('button', { class: 'btn btn--sm', type: 'button' }, '▶ Ouvir a troca');
+  tutto.addEventListener('click', () => speech.speakSequence(battute));
+
+  return el('div', { class: 'scambio__wrap' }, ol, el('div', { class: 'ex__row' }, tutto));
+}
+
 function renderParadigma(block, modo = 'pt') {
   const thead = el('tr', {},
     el('th', {}, 'Português'),
@@ -306,6 +342,7 @@ const BLOCKS = {
   tabella: renderTabella,
   contrasto: renderContrasto,
   paradigma: renderParadigma,
+  scambio: renderScambio,
   nota: renderNota,
 };
 

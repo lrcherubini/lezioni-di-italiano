@@ -146,6 +146,19 @@ class TestBuildLessico(unittest.TestCase):
         self.assertNotIn('palavrainventada', f)
         self.assertNotIn('outrainventada', f)
 
+    def test_scambio_entra_mas_dialogo_nao(self):
+        # A diferença não é o formato — os dois são turnos com falante. É o
+        # papel: o scambio é modelo que a aula EXIBE e ensina, como uma
+        # lista; o diálogo é o que a checagem de escopo confere.
+        f = self.formas(aula(
+            sections=[{'id': 's', 'blocks': [
+                {'type': 'scambio', 'battute': [{'speaker': 'A', 'it': 'Scambiata'}]},
+            ]}],
+            dialogo={'id': 'd', 'battute': [{'it': 'Dialogata'}]},
+        ))
+        self.assertIn('scambiata', f)
+        self.assertNotIn('dialogata', f)
+
     def test_stoplist_fora(self):
         f = self.formas(aula(chunks=[{'id': 'c', 'it': 'Io e Marco'}]))
         self.assertNotIn('io', f)
@@ -690,6 +703,54 @@ class TestCheckTraduzione(unittest.TestCase):
     def test_lacuna_e_erro_de_tipo(self):
         self.assertIn('lacuna', self.check(
             {'pt': 'Eu sou ___.', 'risposta': 'Io sono ___.'})[0])
+
+
+class TestCheckScambio(unittest.TestCase):
+    """`scambio` — o microdiálogo de 2 a 4 linhas.
+
+    Bloco de seção, não exercício: é leitura, sem id e sem progresso. As
+    duas regras vêm do diálogo, e pelo mesmo motivo — dois falantes porque
+    é o que `voiceFor()` diferencia, alternados porque dois turnos na mesma
+    voz leem como uma frase só.
+    """
+
+    def setUp(self):
+        v.errors.clear()
+        v.warnings.clear()
+
+    def check(self, battute):
+        v.errors.clear()
+        v.check_scambio('t.json', 's1', {'battute': battute})
+        return v.errors
+
+    OK = [
+        {'speaker': 'A', 'it': 'Qualcosa da bere?', 'pt': 'Algo pra beber?'},
+        {'speaker': 'B', 'it': 'Un caffè, per favore.', 'pt': 'Um café, por favor.'},
+    ]
+
+    def test_troca_minima_passa(self):
+        self.assertEqual(self.check(self.OK), [])
+
+    def test_um_turno_so_nao_e_troca(self):
+        self.assertTrue(any('turno' in e for e in self.check(self.OK[:1])))
+
+    def test_cinco_turnos_ja_e_dialogo(self):
+        # Mais que quatro é diálogo, e diálogo tem passadas.
+        longo = [dict(b, speaker='AB'[i % 2]) for i, b in enumerate(self.OK * 3)][:5]
+        self.assertTrue(any('turno' in e for e in self.check(longo)))
+
+    def test_falante_repetido_e_erro(self):
+        battute = [dict(b, speaker='A') for b in self.OK]
+        self.assertTrue(any('repete o falante' in e for e in self.check(battute)))
+
+    def test_terceiro_falante_e_erro(self):
+        battute = [dict(self.OK[0]), dict(self.OK[1], speaker='C')]
+        self.assertTrue(any('speaker' in e for e in self.check(battute)))
+
+    def test_sem_pt_e_erro(self):
+        # É modelo para ler, não exercício de compreensão.
+        battute = [dict(self.OK[0]), {k: x for k, x in self.OK[1].items() if k != 'pt'}]
+        self.assertTrue(any('«pt»' in e for e in self.check(battute)))
 
 
 class TestCheckDictogloss(unittest.TestCase):

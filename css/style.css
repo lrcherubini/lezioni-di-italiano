@@ -1011,6 +1011,15 @@ textarea { min-height: 5rem; resize: vertical; line-height: var(--lh-normal); }
 /* (o `.battute[hidden] { display:none }` que morava aqui virou redundante:
    a regra global do topo cobre todos os casos) */
 
+/* --- scambio: a menor conversa possível -------------------------------
+   Reusa `.battuta` do diálogo — é a mesma coisa visualmente, e é de
+   propósito: o aluno deve reconhecer «isto é uma troca de turnos» sem
+   precisar aprender um segundo vocabulário visual.                      */
+
+.scambio { list-style: none; display: grid; gap: var(--sp-2); }
+.scambio .battuta__testo { display: grid; gap: 2px; }
+.scambio__wrap .ex__row { margin-top: var(--sp-3); }
+
 .domande { list-style: none; display: grid; gap: var(--sp-3); margin-top: var(--sp-3); }
 .domanda__label { display: block; font-weight: 600; margin-bottom: var(--sp-2); font-size: var(--fs-sm); }
 

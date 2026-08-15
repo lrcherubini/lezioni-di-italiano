@@ -288,6 +288,16 @@
           ]
         },
         {
+          "type": "scambio",
+          "titolo": "As três juntas, na menor conversa possível",
+          "battute": [
+            { "speaker": "A", "it": "Cosa leggi di solito?", "pt": "O que você lê normalmente?" },
+            { "speaker": "B", "it": "Un giornale, ogni mattina.", "pt": "Um jornal, toda manhã." },
+            { "speaker": "A", "it": "Tu scrivi anche un diario, vero?", "pt": "Você também escreve um diário, né?" },
+            { "speaker": "B", "it": "Sicuramente! Adesso tocca a te.", "pt": "Com certeza! Agora é a sua vez." }
+          ]
+        },
+        {
           "type": "nota",
           "tono": "attenzione",
           "titolo": "«tocca» não concorda com ninguém",

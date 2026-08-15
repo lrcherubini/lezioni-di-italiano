@@ -215,6 +215,52 @@ describe('bloco paradigma', () => {
   });
 });
 
+describe('bloco scambio', () => {
+  const bloco = {
+    type: 'scambio',
+    titolo: 'Na menor conversa possível',
+    battute: [
+      { speaker: 'A', it: 'Qualcosa da bere?', pt: 'Algo pra beber?' },
+      { speaker: 'B', it: 'Un caffè, per favore.', pt: 'Um café, por favor.' },
+    ],
+  };
+
+  test('uma linha por turno, com o falante no dataset', () => {
+    const b = renderBlock(bloco);
+    const righe = b.querySelectorAll('.battuta');
+    assert.equal(righe.length, 2);
+    assert.deepEqual(righe.map((r) => r.getAttribute('data-speaker')), ['A', 'B']);
+  });
+
+  test('cada turno é audível sozinho, com a voz do seu falante', () => {
+    const b = renderBlock(bloco);
+    assert.deepEqual(spokenLabels(b), ['Qualcosa da bere?', 'Un caffè, per favore.']);
+  });
+
+  test('e a troca inteira também', () => {
+    const b = renderBlock(bloco);
+    const tutto = b.querySelectorAll('button').find((x) => /Ouvir a troca/.test(x.textContent));
+    assert.ok(tutto, 'sem play da troca inteira, o scambio vira uma lista');
+  });
+
+  test('a tradução aparece: é modelo para ler, não teste de compreensão', () => {
+    const b = renderBlock(bloco);
+    assert.match(b.textContent, /Algo pra beber\?/);
+    assert.match(b.textContent, /Um café, por favor\./);
+  });
+
+  test('ganha o wrapper de bloco e o título, ao contrário da nota', () => {
+    const b = renderBlock(bloco);
+    assert.equal(b.className, 'block');
+    assert.match(b.querySelector('.block__title').textContent, /menor conversa/);
+  });
+
+  test('sem battute não quebra a página', () => {
+    // O validador reprova; o render não pode explodir por causa disso.
+    assert.doesNotThrow(() => renderBlock({ type: 'scambio' }));
+  });
+});
+
 describe('bloco nota', () => {
   test('o tono vira classe e não recebe wrapper de bloco', () => {
     const b = renderBlock({ type: 'nota', tono: 'eccezione', titolo: 'Belga', testo: 'i belgi' });
