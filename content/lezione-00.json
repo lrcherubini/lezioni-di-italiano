@@ -5,20 +5,20 @@
   "gloss": "O alfabeto e os sons",
   "header": {
     "comunicazione": [
-      "Dire l'alfabeto",
-      "Fare lo spelling di un nome",
-      "Chiedere «Come si scrive?»"
+      { "it": "Dire l'alfabeto", "sezione": "l00-s06" },
+      { "it": "Fare lo spelling di un nome", "sezione": "l00-s06" },
+      { "it": "Chiedere «Come si scrive?»", "sezione": "lessico" }
     ],
     "lessico": [
-      "I nomi delle lettere",
-      "Le lettere straniere"
+      { "it": "I nomi delle lettere", "sezione": "l00-s06" },
+      { "it": "Le lettere straniere", "sezione": "l00-s06" }
     ],
     "grammatica": [
-      "Vocali aperte e chiuse",
-      "C e G: suono duro e suono dolce",
-      "I digrammi GN, GL, SC, CH, GH",
-      "Le consonanti doppie",
-      "L'accento tonico"
+      { "it": "Vocali aperte e chiuse", "sezione": "l00-s01" },
+      { "it": "C e G: suono duro e suono dolce", "sezione": "l00-s02" },
+      { "it": "I digrammi GN, GL, SC, CH, GH", "sezione": "l00-s04" },
+      { "it": "Le consonanti doppie", "sezione": "l00-s03" },
+      { "it": "L'accento tonico", "sezione": "l00-s07" }
     ]
   },
   "riscaldamento": {
@@ -496,6 +496,12 @@
     { "id": "l00-c19", "it": "la guerra", "pt": "a guerra", "category": "VOCABOLARIO", "chunkType": "word" },
     { "id": "l00-c20", "it": "il tappo", "pt": "a tampa, a rolha", "category": "VOCABOLARIO", "chunkType": "word" }
   ],
+  "funzioni": [
+    { "id": "l00-f01", "quando": "Quando non capisci", "gloss": "Quando você não entende", "figura": "🤔",
+      "chunks": ["l00-c03", "l00-c04"] },
+    { "id": "l00-f02", "quando": "Quando chiedi come si scrive o come si dice", "gloss": "Quando você pergunta como se escreve ou como se diz", "figura": "✏️",
+      "chunks": ["l00-c01", "l00-c02", "l00-c05"] }
+  ],
   "dialogo": {
     "id": "l00-d01",
     "titolo": "Come si scrive?",
@@ -594,6 +600,29 @@
       "domanda": { "tts": "Come si dice «obrigado» in italiano?", "testo": "Come si dice «obrigado» in italiano?", "pt": "Como se diz «obrigado» em italiano?" },
       "risposta": { "tts": "Si dice grazie.", "testo": "Si dice grazie.", "pt": "Diz-se «grazie»." },
       "aiuto": "Duas palavras depois de «Si dice»."
+    },
+    {
+      "id": "l00-e07",
+      "type": "traduzione",
+      "category": "PRONUNCIA",
+      "consegna": "Escreva em italiano. Aqui o alvo é a <b>grafia</b>: em italiano se escreve como se fala, e o que trava é escolher entre <em>ch/c</em>, <em>gh/g</em> e a consoante dobrada.",
+      "frasi": [
+        { "id": "l00-e07-f1", "pt": "Como se escreve?",
+          "risposta": "Come si scrive?",
+          "nota": "<it>sc</it> antes de <em>i</em> soa /ʃ/, como o «ch» de «chave»." },
+        { "id": "l00-e07-f2", "pt": "Pode repetir, por favor?",
+          "risposta": "Puoi ripetere, per favore?",
+          "nota": "Um <em>p</em> só em <it>ripetere</it> — dobrar mudaria a palavra." },
+        { "id": "l00-e07-f3", "pt": "a mãe",
+          "risposta": "la mamma",
+          "nota": "Dois <em>m</em>. A dobrada é mais longa na fala, e ouvir isso é o que sustenta escrevê-la." },
+        { "id": "l00-e07-f4", "pt": "a família",
+          "risposta": "la famiglia",
+          "nota": "<em>gli</em> aqui é o dígrafo /ʎ/, o mesmo som do «lh» de «filha»." },
+        { "id": "l00-e07-f5", "pt": "o gelo",
+          "risposta": "il ghiaccio",
+          "nota": "O <em>h</em> de <it>ghi</it> existe só para segurar o G duro; sem ele seria /dʒ/." }
+      ]
     }
   ],
   "produzione": [

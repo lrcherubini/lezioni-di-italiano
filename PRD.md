@@ -50,6 +50,16 @@ A referência inicial foi a metodologia da inFlux. A pesquisa mostrou que ela é
 
 A **progressão de tópicos A1** vem do padrão de facto do mercado (Nuovo Espresso 1), não da inFlux.
 
+### A ordem das etapas: contexto antes da regra
+
+A aula renderiza sempre na mesma ordem — *Riscaldamento → Lessico → Ascolto → Studio → Esercizi → Produzione → Bilancio* — e ela é fixa no código, não configurável por aula.
+
+A primeira versão punha **Studio antes de tudo**, herdando a organização dos slides do professor: eles são agrupados por tópico gramatical, que é uma ordem de referência, não de aprendizado. O efeito era o aluno ler a regra de `lo/gli` antes de jamais ter ouvido `lo spagnolo` — exatamente o contrário da abordagem comunicativa que este documento declara como fundamentação.
+
+A ordem atual segue o ciclo do método lexical: **o bloco pronto primeiro** (`Lessico`, com os chunks agrupados por intenção comunicativa), **o bloco em uso** (`Ascolto`), **e só então a estrutura que o explica** (`Studio`). É onde `spiegazione` rende mais: explicar uma forma que o aluno já encontrou é ancorar; explicá-la antes é pedir para decorar.
+
+A ordem ser única, e não declarada por aula, é decisão: uma aula que parecesse pedir outra ordem seria conteúdo colocado no bloco errado, e um campo de ordenação só esconderia isso.
+
 ### Modos de falha documentados, contra os quais o produto foi desenhado
 
 | Falha observada em produtos comparáveis | Resposta do produto |
@@ -114,8 +124,25 @@ Como aluno, quero ouvir uma pergunta e sua resposta e transcrever apenas a respo
 | `abbinamento` | Associar pergunta e resposta | Compito «Abbina domande e risposte» |
 | `flashcard` | Baralho do léxico da aula, uma carta por vez, com autoavaliação; a frente pode ser um **emoji/SVG** em vez do português | Lexical Notebook; efeito de superioridade da imagem |
 | `dictogloss` | 4 etapas: pré-ensino → 3 escutas → reconstrução → análise contra o original | Dictogloss |
+| `trasformazione` | Converter o modo da frase: afirmativa ⇄ negativa ⇄ interrogativa | Conversão de modo; tabela «afirmativa/negativa/interrogativa» dos materiais comunicativos |
+| `traduzione` | PT → IT, frase inteira, sem nenhum andaime; feedback por diff de palavra | Tradução bidirecional das *consolidation exercises* |
 
-Também já entregues: **Ripasso** adaptativo atravessando aulas (`ripasso.html`), card de Ripasso na home, **Lexical Notebook** com UI própria (`notebook.html`) e **gravação de voz** na etapa de Produzione.
+**Os drills de volume formam uma escada, e ela foi desenhada como escada.** Cada degrau tira uma muleta da tela: `abbinamento` dá os dois lados · `scelta` dá as alternativas · `riordino` dá as palavras · `slot-frame` dá o molde · `trasformazione` dá a frase e pede uma operação · `traduzione` não dá nada além do sentido.
+
+Os dois últimos foram os que faltaram por mais tempo, e a falta tinha consequência: sem eles a aula terminava em reconhecimento, e produzir uma frase inteira do zero — o que a conversa exige — só acontecia na etapa de Produzione, que não tem correção.
+
+Também já entregues: **Ripasso** adaptativo atravessando aulas (`ripasso.html`), card de Ripasso na home, **Lexical Notebook** com UI própria (`notebook.html`), **gravação de voz** na etapa de Produzione e as **Frasi utili** (§7.1).
+
+### 7.1 Frasi utili — o chunk agrupado por intenção
+
+Os chunks existiam desde a Aula 1 e só apareciam de uma forma: cartas embaralhadas no baralho. Isso testa recuperação, mas não responde a pergunta que o aluno faz quando vai falar, que não é «o que quer dizer *piacere*» e sim **«o que eu digo quando conheço alguém»**.
+
+`funzioni` agrupa os chunks por intenção comunicativa — *Quando ti presenti*, *Quando non capisci*, *Quando sei gentile* — e renderiza no alto da etapa Lessico, antes do baralho. Primeiro se lê organizado, depois se testa embaralhado.
+
+Duas decisões sustentam isso:
+
+- **Agrupa por referência de id, nunca copiando texto.** `chunks` continua sendo o inventário lexical único: texto duplicado ficaria mentindo depois da primeira edição, e id duplicado misturaria dois históricos de progresso.
+- **Não grava progresso.** Função é leitura organizada; quem mede a recuperação é o baralho logo abaixo. Por isso `funzioni` não entra no `conteggio` — e por isso acrescentá-la a uma aula antiga não mexeu na barra de progresso de ninguém.
 
 ### Ainda não implementado
 
@@ -141,7 +168,7 @@ Também já entregues: **Ripasso** adaptativo atravessando aulas (`ripasso.html`
 ## 9. Critérios de aceite (verificáveis)
 
 1. `python tools/validate.py` sai com 0.
-2. Aula 1 renderiza 10 seções, 6 etapas e 15 cards de exercício, sem erro no console.
+2. Aula 1 renderiza 11 seções e as 7 etapas, sem erro no console. A trilha sticky lista as etapas **na mesma ordem** em que elas aparecem na página.
 3. Todos os chips aparecem com as cores do deck.
 4. Resposta sem acento em item com acento → correto **com nota** exibindo a forma acentuada.
 5. `un amico` **não** é aceito onde se espera `un'amica`.
@@ -159,6 +186,8 @@ Também já entregues: **Ripasso** adaptativo atravessando aulas (`ripasso.html`
 **Fase 1 — feita.** Estrutura, docs, 4 tipos de exercício, Aulas 0 e 1 completas a partir das fontes reais, validador, progresso com SRS, degradação de áudio, tema claro/escuro.
 
 **Fase 2 — feita.** `slot-frame`, `scelta`, `riordino`, `abbinamento`, `flashcard`, `dictogloss`; UI do Lexical Notebook; Ripasso adaptativo na home; gravação de voz na Produzione; mecanismo de modo de língua (§12).
+
+**Fase 2.1 — feita.** Reordenação das etapas para *contexto antes da regra* (§5); **Frasi utili** (§7.1); `trasformazione` e `traduzione`, que fecham a escada de produção; cabeçalho de objetivos virou **sumário navegável** — cada item com `sezione` rola até o ponto da aula.
 
 **Fase 3 — se fizer falta.** `minimal-pair` (exige refatorar a seleção de voz); persistir gravações em IndexedDB para comparar evolução ao longo das semanas — **e isso exige opt-in explícito na mesma mudança**, porque gravação salva deixa de ser armazenamento necessário e vira dado guardado por escolha (ver `js/record.js` e CLAUDE.md); MP3 pré-gerados por item (o schema já tem `audio.src`) caso o TTS se mostre insuficiente; busca em todo o conteúdo.
 

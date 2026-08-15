@@ -5,27 +5,27 @@
   "gloss": "Apresentar-se, dizer nacionalidade e idade",
   "header": {
     "comunicazione": [
-      "Salutare e rispondere al saluto",
-      "Dire la propria nazionalità",
-      "Dire l'età",
-      "Parlare di altre persone",
-      "Ringraziare e chiedere per favore"
+      { "it": "Salutare e rispondere al saluto", "sezione": "l01-s05" },
+      { "it": "Dire la propria nazionalità", "sezione": "l01-s03" },
+      { "it": "Dire l'età", "sezione": "l01-s09" },
+      { "it": "Parlare di altre persone", "sezione": "l01-s01" },
+      { "it": "Ringraziare e chiedere per favore", "sezione": "l01-s05" }
     ],
     "lessico": [
-      "I paesi",
-      "Le nazionalità",
-      "I numeri 0–20",
-      "Saluti ed espressioni utili",
-      "anno / anni"
+      { "it": "I paesi", "sezione": "l01-s02" },
+      { "it": "Le nazionalità", "sezione": "l01-s03" },
+      { "it": "I numeri 0–20", "sezione": "l01-s04" },
+      { "it": "Saluti ed espressioni utili", "sezione": "l01-s05" },
+      { "it": "anno / anni", "sezione": "l01-s09" }
     ],
     "grammatica": [
-      "Presente di essere e avere",
-      "Articoli determinativi",
-      "Articoli indeterminativi",
-      "Plurale dei sostantivi",
-      "Accordo di genere e numero",
-      "avere + numero + anni",
-      "e / ma"
+      { "it": "Presente di essere e avere", "sezione": "l01-s01" },
+      { "it": "Articoli determinativi", "sezione": "l01-s06" },
+      { "it": "Articoli indeterminativi", "sezione": "l01-s07" },
+      { "it": "Plurale dei sostantivi", "sezione": "l01-s08" },
+      { "it": "Accordo di genere e numero", "sezione": "l01-s03" },
+      { "it": "avere + numero + anni", "sezione": "l01-s09" },
+      { "it": "e / ma", "sezione": "l01-s10" }
     ]
   },
   "riscaldamento": {
@@ -596,6 +596,18 @@
     { "id": "l01-c41", "it": "Sì", "pt": "sim", "category": "ESPRESSIONE", "chunkType": "word" },
     { "id": "l01-c42", "it": "No", "pt": "não", "category": "ESPRESSIONE", "chunkType": "word" }
   ],
+  "funzioni": [
+    { "id": "l01-f01", "quando": "Quando saluti", "gloss": "Quando você cumprimenta", "figura": "👋",
+      "chunks": ["l01-c11", "l01-c12", "l01-c13", "l01-c15", "l01-c16"] },
+    { "id": "l01-f02", "quando": "Quando ti congedi", "gloss": "Quando você se despede", "figura": "🌙",
+      "chunks": ["l01-c14", "l01-c15"] },
+    { "id": "l01-f03", "quando": "Quando ti presenti", "gloss": "Quando você se apresenta", "figura": "🤝",
+      "chunks": ["l01-c01", "l01-c08", "l01-c29"] },
+    { "id": "l01-f04", "quando": "Quando chiedi a qualcuno di sé", "gloss": "Quando você pergunta sobre a outra pessoa", "figura": "❓",
+      "chunks": ["l01-c28", "l01-c27", "l01-c19"] },
+    { "id": "l01-f05", "quando": "Quando sei gentile", "gloss": "Quando você é gentil", "figura": "🙏",
+      "chunks": ["l01-c17", "l01-c18", "l01-c39", "l01-c40"] }
+  ],
   "dialogo": {
     "id": "l01-d01",
     "titolo": "Piacere!",
@@ -952,6 +964,58 @@
       "risposta": "avete",
       "pt": "Vocês têm nove anos e são austríacos.",
       "aiuto": "Idade usa <em>avere</em>."
+    },
+    {
+      "id": "l01-e26",
+      "type": "trasformazione",
+      "category": "GRAMMATICA",
+      "consegna": "Transforme cada frase na forma pedida. Ouça a frase de partida antes — na interrogativa, o italiano não mexe na ordem das palavras: só a entonação sobe no fim.",
+      "frasi": [
+        { "id": "l01-e26-f1", "partenza": "Io sono brasiliano.", "verso": "negativa",
+          "risposta": "Io non sono brasiliano.", "accettaAnche": ["Non sono brasiliano."],
+          "nota": "O <em>non</em> vai antes do verbo, nunca depois." },
+        { "id": "l01-e26-f2", "partenza": "Tu sei italiano.", "verso": "interrogativa",
+          "risposta": "Tu sei italiano?", "accettaAnche": ["Sei italiano?"],
+          "nota": "Nada muda de lugar. Compare com o inglês <em>are you</em>, que inverte — o italiano não." },
+        { "id": "l01-e26-f3", "partenza": "Lui ha vent'anni.", "verso": "negativa",
+          "risposta": "Lui non ha vent'anni.", "accettaAnche": ["Non ha vent'anni."],
+          "nota": "A elisão de <em>vent'anni</em> não se desfaz na negativa." },
+        { "id": "l01-e26-f4", "partenza": "Noi non siamo francesi.", "verso": "affermativa",
+          "risposta": "Noi siamo francesi.", "accettaAnche": ["Siamo francesi."],
+          "nota": "Tirar o <em>non</em> é tudo o que muda." },
+        { "id": "l01-e26-f5", "partenza": "Loro hanno diciotto anni.", "verso": "interrogativa",
+          "risposta": "Loro hanno diciotto anni?", "accettaAnche": ["Hanno diciotto anni?"],
+          "nota": "Lembre que o H de <em>hanno</em> continua mudo." }
+      ]
+    },
+    {
+      "id": "l01-e27",
+      "type": "traduzione",
+      "category": "ESPRESSIONE",
+      "consegna": "Traduza para o italiano. Diga em voz alta antes de escrever — e escreva sem voltar às tabelas.",
+      "frasi": [
+        { "id": "l01-e27-f1", "pt": "Bom dia. Eu sou brasileiro.",
+          "risposta": "Buongiorno. Io sono brasiliano.",
+          "accettaAnche": ["Buongiorno. Sono brasiliano."],
+          "nota": "O pronome é opcional em italiano: <it>sono brasiliano</it> já diz quem." },
+        { "id": "l01-e27-f2", "pt": "Quantos anos você tem?",
+          "risposta": "Quanti anni hai?",
+          "nota": "Idade com <it>avere</it>, como em português — quem veio do inglês tropeça aqui." },
+        { "id": "l01-e27-f3", "pt": "Eu tenho vinte anos.",
+          "risposta": "Io ho vent'anni.",
+          "accettaAnche": ["Ho vent'anni."],
+          "nota": "<it>venti</it> perde o <em>i</em> antes de <it>anni</it>." },
+        { "id": "l01-e27-f4", "pt": "De onde você é? Eu sou da Suíça.",
+          "risposta": "Di dove sei? Io sono svizzero.",
+          "accettaAnche": ["Di dove sei? Sono svizzero.", "Di dove sei? Io sono svizzera.", "Di dove sei? Sono svizzera."],
+          "nota": "A nacionalidade concorda com quem fala — <it>svizzero</it> ou <it>svizzera</it>." },
+        { "id": "l01-e27-f5", "pt": "Obrigado! Boa noite (ao se despedir).",
+          "risposta": "Grazie! Buonanotte.",
+          "nota": "<it>Buonanotte</it> é de despedida; ao chegar seria <it>Buonasera</it>." },
+        { "id": "l01-e27-f6", "pt": "Ela não é alemã, é austríaca.",
+          "risposta": "Lei non è tedesca, è austriaca.",
+          "nota": "Repare no <em>è</em> com acento: sem ele vira <it>e</it>, que é «e»." }
+      ]
     }
   ],
   "produzione": [

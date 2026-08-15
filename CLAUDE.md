@@ -20,6 +20,7 @@ O objetivo principal deste projeto é um **loop de autoria repetível**: a cada 
 7.2. **Marque sempre a minoria — e o `modo` da aula diz quem é a minoria.** É a regra única por trás dos mecanismos de "isto é italiano?". Em **célula de tabela** o italiano é sempre a maioria → marque a exceção portuguesa com `pt: true`. Em **texto corrido** depende do `modo`: em `pt` a prosa é portuguesa e você marca o italiano com `<it>`; em `misto`/`it` a prosa é italiana e você marca o português com `<pt>`. Todos nomeiam o que é marcado, nunca o padrão. Ver *Os dois mecanismos* e *Modo de língua*.
 8. **Nada de atividade em par ou grupo.** A aula é particular 1-a-1. Materiais A1 de referência estão cheios de *"in coppia"* e *"girate per la classe"* — tudo isso é inaplicável aqui.
 9. **`category` só entre os cinco valores permitidos** (abaixo). Acrescentar um valor exige editar `tools/validate.py`, `css/tokens.css` **e** este documento.
+10. **A ordem das etapas é fixa e igual em toda aula.** *Riscaldamento → Lessico → Ascolto → Studio → Esercizi → Produzione → Bilancio.* Quem manda é a sequência de `append` em `renderLesson()` (`js/app.js`), **não** a ordem das chaves no JSON — reordenar o arquivo não muda nada na página. Uma aula pode **omitir** etapa (a Aula 0 não tem diálogo com paradigma; a trilha filtra sozinha), nunca reordenar. O motivo é pedagógico: **contexto antes da regra** — o aluno encontra o bloco pronto, ouve o diálogo usando o bloco, e só então lê o porquê. Aula que pareça exigir outra ordem é sinal de que o conteúdo está no bloco errado — pare e diga; não mexa em `js/`.
 
 ---
 
@@ -116,8 +117,16 @@ Fonte da verdade. `tools/validate.py` verifica tudo abaixo.
   "titolo": "Io sono, tu sei",   // em italiano
   "gloss": "…",                  // em português
 
-  "header": {                    // cabeçalho de 3 colunas, no modelo dos livros A1
-    "comunicazione": ["…"],
+  // Cabeçalho de 3 colunas, no modelo dos livros A1 — e o SUMÁRIO da aula.
+  // Cada item é string OU objeto, o mesmo idioma da célula de `tabella`:
+  //   "Presentarsi"                              → texto, sem link
+  //   { "it": "…", "sezione": "l01-s06" }        → vira atalho para o ponto
+  // `sezione` aceita um `section.id` desta aula OU uma âncora de etapa
+  // (`riscaldamento` `lessico` `ascolto` `studio` `esercizi` `produzione`
+  // `bilancio`) — item de comunicazione costuma apontar para o diálogo.
+  // Alvo inexistente é ERRO: o link ficaria clicável e mudo.
+  "header": {
+    "comunicazione": [{ "it": "Salutare", "sezione": "l01-s05" }],
     "lessico": ["…"],
     "grammatica": ["…"]
   },
@@ -149,6 +158,7 @@ Fonte da verdade. `tools/validate.py` verifica tudo abaixo.
     "figura": "🚗"               // opcional; ver abaixo
   }],
 
+  "funzioni": [ /* opcional; ver abaixo */ ],
   "dialogo": { /* ver abaixo */ },
   "esercizi": [ /* ver abaixo */ ],
   "produzione": [{ "id": "l01-p01", "consegna": "…" }],
@@ -198,6 +208,37 @@ Regras, e o validador reprova quem as quebrar:
   italiana; o léxico continua colhendo o que a aula *exibe* em italiano.
 - A figura vai com `role="img"` e a glossa portuguesa como `aria-label`.
   Com leitor de tela a carta degrada exatamente para a carta de texto.
+
+### `funzioni` — os chunks agrupados por intenção comunicativa
+
+Campo **opcional** no topo do JSON. Rende as *Frasi utili* no alto da etapa
+Lessico, acima do baralho: primeiro se lê organizado, depois se testa
+embaralhado.
+
+```jsonc
+"funzioni": [
+  { "id": "l01-f01",
+    "quando": "Quando ti presenti",        // italiano, ganha 🔊
+    "gloss": "Quando você se apresenta",   // português
+    "figura": "🤝",                        // opcional, mesmas regras acima
+    "chunks": ["l01-c01", "l01-c08", "l01-c29"] }
+]
+```
+
+- **Agrupa por REFERÊNCIA de id, nunca copiando texto.** `chunks` continua
+  sendo o inventário lexical único da aula. Duplicar o texto aqui faria uma
+  edição no chunk deixar o agrupamento mentindo, e id repetido misturaria
+  dois históricos de progresso. Id que não existe em `chunks` é **erro**.
+- **O mesmo chunk pode entrar em duas funções.** `Ciao` é saudação e
+  despedida; é justamente por referenciar que isso sai de graça.
+- **Não grava progresso e não conta no `conteggio`.** Função é leitura
+  organizada; quem testa a recuperação é o baralho logo abaixo dela.
+- **Só `fixed` é cobrado.** O validador **avisa** quando uma frase fixa ficou
+  fora de toda função — frase fixa é por definição frase pronta com função
+  comunicativa. `word` e `collocation` são item lexical (`il cane`,
+  `i Paesi Bassi`), não têm um «quando se usa» e ficam de fora da conta.
+- **`quando` entra em `content/lessico.json`.** Não é exceção nova: é o mesmo
+  caso de `header.comunicazione`, rótulo funcional em italiano exibido com 🔊.
 
 ### Tipos de bloco
 
@@ -379,13 +420,20 @@ palavra já apareça num bloco `lista`. Não existe colheita automática de
               "nota": "…", "eccezione": false }] }
 ```
 
-#### Os quatro drills de fixação
+#### Os seis drills de fixação
 
 São os tipos de **volume**: cada um leva vários sub-itens, e **cada sub-item
 tem id próprio e vira uma linha do progresso**. É por isso que eles precisam
 de `subItemIds` no módulo (ver `js/exercises/index.js`) — sem isso o
 `conteggio` do manifest conta 1 onde há 8, a barra de progresso mente **e o
 Ripasso nunca traz aquele sub-item de volta**.
+
+> **Eles formam uma escada, e ela só se lê inteira.** Cada degrau tira uma
+> muleta da tela: `abbinamento` dá os dois lados · `scelta` dá as
+> alternativas · `riordino` dá as palavras · `slot-frame` dá o molde ·
+> `trasformazione` dá a frase e pede uma operação · `traduzione` não dá nada
+> além do sentido. Ao escrever uma aula, cubra degraus vizinhos — pular do
+> `abbinamento` direto para o `traduzione` é onde o aluno trava e desiste.
 
 ```jsonc
 // scelta — escolher a forma certa entre alternativas.
@@ -427,7 +475,42 @@ Ripasso nunca traz aquele sub-item de volta**.
              "pt": "italiano",       // prompt em PORTUGUÊS — o aluno produz
              "risposta": "Io parlo italiano.",
              "accettaAnche": ["…"] }] }
+
+// trasformazione — converter o modo da frase. A operação isolada: o aluno já
+// produz `Io sono italiano` e trava em `Non sono italiano?` porque nunca
+// moveu as peças da frase que ele mesmo acabou de dizer.
+{ "id": "l01-e26", "type": "trasformazione", "category": "GRAMMATICA",
+  "consegna": "…",
+  "frasi": [{ "id": "l01-e26-f1",
+              "partenza": "Io sono italiano.",   // italiano, ganha 🔊
+              "verso": "negativa",               // affermativa|negativa|interrogativa
+              "risposta": "Io non sono italiano.",
+              "accettaAnche": ["…"], "nota": "…" }] }
+
+// traduzione — PT → IT, frase inteira, sem nenhum andaime na tela.
+// O topo da escada: só o português aparece, e o italiano sai da memória.
+{ "id": "l01-e27", "type": "traduzione", "category": "ESPRESSIONE",
+  "consegna": "…",
+  "frasi": [{ "id": "l01-e27-f1",
+              "pt": "Bom dia. Eu sou brasileiro.",   // o ÚNICO estímulo
+              "risposta": "Buongiorno. Io sono brasiliano.",
+              "accettaAnche": ["Buongiorno. Sono brasiliano."],
+              "nota": "…", "tolleranzaAccenti": true }] }
 ```
+
+> **A pontuação final é conteúdo em `trasformazione`, e só ali.** Em italiano
+> a interrogativa **não inverte nada**: `Tu sei italiano?` difere de
+> `Tu sei italiano.` apenas pelo ponto. `checkAnswer` descarta pontuação — o
+> que está certo para todo outro tipo —, então o módulo confere isso à parte,
+> e o validador exige que `risposta` termine em `?` quando `verso` é
+> `interrogativa` e **não** termine quando é `negativa`/`affermativa`. Sem
+> isso, copiar a frase de partida valeria ponto e o drill não exercitaria
+> nada. `pontuacaoBate` em `js/exercises/trasformazione.js` e a checagem em
+> `check_trasformazione` são espelhos — mudou uma, mude a outra.
+
+> **`traduzione` não leva lacuna.** Um `___` ali é engano de tipo: quem quer
+> lacuna quer `slot-frame` (se o molde é o alvo) ou `gap-audio` (se é escuta).
+> O validador reprova.
 
 > **`slot` e `risposta` têm que casar.** O validador avisa quando
 > `frame.it` com o `slot` no lugar do `___` não reproduz a `risposta` — é o
@@ -435,7 +518,7 @@ Ripasso nunca traz aquele sub-item de volta**.
 > exercício. Elisão é o caso legítimo (`vent'` + ` anni` = `vent'anni`), e o
 > validador já sabe disso.
 
-**Regra dura dos quatro:** `id` de sub-item é tão imutável quanto o do
+**Regra dura dos seis:** `id` de sub-item é tão imutável quanto o do
 exercício. Renomear um apaga o histórico daquela pergunta específica.
 
 ### Diálogo
@@ -524,7 +607,8 @@ Só um campo relaxa: **`slot-frame.giri[].pt`**. Em modo `it`, o próprio `slot`
 4. **Extraia o inventário de chunks** e classifique cada um em `chunkType`.
 5. **Valide formas duvidosas** contra Treccani/Crusca e aplique a classificação de 3 saídas.
 6. **Escreva o diálogo** (6–10 turnos), só com vocabulário em escopo.
-7. **Gere exercícios:** ≥2 `gap-audio`, ≥1 `qa-transcribe`, ≥1 `paradigm-fill` por paradigma, ≥1 `dialogo`. Para **volume de fixação**, use os quatro drills: `scelta` e `slot-frame` são os que mais rendem por linha escrita, e `riordino`/`abbinamento` quebram a monotonia de digitar. Os *Compito* do professor são a melhor matéria-prima — cada exercício deles mapeia direto num tipo (`Scegli` → `scelta`, `Riordina` → `riordino`, `Abbina` → `abbinamento`, `Coniuga` → `paradigm-fill`).
+7. **Gere exercícios:** ≥2 `gap-audio`, ≥1 `qa-transcribe`, ≥1 `paradigm-fill` por paradigma, ≥1 `dialogo`. Para **volume de fixação**, use os seis drills, subindo a escada: `scelta` e `slot-frame` são os que mais rendem por linha escrita, `riordino`/`abbinamento` quebram a monotonia de digitar, e feche com `trasformazione` e `traduzione` — sem o topo da escada a aula só treina reconhecimento. Os *Compito* do professor são a melhor matéria-prima — cada exercício deles mapeia direto num tipo (`Scegli` → `scelta`, `Riordina` → `riordino`, `Abbina` → `abbinamento`, `Coniuga` → `paradigm-fill`, `Traduci` → `traduzione`, `Trasforma`/`Volgi al negativo` → `trasformazione`).
+7.1. **Agrupe as frases fixas em `funzioni`.** Toda frase pronta da aula tem um «quando se usa» — é isso que o aluno procura quando vai falar, e é o que o baralho embaralhado não mostra.
 8. **Acrescente a entrada em `content/manifest.json`** (`id`, `numero`, `file`, `titolo`, `gloss`, `categorie`, `temi`). **Não escreva `conteggio` à mão** — é derivado, sai do `--fix`.
 9. **Rode `python tools/validate.py --fix`** (grava os derivados) e depois **`python tools/validate.py`** até zerar os erros. Rode também **`node tools/test.mjs`**: os testes de página carregam os JSONs reais, então uma aula que não renderiza falha ali.
 9.1. **Leia os avisos de escopo.** O validador compara o italiano do seu diálogo com `content/lessico.json`, o léxico acumulado até aquela aula, e avisa sobre forma nunca ensinada. É **aviso, não erro**, porque a checagem é heurística e existe caso legítimo — o diálogo da Aula 0 soletra *Castelli* de propósito, e a palavra não é vocabulário a ensinar. Para cada aviso, decida: ou a palavra entra no conteúdo da aula (num `chunk`, `lista` ou `tabella`), ou ela sai do diálogo, ou é caso legítimo e fica. O que não vale é ignorar sem olhar.
@@ -611,11 +695,17 @@ reprova quando ficam velhos. `--fix` reescreve. Não é um passo de build: o
 derivado é conferido no repositório, não gerado no deploy.
 
 A colheita do léxico é exatamente o italiano que a aula **exibe** — o mesmo
-conjunto que ganha 🔊 pelo invariante 7.1: `chunks` (com `slot`), `header`,
-e os blocos `lista`, `tabella` (menos células `pt: true`), `contrasto` e
-`paradigma`. `dialogo` e `esercizi` ficam **fora de propósito**: são o que a
-checagem confere, e se entrassem, um diálogo fora de escopo se
-autoautorizaria.
+conjunto que ganha 🔊 pelo invariante 7.1: `chunks` (com `slot`), `header`
+(o `it` quando o item é objeto), `funzioni[].quando`, e os blocos `lista`,
+`tabella` (menos células `pt: true`), `contrasto` e `paradigma`. `dialogo` e
+`esercizi` ficam **fora de propósito**: são o que a checagem confere, e se
+entrassem, um diálogo fora de escopo se autoautorizaria.
+
+> **O léxico nunca deve encolher.** Depois de um `--fix`, confira
+> `git diff content/lessico.json`: encolheu é sinal de que uma fonte de
+> colheita deixou de ser lida — foi o risco concreto quando o item de
+> `header` passou a aceitar objeto. Um léxico menor não quebra nada na hora,
+> só faz a checagem do i+1 aprovar silenciosamente diálogo fora de escopo.
 
 ### Testes
 

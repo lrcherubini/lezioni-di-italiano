@@ -260,6 +260,10 @@
       "aula": "01",
       "origine": "tabella"
     },
+    "capisci": {
+      "aula": "00",
+      "origine": "funzione"
+    },
     "cappa": {
       "aula": "00",
       "origine": "tabella"
@@ -312,6 +316,10 @@
       "aula": "00",
       "origine": "header"
     },
+    "chiedi": {
+      "aula": "00",
+      "origine": "funzione"
+    },
     "chiudere": {
       "aula": "00",
       "origine": "contrasto"
@@ -344,6 +352,10 @@
       "aula": "00",
       "origine": "tabella"
     },
+    "congedi": {
+      "aula": "01",
+      "origine": "funzione"
+    },
     "conoscerla": {
       "aula": "02",
       "origine": "chunk"
@@ -351,6 +363,10 @@
     "conoscerti": {
       "aula": "02",
       "origine": "chunk"
+    },
+    "conosci": {
+      "aula": "02",
+      "origine": "funzione"
     },
     "consonanti": {
       "aula": "00",
@@ -402,7 +418,11 @@
     },
     "dice": {
       "aula": "00",
-      "origine": "chunk"
+      "origine": "funzione"
+    },
+    "dici": {
+      "aula": "02",
+      "origine": "funzione"
     },
     "diciannove": {
       "aula": "01",
@@ -1062,7 +1082,7 @@
     },
     "parli": {
       "aula": "02",
-      "origine": "chunk"
+      "origine": "funzione"
     },
     "parliamo": {
       "aula": "02",
@@ -1172,6 +1192,10 @@
       "aula": "01",
       "origine": "header"
     },
+    "presenti": {
+      "aula": "01",
+      "origine": "funzione"
+    },
     "propria": {
       "aula": "01",
       "origine": "header"
@@ -1184,9 +1208,17 @@
       "aula": "00",
       "origine": "tabella"
     },
+    "qualcuno": {
+      "aula": "01",
+      "origine": "funzione"
+    },
     "quali": {
       "aula": "02",
       "origine": "header"
+    },
+    "quando": {
+      "aula": "00",
+      "origine": "funzione"
     },
     "quanti": {
       "aula": "01",
@@ -1322,7 +1354,7 @@
     },
     "scusi": {
       "aula": "02",
-      "origine": "chunk"
+      "origine": "funzione"
     },
     "sedici": {
       "aula": "01",
@@ -1330,7 +1362,7 @@
     },
     "sei": {
       "aula": "01",
-      "origine": "chunk"
+      "origine": "funzione"
     },
     "sette": {
       "aula": "01",
@@ -1475,6 +1507,10 @@
     "svizzero": {
       "aula": "01",
       "origine": "paradigma"
+    },
+    "sé": {
+      "aula": "01",
+      "origine": "funzione"
     },
     "t": {
       "aula": "00",

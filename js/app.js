@@ -14,6 +14,7 @@ import { getExercise, flashcardDeck } from './exercises/index.js';
 import { recorder } from './record.js';
 import {
   el, chip, speakButton, prose, renderSection, renderObiettivi, renderStage,
+  renderFunzioni,
 } from './render.js';
 
 const CONTENT = 'content/';
@@ -430,12 +431,13 @@ async function renderLesson() {
   // O baralho sai dos chunks da aula; null quando não há chunk elegível.
   const deck = flashcardDeck(lesson);
 
-  /* Trilha sticky — só com as etapas que a aula realmente tem */
+  /* Trilha sticky — só com as etapas que a aula realmente tem.
+     A ordem aqui TEM que casar com a ordem dos append abaixo. */
   const stages = [
     ['riscaldamento', 'Riscaldamento', Boolean(lesson.riscaldamento)],
-    ['studio', 'Studio', Boolean(lesson.sections?.length)],
-    ['lessico', 'Lessico', Boolean(deck)],
+    ['lessico', 'Lessico', Boolean(deck) || Boolean(lesson.funzioni?.length)],
     ['ascolto', 'Ascolto', Boolean(lesson.dialogo)],
+    ['studio', 'Studio', Boolean(lesson.sections?.length)],
     ['esercizi', 'Esercizi', Boolean(lesson.esercizi?.length)],
     ['produzione', 'Produzione', Boolean(lesson.produzione?.length)],
     ['bilancio', 'Bilancio', Boolean(lesson.bilancio?.length)],
@@ -460,33 +462,26 @@ async function renderLesson() {
     ));
   }
 
-  /* Studio */
-  if (lesson.sections?.length) {
-    main.append(renderStage(
-      {
-        id: 'studio',
-        kicker: 'Etapa 2',
-        title: 'Studio',
-        intro: 'Cada linha em italiano tem 🔊. Ouça antes de ler a tradução — '
-             + 'e leia a explicação, não só a tabela.',
-        modo,
-      },
-      ...lesson.sections.map((s) => renderSection(s, modo))
-    ));
-  }
+  /* Lessico — os blocos de linguagem da aula, e depois o baralho.
 
-  /* Lessico — o baralho da aula */
-  if (deck) {
+     Vem antes de Studio de propósito, e a ordem contraria a dos slides de
+     origem: eles são organizados por tópico gramatical, o site é organizado
+     por progressão didática. O aluno encontra o bloco pronto, ouve o diálogo
+     usando o bloco, e só então lê a regra que o explica — contexto antes da
+     regra é a abordagem que o PRD §5 declara. Ler `lo/gli` antes de ouvir
+     `lo spagnolo` era ler apostila de gramática. */
+  if (deck || lesson.funzioni?.length) {
     main.append(renderStage(
       {
         id: 'lessico',
-        kicker: 'Etapa 3',
+        kicker: 'Etapa 2',
         title: 'Lessico',
-        intro: 'O léxico da aula em cartas. Tente lembrar antes de virar — '
-             + 'a recuperação é o que fixa; reler não fixa nada.',
+        intro: 'Estes são os blocos que você vai ouvir daqui a pouco. Leia agrupado, '
+             + 'ouça cada um — depois tente lembrar nas cartas, embaralhado.',
         modo,
       },
-      mountExercise(deck, id, { headLabel: 'Lessico', countInIndex: false, modo })
+      renderFunzioni(lesson, modo),
+      deck ? mountExercise(deck, id, { headLabel: 'Lessico', countInIndex: false, modo }) : null
     ));
   }
 
@@ -498,7 +493,7 @@ async function renderLesson() {
     // cabeçalho próprio (título+gloss em italiano, com áudio) em vez do
     // "Ex. NN" genérico — e sem entrar na numeração dos exercícios.
     main.append(renderStage(
-      { id: 'ascolto', kicker: 'Etapa 4', title: 'Ascolto', intro: d.consegna ?? '', modo },
+      { id: 'ascolto', kicker: 'Etapa 3', title: 'Ascolto', intro: d.consegna ?? '', modo },
       mountExercise({ ...d, type: 'dialogue' }, id, {
         headLabel: 'Dialogo',
         headTitle: d.titolo,
@@ -506,6 +501,21 @@ async function renderLesson() {
         countInIndex: false,
         modo,
       })
+    ));
+  }
+
+  /* Studio */
+  if (lesson.sections?.length) {
+    main.append(renderStage(
+      {
+        id: 'studio',
+        kicker: 'Etapa 4',
+        title: 'Studio',
+        intro: 'Você já ouviu estas formas. Agora o porquê de cada uma — leia a '
+             + 'explicação, não só a tabela. Cada linha em italiano tem 🔊.',
+        modo,
+      },
+      ...lesson.sections.map((s) => renderSection(s, modo))
     ));
   }
 

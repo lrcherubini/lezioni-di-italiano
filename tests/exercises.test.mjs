@@ -34,6 +34,7 @@ describe('registry', () => {
     assert.deepEqual(knownTypes().sort(), [
       'abbinamento', 'dialogue', 'dictogloss', 'flashcard', 'gap-audio',
       'paradigm-fill', 'qa-transcribe', 'riordino', 'scelta', 'slot-frame',
+      'traduzione', 'trasformazione',
     ]);
   });
 

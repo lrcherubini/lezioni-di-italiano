@@ -64,13 +64,36 @@ describe('cabeçalho da aula', () => {
   test('a visita fica registrada no progresso', () => {
     assert.equal(store.lessonProgress('01', 1).visited, true);
   });
+
+  // O sumário só serve se levar a algum lugar: cada `sezione` do conteúdo
+  // real tem que casar com um id que EXISTE na página montada. Um alvo
+  // digitado errado deixa o link clicável e mudo, sem erro no console.
+  test('todo link do sumário aponta para um ponto que existe na página', () => {
+    const alvos = Object.values(aula.header).flat()
+      .filter((i) => typeof i === 'object' && i.sezione)
+      .map((i) => i.sezione);
+
+    assert.ok(alvos.length, 'a Aula 1 tem sumário navegável');
+    for (const alvo of alvos) {
+      assert.ok(dom.document.getElementById(alvo), `o sumário aponta para #${alvo}, que não existe`);
+    }
+  });
 });
 
 describe('trilha de etapas', () => {
   test('lista só as etapas que a aula realmente tem', () => {
     const labels = main.querySelectorAll('.rail a').map((a) => a.textContent);
     assert.deepEqual(labels,
-      ['Riscaldamento', 'Studio', 'Lessico', 'Ascolto', 'Esercizi', 'Produzione', 'Bilancio']);
+      ['Riscaldamento', 'Lessico', 'Ascolto', 'Studio', 'Esercizi', 'Produzione', 'Bilancio']);
+  });
+
+  // A trilha é só um índice: quem manda na ordem da página é a sequência de
+  // append em renderLesson. Se as duas divergirem, os links continuam
+  // funcionando e a trilha passa a mentir sobre onde o aluno está.
+  test('a ordem da trilha é a ordem em que as etapas aparecem na página', () => {
+    const naTrilha = main.querySelectorAll('.rail a').map((a) => a.getAttribute('href').slice(1));
+    const naPagina = main.querySelectorAll('.stage').map((s) => s.getAttribute('id'));
+    assert.deepEqual(naTrilha, naPagina);
   });
 
   test('cada link aponta para uma âncora que existe', () => {
@@ -105,6 +128,26 @@ describe('trilha de etapas', () => {
 });
 
 describe('etapas', () => {
+  test('Lessico traz as Frasi utili ANTES do baralho', () => {
+    // A ordem dentro da etapa é a mesma ideia da ordem entre etapas: primeiro
+    // se lê agrupado, depois se testa embaralhado. Inverter aqui entregaria a
+    // resposta das cartas logo acima delas.
+    const lessico = dom.document.getElementById('lessico');
+    assert.ok(lessico.querySelector('.funzioni'), 'as funzioni não renderizaram');
+
+    const classes = lessico.children.map((c) => c.className);
+    assert.ok(classes.indexOf('funzioni') < classes.findIndex((c) => c.includes('ex')),
+      'o baralho apareceu antes das Frasi utili');
+  });
+
+  test('cada funzione resolve os chunks que referencia', () => {
+    for (const f of aula.funzioni) {
+      const card = dom.document.getElementById(f.id);
+      assert.ok(card, `funzione ${f.id} não renderizou`);
+      assert.equal(card.querySelectorAll('.funzione__riga').length, f.chunks.length);
+    }
+  });
+
   test('Studio renderiza uma seção por section do JSON', () => {
     const secoes = dom.document.getElementById('studio').querySelectorAll('.section');
     assert.equal(secoes.length, aula.sections.length);

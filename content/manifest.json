@@ -24,7 +24,7 @@
         "Doppie",
         "Accento"
       ],
-      "conteggio": 27
+      "conteggio": 32
     },
     {
       "id": "01",
@@ -48,7 +48,7 @@
         "Plurale",
         "L'età"
       ],
-      "conteggio": 127
+      "conteggio": 138
     },
     {
       "id": "02",
@@ -72,7 +72,7 @@
         "Espressioni utili",
         "Formale e informale"
       ],
-      "conteggio": 181
+      "conteggio": 192
     }
   ]
 }

@@ -514,6 +514,184 @@ class TestCheckScope(unittest.TestCase):
         self.assertIn('(+12)', v.warnings[0])
 
 
+class TestCheckHeader(unittest.TestCase):
+    """O cabeçalho é o sumário da aula, e cada item pode virar atalho.
+
+    O item é string OU {it, sezione} — string continua sendo o caso comum e
+    continua sendo texto puro. O que não pode passar é `sezione` apontando
+    para o vazio: o link ficaria clicável e simplesmente não rolaria.
+    """
+
+    def setUp(self):
+        v.errors.clear()
+        v.warnings.clear()
+
+    def test_string_simples_continua_valendo(self):
+        v.check_header('x.json', aula(header={'comunicazione': ['Presentarsi']}))
+        self.assertEqual(v.errors, [])
+
+    def test_sezione_para_secao_existente_passa(self):
+        v.check_header('x.json', aula(
+            header={'comunicazione': [{'it': 'Salutare', 'sezione': 's1'}]},
+            sections=[{'id': 's1'}]))
+        self.assertEqual(v.errors, [])
+
+    def test_sezione_para_ancora_de_etapa_passa(self):
+        # Item de «comunicazione» costuma apontar para o diálogo, não para
+        # uma seção — por isso as âncoras de etapa também valem.
+        v.check_header('x.json', aula(
+            header={'comunicazione': [{'it': 'Salutare', 'sezione': 'ascolto'}]}))
+        self.assertEqual(v.errors, [])
+
+    def test_sezione_inexistente_e_erro(self):
+        v.check_header('x.json', aula(
+            header={'comunicazione': [{'it': 'Salutare', 'sezione': 'l99-s01'}]},
+            sections=[{'id': 's1'}]))
+        self.assertIn('l99-s01', v.errors[0])
+
+    def test_objeto_sem_it_e_erro(self):
+        v.check_header('x.json', aula(header={'comunicazione': [{'sezione': 'ascolto'}]}))
+        self.assertIn('sem «it»', v.errors[0])
+
+
+class TestCheckFunzioni(unittest.TestCase):
+    """`funzioni` agrupa chunks POR REFERÊNCIA de id, nunca copiando texto."""
+
+    def setUp(self):
+        v.errors.clear()
+        v.warnings.clear()
+
+    def check(self, **kw):
+        v.check_funzioni('x.json', aula(**kw), Counter())
+        return v.errors
+
+    def test_aula_sem_funzioni_nao_diz_nada(self):
+        self.assertEqual(self.check(), [])
+        self.assertEqual(v.warnings, [])
+
+    def test_referencia_valida_passa(self):
+        self.assertEqual(self.check(
+            chunks=[{'id': 'c1', 'it': 'Ciao', 'chunkType': 'fixed'}],
+            funzioni=[{'id': 'f1', 'quando': 'Quando saluti', 'gloss': 'g', 'chunks': ['c1']}],
+        ), [])
+
+    def test_referencia_a_chunk_inexistente_e_erro(self):
+        self.assertIn('fantasma', self.check(
+            chunks=[],
+            funzioni=[{'id': 'f1', 'quando': 'Q', 'gloss': 'g', 'chunks': ['fantasma']}],
+        )[0])
+
+    def test_funzione_vazia_e_erro(self):
+        self.assertIn('sem nenhum chunk', self.check(
+            funzioni=[{'id': 'f1', 'quando': 'Q', 'gloss': 'g', 'chunks': []}],
+        )[0])
+
+    def test_frase_fixa_fora_de_todo_grupo_avisa(self):
+        self.check(
+            chunks=[
+                {'id': 'c1', 'it': 'Ciao', 'chunkType': 'fixed'},
+                {'id': 'c2', 'it': 'Grazie', 'chunkType': 'fixed'},
+            ],
+            funzioni=[{'id': 'f1', 'quando': 'Q', 'gloss': 'g', 'chunks': ['c1']}],
+        )
+        self.assertIn('c2', v.warnings[0])
+
+    def test_palavra_solta_fora_de_grupo_NAO_avisa(self):
+        # `word` e `collocation` são item lexical, não frase com «quando se
+        # usa». Cobrá-los encheria a saída de ruído que se aprende a ignorar.
+        self.check(
+            chunks=[
+                {'id': 'c1', 'it': 'Ciao', 'chunkType': 'fixed'},
+                {'id': 'c2', 'it': 'il cane', 'chunkType': 'word'},
+                {'id': 'c3', 'it': 'i Paesi Bassi', 'chunkType': 'collocation'},
+            ],
+            funzioni=[{'id': 'f1', 'quando': 'Q', 'gloss': 'g', 'chunks': ['c1']}],
+        )
+        self.assertEqual(v.warnings, [])
+
+    def test_o_mesmo_chunk_pode_servir_a_duas_intencoes(self):
+        self.assertEqual(self.check(
+            chunks=[{'id': 'c1', 'it': 'Ciao', 'chunkType': 'fixed'}],
+            funzioni=[
+                {'id': 'f1', 'quando': 'Quando saluti', 'gloss': 'g', 'chunks': ['c1']},
+                {'id': 'f2', 'quando': 'Quando ti congedi', 'gloss': 'g', 'chunks': ['c1']},
+            ],
+        ), [])
+
+    def test_quando_entra_no_lexico(self):
+        # Mesmo caso de header.comunicazione: rótulo funcional em italiano,
+        # exibido com 🔊, logo colhido.
+        files = {'lezione-01.json': aula(id='01', funzioni=[
+            {'id': 'f1', 'quando': 'Quando saluti', 'gloss': 'g', 'chunks': []},
+        ])}
+        formas = v.build_lessico(files)['forme']
+        self.assertEqual(formas['saluti']['origine'], 'funzione')
+
+
+class TestCheckTrasformazione(unittest.TestCase):
+    """A pontuação final é conteúdo neste tipo, e só neste.
+
+    Em italiano a interrogativa não inverte nada: `Tu sei italiano?` difere
+    de `Tu sei italiano.` apenas pelo ponto. Por isso a comparação aqui não
+    passa por norm(), que descartaria justamente o que distingue as duas.
+    """
+
+    def setUp(self):
+        v.errors.clear()
+        v.warnings.clear()
+
+    def check(self, frase):
+        ex = {'id': 'e1', 'type': 'trasformazione', 'frasi': [dict(frase, id='e1-f1')]}
+        v.check_trasformazione('x.json', ex, Counter())
+        return v.errors
+
+    def test_interrogativa_legitima_passa(self):
+        self.assertEqual(self.check({
+            'partenza': 'Tu sei italiano.', 'verso': 'interrogativa',
+            'risposta': 'Tu sei italiano?'}), [])
+
+    def test_interrogativa_sem_ponto_de_interrogacao_e_erro(self):
+        self.assertIn('sem «?»', self.check({
+            'partenza': 'Tu sei italiano.', 'verso': 'interrogativa',
+            'risposta': 'Tu sei italiano.'})[0])
+
+    def test_negativa_com_ponto_de_interrogacao_e_erro(self):
+        self.assertIn('termina em «?»', self.check({
+            'partenza': 'Io sono italiano.', 'verso': 'negativa',
+            'risposta': 'Io non sono italiano?'})[0])
+
+    def test_partida_igual_a_chegada_e_erro(self):
+        self.assertIn('nada a transformar', self.check({
+            'partenza': 'Io sono italiano.', 'verso': 'negativa',
+            'risposta': 'Io sono italiano.'})[0])
+
+    def test_verso_invalido_e_erro(self):
+        self.assertIn('verso', self.check({
+            'partenza': 'A.', 'verso': 'esclamativa', 'risposta': 'B!'})[0])
+
+
+class TestCheckTraduzione(unittest.TestCase):
+    def setUp(self):
+        v.errors.clear()
+        v.warnings.clear()
+
+    def check(self, frase):
+        ex = {'id': 'e1', 'type': 'traduzione', 'frasi': [dict(frase, id='e1-f1')]}
+        v.check_traduzione('x.json', ex, Counter())
+        return v.errors
+
+    def test_frase_completa_passa(self):
+        self.assertEqual(self.check({'pt': 'Eu sou.', 'risposta': 'Io sono.'}), [])
+
+    def test_sem_pt_e_erro(self):
+        # O `pt` é o único estímulo na tela: sem ele o exercício é impossível.
+        self.assertIn('sem «pt»', self.check({'risposta': 'Io sono.'})[0])
+
+    def test_lacuna_e_erro_de_tipo(self):
+        self.assertIn('lacuna', self.check(
+            {'pt': 'Eu sou ___.', 'risposta': 'Io sono ___.'})[0])
+
+
 class TestConteudoReal(unittest.TestCase):
     """O conteúdo versionado passa no próprio validador."""
 

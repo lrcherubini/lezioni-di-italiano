@@ -17,7 +17,7 @@ installStorage();
 
 const {
   el, speakButton, chip, subChip, prose, renderBlock, renderSection, renderObiettivi,
-  renderStage, audioBar,
+  renderStage, audioBar, renderFunzioni,
 } = await import('../js/render.js');
 const speech = await import('../js/speech.js');
 await speech.voicesReady();
@@ -477,6 +477,95 @@ describe('renderObiettivi', () => {
   test('coluna vazia não gera item', () => {
     const o = renderObiettivi({ comunicazione: ['A'] });
     assert.equal(o.querySelectorAll('li').length, 1);
+  });
+
+  test('item com `sezione` vira link; string simples continua texto', () => {
+    const o = renderObiettivi({
+      comunicazione: ['Presentarsi', { it: 'Salutare', sezione: 'l01-s05' }],
+    });
+    const links = o.querySelectorAll('a');
+    assert.equal(links.length, 1, 'só o item com sezione vira link');
+    assert.equal(links[0].getAttribute('href'), '#l01-s05');
+    assert.equal(links[0].innerHTML, 'Salutare');
+  });
+
+  test('o 🔊 fica FORA do link — clicar nele toca, não navega', () => {
+    // Se o botão estivesse dentro do <a>, o clique borbulharia para a âncora
+    // e a página rolaria em vez de (ou além de) falar.
+    const o = renderObiettivi({ comunicazione: [{ it: 'Salutare', sezione: 'l01-s05' }] });
+    assert.equal(o.querySelectorAll('a .speak').length, 0);
+    assert.equal(speakButtons(o).length, 1);
+  });
+
+  test('objeto sem sezione ainda fala e ainda aparece', () => {
+    const o = renderObiettivi({ comunicazione: [{ it: 'Salutare' }] });
+    assert.deepEqual(spokenLabels(o), ['Salutare']);
+    assert.equal(o.querySelectorAll('a').length, 0);
+  });
+});
+
+describe('renderFunzioni', () => {
+  const AULA = {
+    funzioni: [
+      { id: 'l01-f01', quando: 'Quando saluti', gloss: 'Quando você cumprimenta',
+        figura: '👋', chunks: ['c1', 'c2'] },
+      { id: 'l01-f02', quando: 'Quando ti presenti', gloss: 'Quando você se apresenta',
+        chunks: ['c1'] },
+    ],
+    chunks: [
+      { id: 'c1', it: 'Buongiorno', pt: 'Bom dia' },
+      { id: 'c2', it: 'Ciao', pt: 'Oi / Tchau' },
+    ],
+  };
+
+  test('aula sem funzioni devolve null', () => {
+    assert.equal(renderFunzioni({ chunks: [] }), null);
+    assert.equal(renderFunzioni(null), null);
+  });
+
+  test('um card por função, com o id da função como âncora', () => {
+    const f = renderFunzioni(AULA);
+    const cards = f.querySelectorAll('.funzione');
+    assert.equal(cards.length, 2);
+    assert.equal(cards[0].getAttribute('id'), 'l01-f01');
+  });
+
+  test('resolve os chunks por id, sem duplicar o texto deles', () => {
+    const f = renderFunzioni(AULA);
+    const righe = f.querySelectorAll('.funzione__riga');
+    assert.equal(righe.length, 3, '2 chunks no primeiro grupo + 1 no segundo');
+    assert.match(righe[0].textContent, /Buongiorno/);
+    assert.match(righe[0].textContent, /Bom dia/);
+  });
+
+  test('o mesmo chunk pode servir a duas intenções', () => {
+    // `Ciao` é saudação e despedida; agrupar por referência é o que permite
+    // isso sem duplicar id — e id duplicado misturaria dois progressos.
+    const f = renderFunzioni(AULA);
+    assert.equal(f.textContent.match(/Buongiorno/g).length, 2);
+  });
+
+  test('o rótulo e cada linha italiana ganham 🔊', () => {
+    const f = renderFunzioni(AULA);
+    assert.deepEqual(spokenLabels(f),
+      ['Quando saluti', 'Buongiorno', 'Ciao', 'Quando ti presenti', 'Buongiorno']);
+  });
+
+  test('a figura é role=img com a glossa como nome acessível', () => {
+    const f = renderFunzioni(AULA);
+    const fig = f.querySelector('.funzione__figura');
+    assert.equal(fig.getAttribute('role'), 'img');
+    assert.equal(fig.getAttribute('aria-label'), 'Quando você cumprimenta');
+    assert.equal(fig.textContent, '👋');
+  });
+
+  test('referência para chunk inexistente não quebra a página', () => {
+    // O validador reprova isto; o render não pode explodir por causa disso.
+    const f = renderFunzioni({
+      funzioni: [{ id: 'f1', quando: 'X', chunks: ['fantasma'] }],
+      chunks: [],
+    });
+    assert.equal(f.querySelectorAll('.funzione__riga').length, 0);
   });
 });
 
