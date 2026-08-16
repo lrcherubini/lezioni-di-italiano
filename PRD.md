@@ -253,6 +253,36 @@ DESIGN §1.6 afirmava «10 seções e 15 cards» para uma Aula 1 que tem 11 e 29
 | **`category` e `chunkType` separados** | Um campo só | Eixos diferentes: um governa cor e navegação, o outro governa elegibilidade de drill. Fundir quebraria a geração de exercício. |
 | **Teto de velocidade em 1.0** | Deixar 1.5× | Para A1, acelerar derruba a compreensão. Restrição pedagógica deliberada. |
 | **Acento vira "correto com nota"** | Reprovar | Quem escreve `perche` acertou a palavra. Reprovar ensina menos que apontar o acento. |
+| **Harness de navegador em CDP puro** | Playwright | Ver abaixo. |
+
+### Por que não Playwright
+
+A pergunta é legítima — uma ferramenta só de teste, que nunca toca o que é
+servido, não ameaça o «durar dois anos sem manutenção» do jeito que uma
+dependência de runtime ameaçaria. Ela foi considerada e recusada por medida,
+não por princípio.
+
+O Node 22+ traz `WebSocket` global e o Chrome fala **CDP** — o mesmo protocolo
+que o Playwright usa por baixo. O driver inteiro coube em `tools/browser.mjs`,
+stdlib pura, e entrega 52 asserções em ~13s. O que o Playwright somaria a isso:
+
+- **Firefox e WebKit**, que o CDP não alcança. É o único ganho insubstituível —
+  e vale **zero aqui**, porque o único usuário estuda em Chrome/Edge no desktop
+  e Chrome no Android: os três são Chromium, exatamente o motor já coberto.
+- **Regressão visual.** Não é exclusividade dele: `Page.captureScreenshot` é
+  comando CDP. Fica como extensão possível do harness atual, se a Parte 2 do
+  DESIGN passar a merecer verificação.
+- Conveniência (auto-wait rico, seletor por texto, trace viewer). Real, mas
+  `page.esperar()` cobre o essencial.
+
+E uma ressalva que derruba o argumento aparentemente mais forte: **o WebKit do
+Playwright não é o Safari.** É um build sem a pilha da Apple, e a
+`speechSynthesis` dele não é a do iOS — logo ele **não** testaria o `unlock()`
+por gesto que o `js/speech.js` implementa justamente para o iOS Safari. O caso
+que mais pediria WebKit é o que o WebKit do Playwright não cobre.
+
+**O que reabriria a decisão:** passar a estudar em Firefox ou em iPhone. Aí
+cross-browser deixa de ser hipótese.
 
 
 ## 12. Progressão de língua
