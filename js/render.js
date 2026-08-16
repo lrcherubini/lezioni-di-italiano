@@ -256,6 +256,42 @@ function renderContrasto(block, modo = 'pt') {
   return wrap;
 }
 
+/**
+ * `scambio` — o microdiálogo de 2 a 4 linhas.
+ *
+ * É LEITURA, não drill: não tem input, não corrige nada e não grava
+ * progresso. Por isso é bloco de seção e não tipo de exercício — a
+ * distinção é a mesma que separa `funzioni` do baralho.
+ *
+ * Existe para preencher o degrau que faltava na escada: entre produzir uma
+ * frase solta (`traduzione`) e o diálogo de 8 turnos não havia nada, e o
+ * que falta ali é ver o bloco vivendo na menor conversa possível.
+ *
+ * Usa o eixo `speaker` A/B do TTS, o mesmo do diálogo, para as duas vozes
+ * saírem diferentes — dois turnos na mesma voz leem como uma frase só.
+ */
+function renderScambio(block, modo = 'pt') {
+  const battute = block.battute ?? [];
+
+  const ol = el('ol', { class: 'scambio' });
+  for (const b of battute) {
+    ol.append(el('li', { class: 'battuta', 'data-speaker': b.speaker },
+      speakButton(b.it, { speaker: b.speaker }),
+      el('span', { class: 'battuta__testo' },
+        el('span', { class: 'item__it', html: `<b>${escapeHtml(b.it)}</b>` }),
+        b.pt ? el('span', { class: 'item__pt', html: b.pt }) : null
+      )
+    ));
+  }
+
+  // `speakSequence` já consome {it, speaker} — a mesma forma das battute do
+  // diálogo, então não há o que mapear.
+  const tutto = el('button', { class: 'btn btn--sm', type: 'button' }, '▶ Ouvir a troca');
+  tutto.addEventListener('click', () => speech.speakSequence(battute));
+
+  return el('div', { class: 'scambio__wrap' }, ol, el('div', { class: 'ex__row' }, tutto));
+}
+
 function renderParadigma(block, modo = 'pt') {
   const thead = el('tr', {},
     el('th', {}, 'Português'),
@@ -306,6 +342,7 @@ const BLOCKS = {
   tabella: renderTabella,
   contrasto: renderContrasto,
   paradigma: renderParadigma,
+  scambio: renderScambio,
   nota: renderNota,
 };
 
@@ -358,12 +395,24 @@ export function renderObiettivi(header) {
   if (!header) return null;
   // header.comunicazione/lessico/grammatica são frases em italiano — cada
   // uma ganha 🔊, como qualquer outro texto italiano do site.
+  //
+  // O item é string OU { it, sezione }, o mesmo idioma da célula de tabella.
+  // Com `sezione` o texto vira link para o ponto da página: este bloco é o
+  // sumário da aula, e sumário que não leva a lugar nenhum é texto morto.
+  // O 🔊 fica FORA do link — clicar no alto-falante toca o áudio, não navega.
   const col = (title, items) =>
     el('div', {},
       el('h2', {}, title),
-      el('ul', {}, ...(items ?? []).map((i) =>
-        el('li', {}, speakButton(i), el('span', { html: i }))
-      ))
+      el('ul', {}, ...(items ?? []).map((raw) => {
+        const it = typeof raw === 'string' ? raw : raw.it;
+        const alvo = typeof raw === 'string' ? null : raw.sezione;
+        return el('li', {},
+          speakButton(it),
+          alvo
+            ? el('a', { class: 'obiettivi__link', href: `#${alvo}`, html: it })
+            : el('span', { html: it })
+        );
+      }))
     );
 
   return el('div', { class: 'obiettivi' },
@@ -371,6 +420,86 @@ export function renderObiettivi(header) {
     col('Lessico', header.lessico),
     col('Grammatica', header.grammatica)
   );
+}
+
+/* --- Frasi utili: chunks agrupados por intenção comunicativa ------------- */
+
+/** As funções agrupam chunks POR REFERÊNCIA de id, nunca copiando o texto.
+ *  `chunks` continua sendo o inventário lexical único da aula — se o texto
+ *  fosse duplicado aqui, uma edição no chunk deixaria o agrupamento mentindo,
+ *  e um id repetido misturaria dois históricos de progresso.
+ *
+ *  Nada aqui grava progresso: `funzioni` é leitura organizada, e é o baralho
+ *  logo abaixo que testa a recuperação. */
+export function renderFunzioni(lesson, modo = 'pt', notebook = null) {
+  if (!lesson?.funzioni?.length) return null;
+
+  const perId = new Map((lesson.chunks ?? []).map((c) => [c.id, c]));
+
+  const cards = lesson.funzioni.map((f) => {
+    const righe = (f.chunks ?? [])
+      .map((cid) => perId.get(cid))
+      .filter(Boolean)
+      .map((c) => el('li', { class: 'funzione__riga' },
+        speakButton(c.it),
+        el('span', { class: 'funzione__it', html: `<b>${escapeHtml(c.it)}</b>` }),
+        el('span', { class: 'funzione__pt', html: c.pt ?? '' }),
+        notebook ? notebookToggle(c, notebook) : null
+      ));
+
+    return el('section', { class: 'funzione', id: f.id },
+      el('div', { class: 'funzione__head' },
+        f.figura ? figuraFor(f.figura, f.gloss ?? f.quando) : null,
+        el('h3', { class: 'funzione__quando' },
+          speakButton(f.quando),
+          el('span', { html: f.quando })
+        ),
+        f.gloss ? el('p', { class: 'funzione__gloss', html: f.gloss }) : null
+      ),
+      el('ul', { class: 'funzione__righe' }, ...righe)
+    );
+  });
+
+  return el('div', { class: 'funzioni' }, ...cards);
+}
+
+/**
+ * Botão de guardar no caderno, idêntico ao do verso do flashcard.
+ *
+ * Aqui ele é visível de saída — não atrás de um «Mostrar». É a porta de
+ * entrada do caderno: era o único ponto do site que sabia guardar uma forma,
+ * e nascia escondido, o que fazia o caderno parecer não existir.
+ *
+ * O `notebook` vem por parâmetro, como no `ctx` dos exercícios: render.js
+ * não fala com o store — quem grava é o app.js.
+ */
+function notebookToggle(chunk, notebook) {
+  const dentro = () => Boolean(notebook.has?.(chunk.id));
+  const rotulo = (on) => (on ? '✓ no caderno' : '＋ caderno');
+
+  const btn = el('button', {
+    class: 'btn btn--sm btn--ghost funzione__caderno',
+    type: 'button',
+    'aria-pressed': dentro() ? 'true' : 'false',
+    title: `Guardar «${chunk.it}» para escrever uma frase sua`,
+  }, rotulo(dentro()));
+
+  btn.addEventListener('click', () => {
+    const on = Boolean(notebook.toggle?.(chunk));
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.textContent = rotulo(on);
+  });
+
+  return btn;
+}
+
+/** Mesma regra do flashcard: emoji por padrão, SVG inline por exceção, e
+ *  sempre `role="img"` com a glossa portuguesa como nome acessível. */
+function figuraFor(fig, label) {
+  const node = el('div', { class: 'funzione__figura', role: 'img', 'aria-label': label });
+  if (String(fig).trimStart().startsWith('<svg')) node.innerHTML = fig;
+  else node.textContent = fig;
+  return node;
 }
 
 /* --- Etapa (stage) ------------------------------------------------------- */

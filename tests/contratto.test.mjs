@@ -99,6 +99,28 @@ const FIXTURES = {
     pt: 'Eu sou italiano.', preinsegnamento: [{ it: 'sono', pt: 'sou' }],
     aiuto: 'Verbo <it>essere</it>.',
   },
+  traduzione: {
+    id: 'x-e09', type: 'traduzione', category: 'ESPRESSIONE', consegna: 'Traduci.',
+    frasi: [{ id: 'x-e09-f1', pt: 'Eu sou italiano.', risposta: 'Io sono italiano.', nota: 'Verbo <it>essere</it>.' }],
+  },
+  trasformazione: {
+    id: 'x-e10', type: 'trasformazione', category: 'GRAMMATICA', consegna: 'Trasforma.',
+    // Uma interrogativa de propósito: é o caso em que a transformação inteira
+    // mora na pontuação, que checkAnswer descarta. Passar pela matriz garante
+    // que o ramo extra de `pontuacaoBate` não quebra nenhum contrato comum.
+    frasi: [{ id: 'x-e10-f1', partenza: 'Tu sei italiano.', verso: 'interrogativa',
+      risposta: 'Tu sei italiano?', nota: 'Só o <it>?</it> muda.' }],
+  },
+  correzione: {
+    id: 'x-e11', type: 'correzione', category: 'GRAMMATICA', consegna: 'Trova l\'errore.',
+    // A `sbagliata` é o único italiano do site que não deve virar áudio nem
+    // léxico. A matriz cobre isso de graça: o contrato «todo áudio que ele
+    // produz é it-IT» só vê o que os botões falam, e aqui nenhum botão fala
+    // a forma errada.
+    frasi: [{ id: 'x-e11-f1', sbagliata: 'Lui legge i giornale.',
+      risposta: 'Lui legge il giornale.', pt: 'Ele lê o jornal.',
+      nota: 'Com <it>giornale</it> no singular o artigo é <it>il</it>.' }],
+  },
 };
 
 const TIPOS = knownTypes().sort();

@@ -24,7 +24,7 @@
         "Doppie",
         "Accento"
       ],
-      "conteggio": 27
+      "conteggio": 32
     },
     {
       "id": "01",
@@ -48,7 +48,7 @@
         "Plurale",
         "L'età"
       ],
-      "conteggio": 127
+      "conteggio": 138
     },
     {
       "id": "02",
@@ -72,7 +72,31 @@
         "Espressioni utili",
         "Formale e informale"
       ],
-      "conteggio": 181
+      "conteggio": 192
+    },
+    {
+      "id": "03",
+      "numero": 3,
+      "file": "lezione-03.json",
+      "titolo": "Io leggo, io scrivo",
+      "gloss": "Verbos regulares em -ERE, materiais de leitura e quando se faz cada coisa",
+      "categorie": [
+        "VERBO",
+        "PRONUNCIA",
+        "VOCABOLARIO",
+        "GRAMMATICA",
+        "ESPRESSIONE"
+      ],
+      "temi": [
+        "Scrivere e Leggere",
+        "Verbos regulares -ERE",
+        "La G di leggere",
+        "Materiali di lettura",
+        "Plurali particolari",
+        "Espressioni utili",
+        "La mattina, ogni sera"
+      ],
+      "conteggio": 167
     }
   ]
 }

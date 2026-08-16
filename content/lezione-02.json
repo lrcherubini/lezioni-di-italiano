@@ -6,24 +6,24 @@
 
   "header": {
     "comunicazione": [
-      "Dire quali lingue parlo",
-      "Dire dove abito",
-      "Chiedere «Dove abiti?»",
-      "Presentarsi in modo formale e informale",
-      "Scusarsi"
+      { "it": "Dire quali lingue parlo", "sezione": "l02-s03" },
+      { "it": "Dire dove abito", "sezione": "l02-s04" },
+      { "it": "Chiedere «Dove abiti?»", "sezione": "l02-s04" },
+      { "it": "Presentarsi in modo formale e informale", "sezione": "l02-s06" },
+      { "it": "Scusarsi", "sezione": "l02-s06" }
     ],
     "lessico": [
-      "Le lingue",
-      "I paesi dell'Europa centrale",
-      "Le città",
-      "un po' · molto bene · solo",
-      "a casa"
+      { "it": "Le lingue", "sezione": "l02-s03" },
+      { "it": "I paesi dell'Europa centrale", "sezione": "l02-s02" },
+      { "it": "Le città", "sezione": "l02-s04" },
+      { "it": "un po' · molto bene · solo", "sezione": "l02-s05" },
+      { "it": "a casa", "sezione": "l02-s05" }
     ],
     "grammatica": [
-      "Presente dei verbi regolari in -ARE",
-      "Le desinenze -o -i -a -iamo -ate -ano",
-      "in + paese · a + città",
-      "Accordo delle nazionalità in -co e -go"
+      { "it": "Presente dei verbi regolari in -ARE", "sezione": "l02-s01" },
+      { "it": "Le desinenze -o -i -a -iamo -ate -ano", "sezione": "l02-s01" },
+      { "it": "in + paese · a + città", "sezione": "l02-s04" },
+      { "it": "Accordo delle nazionalità in -co e -go", "sezione": "l02-s02" }
     ]
   },
 
@@ -403,6 +403,17 @@
     { "id": "l02-c47", "it": "il portoghese", "pt": "o português (língua)", "category": "VOCABOLARIO", "chunkType": "word" },
     { "id": "l02-c48", "it": "l'olandese", "pt": "o holandês (língua)", "category": "VOCABOLARIO", "chunkType": "word" },
     { "id": "l02-c49", "it": "il lussemburghese", "pt": "o luxemburguês (língua)", "category": "VOCABOLARIO", "chunkType": "word" }
+  ],
+
+  "funzioni": [
+    { "id": "l02-f01", "quando": "Quando dici che lingue parli", "gloss": "Quando você diz que línguas fala", "figura": "🗣",
+      "chunks": ["l02-c01", "l02-c11", "l02-c12", "l02-c20", "l02-c21"] },
+    { "id": "l02-f02", "quando": "Quando parli di dove abiti", "gloss": "Quando você fala de onde mora", "figura": "🏠",
+      "chunks": ["l02-c10", "l02-c07", "l02-c08", "l02-c22"] },
+    { "id": "l02-f03", "quando": "Quando conosci qualcuno", "gloss": "Quando você conhece alguém", "figura": "🤝",
+      "chunks": ["l02-c13", "l02-c14", "l02-c15", "l02-c16"] },
+    { "id": "l02-f04", "quando": "Quando ti scusi", "gloss": "Quando você se desculpa", "figura": "😔",
+      "chunks": ["l02-c17", "l02-c18", "l02-c19"] }
   ],
 
   "dialogo": {
@@ -791,6 +802,60 @@
       "domanda": { "tts": "Scusi, Lei di dove è?", "testo": "Scusi, Lei di dove è?", "pt": "Com licença, o senhor é de onde?" },
       "risposta": { "tts": "Sono polacco, ma abito a Milano.", "testo": "Sono polacco, ma abito a Milano.", "pt": "Sou polonês, mas moro em Milão." },
       "aiuto": "Cidade → <em>a</em>."
+    },
+    {
+      "id": "l02-e27",
+      "type": "trasformazione",
+      "category": "GRAMMATICA",
+      "consegna": "Transforme cada frase na forma pedida. Ouça a partida antes — a interrogativa em italiano não mexe em nada, só sobe no fim.",
+      "frasi": [
+        { "id": "l02-e27-f1", "partenza": "Io parlo italiano.", "verso": "negativa",
+          "risposta": "Io non parlo italiano.", "accettaAnche": ["Non parlo italiano."],
+          "nota": "O <em>non</em> vem antes do verbo — sempre." },
+        { "id": "l02-e27-f2", "partenza": "Tu abiti a Roma.", "verso": "interrogativa",
+          "risposta": "Tu abiti a Roma?", "accettaAnche": ["Abiti a Roma?"],
+          "nota": "Nenhuma palavra muda de lugar; o <em>?</em> é a transformação inteira." },
+        { "id": "l02-e27-f3", "partenza": "Noi parliamo solo portoghese.", "verso": "interrogativa",
+          "risposta": "Noi parliamo solo portoghese?", "accettaAnche": ["Parliamo solo portoghese?"],
+          "nota": "Repare que <it>parliamo</it> serve para «falamos» e «falamos?»." },
+        { "id": "l02-e27-f4", "partenza": "Loro non abitano in Germania.", "verso": "affermativa",
+          "risposta": "Loro abitano in Germania.", "accettaAnche": ["Abitano in Germania."],
+          "nota": "País leva <it>in</it>; só o <em>non</em> sai." },
+        { "id": "l02-e27-f5", "partenza": "Lui parla un po' di spagnolo.", "verso": "negativa",
+          "risposta": "Lui non parla un po' di spagnolo.", "accettaAnche": ["Non parla un po' di spagnolo."],
+          "nota": "A negativa é gramatical, mas soa estranha: para negar de verdade um italiano diria <it>non parla spagnolo</it>. Aqui o alvo é a mecânica." }
+      ]
+    },
+    {
+      "id": "l02-e28",
+      "type": "traduzione",
+      "category": "VERBO",
+      "consegna": "Traduza para o italiano. Diga em voz alta antes de escrever — e não volte às tabelas.",
+      "frasi": [
+        { "id": "l02-e28-f1", "pt": "Eu falo português e um pouco de italiano.",
+          "risposta": "Io parlo portoghese e un po' di italiano.",
+          "accettaAnche": ["Parlo portoghese e un po' di italiano.", "Io parlo portoghese e un po' d'italiano.", "Parlo portoghese e un po' d'italiano."],
+          "nota": "O apóstrofo de <it>un po'</it> não é opcional: ele marca a abreviação de <it>un poco</it>." },
+        { "id": "l02-e28-f2", "pt": "Onde você mora?",
+          "risposta": "Dove abiti?",
+          "nota": "Pergunta com palavra interrogativa também não inverte nada." },
+        { "id": "l02-e28-f3", "pt": "Eu moro em Lugano, na Suíça.",
+          "risposta": "Io abito a Lugano, in Svizzera.",
+          "accettaAnche": ["Abito a Lugano, in Svizzera."],
+          "nota": "Cidade leva <it>a</it>, país leva <it>in</it> — as duas na mesma frase." },
+        { "id": "l02-e28-f4", "pt": "Eles falam alemão em casa.",
+          "risposta": "Loro parlano tedesco a casa.",
+          "accettaAnche": ["Parlano tedesco a casa.", "Loro parlano il tedesco a casa.", "Parlano il tedesco a casa."],
+          "nota": "<it>parlano</it> com o acento na primeira sílaba: PAR-la-no." },
+        { "id": "l02-e28-f5", "pt": "Desculpe, o senhor fala inglês?",
+          "risposta": "Scusi, Lei parla inglese?",
+          "accettaAnche": ["Scusi, parla inglese?"],
+          "nota": "<it>Scusi</it> é o formal; <it>Scusa</it> seria para alguém de quem você fala por <it>tu</it>." },
+        { "id": "l02-e28-f6", "pt": "Prazer em te conhecer. Eu sou brasileiro e moro na Itália.",
+          "risposta": "Piacere di conoscerti. Io sono brasiliano e abito in Italia.",
+          "accettaAnche": ["Piacere di conoscerti. Sono brasiliano e abito in Italia."],
+          "nota": "Junta a Aula 1 com a 2: <it>essere</it> para quem você é, <it>abitare</it> para onde mora." }
+      ]
     }
   ],
 

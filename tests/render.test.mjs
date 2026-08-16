@@ -17,7 +17,7 @@ installStorage();
 
 const {
   el, speakButton, chip, subChip, prose, renderBlock, renderSection, renderObiettivi,
-  renderStage, audioBar,
+  renderStage, audioBar, renderFunzioni,
 } = await import('../js/render.js');
 const speech = await import('../js/speech.js');
 await speech.voicesReady();
@@ -212,6 +212,52 @@ describe('bloco paradigma', () => {
   test('sem exceção, sem legenda', () => {
     const b = renderBlock({ ...bloco, righe: [bloco.righe[0]] });
     assert.ok(!b.innerHTML.includes('forma irregular'));
+  });
+});
+
+describe('bloco scambio', () => {
+  const bloco = {
+    type: 'scambio',
+    titolo: 'Na menor conversa possível',
+    battute: [
+      { speaker: 'A', it: 'Qualcosa da bere?', pt: 'Algo pra beber?' },
+      { speaker: 'B', it: 'Un caffè, per favore.', pt: 'Um café, por favor.' },
+    ],
+  };
+
+  test('uma linha por turno, com o falante no dataset', () => {
+    const b = renderBlock(bloco);
+    const righe = b.querySelectorAll('.battuta');
+    assert.equal(righe.length, 2);
+    assert.deepEqual(righe.map((r) => r.getAttribute('data-speaker')), ['A', 'B']);
+  });
+
+  test('cada turno é audível sozinho, com a voz do seu falante', () => {
+    const b = renderBlock(bloco);
+    assert.deepEqual(spokenLabels(b), ['Qualcosa da bere?', 'Un caffè, per favore.']);
+  });
+
+  test('e a troca inteira também', () => {
+    const b = renderBlock(bloco);
+    const tutto = b.querySelectorAll('button').find((x) => /Ouvir a troca/.test(x.textContent));
+    assert.ok(tutto, 'sem play da troca inteira, o scambio vira uma lista');
+  });
+
+  test('a tradução aparece: é modelo para ler, não teste de compreensão', () => {
+    const b = renderBlock(bloco);
+    assert.match(b.textContent, /Algo pra beber\?/);
+    assert.match(b.textContent, /Um café, por favor\./);
+  });
+
+  test('ganha o wrapper de bloco e o título, ao contrário da nota', () => {
+    const b = renderBlock(bloco);
+    assert.equal(b.className, 'block');
+    assert.match(b.querySelector('.block__title').textContent, /menor conversa/);
+  });
+
+  test('sem battute não quebra a página', () => {
+    // O validador reprova; o render não pode explodir por causa disso.
+    assert.doesNotThrow(() => renderBlock({ type: 'scambio' }));
   });
 });
 
@@ -477,6 +523,153 @@ describe('renderObiettivi', () => {
   test('coluna vazia não gera item', () => {
     const o = renderObiettivi({ comunicazione: ['A'] });
     assert.equal(o.querySelectorAll('li').length, 1);
+  });
+
+  test('item com `sezione` vira link; string simples continua texto', () => {
+    const o = renderObiettivi({
+      comunicazione: ['Presentarsi', { it: 'Salutare', sezione: 'l01-s05' }],
+    });
+    const links = o.querySelectorAll('a');
+    assert.equal(links.length, 1, 'só o item com sezione vira link');
+    assert.equal(links[0].getAttribute('href'), '#l01-s05');
+    assert.equal(links[0].innerHTML, 'Salutare');
+  });
+
+  test('o 🔊 fica FORA do link — clicar nele toca, não navega', () => {
+    // Se o botão estivesse dentro do <a>, o clique borbulharia para a âncora
+    // e a página rolaria em vez de (ou além de) falar.
+    const o = renderObiettivi({ comunicazione: [{ it: 'Salutare', sezione: 'l01-s05' }] });
+    assert.equal(o.querySelectorAll('a .speak').length, 0);
+    assert.equal(speakButtons(o).length, 1);
+  });
+
+  test('objeto sem sezione ainda fala e ainda aparece', () => {
+    const o = renderObiettivi({ comunicazione: [{ it: 'Salutare' }] });
+    assert.deepEqual(spokenLabels(o), ['Salutare']);
+    assert.equal(o.querySelectorAll('a').length, 0);
+  });
+});
+
+describe('renderFunzioni', () => {
+  const AULA = {
+    funzioni: [
+      { id: 'l01-f01', quando: 'Quando saluti', gloss: 'Quando você cumprimenta',
+        figura: '👋', chunks: ['c1', 'c2'] },
+      { id: 'l01-f02', quando: 'Quando ti presenti', gloss: 'Quando você se apresenta',
+        chunks: ['c1'] },
+    ],
+    chunks: [
+      { id: 'c1', it: 'Buongiorno', pt: 'Bom dia' },
+      { id: 'c2', it: 'Ciao', pt: 'Oi / Tchau' },
+    ],
+  };
+
+  test('aula sem funzioni devolve null', () => {
+    assert.equal(renderFunzioni({ chunks: [] }), null);
+    assert.equal(renderFunzioni(null), null);
+  });
+
+  test('um card por função, com o id da função como âncora', () => {
+    const f = renderFunzioni(AULA);
+    const cards = f.querySelectorAll('.funzione');
+    assert.equal(cards.length, 2);
+    assert.equal(cards[0].getAttribute('id'), 'l01-f01');
+  });
+
+  test('resolve os chunks por id, sem duplicar o texto deles', () => {
+    const f = renderFunzioni(AULA);
+    const righe = f.querySelectorAll('.funzione__riga');
+    assert.equal(righe.length, 3, '2 chunks no primeiro grupo + 1 no segundo');
+    assert.match(righe[0].textContent, /Buongiorno/);
+    assert.match(righe[0].textContent, /Bom dia/);
+  });
+
+  test('o mesmo chunk pode servir a duas intenções', () => {
+    // `Ciao` é saudação e despedida; agrupar por referência é o que permite
+    // isso sem duplicar id — e id duplicado misturaria dois progressos.
+    const f = renderFunzioni(AULA);
+    assert.equal(f.textContent.match(/Buongiorno/g).length, 2);
+  });
+
+  test('o rótulo e cada linha italiana ganham 🔊', () => {
+    const f = renderFunzioni(AULA);
+    assert.deepEqual(spokenLabels(f),
+      ['Quando saluti', 'Buongiorno', 'Ciao', 'Quando ti presenti', 'Buongiorno']);
+  });
+
+  test('a figura é role=img com a glossa como nome acessível', () => {
+    const f = renderFunzioni(AULA);
+    const fig = f.querySelector('.funzione__figura');
+    assert.equal(fig.getAttribute('role'), 'img');
+    assert.equal(fig.getAttribute('aria-label'), 'Quando você cumprimenta');
+    assert.equal(fig.textContent, '👋');
+  });
+
+  test('referência para chunk inexistente não quebra a página', () => {
+    // O validador reprova isto; o render não pode explodir por causa disso.
+    const f = renderFunzioni({
+      funzioni: [{ id: 'f1', quando: 'X', chunks: ['fantasma'] }],
+      chunks: [],
+    });
+    assert.equal(f.querySelectorAll('.funzione__riga').length, 0);
+  });
+
+  /* --- A porta do caderno ------------------------------------------------
+     O botão nasce VISÍVEL aqui, ao contrário do irmão no verso do flashcard.
+     Era o laço fechado: o único jeito de guardar uma forma estava escondido
+     atrás do «Mostrar» de uma carta, então só achava o caderno quem já o
+     tinha usado. */
+
+  test('sem `notebook`, nenhuma linha ganha botão — compatível para trás', () => {
+    const f = renderFunzioni(AULA);
+    assert.equal(f.querySelectorAll('.funzione__caderno').length, 0);
+  });
+
+  test('com `notebook`, cada linha ganha um ＋ caderno já visível', () => {
+    const f = renderFunzioni(AULA, 'pt', { has: () => false, toggle: () => true });
+    const bts = f.querySelectorAll('.funzione__caderno');
+    assert.equal(bts.length, 3, 'um por linha, inclusive o chunk repetido');
+    assert.equal(bts[0].hasAttribute('hidden'), false, 'visível de saída, sem virar carta');
+    assert.equal(bts[0].textContent, '＋ caderno');
+    assert.equal(bts[0].getAttribute('aria-pressed'), 'false');
+  });
+
+  test('o que já está no caderno nasce marcado', () => {
+    const f = renderFunzioni(AULA, 'pt', { has: (id) => id === 'c1', toggle: () => true });
+    const bts = f.querySelectorAll('.funzione__caderno');
+    assert.equal(bts[0].getAttribute('aria-pressed'), 'true');
+    assert.equal(bts[0].textContent, '✓ no caderno');
+    assert.equal(bts[1].getAttribute('aria-pressed'), 'false', 'c2 não está');
+  });
+
+  test('clicar entrega o chunk inteiro e alterna rótulo e aria-pressed', () => {
+    const guardados = [];
+    let dentro = false;
+    const f = renderFunzioni(AULA, 'pt', {
+      has: () => dentro,
+      toggle(chunk) { guardados.push(chunk); dentro = !dentro; return dentro; },
+    });
+    const btn = f.querySelector('.funzione__caderno');
+
+    btn.click();
+    assert.deepEqual(guardados[0], { id: 'c1', it: 'Buongiorno', pt: 'Bom dia' },
+      'o chunk vai inteiro — o caderno precisa do `it` e do `pt`');
+    assert.equal(btn.textContent, '✓ no caderno');
+    assert.equal(btn.getAttribute('aria-pressed'), 'true');
+
+    btn.click();
+    assert.equal(btn.textContent, '＋ caderno');
+    assert.equal(btn.getAttribute('aria-pressed'), 'false');
+  });
+
+  test('render.js não fala com o store: só usa o que recebe por parâmetro', () => {
+    // `notebook` sem os métodos não pode explodir — é a mesma tolerância que
+    // o flashcard tem com `ctx.notebook?.toggle?.()`.
+    const f = renderFunzioni(AULA, 'pt', {});
+    const btn = f.querySelector('.funzione__caderno');
+    assert.equal(btn.getAttribute('aria-pressed'), 'false');
+    btn.click();
+    assert.equal(btn.getAttribute('aria-pressed'), 'false');
   });
 });
 

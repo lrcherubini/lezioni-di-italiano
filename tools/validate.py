@@ -39,7 +39,17 @@ CONTENT = ROOT / 'content'
 
 # Arquivos de content/ que NÃO são aula. Ficam de fora das checagens de
 # schema de aula e da conferência contra o manifest.
-NAO_LEZIONE = {'manifest.json', 'lessico.json'}
+# Arquivos de content/ que NÃO são aula. O conjunto governa cinco coisas de
+# uma vez: pular `check_lesson`, ficar fora da colheita do léxico, ficar fora
+# da checagem de escopo, não exigir entrada no manifest, e não entrar na
+# contagem de aulas.
+#
+# `frasi.json` está aqui de propósito, e a razão do léxico é a que importa:
+# ele existe para a checagem do i+1 dos diálogos, e as frases de sobrevivência
+# são `fixed` decoradas inteiras, não vocabulário ensinado. Se entrassem, um
+# diálogo poderia se autoautorizar a usá-las. Ele tem checagem própria em
+# `check_frasi`.
+NAO_LEZIONE = {'manifest.json', 'lessico.json', 'frasi.json'}
 
 # Espelham o que está documentado no CLAUDE.md. Acrescentar valor aqui
 # exige acrescentar no CLAUDE.md também — é de propósito que dê trabalho.
@@ -49,7 +59,7 @@ VALID_CHUNK_TYPE = {'fixed', 'semiFixed', 'collocation', 'word'}
 # js/exercises/flashcard.js. `semiFixed` fica de fora: tem lacuna por
 # definição («Io sono ___») e não tem verso — é matéria do slot-frame.
 TIPI_CARTA = {'word', 'collocation', 'fixed'}
-VALID_BLOCK = {'lista', 'tabella', 'contrasto', 'paradigma', 'nota'}
+VALID_BLOCK = {'lista', 'tabella', 'contrasto', 'paradigma', 'scambio', 'nota'}
 VALID_TONO = {'info', 'attenzione', 'eccezione'}
 # Língua da prosa da aula. O curso caminha de 'pt' para 'it' — ver CLAUDE.md.
 # Ausente = 'pt', para que toda aula escrita antes do mecanismo continue válida.
@@ -58,7 +68,11 @@ MODI = ('pt', 'misto', 'it')
 REGISTERED_TYPES = {
     'gap-audio', 'qa-transcribe', 'dialogue', 'paradigm-fill',
     'scelta', 'riordino', 'abbinamento', 'slot-frame', 'dictogloss',
+    'traduzione', 'trasformazione', 'correzione',
 }
+# Alvos de `trasformazione`. ESPELHA o Map `VERSI` em
+# js/exercises/trasformazione.js — valor fora daqui renderiza sem glosa.
+VALID_VERSO = {'affermativa', 'negativa', 'interrogativa'}
 # `flashcard` NÃO entra aqui de propósito: o baralho é derivado dos chunks
 # por flashcardDeck(), nunca escrito em `esercizi`. Escrever um à mão
 # duplicaria os ids e o conteggio contaria duas vezes.
@@ -72,10 +86,21 @@ SUBITEM_FIELD = {
     'riordino': 'frasi',
     'abbinamento': 'coppie',
     'slot-frame': 'giri',
+    'traduzione': 'frasi',
+    'trasformazione': 'frasi',
+    'correzione': 'frasi',
 }
 
 # Mínimos por aula, conforme o passo 7 da checklist.
 MINIMUMS = {'gap-audio': 2, 'qa-transcribe': 1}
+
+# Âncoras de etapa que renderLesson() emite. ESPELHA o array `stages` em
+# js/app.js — a ordem aqui não importa (é um conjunto), a existência sim:
+# um item de `header` pode apontar para uma etapa, não só para uma seção.
+STAGE_ANCHORS = {
+    'riscaldamento', 'lessico', 'ascolto', 'studio',
+    'esercizi', 'produzione', 'bilancio',
+}
 
 errors: list[str] = []
 warnings: list[str] = []
@@ -248,6 +273,128 @@ def check_figura(quem: str, fig) -> None:
             f'não pode virar texto, senão entrega a resposta')
 
 
+def check_header(name: str, d: dict) -> None:
+    """O cabeçalho de 3 colunas é o sumário da aula, e cada item pode virar
+    atalho para o ponto da página.
+
+    O item é string OU {it, sezione} — o mesmo idioma da célula de tabella,
+    e pela mesma razão: string é o caso comum, o objeto marca a exceção. Sem
+    `sezione` o item continua sendo texto, como sempre foi.
+
+    `sezione` que aponta para o vazio é ERRO: o link continuaria clicável e
+    simplesmente não rolaria, que é o defeito que ninguém percebe.
+    """
+    header = d.get('header') or {}
+    alvos = {s.get('id') for s in d.get('sections', [])} | STAGE_ANCHORS
+
+    for coluna, itens in header.items():
+        for i, raw in enumerate(itens or []):
+            quem = f'{name} header.{coluna}[{i}]'
+            if isinstance(raw, str):
+                continue
+            if not isinstance(raw, dict):
+                err(f'{quem}: item precisa ser string ou objeto {{it, sezione}}')
+                continue
+            if not raw.get('it'):
+                err(f'{quem}: objeto de header sem «it»')
+            alvo = raw.get('sezione')
+            if alvo is None:
+                warn(f'{quem}: objeto sem «sezione» — use string simples, é a mesma coisa')
+            elif alvo not in alvos:
+                err(f'{quem}: sezione «{alvo}» não existe nesta aula '
+                    f'(use um id de section ou uma âncora de etapa)')
+
+
+def check_funzioni(name: str, d: dict, ids: Counter, modo: str = 'pt') -> None:
+    """`funzioni` — os chunks da aula agrupados por intenção comunicativa.
+
+    Agrupa POR REFERÊNCIA de id, nunca copiando texto: `chunks` continua
+    sendo o inventário lexical único da aula. Duplicar o texto aqui faria uma
+    edição no chunk deixar o agrupamento mentindo, e um id repetido
+    misturaria dois históricos de progresso.
+
+    Não conta em `count_items`: função é leitura organizada, e quem testa a
+    recuperação é o baralho logo abaixo dela.
+    """
+    funzioni = d.get('funzioni') or []
+    if not funzioni:
+        return
+
+    disponiveis = {c['id'] for c in d.get('chunks', [])}
+    agrupados: set[str] = set()
+
+    for f in funzioni:
+        fid = f.get('id', '?')
+        ids[fid] += 1
+
+        if not f.get('quando'):
+            err(f'{name} {fid}: funzione sem «quando» (o rótulo em italiano)')
+        if not f.get('gloss'):
+            warn(f'{name} {fid}: funzione sem gloss em português')
+        check_prose(name, f'{fid}.gloss', f.get('gloss'), modo)
+
+        if 'figura' in f:
+            check_figura(f'{name} {fid}', f['figura'])
+
+        refs = f.get('chunks') or []
+        if not refs:
+            err(f'{name} {fid}: funzione sem nenhum chunk — remova-a ou preencha')
+        for cid in refs:
+            if cid not in disponiveis:
+                err(f'{name} {fid}: referencia o chunk «{cid}», que não existe nesta aula')
+            else:
+                agrupados.add(cid)
+
+    # Só `fixed` entra nesta conta, e é de propósito. Frase fixa é por
+    # definição uma frase pronta com função comunicativa — «Buongiorno»,
+    # «Quanti anni hai?» —, então uma que ficou fora de todo grupo é
+    # provavelmente descuido. `word` e `collocation` são item lexical
+    # (`il cane`, `i Paesi Bassi`): não têm um «quando se usa», e cobrá-los
+    # aqui encheria a saída de ruído que se aprende a ignorar.
+    orfaos = [c['id'] for c in d.get('chunks', [])
+              if c.get('chunkType') == 'fixed' and c['id'] not in agrupados]
+    if orfaos:
+        amostra = ', '.join(orfaos[:6])
+        extra = f' (+{len(orfaos) - 6})' if len(orfaos) > 6 else ''
+        warn(f'{name}: {len(orfaos)} frase(s) fixa(s) fora de toda funzione — '
+             f'{amostra}{extra}. Ou entram num grupo, ou é caso legítimo.')
+
+
+def check_scambio(name: str, sid: str, block: dict) -> None:
+    """`scambio` — o microdiálogo de 2 a 4 linhas.
+
+    É leitura, não drill: bloco de seção, sem id, sem progresso, sem entrar
+    no `conteggio`. Preenche o degrau que faltava entre produzir uma frase
+    solta (`traduzione`) e o diálogo de 8 turnos.
+
+    Duas regras, e as duas herdadas do diálogo pelo mesmo motivo:
+    exatamente dois falantes, `A` e `B`, porque é o que `voiceFor()` sabe
+    diferenciar; e turnos alternados, porque dois turnos seguidos na mesma
+    voz leem como uma frase só e a troca deixa de ser troca.
+    """
+    battute = block.get('battute') or []
+
+    if not 2 <= len(battute) <= 4:
+        err(f'{name} {sid}: scambio com {len(battute)} turno(s) — o formato é de 2 a 4. '
+            f'Mais que isso é diálogo, e diálogo tem passadas.')
+
+    anterior = None
+    for i, b in enumerate(battute):
+        if not b.get('it'):
+            err(f'{name} {sid}: battuta[{i}] do scambio sem «it»')
+        if not b.get('pt'):
+            err(f'{name} {sid}: battuta[{i}] do scambio sem «pt» — é modelo para ler, '
+                f'não exercício de compreensão')
+        sp = b.get('speaker')
+        if sp not in {'A', 'B'}:
+            err(f'{name} {sid}: battuta[{i}] do scambio com speaker «{sp}» — só A e B, '
+                f'que é o que o TTS sabe diferenciar')
+        elif sp == anterior:
+            err(f'{name} {sid}: battuta[{i}] do scambio repete o falante «{sp}» — '
+                f'dois turnos na mesma voz leem como uma frase só')
+        anterior = sp
+
+
 def check_section(name: str, section: dict, ids: Counter, modo: str = 'pt') -> None:
     sid = section.get('id', '?')
     ids[sid] += 1
@@ -278,6 +425,8 @@ def check_section(name: str, section: dict, ids: Counter, modo: str = 'pt') -> N
             check_prose(name, f'{sid}.nota', block.get('testo'), modo)
         elif btype == 'contrasto' and len(block.get('gruppi', [])) < 2:
             err(f'{name} {sid}: contrasto precisa de 2+ grupos')
+        elif btype == 'scambio':
+            check_scambio(name, sid, block)
 
         # Toda nota de item é prosa e passa por prose() no render.
         for it in block.get('items', []):
@@ -335,6 +484,45 @@ def check_subitems(name: str, ex: dict, ids: Counter) -> list[dict]:
     return itens
 
 
+def check_dictogloss(name: str, ex: dict) -> None:
+    """Ouvir um texto curto e reconstruí-lo de memória.
+
+    Duas exigências, e as duas vêm do que o próprio módulo argumenta.
+
+    A do áudio é a mesma regra dura do `gap-audio`: o que se ouve tem que
+    ser o que se lê no fim. Divergir aqui é pior que num gap, porque o aluno
+    compara a reconstrução inteira contra o `testo` — um `tts` diferente
+    faria o diff acusar erro numa palavra que o áudio nunca disse.
+
+    A do pré-ensino é pedagógica. O aluno A1 falha em decodificação e
+    fronteira de palavra, não em vocabulário: travado numa forma que nunca
+    viu escrita, perde a frase inteira atrás dela, e o exercício passa a
+    medir sorte em vez de escuta.
+    """
+    testo = ex.get('testo', '')
+    if not testo:
+        err(f'{name} {ex["id"]}: dictogloss sem «testo» — não há o que reconstruir')
+        return
+
+    tts = (ex.get('audio') or {}).get('tts')
+    if tts and norm(tts) != norm(testo):
+        err(f'{name} {ex["id"]}: audio.tts não bate com «testo» — o aluno ouviria uma '
+            f'coisa e seria corrigido por outra')
+
+    if not ex.get('preinsegnamento'):
+        err(f'{name} {ex["id"]}: dictogloss sem «preinsegnamento» — sem as formas difíceis '
+            f'de antemão o exercício mede sorte, não escuta')
+    for p in ex.get('preinsegnamento', []):
+        if not p.get('it') or not p.get('pt'):
+            err(f'{name} {ex["id"]}: item de preinsegnamento precisa de «it» e «pt»')
+        elif norm(p['it']) not in norm(testo):
+            err(f'{name} {ex["id"]}: preinsegnamento «{p["it"]}» não aparece no texto — '
+                f'pré-ensinar o que não vai ser ouvido só gasta a atenção do aluno')
+
+    if not ex.get('pt'):
+        err(f'{name} {ex["id"]}: dictogloss sem «pt» — a análise final compara sem tradução')
+
+
 def check_scelta(name: str, ex: dict, ids: Counter) -> None:
     for q in check_subitems(name, ex, ids):
         qid = q.get('id', '?')
@@ -365,6 +553,97 @@ def check_riordino(name: str, ex: dict, ids: Counter) -> None:
             err(f'{name} {fid}: as peças não remontam a risposta\n'
                 f'      peças:    {sorted(pecas)}\n'
                 f'      risposta: {sorted(alvo)}')
+
+
+def check_traduzione(name: str, ex: dict, ids: Counter) -> None:
+    """PT → IT, frase inteira, sem andaime nenhum na tela.
+
+    O `pt` é o enunciado inteiro, não uma glosa de vocabulário: sem ele a
+    frase não tem estímulo e o exercício fica impossível.
+    """
+    for f in check_subitems(name, ex, ids):
+        fid = f.get('id', '?')
+        if not f.get('pt'):
+            err(f'{name} {fid}: traduzione sem «pt» — é o único estímulo que o aluno vê')
+        if not f.get('risposta'):
+            err(f'{name} {fid}: traduzione sem «risposta»')
+        # Lacuna aqui é engano de tipo: quem quer lacuna quer slot-frame ou
+        # gap-audio, e um `___` mostrado ao aluno seria pedido impossível.
+        if '___' in str(f.get('pt', '')) or '___' in str(f.get('risposta', '')):
+            err(f'{name} {fid}: traduzione com lacuna «___» — use slot-frame se o molde é o alvo')
+
+
+def check_trasformazione(name: str, ex: dict, ids: Counter) -> None:
+    """Afirmativa ⇄ negativa ⇄ interrogativa. ESPELHA o Map `VERSI` em
+    js/exercises/trasformazione.js — `verso` fora dele renderiza sem glosa."""
+    for f in check_subitems(name, ex, ids):
+        fid = f.get('id', '?')
+        if not f.get('partenza'):
+            err(f'{name} {fid}: trasformazione sem «partenza»')
+        if not f.get('risposta'):
+            err(f'{name} {fid}: trasformazione sem «risposta»')
+        verso = f.get('verso')
+        if verso not in VALID_VERSO:
+            err(f'{name} {fid}: verso «{verso}» inválido — use um de {sorted(VALID_VERSO)}')
+
+        partenza = str(f.get('partenza', '')).strip()
+        risposta = str(f.get('risposta', '')).strip()
+
+        # A pontuação final é conteúdo neste tipo, e só neste: em italiano a
+        # interrogativa não inverte nada, então `Tu sei italiano?` difere de
+        # `Tu sei italiano.` apenas pelo ponto. Por isso a comparação abaixo
+        # NÃO passa por norm(), que descartaria justamente o que distingue as
+        # duas — e por isso o módulo confere a pontuação à parte do
+        # checkAnswer. ESPELHA `pontuacaoBate` em
+        # js/exercises/trasformazione.js: mudou lá, mude aqui.
+        if verso == 'interrogativa' and not risposta.endswith('?'):
+            err(f'{name} {fid}: risposta interrogativa sem «?» — é ele que faz a pergunta em italiano')
+        if verso in ('affermativa', 'negativa') and risposta.endswith('?'):
+            err(f'{name} {fid}: risposta «{verso}» termina em «?»')
+
+        # Partida igual à chegada é linha que não transforma nada, e passa
+        # despercebida porque «responder» seria só copiar o que está na tela.
+        if partenza.casefold() == risposta.casefold():
+            err(f'{name} {fid}: partenza e risposta são a mesma frase — nada a transformar')
+
+
+def check_correzione(name: str, ex: dict, ids: Counter) -> None:
+    """Ler uma frase errada e reescrevê-la certa.
+
+    Treina MONITORAMENTO, que não é produção: quem escreve certo pode passar
+    direto por um erro num texto seu. Nenhum outro drill cobre isso — todos
+    partem de material correto.
+
+    A regra dura é a mesma ideia da pontuação em `trasformazione`: se
+    `sbagliata` e `risposta` forem iguais depois de normalizar, copiar a
+    frase vale ponto e o drill não exercita nada. Aqui é mais insidioso que
+    lá, porque as duas são frases inteiras e a diferença pode ser uma letra.
+
+    O que este checador NÃO consegue fazer, e vale saber: ele não julga se
+    `sbagliata` é de fato agramatical. Isso continua sendo responsabilidade
+    de quem escreve a aula, com a hierarquia de fontes do CLAUDE.md.
+    """
+    for f in check_subitems(name, ex, ids):
+        fid = f.get('id', '?')
+        sbagliata, risposta = f.get('sbagliata'), f.get('risposta')
+
+        if not sbagliata:
+            err(f'{name} {fid}: correzione sem «sbagliata» — não há o que corrigir')
+        if not risposta:
+            err(f'{name} {fid}: correzione sem «risposta»')
+        if not f.get('pt'):
+            err(f'{name} {fid}: correzione sem «pt» — sem o sentido pretendido o aluno '
+                f'não tem como saber qual das leituras possíveis é a certa')
+
+        if sbagliata and risposta and norm(sbagliata) == norm(risposta):
+            err(f'{name} {fid}: «sbagliata» e «risposta» são a mesma frase — copiar valeria '
+                f'ponto e o drill não exercitaria nada')
+
+        # Lacuna aqui é engano de tipo, como em `traduzione`: quem quer
+        # lacuna quer gap-audio ou slot-frame.
+        for campo in ('sbagliata', 'risposta'):
+            if '___' in str(f.get(campo) or ''):
+                err(f'{name} {fid}: «{campo}» com lacuna — correzione mostra a frase inteira')
 
 
 def check_abbinamento(name: str, ex: dict, ids: Counter) -> None:
@@ -455,6 +734,8 @@ def check_lesson(name: str, d: dict, ids: Counter) -> None:
         err(f'{name}: modo «{modo}» inválido — use um de {MODI}')
         modo = 'pt'
 
+    check_header(name, d)
+
     r = d.get('riscaldamento') or {}
     check_prose(name, 'riscaldamento.prompt', r.get('prompt'), modo)
     for i, p in enumerate(r.get('spiegazione', [])):
@@ -473,6 +754,9 @@ def check_lesson(name: str, d: dict, ids: Counter) -> None:
             err(f'{name} {chunk["id"]}: semiFixed sem slot «___»')
         if 'figura' in chunk:
             check_figura(f'{name} {chunk["id"]}', chunk['figura'])
+
+    # Depois dos chunks: as funções referenciam ids, e precisam vê-los prontos.
+    check_funzioni(name, d, ids, modo)
 
     types: Counter = Counter()
     for ex in d.get('esercizi', []):
@@ -493,6 +777,8 @@ def check_lesson(name: str, d: dict, ids: Counter) -> None:
             err(f'{name} {ex["id"]}: type «{etype}» não está no registry de js/exercises/index.js')
         if etype == 'gap-audio':
             check_gap_audio(name, ex)
+        elif etype == 'dictogloss':
+            check_dictogloss(name, ex)
         elif etype == 'paradigm-fill':
             check_paradigm_fill(name, ex, ids)
         elif etype == 'scelta':
@@ -503,6 +789,12 @@ def check_lesson(name: str, d: dict, ids: Counter) -> None:
             check_abbinamento(name, ex, ids)
         elif etype == 'slot-frame':
             check_slot_frame(name, ex, ids, modo)
+        elif etype == 'traduzione':
+            check_traduzione(name, ex, ids)
+        elif etype == 'trasformazione':
+            check_trasformazione(name, ex, ids)
+        elif etype == 'correzione':
+            check_correzione(name, ex, ids)
 
     if d.get('dialogo'):
         check_dialogo(name, d['dialogo'], ids)
@@ -598,9 +890,18 @@ def build_lessico(files: dict[str, dict]) -> dict:
         lesson = files[name]
         aula = lesson.get('id', '??')
 
+        # Item de header é string OU {it, sezione}. Ler só a string faria o
+        # léxico encolher em silêncio no dia em que o item virasse objeto —
+        # e a checagem de escopo passaria a aprovar diálogo fora de escopo.
         for coluna in (lesson.get('header') or {}).values():
-            for frase in coluna:
-                registra(frase, aula, 'header')
+            for item in coluna:
+                registra(item if isinstance(item, str) else item.get('it', ''), aula, 'header')
+
+        # `funzioni[].quando` é rótulo funcional em italiano, exibido com 🔊 —
+        # exatamente o caso de header.comunicazione, e colhido pela mesma razão.
+        # Os chunks agrupados já entram abaixo, por referência de id.
+        for f in lesson.get('funzioni', []):
+            registra(f.get('quando', ''), aula, 'funzione')
 
         for chunk in lesson.get('chunks', []):
             registra(chunk.get('it', ''), aula, 'chunk')
@@ -633,6 +934,15 @@ def build_lessico(files: dict[str, dict]) -> dict:
                     for row in block.get('righe', []):
                         for forma in row.get('forme', []):
                             registra(forma, aula, 'paradigma')
+
+                # `scambio` ENTRA na colheita, ao contrário de `dialogo`, e a
+                # diferença não é o formato — é o papel. O scambio é modelo
+                # que a aula exibe e ensina, como uma `lista`; o diálogo é o
+                # que a checagem de escopo confere. Se o diálogo entrasse,
+                # ele se autoautorizaria.
+                elif tipo == 'scambio':
+                    for b in block.get('battute', []):
+                        registra(b.get('it', ''), aula, 'scambio')
 
     return {'forme': dict(sorted(formas.items()))}
 
@@ -693,6 +1003,107 @@ def count_items(lesson: dict) -> int:
     n += sum(1 for c in lesson.get('chunks', []) if c.get('chunkType') in TIPI_CARTA)
 
     return n
+
+
+def check_frasi(data: dict, files: dict[str, dict]) -> None:
+    """`content/frasi.json` — as frases que atravessam todas as aulas.
+
+    Não é aula: não tem `numero`, não entra no manifest, não grava progresso
+    e não alimenta o léxico. O que ela tem em comum com uma aula é a dupla
+    `funzioni` + `chunks`, e é por isso que `renderFunzioni()` a monta sem
+    uma linha de mudança.
+
+    A checagem que justifica este arquivo existir é a do id reusado. Uma
+    frase que a Aula 0 já ensina aparece aqui com o MESMO id (`l00-c03`), e
+    não com um id novo: id é a chave do caderno, e dois ids para a mesma
+    frase fariam o aluno guardá-la duas vezes. O preço é o texto duplicado
+    no arquivo — então o texto é conferido contra a aula de origem, e o
+    build quebra se um dos dois for editado sozinho.
+    """
+    name = 'frasi.json'
+
+    for campo in ('titolo', 'gruppi', 'chunks'):
+        if not data.get(campo):
+            err(f'{name}: falta «{campo}»')
+    check_prose(name, 'intro', data.get('intro', ''))
+
+    # Índice das formas que as aulas já ensinam, para casar id reusado.
+    das_aule: dict[str, dict] = {}
+    for fname, lesson in files.items():
+        if fname in NAO_LEZIONE:
+            continue
+        for c in lesson.get('chunks', []):
+            das_aule[c['id']] = {'it': c.get('it'), 'pt': c.get('pt'), 'file': fname}
+
+    vistos: set[str] = set()
+    disponiveis: set[str] = set()
+    for c in data.get('chunks', []):
+        cid = c.get('id')
+        if not cid:
+            err(f'{name}: chunk sem id')
+            continue
+        if cid in vistos:
+            err(f'{name}: chunk «{cid}» duplicado dentro do arquivo')
+        vistos.add(cid)
+        disponiveis.add(cid)
+
+        if not c.get('it') or not c.get('pt'):
+            err(f'{name} {cid}: chunk precisa de «it» e «pt»')
+        if c.get('category') not in VALID_CATEGORY:
+            err(f'{name} {cid}: category «{c.get("category")}» fora dos valores permitidos')
+        if c.get('chunkType') not in VALID_CHUNK_TYPE:
+            err(f'{name} {cid}: chunkType «{c.get("chunkType")}» fora dos valores permitidos')
+        if 'figura' in c:
+            check_figura(f'{name} {cid}', c['figura'])
+
+        origem = das_aule.get(cid)
+        if origem:
+            # Id reusado: o texto TEM que ser o mesmo, senão a mesma frase
+            # apareceria diferente em dois lugares do site.
+            for campo in ('it', 'pt'):
+                if c.get(campo) != origem[campo]:
+                    err(f'{name} {cid}: «{campo}» diverge de {origem["file"]} — '
+                        f'{c.get(campo)!r} contra {origem[campo]!r}. Id reusado tem que '
+                        f'carregar o mesmo texto; edite os dois ou use um id novo.')
+        elif not cid.startswith('fr-'):
+            err(f'{name} {cid}: id que não vem de aula nenhuma deve começar com «fr-», '
+                f'para não colidir com um id de aula futura')
+
+    for g in data.get('gruppi', []):
+        gid = g.get('id', '?')
+        if not g.get('titolo'):
+            err(f'{name} {gid}: grupo sem «titolo»')
+        if not g.get('funzioni'):
+            err(f'{name} {gid}: grupo sem «funzioni» — não mostraria nada')
+        # Mesma exigência de uma seção de aula: sem o porquê, é lista de frases.
+        if len(g.get('spiegazione') or []) < 1:
+            err(f'{name} {gid}: grupo sem «spiegazione»')
+        for i, p in enumerate(g.get('spiegazione') or []):
+            check_prose(name, f'{gid}.spiegazione[{i}]', p)
+
+        for f in g.get('funzioni', []):
+            fid = f.get('id', '?')
+            if fid in vistos:
+                err(f'{name}: id «{fid}» duplicado')
+            vistos.add(fid)
+            if not f.get('quando'):
+                err(f'{name} {fid}: funzione sem «quando»')
+            if not f.get('gloss'):
+                err(f'{name} {fid}: funzione sem «gloss»')
+            if 'figura' in f:
+                check_figura(f'{name} {fid}', f['figura'])
+            if not f.get('chunks'):
+                err(f'{name} {fid}: funzione sem chunks — não mostraria nada')
+            for cid in f.get('chunks', []):
+                if cid not in disponiveis:
+                    err(f'{name} {fid}: referencia chunk «{cid}», que não existe em frasi.json')
+
+    # Chunk declarado e nunca agrupado é chunk invisível: a página só desenha
+    # o que alguma funzione referencia.
+    agrupados = {cid for g in data.get('gruppi', []) for f in g.get('funzioni', [])
+                 for cid in f.get('chunks', [])}
+    for cid in sorted(disponiveis - agrupados):
+        err(f'{name} {cid}: chunk fora de toda funzione — não apareceria na página')
 
 
 def check_manifest(data: dict, files: dict[str, dict]) -> None:
@@ -798,6 +1209,9 @@ def main(argv: list[str] | None = None) -> int:
         check_lesson(name, data, ids)
 
     check_manifest(files['manifest.json'], files)
+
+    if 'frasi.json' in files:
+        check_frasi(files['frasi.json'], files)
 
     # Léxico cumulativo: dado derivado, conferido como invariante.
     lessico = build_lessico(files)

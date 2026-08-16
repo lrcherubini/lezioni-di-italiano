@@ -50,6 +50,16 @@ A referência inicial foi a metodologia da inFlux. A pesquisa mostrou que ela é
 
 A **progressão de tópicos A1** vem do padrão de facto do mercado (Nuovo Espresso 1), não da inFlux.
 
+### A ordem das etapas: contexto antes da regra
+
+A aula renderiza sempre na mesma ordem — *Riscaldamento → Lessico → Ascolto → Studio → Esercizi → Produzione → Bilancio* — e ela é fixa no código, não configurável por aula.
+
+A primeira versão punha **Studio antes de tudo**, herdando a organização dos slides do professor: eles são agrupados por tópico gramatical, que é uma ordem de referência, não de aprendizado. O efeito era o aluno ler a regra de `lo/gli` antes de jamais ter ouvido `lo spagnolo` — exatamente o contrário da abordagem comunicativa que este documento declara como fundamentação.
+
+A ordem atual segue o ciclo do método lexical: **o bloco pronto primeiro** (`Lessico`, com os chunks agrupados por intenção comunicativa), **o bloco em uso** (`Ascolto`), **e só então a estrutura que o explica** (`Studio`). É onde `spiegazione` rende mais: explicar uma forma que o aluno já encontrou é ancorar; explicá-la antes é pedir para decorar.
+
+A ordem ser única, e não declarada por aula, é decisão: uma aula que parecesse pedir outra ordem seria conteúdo colocado no bloco errado, e um campo de ordenação só esconderia isso.
+
 ### Modos de falha documentados, contra os quais o produto foi desenhado
 
 | Falha observada em produtos comparáveis | Resposta do produto |
@@ -114,8 +124,55 @@ Como aluno, quero ouvir uma pergunta e sua resposta e transcrever apenas a respo
 | `abbinamento` | Associar pergunta e resposta | Compito «Abbina domande e risposte» |
 | `flashcard` | Baralho do léxico da aula, uma carta por vez, com autoavaliação; a frente pode ser um **emoji/SVG** em vez do português | Lexical Notebook; efeito de superioridade da imagem |
 | `dictogloss` | 4 etapas: pré-ensino → 3 escutas → reconstrução → análise contra o original | Dictogloss |
+| `trasformazione` | Converter o modo da frase: afirmativa ⇄ negativa ⇄ interrogativa | Conversão de modo; tabela «afirmativa/negativa/interrogativa» dos materiais comunicativos |
+| `traduzione` | PT → IT, frase inteira, sem nenhum andaime; feedback por diff de palavra | Tradução bidirecional das *consolidation exercises* |
+| `correzione` | Ler uma frase errada e reescrevê-la certa | *Find the mistakes and rewrite* |
 
-Também já entregues: **Ripasso** adaptativo atravessando aulas (`ripasso.html`), card de Ripasso na home, **Lexical Notebook** com UI própria (`notebook.html`) e **gravação de voz** na etapa de Produzione.
+**Os drills de volume formam uma escada, e ela foi desenhada como escada.** Cada degrau tira uma muleta da tela: `abbinamento` dá os dois lados · `scelta` dá as alternativas · `riordino` dá as palavras · `slot-frame` dá o molde · `trasformazione` dá a frase e pede uma operação · `traduzione` não dá nada além do sentido.
+
+Os dois últimos foram os que faltaram por mais tempo, e a falta tinha consequência: sem eles a aula terminava em reconhecimento, e produzir uma frase inteira do zero — o que a conversa exige — só acontecia na etapa de Produzione, que não tem correção.
+
+**`correzione` não é um degrau da escada: é um eixo perpendicular a ela.** Os seis degraus partem todos de material correto e medem *produção*. Este parte de material errado e mede **monitoramento** — a atenção com que se relê o que se acabou de escrever. Quem produz `Lui legge il giornale` sem hesitar passa direto por `Lui legge i giornale` num texto seu, porque são duas habilidades e o site só treinava uma.
+
+Ele traz consigo a **única exceção** ao invariante «italiano exibido ⇒ 🔊 ⇒ entra no léxico»: o campo `sbagliata` não ganha áudio e não alimenta `lessico.json`. Ver DESIGN §1.3 e o cabeçalho de `js/exercises/correzione.js`.
+
+### Blocos de conteúdo
+
+Além dos exercícios, uma seção monta blocos de leitura: `lista`, `tabella`, `contrasto`, `paradigma`, `nota` e **`scambio`**.
+
+`scambio` é o microdiálogo de 2 a 4 turnos, e existe para o degrau que faltava: entre produzir *uma frase* (`traduzione`) e o diálogo de 8 turnos não havia nada, e o que falta ali é ver o bloco vivendo na menor conversa possível. É **leitura, não drill** — sem id, sem progresso, sem entrar no `conteggio` —, pela mesma distinção que separa `funzioni` do baralho.
+
+Ele **entra** em `lessico.json`, ao contrário do `dialogo`. A diferença não é o formato — os dois são turnos com falante — é o papel: o scambio é modelo que a aula exibe e ensina, como uma `lista`; o diálogo é o que a checagem de escopo confere, e entrando ele se autoautorizaria.
+
+Também já entregues: **Ripasso** adaptativo atravessando aulas (`ripasso.html`), card de Ripasso na home, **Lexical Notebook** com UI própria (`notebook.html`), **gravação de voz** na etapa de Produzione, as **Frasi utili** (§7.1) e a página **Frasi per la lezione** (§7.2).
+
+### 7.1 Frasi utili — o chunk agrupado por intenção
+
+Os chunks existiam desde a Aula 1 e só apareciam de uma forma: cartas embaralhadas no baralho. Isso testa recuperação, mas não responde a pergunta que o aluno faz quando vai falar, que não é «o que quer dizer *piacere*» e sim **«o que eu digo quando conheço alguém»**.
+
+`funzioni` agrupa os chunks por intenção comunicativa — *Quando ti presenti*, *Quando non capisci*, *Quando sei gentile* — e renderiza no alto da etapa Lessico, antes do baralho. Primeiro se lê organizado, depois se testa embaralhado.
+
+Duas decisões sustentam isso:
+
+- **Agrupa por referência de id, nunca copiando texto.** `chunks` continua sendo o inventário lexical único: texto duplicado ficaria mentindo depois da primeira edição, e id duplicado misturaria dois históricos de progresso.
+- **Não grava progresso.** Função é leitura organizada; quem mede a recuperação é o baralho logo abaixo. Por isso `funzioni` não entra no `conteggio` — e por isso acrescentá-la a uma aula antiga não mexeu na barra de progresso de ninguém.
+
+### 7.2 Frasi per la lezione — o que atravessa todas as aulas
+
+`frasi.html` é a terceira página fora da sequência, depois de Ripasso e Caderno, e existe pelo mesmo motivo das outras duas: **o que atravessa todas as aulas não cabe dentro de nenhuma.** As frases de sobrevivência viviam na Aula 0 — e ninguém volta à Aula 0 no meio da Aula 12 para achar «pode repetir?».
+
+A divisão em dois grupos é o conteúdo inteiro:
+
+| Grupo | O aluno | Por que separado |
+|---|---|---|
+| **Tu dici** | **produz** | Decora e diz. Travar sem ter como pedir socorro é o que faz a conversa parar. |
+| **L'insegnante dice** | só **reconhece** | Chegam faladas, rápido e sem aviso, e é aí que travam. |
+
+A metade receptiva é a parte que **o site faz melhor que um livro**: um livro imprime `Ripeti dopo di me` e manda ouvir um CD; aqui o 🔊 já está em cada linha, a 0.7 e a 1.0. Reconhecer a instrução na velocidade real é habilidade separada de saber o que ela significa, e é a que decide se a aula anda ou para para explicar.
+
+Reusa `funzioni` + `chunks`, então `renderFunzioni()` a monta sem uma linha de mudança. **Não grava progresso e fica fora do Ripasso**, pela mesma decisão do §7.1. O que ela tem é o **＋ caderno** — leia organizado aqui, guarde o que travou, escreva a sua frase lá.
+
+Duas regras que o validador sustenta: frase que uma aula já ensina aparece com o **mesmo id** (id é a chave do caderno, e dois ids para a mesma frase a guardariam duas vezes), com o texto conferido contra a aula de origem; e `frasi.json` fica **fora de `lessico.json`**, senão um diálogo se autoautorizaria a usar as frases de sobrevivência.
 
 ### Ainda não implementado
 
@@ -127,7 +184,7 @@ Também já entregues: **Ripasso** adaptativo atravessando aulas (`ripasso.html`
 
 | # | Requisito | Como é atendido |
 |---|---|---|
-| NF1 | **Zero build, zero dependência** | HTML + CSS + JS vanilla, ES modules, JSON via `fetch`. Deploy = `git push`. |
+| NF1 | **Zero build, zero dependência** | HTML + CSS + JS vanilla, ES modules, JSON via `fetch`. Deploy = `git push`. Vale para o ferramental: validador em stdlib do Python, suíte no `node --test` embutido, e o harness de navegador falando CDP direto pelo `WebSocket` do Node — sem Playwright e sem `package.json`. |
 | NF2 | **Loop de autoria mecânico** | Aula nova toca só `content/`; `CLAUDE.md` traz a checklist; `tools/validate.py` verifica. |
 | NF3 | **Sem servidor, sem rastreamento** | Nada sai do navegador. Sem cookies, sem analytics, sem fonte ou script externo. |
 | NF4 | **Privacidade** | Nenhum arquivo versionado cita nome de pessoa ou plataforma. `presentations/` e `ERRATA.md` gitignorados. |
@@ -140,19 +197,29 @@ Também já entregues: **Ripasso** adaptativo atravessando aulas (`ripasso.html`
 
 ## 9. Critérios de aceite (verificáveis)
 
+Onde diz **[nav]**, o critério deixou de depender de alguém abrir o navegador e
+conferir: virou asserção em `tests/browser/`, num Chrome de verdade. Era a
+metade da lista que o DOM da suíte não alcançava — e a que envelhecia calada,
+como o parágrafo do DESIGN §1.6 que ficou anos afirmando «10 seções e 15 cards»
+para uma aula que tem 11 e 29.
+
 1. `python tools/validate.py` sai com 0.
-2. Aula 1 renderiza 10 seções, 6 etapas e 15 cards de exercício, sem erro no console.
+2. Aula 1 renderiza 11 seções e as 7 etapas, **sem erro no console**. A trilha sticky lista as etapas **na mesma ordem** em que elas aparecem na página. **[nav]**
 3. Todos os chips aparecem com as cores do deck.
 4. Resposta sem acento em item com acento → correto **com nota** exibindo a forma acentuada.
 5. `un amico` **não** é aceito onde se espera `un'amica`.
-6. Passada 1 do diálogo: input desabilitado e transcrição oculta; passadas 2 e 3 travadas até liberar.
-7. Verificar um exercício grava em `localStorage` e o progresso sobrevive a F5.
+6. Passada 1 do diálogo: input desabilitado e transcrição oculta; passadas 2 e 3 travadas até liberar. **[nav]**
+7. Verificar um exercício grava em `localStorage` e o progresso sobrevive a F5 — no dado salvo e na barra da home, **não** na borda do card, que é estado de sessão. **[nav]**
 8. Paradigma grava progresso **por célula** (`l01-e13-r1-c1`), não por exercício.
-9. Sem voz `it-IT`: banner aparece, página segue completa e interativa.
+9. Sem voz `it-IT`: banner aparece, página segue completa e interativa. **[nav]**
 10. Aula inexistente (`?l=99`) mostra erro explicativo, não tela branca.
 11. Nenhum nome de pessoa ou plataforma em arquivo versionado.
-12. O verso do flashcard **não** aparece antes de «Mostrar», e só uma carta fica visível por vez.
+12. O verso do flashcard **não** aparece antes de «Mostrar», e só uma carta fica visível por vez. **[nav]**
 13. «🗑 Apagar tudo» pede confirmação; cancelar preserva o progresso, confirmar zera progresso, agenda e caderno.
+14. Nenhuma das cinco páginas rola na horizontal a 360px de largura (NF7). **[nav]**
+15. Todo elemento marcado `[hidden]` está de fato com `display: none` (NF6/NF7). **[nav]**
+16. O tema segue o sistema **e** o toggle vence nos dois sentidos (NF8). **[nav]**
+17. Na impressão, trilha, player e botões somem; a transcrição oculta é revelada. **[nav]**
 
 ## 10. Roadmap
 
@@ -160,7 +227,26 @@ Também já entregues: **Ripasso** adaptativo atravessando aulas (`ripasso.html`
 
 **Fase 2 — feita.** `slot-frame`, `scelta`, `riordino`, `abbinamento`, `flashcard`, `dictogloss`; UI do Lexical Notebook; Ripasso adaptativo na home; gravação de voz na Produzione; mecanismo de modo de língua (§12).
 
-**Fase 3 — se fizer falta.** `minimal-pair` (exige refatorar a seleção de voz); persistir gravações em IndexedDB para comparar evolução ao longo das semanas — **e isso exige opt-in explícito na mesma mudança**, porque gravação salva deixa de ser armazenamento necessário e vira dado guardado por escolha (ver `js/record.js` e CLAUDE.md); MP3 pré-gerados por item (o schema já tem `audio.src`) caso o TTS se mostre insuficiente; busca em todo o conteúdo.
+**Fase 2.1 — feita.** Reordenação das etapas para *contexto antes da regra* (§5); **Frasi utili** (§7.1); `trasformazione` e `traduzione`, que fecham a escada de produção; cabeçalho de objetivos virou **sumário navegável** — cada item com `sezione` rola até o ponto da aula.
+
+**Fase 2.2 — feita.** O caderno léxico estava inteiro e passando nos testes, e mesmo assim invisível: era um laço fechado, porque só se chegava a ele pelo card da home — que só aparece com o caderno cheio — e o único botão capaz de enchê-lo nascia escondido atrás do «Mostrar» de uma carta. Ganhou **＋ caderno em toda linha das Frasi utili** e link na etapa Lessico. Junto vieram **`frasi.html`** (§7.2); o primeiro **`dictogloss`** autorado, que fez o tipo deixar de ser código morto e expôs que faltava sua checagem no validador; o bloco **`scambio`**; e o drill **`correzione`**.
+
+**Fase 2.3 — feita.** Suíte de navegador (`tools/browser.mjs` + `tests/browser/`),
+que fecha o ponto cego admitido desde sempre: o DOM da suíte nunca interpretou
+CSS, e `tests/css.test.mjs` só conseguia aproximar o invariante lendo a folha
+como texto. São 50 asserções num Chrome de verdade — `[hidden]` realmente
+invisível, nenhuma rolagem horizontal a 360px, tema e impressão, os três degraus
+de voz, e o caminho do aluno de ponta a ponta. Sete critérios do §9 deixaram de
+depender de conferência manual, e a conferência que ela forçou já rendeu: o
+DESIGN §1.6 afirmava «10 seções e 15 cards» para uma Aula 1 que tem 11 e 29.
+
+**Fase 2.4 — feita em parte.** Cartão de link (`description` + Open Graph) nas
+cinco páginas, travado por `tests/meta.test.mjs`. O resto do caminho para o site
+ser achável está em **§13**, e um item de lá é sensível a tempo: a URL por aula
+precisa existir **antes** de qualquer indexação, porque o GitHub Pages não faz
+redirecionamento.
+
+**Fase 3 — se fizer falta.** `minimal-pair` (exige refatorar a seleção de voz); persistir gravações em IndexedDB para comparar evolução ao longo das semanas — **e isso exige opt-in explícito na mesma mudança**, porque gravação salva deixa de ser armazenamento necessário e vira dado guardado por escolha (ver `js/record.js` e CLAUDE.md); MP3 pré-gerados por item (o schema já tem `audio.src`) caso o TTS se mostre insuficiente; busca em todo o conteúdo (com 4 aulas e ~500 formas, ainda resolve um problema que não existe); pôr `frasi.json` no manifest, se as frases de sobrevivência pedirem drill e revisão espaçada além da leitura.
 
 ## 11. Decisões de arquitetura e o motivo
 
@@ -173,6 +259,46 @@ Também já entregues: **Ripasso** adaptativo atravessando aulas (`ripasso.html`
 | **`category` e `chunkType` separados** | Um campo só | Eixos diferentes: um governa cor e navegação, o outro governa elegibilidade de drill. Fundir quebraria a geração de exercício. |
 | **Teto de velocidade em 1.0** | Deixar 1.5× | Para A1, acelerar derruba a compreensão. Restrição pedagógica deliberada. |
 | **Acento vira "correto com nota"** | Reprovar | Quem escreve `perche` acertou a palavra. Reprovar ensina menos que apontar o acento. |
+| **Harness de navegador em CDP puro** | Playwright | Ver abaixo. |
+
+### Por que não Playwright
+
+A pergunta é legítima — uma ferramenta só de teste, que nunca toca o que é
+servido, não ameaça o «durar dois anos sem manutenção» do jeito que uma
+dependência de runtime ameaçaria. Ela foi considerada e recusada por medida,
+não por princípio.
+
+O Node 22+ traz `WebSocket` global e o Chrome fala **CDP** — o mesmo protocolo
+que o Playwright usa por baixo. O driver inteiro coube em `tools/browser.mjs`,
+stdlib pura, e entrega 52 asserções em ~13s. O que o Playwright somaria a isso:
+
+- **Firefox e WebKit**, que o CDP não alcança. É o único ganho insubstituível —
+  e vale **zero enquanto a audiência for quem hoje ela é**: o autor estuda em
+  Chrome/Edge no desktop e Chrome no Android, os três Chromium, exatamente o
+  motor já coberto. **Esta é uma premissa com prazo** — ver abaixo.
+- **Regressão visual.** Não é exclusividade dele: `Page.captureScreenshot` é
+  comando CDP. Fica como extensão possível do harness atual, se a Parte 2 do
+  DESIGN passar a merecer verificação.
+- Conveniência (auto-wait rico, seletor por texto, trace viewer). Real, mas
+  `page.esperar()` cobre o essencial.
+
+E uma ressalva que derruba o argumento aparentemente mais forte: **o WebKit do
+Playwright não é o Safari.** É um build sem a pilha da Apple, e a
+`speechSynthesis` dele não é a do iOS — logo ele **não** testaria o `unlock()`
+por gesto que o `js/speech.js` implementa justamente para o iOS Safari. O caso
+que mais pediria WebKit é o que o WebKit do Playwright não cobre.
+
+**O que reabre a decisão, e já está em movimento:** a audiência deixar de ser
+uma pessoa. O site já foi compartilhado fora, e o §2 prevê torná-lo achável por
+busca. No dia em que qualquer pessoa abrir a URL, «o motor que eu uso» deixa de
+ser um argumento — e para material de estudo consumido no celular, **iOS Safari
+é fatia grande, não borda**.
+
+E aí a resposta honesta não é «instale o Playwright», porque o WebKit dele não
+resolve o caso do iOS (acima). É que **não existe forma automatizada de testar
+o caminho do iOS**: ele precisa de aparelho de verdade, uma vez, à mão. O que o
+Playwright resolveria de fato nesse cenário é **Firefox** — e essa parte sim
+passaria a valer o `package.json`.
 
 
 ## 12. Progressão de língua
@@ -192,3 +318,77 @@ Três decisões que sustentam isto:
 - **A chrome da interface não acompanha o modo.** É texto funcional, não conteúdo de estudo; `index.html` e `ripasso.html` não têm modo (o Ripasso mistura aulas por construção); e a chrome já é deliberadamente bilíngue — rótulos pedagógicos em italiano (`Riscaldamento`, `Esatto!`, `Modello`), mecânicos em português.
 
 **Não-objetivo:** TTS em português. O português aqui é lido, nunca ouvido, e é a L1 do aluno. `<pt>` nunca ganha botão de áudio — uma voz italiana monolíngue leria português com fonologia italiana, e uma multilíngue trocaria de idioma por detecção de conteúdo.
+
+## 13. Descoberta: de material pessoal a página pública
+
+O §2 descrevia **um** usuário, e por muito tempo isso foi literal. Deixou de
+ser: o site já foi compartilhado fora, e há a intenção de torná-lo achável por
+busca — **sem fins comerciais**, para que quem procura explicação de italiano A1
+em português encontre uma.
+
+Isso não muda o produto. Muda três premissas que estavam escondidas em decisões
+já tomadas, e é para não perdê-las de vista que esta seção existe.
+
+### 13.1 O que já foi feito
+
+**Cartão de link nas cinco páginas.** `description` e Open Graph em todas — antes
+existiam só no `index.html`, e colar o endereço num mensageiro rendia um
+retângulo vazio. O sintoma nunca aparecia no site, só na conversa de quem
+recebeu, e por isso passou despercebido até alguém compartilhar de fato.
+`tests/meta.test.mjs` trava isso: página nova sem cartão reprova.
+
+### 13.2 O que falta, em ordem — e o que é sensível a tempo
+
+**1. Uma URL por aula. É o único item com prazo.**
+
+Hoje toda aula mora em `lezione.html?l=NN`: um documento só para todas, cujo
+`<title>` correto só existe **depois** que o JS roda e o `fetch` volta — o que a
+maioria dos scrapers de link não faz, e o que um buscador faz tarde e mal.
+
+É sensível a tempo porque **URL indexada não se troca de graça**, e o GitHub
+Pages não emite 301. Mudar antes de publicar custa pouco; depois, custa links
+mortos.
+
+A saída que **não** quebra o NF1 já é o padrão da casa: `conteggio` e
+`lessico.json` são derivados, gravados por `tools/validate.py --fix` e
+**conferidos no repositório** — o CLAUDE.md é explícito que isso não é passo de
+build. Uma casca HTML por aula cabe no mesmo molde, e o `manifest.json` já tem
+tudo que ela precisa (`titolo`, `gloss`, `temi`). O invariante «acrescentar aula
+mexe só em `content/`» continua de pé, porque quem escreve a casca é a
+ferramenta, não a pessoa.
+
+**2. `robots.txt` e `sitemap.xml`.** Triviais, e o sitemap fica quase de graça
+depois do item 1 — é uma varredura do manifest.
+
+**3. `canonical` e `og:url`.** Exigem **URL absoluta**, e é o único insumo que
+falta: o endereço padrão do GitHub Pages embute o handle do dono do
+repositório, e o invariante 2 proíbe nome de pessoa em arquivo versionado. Com
+domínio próprio, ou com a decisão explícita de que o handle pode entrar, o
+bloqueio some. Até lá as tags ficam de fora — e `tests/meta.test.mjs` guarda
+que ninguém as acrescente por distração.
+
+**4. `og:image`.** Fica sem, por ora, e a razão é a mesma do resto do projeto:
+os mensageiros não aceitam SVG, então serviria só formato raster, e binário em
+repositório público exige origem e licença rastreadas. Um cartão sem imagem
+ainda mostra título, descrição e domínio — legível, só menos vistoso.
+
+**5. Dados estruturados (JSON-LD).** `Course` ou `LearningResource` ajudariam a
+descrever o que a página é. Barato, mas só rende depois do item 1: sem URL por
+aula não há o que descrever individualmente.
+
+### 13.3 O que a audiência maior muda fora do SEO
+
+- **Cobertura de navegador.** Ver §11: «só Chromium» era verdade sobre uma
+  pessoa. Para estudo consumido no celular, iOS Safari é fatia grande, e o
+  caminho do iOS não tem teste automatizado possível — precisa de aparelho, uma
+  vez, à mão.
+- **A licença não casa com a intenção.** O `README` põe **código e conteúdo** sob
+  MIT, e o MIT permite uso comercial por terceiros, enquanto o §4 declara «sem
+  fins comerciais». Enquanto a audiência era uma pessoa, dava na mesma. Se a
+  intenção é que o conteúdo siga não-comercial, ele pediria licença própria
+  (CC BY-NC-SA, por exemplo), separada da do código. **Decisão em aberto.**
+- **O invariante 2.1 ganhou uma pessoa real.** «`content/` nunca fala em terceira
+  pessoa sobre a origem do material» deixou de ser higiene abstrata: quem
+  entregou o material pode abrir o site. Está sendo cumprido — o que mudou é o
+  custo de deixar de cumprir. E `presentations/` fora do versionamento passa a
+  proteger material de terceiro, não só a privacidade do autor.

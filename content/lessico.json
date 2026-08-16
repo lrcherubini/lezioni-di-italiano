@@ -40,6 +40,10 @@
       "aula": "01",
       "origine": "header"
     },
+    "adesso": {
+      "aula": "03",
+      "origine": "header"
+    },
     "aires": {
       "aula": "02",
       "origine": "tabella"
@@ -123,6 +127,10 @@
     "articoli": {
       "aula": "01",
       "origine": "header"
+    },
+    "articolo": {
+      "aula": "03",
+      "origine": "slot"
     },
     "ate": {
       "aula": "02",
@@ -260,6 +268,10 @@
       "aula": "01",
       "origine": "tabella"
     },
+    "capisci": {
+      "aula": "00",
+      "origine": "funzione"
+    },
     "cappa": {
       "aula": "00",
       "origine": "tabella"
@@ -267,6 +279,14 @@
     "carro": {
       "aula": "00",
       "origine": "lista"
+    },
+    "cartolina": {
+      "aula": "03",
+      "origine": "slot"
+    },
+    "cartoline": {
+      "aula": "03",
+      "origine": "tabella"
     },
     "casa": {
       "aula": "00",
@@ -312,6 +332,10 @@
       "aula": "00",
       "origine": "header"
     },
+    "chiedi": {
+      "aula": "00",
+      "origine": "funzione"
+    },
     "chiudere": {
       "aula": "00",
       "origine": "contrasto"
@@ -344,6 +368,22 @@
       "aula": "00",
       "origine": "tabella"
     },
+    "computer": {
+      "aula": "03",
+      "origine": "chunk"
+    },
+    "conferma": {
+      "aula": "03",
+      "origine": "header"
+    },
+    "confermi": {
+      "aula": "03",
+      "origine": "funzione"
+    },
+    "congedi": {
+      "aula": "01",
+      "origine": "funzione"
+    },
     "conoscerla": {
       "aula": "02",
       "origine": "chunk"
@@ -352,6 +392,10 @@
       "aula": "02",
       "origine": "chunk"
     },
+    "conosci": {
+      "aula": "02",
+      "origine": "funzione"
+    },
     "consonanti": {
       "aula": "00",
       "origine": "header"
@@ -359,6 +403,10 @@
     "cortesia": {
       "aula": "01",
       "origine": "chunk"
+    },
+    "cosa": {
+      "aula": "03",
+      "origine": "header"
     },
     "così": {
       "aula": "00",
@@ -400,9 +448,21 @@
       "aula": "01",
       "origine": "header"
     },
+    "diari": {
+      "aula": "03",
+      "origine": "tabella"
+    },
+    "diario": {
+      "aula": "03",
+      "origine": "slot"
+    },
     "dice": {
       "aula": "00",
-      "origine": "chunk"
+      "origine": "funzione"
+    },
+    "dici": {
+      "aula": "02",
+      "origine": "funzione"
     },
     "diciannove": {
       "aula": "01",
@@ -460,6 +520,10 @@
       "aula": "01",
       "origine": "slot"
     },
+    "dura": {
+      "aula": "03",
+      "origine": "header"
+    },
     "duro": {
       "aula": "00",
       "origine": "header"
@@ -476,9 +540,17 @@
       "aula": "00",
       "origine": "slot"
     },
+    "enciclopedie": {
+      "aula": "03",
+      "origine": "tabella"
+    },
     "enne": {
       "aula": "00",
       "origine": "slot"
+    },
+    "ere": {
+      "aula": "03",
+      "origine": "header"
     },
     "erre": {
       "aula": "00",
@@ -508,6 +580,10 @@
       "aula": "01",
       "origine": "header"
     },
+    "ete": {
+      "aula": "03",
+      "origine": "header"
+    },
     "f": {
       "aula": "00",
       "origine": "tabella"
@@ -515,6 +591,10 @@
     "fabbrica": {
       "aula": "00",
       "origine": "chunk"
+    },
+    "fai": {
+      "aula": "03",
+      "origine": "header"
     },
     "famiglia": {
       "aula": "00",
@@ -564,6 +644,14 @@
       "aula": "01",
       "origine": "chunk"
     },
+    "frase": {
+      "aula": "03",
+      "origine": "chunk"
+    },
+    "frasi": {
+      "aula": "03",
+      "origine": "slot"
+    },
     "g": {
       "aula": "00",
       "origine": "header"
@@ -606,6 +694,14 @@
     },
     "gi": {
       "aula": "00",
+      "origine": "tabella"
+    },
+    "giornale": {
+      "aula": "03",
+      "origine": "slot"
+    },
+    "giornali": {
+      "aula": "03",
       "origine": "tabella"
     },
     "giorno": {
@@ -788,6 +884,10 @@
       "aula": "01",
       "origine": "paradigma"
     },
+    "l'articolo": {
+      "aula": "03",
+      "origine": "slot"
+    },
     "l'austria": {
       "aula": "01",
       "origine": "lista"
@@ -799,6 +899,10 @@
     "l'austriaco": {
       "aula": "01",
       "origine": "paradigma"
+    },
+    "l'enciclopedia": {
+      "aula": "03",
+      "origine": "chunk"
     },
     "l'età": {
       "aula": "01",
@@ -848,6 +952,34 @@
       "aula": "00",
       "origine": "chunk"
     },
+    "legge": {
+      "aula": "03",
+      "origine": "chunk"
+    },
+    "leggere": {
+      "aula": "03",
+      "origine": "header"
+    },
+    "leggete": {
+      "aula": "03",
+      "origine": "tabella"
+    },
+    "leggi": {
+      "aula": "03",
+      "origine": "header"
+    },
+    "leggiamo": {
+      "aula": "03",
+      "origine": "tabella"
+    },
+    "leggo": {
+      "aula": "03",
+      "origine": "chunk"
+    },
+    "leggono": {
+      "aula": "03",
+      "origine": "tabella"
+    },
     "lentamente": {
       "aula": "00",
       "origine": "chunk"
@@ -858,6 +990,10 @@
     },
     "lettere": {
       "aula": "00",
+      "origine": "header"
+    },
+    "lettura": {
+      "aula": "03",
       "origine": "header"
     },
     "libri": {
@@ -952,6 +1088,10 @@
       "aula": "02",
       "origine": "chunk"
     },
+    "mail": {
+      "aula": "03",
+      "origine": "header"
+    },
     "mamma": {
       "aula": "00",
       "origine": "chunk"
@@ -963,6 +1103,18 @@
     "maschile": {
       "aula": "01",
       "origine": "paradigma"
+    },
+    "materiali": {
+      "aula": "03",
+      "origine": "header"
+    },
+    "mattina": {
+      "aula": "03",
+      "origine": "header"
+    },
+    "me": {
+      "aula": "03",
+      "origine": "chunk"
     },
     "mi": {
       "aula": "02",
@@ -1000,6 +1152,10 @@
       "aula": "00",
       "origine": "header"
     },
+    "notte": {
+      "aula": "03",
+      "origine": "header"
+    },
     "nove": {
       "aula": "01",
       "origine": "slot"
@@ -1012,6 +1168,10 @@
       "aula": "01",
       "origine": "header"
     },
+    "ogni": {
+      "aula": "03",
+      "origine": "chunk"
+    },
     "olandese": {
       "aula": "01",
       "origine": "slot"
@@ -1019,6 +1179,10 @@
     "olandesi": {
       "aula": "01",
       "origine": "slot"
+    },
+    "ono": {
+      "aula": "03",
+      "origine": "header"
     },
     "oro": {
       "aula": "00",
@@ -1039,6 +1203,14 @@
     "paesi": {
       "aula": "01",
       "origine": "header"
+    },
+    "paragrafi": {
+      "aula": "03",
+      "origine": "slot"
+    },
+    "paragrafo": {
+      "aula": "03",
+      "origine": "slot"
     },
     "parigi": {
       "aula": "02",
@@ -1062,7 +1234,7 @@
     },
     "parli": {
       "aula": "02",
-      "origine": "chunk"
+      "origine": "funzione"
     },
     "parliamo": {
       "aula": "02",
@@ -1071,6 +1243,22 @@
     "parlo": {
       "aula": "02",
       "origine": "header"
+    },
+    "parola": {
+      "aula": "03",
+      "origine": "header"
+    },
+    "particolari": {
+      "aula": "03",
+      "origine": "header"
+    },
+    "passare": {
+      "aula": "03",
+      "origine": "header"
+    },
+    "passi": {
+      "aula": "03",
+      "origine": "funzione"
     },
     "penna": {
       "aula": "01",
@@ -1118,6 +1306,10 @@
     },
     "plurale": {
       "aula": "01",
+      "origine": "header"
+    },
+    "plurali": {
+      "aula": "03",
       "origine": "header"
     },
     "po'": {
@@ -1172,6 +1364,10 @@
       "aula": "01",
       "origine": "header"
     },
+    "presenti": {
+      "aula": "01",
+      "origine": "funzione"
+    },
     "propria": {
       "aula": "01",
       "origine": "header"
@@ -1184,9 +1380,21 @@
       "aula": "00",
       "origine": "tabella"
     },
+    "qualcuno": {
+      "aula": "01",
+      "origine": "funzione"
+    },
     "quali": {
       "aula": "02",
       "origine": "header"
+    },
+    "quando": {
+      "aula": "00",
+      "origine": "funzione"
+    },
+    "quante": {
+      "aula": "03",
+      "origine": "lista"
     },
     "quanti": {
       "aula": "01",
@@ -1216,6 +1424,14 @@
       "aula": "00",
       "origine": "tabella"
     },
+    "racconti": {
+      "aula": "03",
+      "origine": "tabella"
+    },
+    "racconto": {
+      "aula": "03",
+      "origine": "slot"
+    },
     "ragazzo": {
       "aula": "00",
       "origine": "chunk"
@@ -1232,6 +1448,22 @@
       "aula": "02",
       "origine": "chunk"
     },
+    "riassunti": {
+      "aula": "03",
+      "origine": "slot"
+    },
+    "riassunto": {
+      "aula": "03",
+      "origine": "slot"
+    },
+    "ricerca": {
+      "aula": "03",
+      "origine": "chunk"
+    },
+    "ricerche": {
+      "aula": "03",
+      "origine": "slot"
+    },
     "ringraziare": {
       "aula": "01",
       "origine": "header"
@@ -1243,6 +1475,14 @@
     "rispondere": {
       "aula": "01",
       "origine": "header"
+    },
+    "rivista": {
+      "aula": "03",
+      "origine": "slot"
+    },
+    "riviste": {
+      "aula": "03",
+      "origine": "tabella"
     },
     "roma": {
       "aula": "00",
@@ -1308,6 +1548,30 @@
       "aula": "00",
       "origine": "header"
     },
+    "scrivere": {
+      "aula": "03",
+      "origine": "chunk"
+    },
+    "scrivete": {
+      "aula": "03",
+      "origine": "chunk"
+    },
+    "scrivi": {
+      "aula": "03",
+      "origine": "header"
+    },
+    "scriviamo": {
+      "aula": "03",
+      "origine": "chunk"
+    },
+    "scrivo": {
+      "aula": "03",
+      "origine": "tabella"
+    },
+    "scrivono": {
+      "aula": "03",
+      "origine": "chunk"
+    },
     "scuola": {
       "aula": "00",
       "origine": "contrasto"
@@ -1322,7 +1586,7 @@
     },
     "scusi": {
       "aula": "02",
-      "origine": "chunk"
+      "origine": "funzione"
     },
     "sedici": {
       "aula": "01",
@@ -1330,7 +1594,15 @@
     },
     "sei": {
       "aula": "01",
+      "origine": "funzione"
+    },
+    "sempre": {
+      "aula": "03",
       "origine": "chunk"
+    },
+    "sera": {
+      "aula": "03",
+      "origine": "header"
     },
     "sette": {
       "aula": "01",
@@ -1339,6 +1611,10 @@
     "siamo": {
       "aula": "01",
       "origine": "chunk"
+    },
+    "sicuramente": {
+      "aula": "03",
+      "origine": "header"
     },
     "siete": {
       "aula": "01",
@@ -1391,6 +1667,10 @@
     "sloveno": {
       "aula": "02",
       "origine": "slot"
+    },
+    "solito": {
+      "aula": "03",
+      "origine": "chunk"
     },
     "solo": {
       "aula": "00",
@@ -1448,6 +1728,14 @@
       "aula": "00",
       "origine": "lista"
     },
+    "storia": {
+      "aula": "03",
+      "origine": "slot"
+    },
+    "storie": {
+      "aula": "03",
+      "origine": "tabella"
+    },
     "straniere": {
       "aula": "00",
       "origine": "header"
@@ -1455,6 +1743,18 @@
     "studente": {
       "aula": "01",
       "origine": "tabella"
+    },
+    "studi": {
+      "aula": "03",
+      "origine": "tabella"
+    },
+    "studio": {
+      "aula": "03",
+      "origine": "slot"
+    },
+    "sul": {
+      "aula": "03",
+      "origine": "chunk"
     },
     "suono": {
       "aula": "00",
@@ -1476,6 +1776,10 @@
       "aula": "01",
       "origine": "paradigma"
     },
+    "sé": {
+      "aula": "01",
+      "origine": "funzione"
+    },
     "t": {
       "aula": "00",
       "origine": "tabella"
@@ -1487,6 +1791,10 @@
     "taxi": {
       "aula": "00",
       "origine": "tabella"
+    },
+    "te": {
+      "aula": "03",
+      "origine": "header"
     },
     "tedesca": {
       "aula": "01",
@@ -1508,9 +1816,33 @@
       "aula": "00",
       "origine": "tabella"
     },
+    "tema": {
+      "aula": "03",
+      "origine": "header"
+    },
+    "temi": {
+      "aula": "03",
+      "origine": "tabella"
+    },
+    "tesi": {
+      "aula": "03",
+      "origine": "header"
+    },
+    "testi": {
+      "aula": "03",
+      "origine": "tabella"
+    },
+    "testo": {
+      "aula": "03",
+      "origine": "slot"
+    },
     "ti": {
       "aula": "00",
       "origine": "slot"
+    },
+    "tocca": {
+      "aula": "03",
+      "origine": "header"
     },
     "tonico": {
       "aula": "00",
@@ -1598,6 +1930,10 @@
     },
     "verbi": {
       "aula": "02",
+      "origine": "header"
+    },
+    "vero": {
+      "aula": "03",
       "origine": "header"
     },
     "vienna": {

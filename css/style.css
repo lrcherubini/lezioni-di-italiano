@@ -448,6 +448,11 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
 }
 .obiettivi ul { list-style: none; font-size: var(--fs-sm); display: grid; gap: var(--sp-1); }
 .obiettivi li { display: flex; align-items: baseline; gap: var(--sp-2); }
+.obiettivi__link {
+  color: var(--text); text-decoration-color: var(--border);
+  text-underline-offset: 0.2em;
+}
+.obiettivi__link:hover { color: var(--accent); text-decoration-color: currentColor; }
 
 /* Trilha de etapas, sticky. */
 .rail {
@@ -496,6 +501,10 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
   border-radius: var(--radius-lg);
   margin-bottom: var(--sp-5);
   overflow: hidden;
+  /* O sumário do cabeçalho linka direto para a seção. Sem esta folga o
+     título aterrissa embaixo do header fixo + trilha sticky, e o atalho
+     funciona parecendo quebrado. Mesmo valor de .stage, de propósito. */
+  scroll-margin-top: 7rem;
 }
 .section__head {
   padding: var(--sp-4);
@@ -814,6 +823,111 @@ textarea { min-height: 5rem; resize: vertical; line-height: var(--lh-normal); }
 .giro__esito--ok { color: var(--ok); }
 .giro__esito--err { color: var(--err); }
 
+/* --- Traduzione: PT → IT, frase inteira -------------------------------- */
+
+.traduzione { list-style: none; padding: 0; display: grid; gap: var(--sp-4); }
+.traduzione__frase { display: grid; gap: var(--sp-2); }
+.traduzione__pt { font-size: var(--fs-base); }
+.traduzione__input { width: 100%; }
+.traduzione__input--ok { border-color: var(--ok); background: var(--ok-bg); }
+.traduzione__input--err { border-color: var(--err); background: var(--err-bg); }
+.traduzione__input--warn { border-color: var(--warn); background: var(--warn-bg); }
+
+.traduzione__esito { display: grid; gap: var(--sp-2); font-size: var(--fs-sm); }
+.traduzione__esito--ok { color: var(--ok); }
+.traduzione__esito--err { color: var(--err); }
+.traduzione__modello { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+.traduzione__nota { color: var(--text-muted); }
+
+/* --- Trasformazione: afirmativa ⇄ negativa ⇄ interrogativa ------------- */
+
+.trasformazione { list-style: none; padding: 0; display: grid; gap: var(--sp-4); }
+.trasformazione__frase { display: grid; gap: var(--sp-2); }
+.trasformazione__partenza {
+  display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap;
+}
+.trasformazione__gloss { font-size: var(--fs-sm); color: var(--text-muted); }
+.trasformazione__input { width: 100%; }
+.trasformazione__input--ok { border-color: var(--ok); background: var(--ok-bg); }
+.trasformazione__input--err { border-color: var(--err); background: var(--err-bg); }
+.trasformazione__input--warn { border-color: var(--warn); background: var(--warn-bg); }
+
+.trasformazione__esito { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-sm); flex-wrap: wrap; }
+.trasformazione__esito--ok { color: var(--ok); }
+.trasformazione__esito--err { color: var(--err); }
+
+/* --- correzione: a única frase italiana do site que não se deve aprender ---
+   A `sbagliata` é marcada como errada VISUALMENTE (cor + itálico) e
+   TEXTUALMENTE (o chip «✗ errata»), porque cor nunca é o único canal. Ela
+   não tem 🔊 — ouvir a forma errada em voz italiana é o jeito mais rápido
+   de gravá-la como se fosse boa.                                          */
+
+.correzione { list-style: none; padding: 0; display: grid; gap: var(--sp-4); }
+.correzione__frase { display: grid; gap: var(--sp-2); }
+.correzione__sbagliata {
+  display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap;
+}
+.correzione__testo { font-style: italic; color: var(--err); text-decoration: underline wavy var(--err); text-underline-offset: 4px; }
+.correzione__gloss { font-size: var(--fs-sm); color: var(--text-muted); }
+.correzione__input { width: 100%; }
+.correzione__input--ok { border-color: var(--ok); background: var(--ok-bg); }
+.correzione__input--err { border-color: var(--err); background: var(--err-bg); }
+.correzione__input--warn { border-color: var(--warn); background: var(--warn-bg); }
+
+.correzione__esito { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-sm); flex-wrap: wrap; }
+.correzione__esito--ok { color: var(--ok); }
+.correzione__esito--err { color: var(--err); }
+
+/* --- Frasi utili: chunks agrupados por intenção comunicativa ------------ */
+
+.funzioni {
+  display: grid; gap: var(--sp-4);
+  margin-bottom: var(--sp-5);
+}
+@media (min-width: 720px) { .funzioni { grid-template-columns: repeat(2, 1fr); } }
+
+.funzione {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-4);
+}
+.funzione__head { margin-bottom: var(--sp-3); }
+.funzione__figura { font-size: 2.2rem; line-height: 1; margin-bottom: var(--sp-1); }
+.funzione__figura svg { width: 2.6rem; height: 2.6rem; display: block; }
+.funzione__quando {
+  font-family: var(--font-serif); font-size: var(--fs-lg);
+  color: var(--accent);
+  display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap;
+}
+.funzione__gloss { font-style: italic; color: var(--text-muted); font-size: var(--fs-sm); margin-top: var(--sp-1); }
+
+.funzione__righe { list-style: none; display: grid; gap: var(--sp-2); }
+.funzione__riga {
+  display: flex; align-items: baseline; gap: var(--sp-2); flex-wrap: wrap;
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--border);
+}
+.funzione__riga:last-child { border-bottom: 0; padding-bottom: 0; }
+.funzione__pt { color: var(--text-muted); font-size: var(--fs-sm); }
+
+/* O «＋ caderno» empurra-se para a direita e não compete com a forma
+   italiana, que é o conteúdo da linha. Marcado, ganha a cor de acerto —
+   mesmo vocabulário visual do voto da carta. */
+.funzione__caderno { margin-left: auto; flex-shrink: 0; }
+.funzione__caderno[aria-pressed='true'] { color: var(--ok); border-color: var(--ok); }
+
+/* Rodapé da etapa Lessico: a ponte para o caderno. */
+.lessico__caderno { margin-top: var(--sp-4); font-size: var(--fs-sm); }
+.lessico__caderno a { font-weight: 600; }
+
+/* Cabeçalho da página das frases de aula. Não tem trilha nem etapas: são
+   dois grupos e acabou, então o título carrega sozinho. */
+.frasi__head { margin: var(--sp-6) 0 var(--sp-5); }
+.frasi__head .section__gloss { display: block; margin-top: var(--sp-1); }
+.frasi__head .spiegazione { margin-top: var(--sp-3); }
+
 /* --- Flashcard: o léxico da aula em cartas ----------------------------- */
 
 .carte { list-style: none; padding: 0; display: grid; gap: var(--sp-3); }
@@ -918,6 +1032,15 @@ textarea { min-height: 5rem; resize: vertical; line-height: var(--lh-normal); }
 }
 /* (o `.battute[hidden] { display:none }` que morava aqui virou redundante:
    a regra global do topo cobre todos os casos) */
+
+/* --- scambio: a menor conversa possível -------------------------------
+   Reusa `.battuta` do diálogo — é a mesma coisa visualmente, e é de
+   propósito: o aluno deve reconhecer «isto é uma troca de turnos» sem
+   precisar aprender um segundo vocabulário visual.                      */
+
+.scambio { list-style: none; display: grid; gap: var(--sp-2); }
+.scambio .battuta__testo { display: grid; gap: 2px; }
+.scambio__wrap .ex__row { margin-top: var(--sp-3); }
 
 .domande { list-style: none; display: grid; gap: var(--sp-3); margin-top: var(--sp-3); }
 .domanda__label { display: block; font-weight: 600; margin-bottom: var(--sp-2); font-size: var(--fs-sm); }

@@ -43,19 +43,39 @@ Riscaldamento  Ativa conhecimento prévio. Pede uma tentativa ANTES de estudar
                ("escreva como você acha que se diz…"), e a etapa Produzione
                manda voltar aqui para o aluno se corrigir. Fecha o ciclo.
 
-Studio         Seções com os chips do deck. spiegazione → blocos.
-               🔊 em toda linha italiana.
+Lessico        Os blocos prontos: as Frasi utili agrupadas por intenção
+               comunicativa, e abaixo o baralho, que testa embaralhado o que
+               se acabou de ler organizado. Cada linha e cada carta oferecem
+               ＋ caderno.
 
 Ascolto        O diálogo, em 3 passadas. Coração do método.
 
-Esercizi       Cards inline: gap-audio, qa-transcribe, paradigm-fill.
+Studio         Seções com os chips do deck. spiegazione → blocos.
+               🔊 em toda linha italiana.
+
+Esercizi       Cards inline. A escuta (gap-audio, qa-transcribe, dictogloss),
+               os paradigmas e a escada de fixação.
 
 Produzione     Sem gabarito, de propósito.
 
 Bilancio       Autoavaliação. O desmarcado é o roteiro de revisão.
 ```
 
-Etapas que a aula não tem simplesmente não aparecem — nem no conteúdo nem na trilha.
+**A ordem é fixa no código, não configurável por aula** — quem manda é a sequência de `append` em `renderLesson()`, não a ordem das chaves no JSON.
+
+E ela é esta, e não a dos slides, por uma razão: **contexto antes da regra.** Os slides de origem agrupam por tópico gramatical, que é ordem de referência, não de aprendizado. Com *Studio* primeiro, o aluno lia a regra de `lo/gli` antes de jamais ter ouvido `lo spagnolo` — o contrário da abordagem comunicativa que o PRD §5 declara. Agora ele encontra o bloco pronto (*Lessico*), ouve o bloco em uso (*Ascolto*), e só então lê a estrutura que o explica (*Studio*). Explicar uma forma que o aluno já encontrou é ancorar; explicá-la antes é pedir para decorar.
+
+Etapas que a aula não tem simplesmente não aparecem — nem no conteúdo nem na trilha. Uma aula que parecesse pedir outra ordem seria conteúdo no bloco errado, e um campo de ordenação só esconderia isso.
+
+### Páginas fora da sequência de aulas
+
+Três, e todas existem pelo mesmo motivo: **o que atravessa todas as aulas não cabe dentro de nenhuma.**
+
+| Página | O que é | Grava progresso? |
+|---|---|---|
+| `ripasso.html` | Revisão espaçada, misturando aulas; o que se erra mais vem primeiro | sim |
+| `notebook.html` | O caderno léxico: a forma guardada mais **a sua frase** com ela | é o próprio dado |
+| `frasi.html` | As frases da aula: metade que se produz, metade que só se reconhece | não |
 
 ## 1.3 Anatomia de um card de exercício
 
@@ -75,6 +95,16 @@ O botão **Mostrar resposta** nasce `disabled` e só libera após uma submissão
 ### Regra: a transcrição completa é feedback, não enunciado
 
 Em `gap-audio`, a frase inteira com áudio e tradução aparece **só no feedback**. Se aparecesse antes, não haveria o que ouvir.
+
+### Regra: italiano errado nunca vira áudio
+
+Vale só para `correzione`, e é a única exceção ao princípio de que todo texto italiano exibido tem 🔊.
+
+O campo `sbagliata` é agramatical de propósito — é o que o aluno tem de encontrar. Ele é o único texto italiano do site que **não deve ser aprendido**, e por isso não recebe botão de áudio: ouvir a forma errada numa voz italiana nativa é o jeito mais rápido de gravá-la como se fosse boa. Só a `risposta` fala, e só depois de o aluno responder.
+
+Pelo mesmo motivo, o botão de ouvir tudo no feedback toca **apenas as formas certas**. Um par *errada → certa* seria tentador — deixaria audível o que mudou, como faz o `trasformazione` — mas metade do que o aluno ouviria seria italiano errado.
+
+Visualmente a frase errada é sublinhada em ondulado vermelho e em itálico. E ganha o chip **`✗ errata`**, textual: cor não é canal de informação, e quem usa leitor de tela precisa saber que aquela frase está errada antes de ouvi-la.
 
 ## 1.4 O diálogo em passadas — a decisão mais opinativa
 
@@ -119,6 +149,16 @@ Corrige três falhas concretas documentadas em apps de curso comerciais: ausênc
 
 Verificado neste ambiente: `getVoices()` devolve **0 vozes imediatamente** e 19 (com 1 italiana) só depois do evento `voiceschanged`. O degrau de 1 voz é, portanto, o caso comum — não uma borda teórica.
 
+> **E a lista não é estável.** Medindo com o harness de navegador, o mesmo
+> Chrome na mesma máquina viu ora **2 vozes** (as SAPI do Windows, ambas
+> `pt-BR`, nenhuma italiana), ora **19** (as do Google, com uma `it-IT`) — as
+> vozes de rede chegam quando chegam, e há execução em que `voiceschanged`
+> nem dispara. Isso não muda o desenho, que já esperava assíncrono; muda o
+> teste. Por isso `tests/browser/voci.browser.mjs` **injeta** a lista antes de
+> o site subir, em vez de ler a da máquina: os três degraus viram
+> determinísticos, inclusive o de duas vozes italianas, que esta máquina não
+> consegue oferecer sozinha.
+
 ## 1.6 Degradação sem voz italiana
 
 Caso real em alguns Linux e Android. Resposta:
@@ -127,7 +167,13 @@ Caso real em alguns Linux e Android. Resposta:
 2. Os exercícios continuam interativos — o texto é revelado e a tarefa passa a ser leitura e produção.
 3. Nada de erro, nada de botão morto sem explicação, nada de tela branca.
 
-Verificado: com zero vozes `it-IT`, a Aula 1 renderiza as 10 seções e 15 cards, com 32 inputs e 15 botões Verificar funcionais.
+Verificado com zero vozes `it-IT` **num Chrome de verdade**: a Aula 1 renderiza as **11 seções** e **29 cards**, com **81 campos** e **28 botões Verificar** funcionais, e nada vai para o `console.error`.
+
+> Os números anteriores deste parágrafo (10 seções, 15 cards, 32 campos) eram
+> de antes da reforma das etapas e envelheceram sem avisar — ninguém os
+> reconferia. Agora eles são **asserção**, em `tests/browser/voci.browser.mjs`:
+> se a Aula 1 mudar de tamanho, o teste cai e este parágrafo é atualizado
+> junto. Número em documentação ou vira teste ou vira mentira.
 
 ## 1.7 Feedback de resposta
 
@@ -256,6 +302,10 @@ Mobile-first, com apenas quatro pontos de quebra e nenhum framework.
 | base | tudo em coluna única |
 | 620px | blocos de `contrasto` viram 2 colunas |
 | 640px | grade de aulas vira multi-coluna |
-| 720px | cabeçalho de objetivos vira 3 colunas |
+| 720px | cabeçalho de objetivos vira 3 colunas, e as *Frasi utili* viram 2 |
+
+Que o corpo **nunca** role na horizontal é afirmação testada, não intenção:
+`tests/browser/pagine.browser.mjs` mede `scrollWidth` contra `clientWidth` das
+cinco páginas a 360px de largura, num Chrome de verdade.
 
 Elementos que sobrevivem em telas estreitas por decisão: os controles do player usam `flex-wrap`; a trilha rola horizontalmente com `min-width: max-content`; tabelas rolam no próprio wrapper.

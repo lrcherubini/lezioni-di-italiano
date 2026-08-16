@@ -14,6 +14,7 @@ import { getExercise, flashcardDeck } from './exercises/index.js';
 import { recorder } from './record.js';
 import {
   el, chip, speakButton, prose, renderSection, renderObiettivi, renderStage,
+  renderFunzioni,
 } from './render.js';
 
 const CONTENT = 'content/';
@@ -113,6 +114,54 @@ export function resetExerciseCounter() {
  * opts.modo é a língua da prosa da aula deste item — por item, e não por
  * página, porque o Ripasso mistura aulas de modos diferentes.
  */
+/**
+ * Ponte para o caderno léxico: quem exibe uma forma pede, o app.js grava.
+ *
+ * Existe como função de módulo, e não inline no `ctx` do exercício, porque
+ * tem DOIS consumidores — o flashcard (via `ctx.notebook`) e a lista de
+ * *Frasi utili* (via `renderFunzioni`). Enquanto só o flashcard tinha o
+ * botão, o caderno era um laço fechado: para achá-lo era preciso já tê-lo
+ * usado, porque o único botão nascia escondido atrás do «Mostrar» da carta.
+ *
+ * @param {string|null} lessonId aula de origem, gravada na entrada
+ * @returns {{has: (id: string) => boolean, toggle: (item: object) => boolean}}
+ */
+export function notebookCtx(lessonId) {
+  return {
+    has: (id) => store.inNotebook(id),
+    toggle(item) {
+      if (store.inNotebook(item.id)) {
+        store.removeFromNotebook(item.id);
+        return false;
+      }
+      store.addToNotebook({ ...item, lesson: lessonId });
+      return true;
+    },
+  };
+}
+
+/**
+ * Link para o caderno, no rodapé da etapa Lessico.
+ *
+ * Sempre presente, e isso não contradiz a decisão de manter o card da home
+ * condicional: lá é um call-out numérico competindo com as aulas, e um
+ * caderno vazio ali só ensinaria a ignorá-lo. Aqui é local ao único lugar de
+ * que ele trata — o aluno está olhando o léxico, e o caderno é onde as formas
+ * que ele guardou viram frase própria. Vazio, é convite; não é ruído.
+ */
+function linkCaderno() {
+  const n = store.notebook().length;
+  return el('p', { class: 'lessico__caderno' },
+    el('a', { href: 'notebook.html' },
+      n > 0
+        ? `📓 Il mio quaderno — ${n} ${n === 1 ? 'forma guardada' : 'formas guardadas'}`
+        : '📓 Il mio quaderno'),
+    el('span', { class: 'section__gloss' }, n > 0
+      ? ' — escreva uma frase sua com cada uma'
+      : ' — guarde uma forma com «＋ caderno» e escreva uma frase sua com ela')
+  );
+}
+
 export function mountExercise(item, lessonId, opts = {}) {
   const mod = getExercise(item.type);
   if (opts.countInIndex !== false) exCounter += 1;
@@ -168,17 +217,7 @@ export function mountExercise(item, lessonId, opts = {}) {
     /* Caderno léxico. Vai pelo ctx e não por import direto porque a regra
        «nenhum módulo de exercício fala com o store» continua valendo — o
        módulo pede, o app.js grava. */
-    notebook: {
-      has: (id) => store.inNotebook(id),
-      toggle(carta) {
-        if (store.inNotebook(carta.id)) {
-          store.removeFromNotebook(carta.id);
-          return false;
-        }
-        store.addToNotebook({ ...carta, lesson: lessonId });
-        return true;
-      },
-    },
+    notebook: notebookCtx(lessonId),
   };
 
   const body = mod.render(item, ctx);
@@ -430,12 +469,13 @@ async function renderLesson() {
   // O baralho sai dos chunks da aula; null quando não há chunk elegível.
   const deck = flashcardDeck(lesson);
 
-  /* Trilha sticky — só com as etapas que a aula realmente tem */
+  /* Trilha sticky — só com as etapas que a aula realmente tem.
+     A ordem aqui TEM que casar com a ordem dos append abaixo. */
   const stages = [
     ['riscaldamento', 'Riscaldamento', Boolean(lesson.riscaldamento)],
-    ['studio', 'Studio', Boolean(lesson.sections?.length)],
-    ['lessico', 'Lessico', Boolean(deck)],
+    ['lessico', 'Lessico', Boolean(deck) || Boolean(lesson.funzioni?.length)],
     ['ascolto', 'Ascolto', Boolean(lesson.dialogo)],
+    ['studio', 'Studio', Boolean(lesson.sections?.length)],
     ['esercizi', 'Esercizi', Boolean(lesson.esercizi?.length)],
     ['produzione', 'Produzione', Boolean(lesson.produzione?.length)],
     ['bilancio', 'Bilancio', Boolean(lesson.bilancio?.length)],
@@ -460,33 +500,27 @@ async function renderLesson() {
     ));
   }
 
-  /* Studio */
-  if (lesson.sections?.length) {
-    main.append(renderStage(
-      {
-        id: 'studio',
-        kicker: 'Etapa 2',
-        title: 'Studio',
-        intro: 'Cada linha em italiano tem 🔊. Ouça antes de ler a tradução — '
-             + 'e leia a explicação, não só a tabela.',
-        modo,
-      },
-      ...lesson.sections.map((s) => renderSection(s, modo))
-    ));
-  }
+  /* Lessico — os blocos de linguagem da aula, e depois o baralho.
 
-  /* Lessico — o baralho da aula */
-  if (deck) {
+     Vem antes de Studio de propósito, e a ordem contraria a dos slides de
+     origem: eles são organizados por tópico gramatical, o site é organizado
+     por progressão didática. O aluno encontra o bloco pronto, ouve o diálogo
+     usando o bloco, e só então lê a regra que o explica — contexto antes da
+     regra é a abordagem que o PRD §5 declara. Ler `lo/gli` antes de ouvir
+     `lo spagnolo` era ler apostila de gramática. */
+  if (deck || lesson.funzioni?.length) {
     main.append(renderStage(
       {
         id: 'lessico',
-        kicker: 'Etapa 3',
+        kicker: 'Etapa 2',
         title: 'Lessico',
-        intro: 'O léxico da aula em cartas. Tente lembrar antes de virar — '
-             + 'a recuperação é o que fixa; reler não fixa nada.',
+        intro: 'Estes são os blocos que você vai ouvir daqui a pouco. Leia agrupado, '
+             + 'ouça cada um — depois tente lembrar nas cartas, embaralhado.',
         modo,
       },
-      mountExercise(deck, id, { headLabel: 'Lessico', countInIndex: false, modo })
+      renderFunzioni(lesson, modo, notebookCtx(id)),
+      deck ? mountExercise(deck, id, { headLabel: 'Lessico', countInIndex: false, modo }) : null,
+      linkCaderno()
     ));
   }
 
@@ -498,7 +532,7 @@ async function renderLesson() {
     // cabeçalho próprio (título+gloss em italiano, com áudio) em vez do
     // "Ex. NN" genérico — e sem entrar na numeração dos exercícios.
     main.append(renderStage(
-      { id: 'ascolto', kicker: 'Etapa 4', title: 'Ascolto', intro: d.consegna ?? '', modo },
+      { id: 'ascolto', kicker: 'Etapa 3', title: 'Ascolto', intro: d.consegna ?? '', modo },
       mountExercise({ ...d, type: 'dialogue' }, id, {
         headLabel: 'Dialogo',
         headTitle: d.titolo,
@@ -506,6 +540,21 @@ async function renderLesson() {
         countInIndex: false,
         modo,
       })
+    ));
+  }
+
+  /* Studio */
+  if (lesson.sections?.length) {
+    main.append(renderStage(
+      {
+        id: 'studio',
+        kicker: 'Etapa 4',
+        title: 'Studio',
+        intro: 'Você já ouviu estas formas. Agora o porquê de cada uma — leia a '
+             + 'explicação, não só a tabela. Cada linha em italiano tem 🔊.',
+        modo,
+      },
+      ...lesson.sections.map((s) => renderSection(s, modo))
     ));
   }
 
