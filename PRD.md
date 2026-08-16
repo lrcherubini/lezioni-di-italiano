@@ -267,8 +267,9 @@ que o Playwright usa por baixo. O driver inteiro coube em `tools/browser.mjs`,
 stdlib pura, e entrega 52 asserções em ~13s. O que o Playwright somaria a isso:
 
 - **Firefox e WebKit**, que o CDP não alcança. É o único ganho insubstituível —
-  e vale **zero aqui**, porque o único usuário estuda em Chrome/Edge no desktop
-  e Chrome no Android: os três são Chromium, exatamente o motor já coberto.
+  e vale **zero enquanto a audiência for quem hoje ela é**: o autor estuda em
+  Chrome/Edge no desktop e Chrome no Android, os três Chromium, exatamente o
+  motor já coberto. **Esta é uma premissa com prazo** — ver abaixo.
 - **Regressão visual.** Não é exclusividade dele: `Page.captureScreenshot` é
   comando CDP. Fica como extensão possível do harness atual, se a Parte 2 do
   DESIGN passar a merecer verificação.
@@ -281,8 +282,17 @@ Playwright não é o Safari.** É um build sem a pilha da Apple, e a
 por gesto que o `js/speech.js` implementa justamente para o iOS Safari. O caso
 que mais pediria WebKit é o que o WebKit do Playwright não cobre.
 
-**O que reabriria a decisão:** passar a estudar em Firefox ou em iPhone. Aí
-cross-browser deixa de ser hipótese.
+**O que reabre a decisão, e já está em movimento:** a audiência deixar de ser
+uma pessoa. O site já foi compartilhado fora, e o §2 prevê torná-lo achável por
+busca. No dia em que qualquer pessoa abrir a URL, «o motor que eu uso» deixa de
+ser um argumento — e para material de estudo consumido no celular, **iOS Safari
+é fatia grande, não borda**.
+
+E aí a resposta honesta não é «instale o Playwright», porque o WebKit dele não
+resolve o caso do iOS (acima). É que **não existe forma automatizada de testar
+o caminho do iOS**: ele precisa de aparelho de verdade, uma vez, à mão. O que o
+Playwright resolveria de fato nesse cenário é **Firefox** — e essa parte sim
+passaria a valer o `package.json`.
 
 
 ## 12. Progressão de língua
