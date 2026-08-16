@@ -42,6 +42,10 @@ python tools/validate.py --fix
 node tools/test.mjs
 python tools/validate_test.py
 
+# Navegador de verdade. Antes de commitar mudança em css/ ou em render/layout:
+# é a única que enxerga cascata, @media e layout computado. Pula sem Chrome.
+node tools/browser-test.mjs
+
 # Servir localmente. Necessário: fetch() de JSON falha em file:// por CORS.
 python -m http.server 8000
 # → http://localhost:8000
@@ -760,9 +764,12 @@ frasi.html            as frases da aula — as que você diz e as que só ouve
 content/              manifest.json + lezione-NN.json + frasi.json
                       + lessico.json (derivado)
 tests/                suíte node:test; support/ tem DOM mínimo e dublês
+                      browser/ tem o que só um Chrome de verdade afirma
 tools/validate.py     valida os invariantes deste documento; --fix grava derivados
 tools/validate_test.py testes do validador (unittest da stdlib)
 tools/test.mjs        roda a suíte JS com cobertura, piso de 80%
+tools/browser.mjs     dirige um Chrome por CDP (WebSocket do Node); zero dep
+tools/browser-test.mjs roda tests/browser/*.browser.mjs; pula sem navegador
 ```
 
 **`app.js` não se autoinicializa.** Quem dispara é `main.js`, com uma linha.
@@ -844,7 +851,7 @@ Duas regras ao mexer aqui:
 ### O ponto cego do DOM da suíte: CSS
 
 O shim guarda `hidden` como propriedade e **nunca interpreta CSS**. Isso deixa
-uma classe inteira de defeito invisível para os 599 testes de comportamento:
+uma classe inteira de defeito invisível para os 710 testes de comportamento:
 uma regra de classe com `display` derrota o `[hidden]` do user-agent, que vale
 0-0-0 de especificidade.
 
@@ -860,8 +867,44 @@ tentar, e tudo verde. O remédio é uma regra global no topo de `style.css`:
 regra existe, que ela vem antes da primeira classe com `display`, e que
 ninguém tenta reexibir `[hidden]` sem `!important` (o `@media print` reexibe
 a transcrição do diálogo, e vence por especificidade). Afirmar CSS por texto
-é pouco — mas é o que cabe sem jsdom, e cobre o único invariante visual que
-não pode falhar em silêncio. **Não afirme estética ali.**
+é pouco — mas custa zero e roda em qualquer máquina, então continua sendo a
+primeira linha. **Não afirme estética ali.**
+
+### A segunda linha: `node tools/browser-test.mjs`
+
+O que o texto do CSS não resolve, um Chrome de verdade resolve. `tools/browser.mjs`
+dirige um Chromium por **CDP**, com `WebSocket` global do Node e `http` da
+stdlib — sem Playwright, sem `package.json`, invariante 4 intacto.
+
+```bash
+node tools/browser-test.mjs                          # tudo (~13s)
+node tools/browser-test.mjs tests/browser/voci.browser.mjs
+CHROME=none node tools/browser-test.mjs              # força o caminho de skip
+```
+
+**Regra deste diretório: nada em `tests/browser/` pode ser afirmável pelo
+shim.** Se um teste caberia em `tests/*.test.mjs`, ele pertence lá — é mais
+rápido e não exige navegador. Aqui só entra o que precisa de cascata, `@media`
+ou layout computado.
+
+Três armadilhas já pagas, não as reintroduza:
+
+- **`getComputedStyle(e).display !== 'none'` não é «está visível».** `display`
+  não herda: filho de um pai `display:none` continua computando `block`. Foi
+  assim que a transcrição do diálogo apareceu como «8 battute na tela» quando
+  o contêiner inteiro estava oculto. Use `page.visiveis(sel)`, que pergunta
+  `checkVisibility()`.
+- **A lista de vozes do Chrome é não-determinística.** Execuções seguidas na
+  mesma máquina viram ora 2 vozes (SAPI, só pt-BR), ora 19 (Google, com uma
+  it-IT). Nunca teste contra a lista ambiente: use `page.vozes([...])`, que
+  injeta antes de o site subir.
+- **Sleep fixo é teste intermitente.** Use `page.esperar(expr)`, que faz
+  espera ativa com mensagem de erro útil.
+
+O estado do card mora em **`data-state`** (`correct`/`partial`/`wrong`), não em
+classe — e ele **não** é restaurado no F5: o card é da sessão, o progresso é do
+`localStorage`. «Sobrevive ao F5» se afirma sobre o dado salvo e sobre a barra
+da home, nunca sobre a borda do card.
 
 ### Contrato de um tipo de exercício
 
@@ -887,6 +930,7 @@ export default {
 ### Armadilhas já resolvidas em `speech.js` — não reintroduza
 
 - `getVoices()` retorna `[]` na primeira chamada. Verificado neste ambiente: 0 vozes imediatamente, 19 depois do evento `voiceschanged`. Use `voicesReady()`.
+- **E a lista não é estável entre execuções.** Medindo pelo harness de navegador, o mesmo Chrome na mesma máquina viu ora 2 vozes (SAPI do Windows, ambas `pt-BR`) ora 19 (Google, com uma `it-IT`), e há execução em que `voiceschanged` nem dispara. Isso não muda o código, que já é assíncrono — muda o **teste**: nunca afirme nada contra a lista ambiente.
 - iOS Safari exige gesto do usuário antes de falar → `unlock()` no primeiro toque.
 - Chrome corta utterance longo (~15s) → quebrado por sentença.
 - Empilhar `speak()` sem `cancel()` trava a fila.

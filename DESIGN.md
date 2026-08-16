@@ -149,6 +149,16 @@ Corrige três falhas concretas documentadas em apps de curso comerciais: ausênc
 
 Verificado neste ambiente: `getVoices()` devolve **0 vozes imediatamente** e 19 (com 1 italiana) só depois do evento `voiceschanged`. O degrau de 1 voz é, portanto, o caso comum — não uma borda teórica.
 
+> **E a lista não é estável.** Medindo com o harness de navegador, o mesmo
+> Chrome na mesma máquina viu ora **2 vozes** (as SAPI do Windows, ambas
+> `pt-BR`, nenhuma italiana), ora **19** (as do Google, com uma `it-IT`) — as
+> vozes de rede chegam quando chegam, e há execução em que `voiceschanged`
+> nem dispara. Isso não muda o desenho, que já esperava assíncrono; muda o
+> teste. Por isso `tests/browser/voci.browser.mjs` **injeta** a lista antes de
+> o site subir, em vez de ler a da máquina: os três degraus viram
+> determinísticos, inclusive o de duas vozes italianas, que esta máquina não
+> consegue oferecer sozinha.
+
 ## 1.6 Degradação sem voz italiana
 
 Caso real em alguns Linux e Android. Resposta:
@@ -157,7 +167,13 @@ Caso real em alguns Linux e Android. Resposta:
 2. Os exercícios continuam interativos — o texto é revelado e a tarefa passa a ser leitura e produção.
 3. Nada de erro, nada de botão morto sem explicação, nada de tela branca.
 
-Verificado: com zero vozes `it-IT`, a Aula 1 renderiza as 10 seções e 15 cards, com 32 inputs e 15 botões Verificar funcionais.
+Verificado com zero vozes `it-IT` **num Chrome de verdade**: a Aula 1 renderiza as **11 seções** e **29 cards**, com **81 campos** e **28 botões Verificar** funcionais, e nada vai para o `console.error`.
+
+> Os números anteriores deste parágrafo (10 seções, 15 cards, 32 campos) eram
+> de antes da reforma das etapas e envelheceram sem avisar — ninguém os
+> reconferia. Agora eles são **asserção**, em `tests/browser/voci.browser.mjs`:
+> se a Aula 1 mudar de tamanho, o teste cai e este parágrafo é atualizado
+> junto. Número em documentação ou vira teste ou vira mentira.
 
 ## 1.7 Feedback de resposta
 
@@ -286,6 +302,10 @@ Mobile-first, com apenas quatro pontos de quebra e nenhum framework.
 | base | tudo em coluna única |
 | 620px | blocos de `contrasto` viram 2 colunas |
 | 640px | grade de aulas vira multi-coluna |
-| 720px | cabeçalho de objetivos vira 3 colunas |
+| 720px | cabeçalho de objetivos vira 3 colunas, e as *Frasi utili* viram 2 |
+
+Que o corpo **nunca** role na horizontal é afirmação testada, não intenção:
+`tests/browser/pagine.browser.mjs` mede `scrollWidth` contra `clientWidth` das
+cinco páginas a 360px de largura, num Chrome de verdade.
 
 Elementos que sobrevivem em telas estreitas por decisão: os controles do player usam `flex-wrap`; a trilha rola horizontalmente com `min-width: max-content`; tabelas rolam no próprio wrapper.

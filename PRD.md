@@ -184,7 +184,7 @@ Duas regras que o validador sustenta: frase que uma aula já ensina aparece com 
 
 | # | Requisito | Como é atendido |
 |---|---|---|
-| NF1 | **Zero build, zero dependência** | HTML + CSS + JS vanilla, ES modules, JSON via `fetch`. Deploy = `git push`. |
+| NF1 | **Zero build, zero dependência** | HTML + CSS + JS vanilla, ES modules, JSON via `fetch`. Deploy = `git push`. Vale para o ferramental: validador em stdlib do Python, suíte no `node --test` embutido, e o harness de navegador falando CDP direto pelo `WebSocket` do Node — sem Playwright e sem `package.json`. |
 | NF2 | **Loop de autoria mecânico** | Aula nova toca só `content/`; `CLAUDE.md` traz a checklist; `tools/validate.py` verifica. |
 | NF3 | **Sem servidor, sem rastreamento** | Nada sai do navegador. Sem cookies, sem analytics, sem fonte ou script externo. |
 | NF4 | **Privacidade** | Nenhum arquivo versionado cita nome de pessoa ou plataforma. `presentations/` e `ERRATA.md` gitignorados. |
@@ -197,19 +197,29 @@ Duas regras que o validador sustenta: frase que uma aula já ensina aparece com 
 
 ## 9. Critérios de aceite (verificáveis)
 
+Onde diz **[nav]**, o critério deixou de depender de alguém abrir o navegador e
+conferir: virou asserção em `tests/browser/`, num Chrome de verdade. Era a
+metade da lista que o DOM da suíte não alcançava — e a que envelhecia calada,
+como o parágrafo do DESIGN §1.6 que ficou anos afirmando «10 seções e 15 cards»
+para uma aula que tem 11 e 29.
+
 1. `python tools/validate.py` sai com 0.
-2. Aula 1 renderiza 11 seções e as 7 etapas, sem erro no console. A trilha sticky lista as etapas **na mesma ordem** em que elas aparecem na página.
+2. Aula 1 renderiza 11 seções e as 7 etapas, **sem erro no console**. A trilha sticky lista as etapas **na mesma ordem** em que elas aparecem na página. **[nav]**
 3. Todos os chips aparecem com as cores do deck.
 4. Resposta sem acento em item com acento → correto **com nota** exibindo a forma acentuada.
 5. `un amico` **não** é aceito onde se espera `un'amica`.
-6. Passada 1 do diálogo: input desabilitado e transcrição oculta; passadas 2 e 3 travadas até liberar.
-7. Verificar um exercício grava em `localStorage` e o progresso sobrevive a F5.
+6. Passada 1 do diálogo: input desabilitado e transcrição oculta; passadas 2 e 3 travadas até liberar. **[nav]**
+7. Verificar um exercício grava em `localStorage` e o progresso sobrevive a F5 — no dado salvo e na barra da home, **não** na borda do card, que é estado de sessão. **[nav]**
 8. Paradigma grava progresso **por célula** (`l01-e13-r1-c1`), não por exercício.
-9. Sem voz `it-IT`: banner aparece, página segue completa e interativa.
+9. Sem voz `it-IT`: banner aparece, página segue completa e interativa. **[nav]**
 10. Aula inexistente (`?l=99`) mostra erro explicativo, não tela branca.
 11. Nenhum nome de pessoa ou plataforma em arquivo versionado.
-12. O verso do flashcard **não** aparece antes de «Mostrar», e só uma carta fica visível por vez.
+12. O verso do flashcard **não** aparece antes de «Mostrar», e só uma carta fica visível por vez. **[nav]**
 13. «🗑 Apagar tudo» pede confirmação; cancelar preserva o progresso, confirmar zera progresso, agenda e caderno.
+14. Nenhuma das cinco páginas rola na horizontal a 360px de largura (NF7). **[nav]**
+15. Todo elemento marcado `[hidden]` está de fato com `display: none` (NF6/NF7). **[nav]**
+16. O tema segue o sistema **e** o toggle vence nos dois sentidos (NF8). **[nav]**
+17. Na impressão, trilha, player e botões somem; a transcrição oculta é revelada. **[nav]**
 
 ## 10. Roadmap
 
@@ -220,6 +230,15 @@ Duas regras que o validador sustenta: frase que uma aula já ensina aparece com 
 **Fase 2.1 — feita.** Reordenação das etapas para *contexto antes da regra* (§5); **Frasi utili** (§7.1); `trasformazione` e `traduzione`, que fecham a escada de produção; cabeçalho de objetivos virou **sumário navegável** — cada item com `sezione` rola até o ponto da aula.
 
 **Fase 2.2 — feita.** O caderno léxico estava inteiro e passando nos testes, e mesmo assim invisível: era um laço fechado, porque só se chegava a ele pelo card da home — que só aparece com o caderno cheio — e o único botão capaz de enchê-lo nascia escondido atrás do «Mostrar» de uma carta. Ganhou **＋ caderno em toda linha das Frasi utili** e link na etapa Lessico. Junto vieram **`frasi.html`** (§7.2); o primeiro **`dictogloss`** autorado, que fez o tipo deixar de ser código morto e expôs que faltava sua checagem no validador; o bloco **`scambio`**; e o drill **`correzione`**.
+
+**Fase 2.3 — feita.** Suíte de navegador (`tools/browser.mjs` + `tests/browser/`),
+que fecha o ponto cego admitido desde sempre: o DOM da suíte nunca interpretou
+CSS, e `tests/css.test.mjs` só conseguia aproximar o invariante lendo a folha
+como texto. São 50 asserções num Chrome de verdade — `[hidden]` realmente
+invisível, nenhuma rolagem horizontal a 360px, tema e impressão, os três degraus
+de voz, e o caminho do aluno de ponta a ponta. Sete critérios do §9 deixaram de
+depender de conferência manual, e a conferência que ela forçou já rendeu: o
+DESIGN §1.6 afirmava «10 seções e 15 cards» para uma Aula 1 que tem 11 e 29.
 
 **Fase 3 — se fizer falta.** `minimal-pair` (exige refatorar a seleção de voz); persistir gravações em IndexedDB para comparar evolução ao longo das semanas — **e isso exige opt-in explícito na mesma mudança**, porque gravação salva deixa de ser armazenamento necessário e vira dado guardado por escolha (ver `js/record.js` e CLAUDE.md); MP3 pré-gerados por item (o schema já tem `audio.src`) caso o TTS se mostre insuficiente; busca em todo o conteúdo (com 4 aulas e ~500 formas, ainda resolve um problema que não existe); pôr `frasi.json` no manifest, se as frases de sobrevivência pedirem drill e revisão espaçada além da leitura.
 
