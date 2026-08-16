@@ -240,6 +240,12 @@ de voz, e o caminho do aluno de ponta a ponta. Sete critérios do §9 deixaram d
 depender de conferência manual, e a conferência que ela forçou já rendeu: o
 DESIGN §1.6 afirmava «10 seções e 15 cards» para uma Aula 1 que tem 11 e 29.
 
+**Fase 2.4 — feita em parte.** Cartão de link (`description` + Open Graph) nas
+cinco páginas, travado por `tests/meta.test.mjs`. O resto do caminho para o site
+ser achável está em **§13**, e um item de lá é sensível a tempo: a URL por aula
+precisa existir **antes** de qualquer indexação, porque o GitHub Pages não faz
+redirecionamento.
+
 **Fase 3 — se fizer falta.** `minimal-pair` (exige refatorar a seleção de voz); persistir gravações em IndexedDB para comparar evolução ao longo das semanas — **e isso exige opt-in explícito na mesma mudança**, porque gravação salva deixa de ser armazenamento necessário e vira dado guardado por escolha (ver `js/record.js` e CLAUDE.md); MP3 pré-gerados por item (o schema já tem `audio.src`) caso o TTS se mostre insuficiente; busca em todo o conteúdo (com 4 aulas e ~500 formas, ainda resolve um problema que não existe); pôr `frasi.json` no manifest, se as frases de sobrevivência pedirem drill e revisão espaçada além da leitura.
 
 ## 11. Decisões de arquitetura e o motivo
@@ -312,3 +318,77 @@ Três decisões que sustentam isto:
 - **A chrome da interface não acompanha o modo.** É texto funcional, não conteúdo de estudo; `index.html` e `ripasso.html` não têm modo (o Ripasso mistura aulas por construção); e a chrome já é deliberadamente bilíngue — rótulos pedagógicos em italiano (`Riscaldamento`, `Esatto!`, `Modello`), mecânicos em português.
 
 **Não-objetivo:** TTS em português. O português aqui é lido, nunca ouvido, e é a L1 do aluno. `<pt>` nunca ganha botão de áudio — uma voz italiana monolíngue leria português com fonologia italiana, e uma multilíngue trocaria de idioma por detecção de conteúdo.
+
+## 13. Descoberta: de material pessoal a página pública
+
+O §2 descrevia **um** usuário, e por muito tempo isso foi literal. Deixou de
+ser: o site já foi compartilhado fora, e há a intenção de torná-lo achável por
+busca — **sem fins comerciais**, para que quem procura explicação de italiano A1
+em português encontre uma.
+
+Isso não muda o produto. Muda três premissas que estavam escondidas em decisões
+já tomadas, e é para não perdê-las de vista que esta seção existe.
+
+### 13.1 O que já foi feito
+
+**Cartão de link nas cinco páginas.** `description` e Open Graph em todas — antes
+existiam só no `index.html`, e colar o endereço num mensageiro rendia um
+retângulo vazio. O sintoma nunca aparecia no site, só na conversa de quem
+recebeu, e por isso passou despercebido até alguém compartilhar de fato.
+`tests/meta.test.mjs` trava isso: página nova sem cartão reprova.
+
+### 13.2 O que falta, em ordem — e o que é sensível a tempo
+
+**1. Uma URL por aula. É o único item com prazo.**
+
+Hoje toda aula mora em `lezione.html?l=NN`: um documento só para todas, cujo
+`<title>` correto só existe **depois** que o JS roda e o `fetch` volta — o que a
+maioria dos scrapers de link não faz, e o que um buscador faz tarde e mal.
+
+É sensível a tempo porque **URL indexada não se troca de graça**, e o GitHub
+Pages não emite 301. Mudar antes de publicar custa pouco; depois, custa links
+mortos.
+
+A saída que **não** quebra o NF1 já é o padrão da casa: `conteggio` e
+`lessico.json` são derivados, gravados por `tools/validate.py --fix` e
+**conferidos no repositório** — o CLAUDE.md é explícito que isso não é passo de
+build. Uma casca HTML por aula cabe no mesmo molde, e o `manifest.json` já tem
+tudo que ela precisa (`titolo`, `gloss`, `temi`). O invariante «acrescentar aula
+mexe só em `content/`» continua de pé, porque quem escreve a casca é a
+ferramenta, não a pessoa.
+
+**2. `robots.txt` e `sitemap.xml`.** Triviais, e o sitemap fica quase de graça
+depois do item 1 — é uma varredura do manifest.
+
+**3. `canonical` e `og:url`.** Exigem **URL absoluta**, e é o único insumo que
+falta: o endereço padrão do GitHub Pages embute o handle do dono do
+repositório, e o invariante 2 proíbe nome de pessoa em arquivo versionado. Com
+domínio próprio, ou com a decisão explícita de que o handle pode entrar, o
+bloqueio some. Até lá as tags ficam de fora — e `tests/meta.test.mjs` guarda
+que ninguém as acrescente por distração.
+
+**4. `og:image`.** Fica sem, por ora, e a razão é a mesma do resto do projeto:
+os mensageiros não aceitam SVG, então serviria só formato raster, e binário em
+repositório público exige origem e licença rastreadas. Um cartão sem imagem
+ainda mostra título, descrição e domínio — legível, só menos vistoso.
+
+**5. Dados estruturados (JSON-LD).** `Course` ou `LearningResource` ajudariam a
+descrever o que a página é. Barato, mas só rende depois do item 1: sem URL por
+aula não há o que descrever individualmente.
+
+### 13.3 O que a audiência maior muda fora do SEO
+
+- **Cobertura de navegador.** Ver §11: «só Chromium» era verdade sobre uma
+  pessoa. Para estudo consumido no celular, iOS Safari é fatia grande, e o
+  caminho do iOS não tem teste automatizado possível — precisa de aparelho, uma
+  vez, à mão.
+- **A licença não casa com a intenção.** O `README` põe **código e conteúdo** sob
+  MIT, e o MIT permite uso comercial por terceiros, enquanto o §4 declara «sem
+  fins comerciais». Enquanto a audiência era uma pessoa, dava na mesma. Se a
+  intenção é que o conteúdo siga não-comercial, ele pediria licença própria
+  (CC BY-NC-SA, por exemplo), separada da do código. **Decisão em aberto.**
+- **O invariante 2.1 ganhou uma pessoa real.** «`content/` nunca fala em terceira
+  pessoa sobre a origem do material» deixou de ser higiene abstrata: quem
+  entregou o material pode abrir o site. Está sendo cumprido — o que mudou é o
+  custo de deixar de cumprir. E `presentations/` fora do versionamento passa a
+  proteger material de terceiro, não só a privacidade do autor.

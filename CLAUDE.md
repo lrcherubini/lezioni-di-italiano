@@ -848,6 +848,29 @@ Duas regras ao mexer aqui:
   checa que o schema está certo, a suíte checa que o schema **vira página**. Uma aula nova
   que quebre a renderização falha aqui.
 
+### Página nova nasce com cartão de link, sempre
+
+Toda página servida precisa, no `<head>`: `<html lang="pt-BR">`, `<title>`,
+`<meta name="description">` (entre 50 e 200 caracteres) e o mínimo de Open
+Graph — `og:type`, `og:site_name`, `og:locale`, `og:title`, `og:description`,
+mais `twitter:card`.
+
+Não é capricho de SEO: **sem isso, colar o endereço num mensageiro rende um
+retângulo vazio**, e o link parece quebrado para quem recebe. O sintoma não
+aparece no site — aparece na conversa alheia —, e foi assim que quatro das
+cinco páginas ficaram mudas sem ninguém notar.
+
+Acrescentar página é ato deliberado em **duas listas**, e as duas são
+explícitas de propósito (glob varreria também ferramenta local gitignorada):
+
+- `PAGINAS` em `tests/meta.test.mjs` — o cartão de link;
+- `PAGINAS` em `tests/browser/pagine.browser.mjs` — os invariantes visuais.
+
+**Não acrescente `og:url` nem `<link rel="canonical">`.** Eles exigem URL
+absoluta, e o endereço padrão do GitHub Pages embute o handle do dono do
+repositório — o invariante 2 proíbe nome de pessoa em arquivo versionado. Há
+teste guardando isso. Ver PRD §13.2 para o que destrava.
+
 ### O ponto cego do DOM da suíte: CSS
 
 O shim guarda `hidden` como propriedade e **nunca interpreta CSS**. Isso deixa

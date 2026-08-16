@@ -173,6 +173,20 @@ O áudio usa a **Web Speech API** do navegador com voz `it-IT`, então não há 
 
 Se o navegador não tiver nenhuma voz italiana instalada, o site avisa e passa para **modo transcrição** — o texto é revelado e os exercícios continuam funcionando como leitura e produção. No Windows, vozes italianas se instalam em *Configurações → Hora e Idioma → Voz*.
 
+## Compartilhar o link
+
+As cinco páginas trazem `description` e Open Graph, então colar o endereço num
+mensageiro mostra título e descrição em vez de um retângulo vazio.
+`tests/meta.test.mjs` guarda isso — página nova sem cartão reprova.
+
+Duas ausências são deliberadas, não esquecimento: **`og:image`** (os
+mensageiros não aceitam SVG, e binário aqui exige origem e licença rastreadas)
+e **`og:url`/`canonical`** (exigem URL absoluta, e a padrão do GitHub Pages
+embute o handle do dono do repositório). O caminho completo para o site ser
+achável por busca está em [PRD §13](PRD.md) — e um item de lá tem prazo: a URL
+por aula precisa existir **antes** de qualquer indexação, porque hoje toda aula
+mora na mesma `lezione.html?l=NN` e o GitHub Pages não faz redirecionamento.
+
 ## Privacidade
 
 Nada sai do navegador. Sem conta, sem servidor, sem cookies, sem analytics, sem fonte ou script externo. O progresso fica no `localStorage` e pode ser exportado e reimportado como JSON pelos botões no topo da home.
